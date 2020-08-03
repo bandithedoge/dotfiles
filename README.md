@@ -1,4 +1,4 @@
-These are my personal dotfiles for my Arch Linux setup. They are messy AF but they work fine for me.
+![screenshot](/screenshot.png)
 
 **Please do not blindly clone this repo and install the dotfiles on your system. They have very specific settings that won't work for everyone. Only use this repo as reference for writing your own configs.**
 
