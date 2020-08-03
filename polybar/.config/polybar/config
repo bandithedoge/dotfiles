@@ -1,0 +1,186 @@
+; vim: ft=dosini
+
+[color]
+bg0 = #282828
+bg0h = #1d2021
+bg4 = #7c6f64
+
+fg0 = #fbf1c7
+fg1 = #ebdbb2
+fg2 = #d5c4a1
+fg3 = #bdae93
+fg4 = #a89984
+
+red = #cc241d
+
+
+[bars]
+lefts = bspwm title
+centers = 
+rights = xkeyboard sep cpu sep memory sep pulseaudio sep date 
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[bar/right]
+enable-ipc = true
+monitor = HDMI-0
+tray-position = right
+locale = pl_PL.UTF-8
+
+modules-left = ${bars.lefts}
+modules-center = ${bars.centers}
+modules-right = ${bars.rights}
+
+background = ${color.bg0}
+font-0 = "FuraCode Nerd Font:style=Regular:size=12;2"
+height = 25
+padding-right = 1
+
+wm-restack = bspwm
+
+
+[bar/center]
+enable-ipc = true
+monitor = DVI-D-1
+locale = pl_PL.UTF-8
+
+modules-left = ${bars.lefts}
+modules-center = ${bars.centers}
+modules-right = ${bars.rights}
+
+background = ${color.bg0}
+font-0 = "FuraCode Nerd Font:style=Regular:size=12;2"
+height = 25
+padding-right = 1
+
+wm-restack = bspwm
+
+
+[bar/left]
+enable-ipc = true
+monitor = VGA-0
+locale = pl_PL.UTF-8
+
+modules-left = bspwm
+modules-center = mpd
+modules-right = date
+
+background = ${color.bg0}
+font-0 = "FuraCode Nerd Font:style=Regular:size=12;2"
+height = 25
+padding-right = 1
+
+wm-restack = bspwm
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[module/sep]
+type = custom/text
+content = |
+
+content-foreground = ${color.bg4}
+content-padding = 1
+
+
+[module/date]
+type = internal/date
+label =  %date%  %time%
+label-foreground = ${color.fg4}
+
+date = %e %b %Y
+time = %H:%M:%S
+
+
+[module/pulseaudio]
+type = internal/pulseaudio
+use-ui-max = false
+
+format-volume = <ramp-volume> <label-volume>
+format-volume-foreground = ${color.fg3}
+
+ramp-volume-0 = 奄
+ramp-volume-1 = 奔
+ramp-volume-2 = 墳
+
+label-muted = ﱝ Muted
+label-muted-foreground = ${color.red}
+
+click-right = pavucontrol &
+
+
+[module/bspwm]
+type = internal/bspwm
+pin-workspaces = true
+reverse-scroll = false
+
+label-focused = %name%
+label-focused-foreground = ${color.bg0}
+label-focused-background = ${color.fg3}
+label-focused-padding = 1
+
+label-occupied = %name%
+label-occupied-padding = 1
+label-occupied-foreground = ${color.fg2}
+
+label-empty = 
+
+label-urgent = %name%
+label-urgent-foreground = ${color.red}
+label-urgent-padding = 1
+
+
+[module/memory]
+type = internal/memory
+interval = 0.3
+
+label =  %mb_used%
+label-foreground = ${color.fg2}
+
+
+[module/cpu]
+type = internal/cpu
+
+label =  %percentage%%
+label-foreground = ${color.fg2}
+
+
+[module/title]
+type = internal/xwindow
+format-padding = 1
+label-maxlen = 50
+label-foreground = ${color.fg1}
+
+
+[module/kernel]
+type = custom/script
+exec = uname -r
+
+format =  <label>
+format-foreground = ${color.purple}
+
+
+[module/xkeyboard]
+type = internal/xkeyboard
+
+format = <label-layout> <label-indicator>
+label-layout =  %layout%
+
+label-layout-foreground = ${color.fg1}
+label-indicator-on-capslock = %icon%
+indicator-icon-0 = caps lock;-CL;ﰵ
+label-indicator-on-capslock-foreground = ${color.red}
+
+
+[module/mpd]
+type = internal/mpd
+
+label-song = ﱘ %artist% - %title%
+label-song-maxlen = 60
+format-playing = <label-song>
+format-paused =
+
+label-song-foreground = ${color.fg0}
+
+format-padding = 1

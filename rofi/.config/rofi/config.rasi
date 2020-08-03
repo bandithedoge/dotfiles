@@ -1,0 +1,4 @@
+configuration {
+    modi: "menu:rofi-power-menu,window,drun,run,calc";
+    theme: "flat-gruvbox";
+}
