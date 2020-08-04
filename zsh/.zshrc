@@ -117,7 +117,7 @@ ZSH_AUTOSUGGEST_STRATEGY=(history)
 alias ls="exa -la"
 alias c="clear"
 alias upgd="archnews && sudo reflector -c "Poland" -f 12 -l 10 -n 12 --save /etc/pacman.d/mirrorlist && yay -Syu && flatpak update && yay -Sc --noconfirm && sudo pacman -Rs $(pacman -Qtdq) --noconfirm"
-alias btw="figlet 'BTW, I use' && neofetch"
+alias btw="figlet 'BTW, I use' && echo '' && neofetch"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
