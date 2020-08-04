@@ -106,8 +106,6 @@ ramp-volume-2 = 墳
 label-muted = ﱝ Muted
 label-muted-foreground = ${color.red}
 
-click-right = pavucontrol &
-
 
 [module/bspwm]
 type = internal/bspwm
@@ -133,7 +131,6 @@ label-urgent-padding = 1
 [module/memory]
 type = internal/memory
 interval = 0.3
-
 label =  %mb_used%
 label-foreground = ${color.fg2}
 
