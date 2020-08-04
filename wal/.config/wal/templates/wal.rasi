@@ -1,54 +1,55 @@
+
 /**
  * ROFI Color theme
  * User: mbfraga
  * Copyright: Martin B. Fraga
  *
- * gruvbox mod by bandithedoge
+ * pywal mod by bandithedoge
  */
 
 /* global settings and color variables */
-* {
-   maincolor:        #7c6f64;
-   highlight:        bold #fbf1c7;
-   urgentcolor:      #cc241d;
+* {{
+   maincolor:        {color2};
+   highlight:        bold {foreground};
+   urgentcolor:      {color2};
 
-   fgwhite:          #ebdbb2;
-   blackdarkest:     #282828;
+   fgwhite:          {foreground};
+   blackdarkest:     {background};
    blackwidget:      @blackdarkest;
    blackentry:       @blackdarkest;
-   blackselect:      #7c6f64;
+   blackselect:      @maincolor;
    darkgray:         @blackselect;
    scrollbarcolor:   @maincolor;
    font: "FuraCode Nerd Font 12";
    background-color: @blackdarkest;
-}
+}}
 
-window {
+window {{
    background-color: @blackdarkest;
    anchor: north;
    location: north;
    y-offset: 30%;
    border: 2;
    border-color: @maincolor;
-}
+}}
 
-mainbox {
+mainbox {{
    background-color: @blackdarkest;
    spacing:0px;
    children: [inputbar, message, mode-switcher, listview];
-}
+}}
 
-message {
+message {{
    padding: 6px 10px;
    background-color:@blackwidget;
-}
+}}
 
-textbox {
+textbox {{
    text-color:@darkgray;
    background-color:@blackwidget;
-}
+}}
 
-listview {
+listview {{
    fixed-height: false;
    dynamic: true;
    scrollbar: true;
@@ -56,96 +57,96 @@ listview {
    padding: 1px 0px 0px 0px;
    margin: 0px 0px 1px 0px;
    background: @blackdarkest;
-}
+}}
 
-element {
+element {{
    padding: 2px 15px;
-}
+}}
 
-element normal.normal {
+element normal.normal {{
    padding: 0px 15px;
    background-color: @blackentry;
    text-color: @fgwhite;
-}
+}}
 
-element normal.urgent {
+element normal.urgent {{
    background-color: @blackentry;
    text-color: @urgentcolor;
-}
+}}
 
-element normal.active {
+element normal.active {{
    background-color: @blackentry;
    text-color: @maincolor;
-}
+}}
 
-element selected.normal {
+element selected.normal {{
     background-color: @blackselect;
     text-color:       @fgwhite;
-}
+}}
 
-element selected.urgent {
+element selected.urgent {{
     background-color: @urgentcolor;
     text-color:       @blackdarkest;
-}
+}}
 
-element selected.active {
+element selected.active {{
     background-color: @maincolor;
     text-color:       @blackdarkest;
-}
+}}
 
-element alternate.normal {
+element alternate.normal {{
     background-color: @blackentry;
     text-color:       @fgwhite;
-}
+}}
 
-element alternate.urgent {
+element alternate.urgent {{
     background-color: @blackentry;
     text-color:       @urgentcolor;
-}
+}}
 
-element alternate.active {
+element alternate.active {{
     background-color: @blackentry;
     text-color:       @maincolor;
-}
+}}
 
-scrollbar {
+scrollbar {{
    background-color: @blackwidget;
    handle-color: @scrollbarcolor;
    handle-width: 15px;
-}
+}}
 
-mode-switcher {
+mode-switcher {{
    background-color: @blackwidget;
-}
+}}
 
-button {
+button {{
    background-color: @blackwidget;
    text-color:       @darkgray;
-}
+}}
 
-button selected {
+button selected {{
     text-color:       @fgwhite;
-}
+}}
 
-inputbar {
+inputbar {{
    background-color: @blackdarkest;
    spacing: 0px;
-}
+}}
 
-prompt {
+prompt {{
    padding:6px 9px;
    background-color: @maincolor;
    text-color:@blackwidget;
-}
+}}
 
-entry {
+entry {{
    padding:6px 10px;
    background-color:@blackwidget;
    text-color:@fgwhite;
-}
+}}
 
-case-indicator {
+case-indicator {{
    padding:6px 10px;
    text-color:@maincolor;
    background-color:@blackwidget;
-}
+}}

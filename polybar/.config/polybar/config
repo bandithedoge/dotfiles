@@ -1,17 +1,16 @@
 ; vim: ft=dosini
 
 [color]
-bg0 = #282828
-bg0h = #1d2021
-bg4 = #7c6f64
+bg0 = ${xrdb:color0}
+bg4 = ${xrdb:color1}
 
-fg0 = #fbf1c7
-fg1 = #ebdbb2
-fg2 = #d5c4a1
-fg3 = #bdae93
-fg4 = #a89984
+fg0 = ${xrdb:color7}
+fg1 = ${xrdb:color6}
+fg2 = ${xrdb:color5}
+fg3 = ${xrdb:color4}
+fg4 = ${xrdb:color3}
 
-red = #cc241d
+red = ${xrdb:color2}
 
 
 [bars]
@@ -122,7 +121,7 @@ label-focused-padding = 1
 
 label-occupied = %name%
 label-occupied-padding = 1
-label-occupied-foreground = ${color.fg2}
+label-occupied-foreground = ${color.fg3}
 
 label-empty = 
 

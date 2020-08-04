@@ -1,4 +1,4 @@
 configuration {
     modi: "menu:rofi-power-menu,window,drun,run,calc";
-    theme: "flat-gruvbox";
+    theme: "~/.cache/wal/wal.rasi";
 }

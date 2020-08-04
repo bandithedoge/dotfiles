@@ -1,6 +1,6 @@
 call plug#begin('~/.vim/plugged')
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'morhetz/gruvbox'
+Plug 'dylanaraps/wal.vim'
 Plug 'itchyny/lightline.vim'
 Plug 'mhinz/vim-signify'
 Plug 'kovetskiy/sxhkd-vim'
@@ -33,11 +33,10 @@ set number
 set relativenumber
 set clipboard=unnamedplus
 set noshowmode
-set termguicolors
 
-colorscheme gruvbox
+colorscheme wal
 let g:lightline = {
-      \ 'colorscheme': 'gruvbox',
+      \ 'colorscheme': 'wal',
       \ }
 
 highlight Normal ctermbg=none
