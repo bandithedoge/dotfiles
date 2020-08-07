@@ -179,6 +179,14 @@ super + a
 super + shift + p
   rofi-pass
 
+# discord
+super + d
+	lightcord
+
+# emacs
+super + e
+	emacs
+
 #
 # media control
 #

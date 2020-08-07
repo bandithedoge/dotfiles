@@ -9,7 +9,7 @@ sxhkd &					                	# hotkey daemon
 lxsession &				                   	# for apps that need authorization
 nitrogen --restore &	        			# set wallpaper from nitrogen
 dunst -conf ~/.cache/wal/dunstrc &          # notification daemon
-picom &				                		# compositor (transparency, shadows, etc.)
+picom &                              		# compositor (transparency, shadows, etc.)
 ~/.config/polybar/launch.sh	        		# polybar
 
 # monitors
@@ -43,3 +43,4 @@ bspc rule -a vlc state=floating focus=on
 bspc rule -a Nfoview state=floating focus=on
 bspc rule -a Cinelerra state=floating focus=on
 bspc rule -a mpv state=floating focus=on
+bspc rule -a Emacs state=tiled focus=on
