@@ -14,6 +14,7 @@ Plug 'preservim/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'alaviss/nim.nvim'
 Plug 'ChesleyTan/wordCount.vim'
+Plug 'tpope/vim-fugitive'
 call plug#end()
 
 let g:indent_guides_enable_on_vim_startup = 1
