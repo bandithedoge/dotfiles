@@ -185,7 +185,7 @@ super + d
 
 # emacs
 super + e
-	emacs
+	emacsclient -c -a emacs
 
 #
 # media control
