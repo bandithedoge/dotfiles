@@ -1,6 +1,6 @@
 ![screenshot](/screenshot.png)
 
-Wallpaper taken from [here](https://www.behance.net/gallery/65912855/Ominous-Anxious).
+Wallpaper taken from [here](https://www.deviantart.com/kawitt/art/The-Neon-Shallows-823330548).
 
 **Please do not blindly clone this repo and install the dotfiles on your system. They have very specific settings that won't work for everyone. Only use this repo as reference for writing your own configs.**
 
