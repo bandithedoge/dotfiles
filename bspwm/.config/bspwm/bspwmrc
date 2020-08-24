@@ -21,6 +21,8 @@ done
 bspc config border_width 2		        	# borders
 bspc config window_gap 10			        # FUCKEN GAPS!!11111!!111!
 bspc config focus_follows_pointer true		# hover to focus
+bspc config gapless_monocle true            # no gaps in monocle layout
+bspc config borderless_monocle true         # no borders in monocle layout
 
 # colors
 bspc config normal_border_color "$color1"
