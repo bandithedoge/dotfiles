@@ -1,0 +1,74 @@
+/* tall line progress bar handle */
+.progress-bar .handle {
+    height: 14px;
+    width: 1px;
+    border-radius: 20%;
+}
+
+.progress-bar-wrapper--ltr .progress-bar .handle {
+    right: -3px;
+}
+
+/* center text on cards */
+.Card__info-wrapper,
+.card-info-wrapper.card-info-with-subtitle-links,
+.card-info-wrapper.card-info-with-metadata {
+    text-align: center;
+}
+
+/* popup sidebar
+TODO: fix weird text and avatars
+this is broken as fuck, don't use it */
+/*
+#menu-wrapper,
+#view-buddy-list {
+    width: 73px;
+    min-width: inherit;
+    transition: 0.3s width;
+}
+
+#menu-wrapper:hover,
+#view-buddy-list:hover {
+    width: 20%;
+}
+
+.leftSidebar span {
+    display: none;
+}
+
+.section-divider-sticky-wrapper {
+    display: none;
+}
+
+#view-buddy-list:hover + .section-divider-sticky-wrapper {
+    display: block;
+}
+*/
+
+/* centered headers */
+.HomeRoot__header .Header__title-text,
+#artist-page .Header__title-text {
+    text-align: center;
+}
+
+ul.nav.navbar-nav {
+    justify-content: center;
+    display: flex;
+}
+
+.glue-page-header__spacer, .Header__spacer {
+    display: none;
+}
+
+.AlbumHeader h1.Header__title-text {
+    text-align: left;
+}
+
+/* centered button thing */
+.popover-footer .button,
+button.button-with-stroke {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px;
+}

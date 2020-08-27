@@ -14,4 +14,4 @@ cd dotfiles
 stow <whatever you want to use>
 ```
 
-If you want to replace your existing configs: `stow <whatever you want to use> --adopt`
+If you want to replace your existing configs, use the `--adopt` flag and pull the repo.
