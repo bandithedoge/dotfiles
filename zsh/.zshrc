@@ -26,3 +26,4 @@ alias btw="figlet 'BTW, I use' && echo '' && neofetch"
 alias ds="~/.emacs.d/bin/doom sync"
 
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+if [ -e /home/bandithedoge/.nix-profile/etc/profile.d/nix.sh ]; then . /home/bandithedoge/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer

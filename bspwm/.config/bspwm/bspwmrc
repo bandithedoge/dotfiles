@@ -4,6 +4,9 @@
 wal -R -n
 . "${HOME}/.cache/wal/colors.sh"
 
+# screens
+~/.screenlayout/xrandr.sh
+
 # startup shit
 sxhkd &					                	# hotkey daemon
 lxsession &				                   	# for apps that need authorization

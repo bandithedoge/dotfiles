@@ -23,7 +23,7 @@ rights = xkeyboard sep cpu sep memory sep pulseaudio sep date
 
 [bar/right]
 enable-ipc = true
-monitor = HDMI-0
+monitor = HDMI-A-1
 tray-position = right
 locale = pl_PL.UTF-8
 
@@ -41,7 +41,7 @@ wm-restack = bspwm
 
 [bar/center]
 enable-ipc = true
-monitor = DVI-D-1
+monitor = DVI-D-0
 locale = pl_PL.UTF-8
 
 modules-left = ${bars.lefts}
