@@ -16,7 +16,7 @@ red = ${xrdb:color2}
 [bars]
 lefts = bspwm title
 centers = 
-rights = xkeyboard sep cpu sep memory sep pulseaudio sep date 
+rights = xkeyboard sep cpu sep temperature sep memory sep pulseaudio sep date
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -180,3 +180,18 @@ format-paused =
 label-song-foreground = ${color.fg0}
 
 format-padding = 1
+
+
+[module/temperature]
+type = internal/temperature
+
+hwmon-path = /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp2_input
+
+format = <ramp> <label>
+label = %temperature-c%
+label-foreground = ${color.fg2}
+
+ramp-0 = 
+ramp-1 = 
+ramp-2 = 
+ramp-foreground = ${color.fg2}
