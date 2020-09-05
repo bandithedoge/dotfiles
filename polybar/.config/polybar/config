@@ -190,6 +190,8 @@ hwmon-path = /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp2_input
 format = <ramp> <label>
 label = %temperature-c%
 label-foreground = ${color.fg2}
+label-warn =  %temperature-c%
+label-warn-foreground = ${color.red}
 
 ramp-0 = 
 ramp-1 = 
