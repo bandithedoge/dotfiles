@@ -150,3 +150,7 @@ case-indicator {{
    text-color:@maincolor;
    background-color:@blackwidget;
 }}
+
+element-icon {
+    size: 2ch;
+}

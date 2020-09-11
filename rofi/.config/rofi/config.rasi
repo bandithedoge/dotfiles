@@ -1,4 +1,8 @@
 configuration {
     modi: "menu:rofi-power-menu,window,drun,run,calc";
     theme: "~/.cache/wal/wal.rasi";
+    window-format: "{t}";
+    scroll-method: 1;
+    matching: "fuzzy";
+    drun-display-format: "{name}";
 }
