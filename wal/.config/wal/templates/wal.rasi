@@ -151,6 +151,6 @@ case-indicator {{
    background-color:@blackwidget;
 }}
 
-element-icon {
+element-icon {{
     size: 2ch;
-}
+}}
