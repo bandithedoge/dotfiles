@@ -15,6 +15,7 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'alaviss/nim.nvim'
 Plug 'ChesleyTan/wordCount.vim'
 Plug 'tpope/vim-fugitive'
+Plug 'morhetz/gruvbox'
 call plug#end()
 
 let g:indent_guides_enable_on_vim_startup = 1
@@ -35,9 +36,9 @@ set relativenumber
 set clipboard=unnamedplus
 set noshowmode
 
-colorscheme wal
+colorscheme gruvbox
 let g:lightline = {
-      \ 'colorscheme': 'wal',
+      \ 'colorscheme': 'gruvbox',
       \ }
 
 highlight Normal ctermbg=none

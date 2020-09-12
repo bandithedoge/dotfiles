@@ -165,7 +165,7 @@ XF86Calculator
 
 # music player
 XF86Tools
-	flatpak run com.spotify.Client
+	spotify
 
 # screenshot
 Print

@@ -1,16 +1,16 @@
 ; vim: ft=dosini
 
 [color]
-bg0 = ${xrdb:color0}
-bg4 = ${xrdb:color1}
+bg0 = #282828
+bg4 = #7c6f64
 
-fg0 = ${xrdb:color7}
-fg1 = ${xrdb:color6}
-fg2 = ${xrdb:color5}
-fg3 = ${xrdb:color4}
-fg4 = ${xrdb:color3}
+fg0 = #fbf1c7
+fg1 = #ebdbb2
+fg2 = #d5c4a1
+fg3 = #bdae93
+fg4 = #a89984
 
-red = ${xrdb:color2}
+red = #fb4934
 
 
 [bars]
