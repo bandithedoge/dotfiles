@@ -6,4 +6,4 @@ cleanup = true
 
 # custom commands
 [commands]
-"Orphan Cleanup" = "pacman -Rs $(pacman -Qtdq)" # remove orphaned packages
+"Orphan Cleanup" = "sudo pacman -Rs $(pacman -Qtdq)" # remove orphaned packages
