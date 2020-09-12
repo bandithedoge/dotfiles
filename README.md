@@ -1,6 +1,6 @@
 ![screenshot](/screenshot.png)
 
-Wallpaper taken from [here](https://www.deviantart.com/kawitt/art/The-Neon-Shallows-823330548).
+Wallpaper is the cover art of [Masquerade](https://www.hardstyle-releases.com/phuture-noize-bms003/).
 
 **Please do not blindly clone this repo and install the dotfiles on your system. They have very specific settings that won't work for everyone. Only use this repo as reference for writing your own configs.**
 
