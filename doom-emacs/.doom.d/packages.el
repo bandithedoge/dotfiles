@@ -7,3 +7,4 @@
            :files ("doom-themes/*.el")))
 (package! nerd-fonts
   :recipe (:host github :repo "twlz0ne/nerd-fonts.el"))
+(package! wc-mode)

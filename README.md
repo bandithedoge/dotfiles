@@ -4,7 +4,7 @@ Wallpaper is the cover art of [Masquerade](https://www.hardstyle-releases.com/ph
 
 **Please do not blindly clone this repo and install the dotfiles on your system. They have very specific settings that won't work for everyone. Only use this repo as reference for writing your own configs.**
 
-I use [pywal](https://github.com/dylanaraps/pywal) to generate colors. **You need to use it at least once for anything here to work.**
+I use [pywal](https://github.com/dylanaraps/pywal) to generate colors. It's not required but recommended to set the preset gruvbox colorscheme.
 
 If you still want to use some of them, here's how:
 
