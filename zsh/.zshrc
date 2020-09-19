@@ -9,7 +9,6 @@ export EDITOR='nvim'
 ZSH_THEME="powerlevel10k/powerlevel10k"
 ZSH_AUTOSUGGEST_STRATEGY=(history)
 
-
 plugins=(
 	git
 	archlinux
