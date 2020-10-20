@@ -1,6 +1,6 @@
 configuration {
     modi: "menu:rofi-power-menu,window,drun,run,calc";
-    theme: "flat-gruvbox.rasi";
+    theme: "flat-blueballs.rasi";
     window-format: "{t}";
     scroll-method: 1;
     drun-display-format: "{name}";

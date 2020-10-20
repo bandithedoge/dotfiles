@@ -10,7 +10,7 @@
     padding = 8
     horizontal_padding = 8
     frame_width = 2
-    frame_color = "#ebdbb2"
+    frame_color = "#4b74ad"
     separator_color = frame
     sort = yes
     idle_threshold = 120
@@ -54,19 +54,19 @@
     context = ctrl+mod1+space
 
 [urgency_low]
-    background = "#282828"
-    foreground = "#ebdbb2"
-    frame_color = "#98971a"
+    background = "#20222c"
+    foreground = "#d9dceb"
+    frame_color = "#69d26e"
     timeout = 4
 
 [urgency_normal]
-    background = "#282828"
-    foreground = "#ebdbb2"
+    background = "#20222c"
+    foreground = "#d9dceb"
     timeout = 10
 
 [urgency_critical]
-    background = "#282828"
-    foreground = "#ebdbb2"
-    frame_color = "#cc241d"
+    background = "#20222c"
+    foreground = "#d9dceb"
+    frame_color = "#cf4e54"
     timeout = 0
 

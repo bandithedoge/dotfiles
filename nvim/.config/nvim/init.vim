@@ -1,6 +1,5 @@
 call plug#begin('~/.vim/plugged')
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'dylanaraps/wal.vim'
 Plug 'itchyny/lightline.vim'
 Plug 'mhinz/vim-signify'
 Plug 'kovetskiy/sxhkd-vim'
@@ -14,12 +13,13 @@ Plug 'preservim/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'alaviss/nim.nvim'
 Plug 'ChesleyTan/wordCount.vim'
-Plug 'tpope/vim-fugitive'
-Plug 'morhetz/gruvbox'
+Plug 'airblade/vim-gitgutter'
+Plug 'bandithedoge/blueballs.vim'
 call plug#end()
 
 let g:indent_guides_enable_on_vim_startup = 1
 let g:indent_guides_auto_colors = 0
+let NERDTreeShowHidden=1
 
 autocmd BufNewFile,BufRead *.rasi set syntax=css
 
@@ -35,10 +35,11 @@ set number
 set relativenumber
 set clipboard=unnamedplus
 set noshowmode
+set termguicolors
+set cursorline
 
-colorscheme gruvbox
+colorscheme blueballs
+
 let g:lightline = {
-      \ 'colorscheme': 'gruvbox',
+      \ 'colorscheme': 'blueballs',
       \ }
-
-highlight Normal ctermbg=none

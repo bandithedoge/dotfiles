@@ -1,16 +1,16 @@
 ; vim: ft=dosini
 
 [color]
-bg0 = #282828
-bg4 = #7c6f64
+bg0 = #20222c
+bg4 = #35384a
 
-fg0 = #fbf1c7
-fg1 = #ebdbb2
-fg2 = #d5c4a1
-fg3 = #bdae93
-fg4 = #a89984
+fg0 = #d9dceb
+fg1 = #d9dceb
+fg2 = #d9dceb
+fg3 = #d9dceb
+fg4 = #d9dceb
 
-red = #fb4934
+red = #cf4e54
 
 
 [bars]
