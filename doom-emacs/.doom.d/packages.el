@@ -8,3 +8,6 @@
 (package! nerd-fonts
   :recipe (:host github :repo "twlz0ne/nerd-fonts.el"))
 (package! wc-mode)
+(package! org-bullets)
+(package! markdown-toc)
+(package! ox-pandoc)
