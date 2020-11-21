@@ -177,6 +177,7 @@
 ** Theme
 *** TODO Fonts
 *** TODO Port blueballs
+*** TODO Disable some UI elements
 #+begin_src elisp
   ;; theme
   (straight-use-package 'doom-themes)
@@ -189,7 +190,6 @@
   ;; hide scrollbars
   (scroll-bar-mode -1)
 #+end_src
-*** TODO Disable some UI elements
 ** Dashboard
 #+begin_src elisp
   (straight-use-package 'dashboard)
