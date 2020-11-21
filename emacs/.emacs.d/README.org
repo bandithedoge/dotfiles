@@ -2,11 +2,11 @@
 #+PROPERTY: header-args :tangle init.el
 * Table of Contents :toc:
 - [[#straightel][straight.el]]
-- [[#keybindings][Keybindings]]
+- [[#evil][Evil]]
   - [[#evil-mode][Evil-mode]]
   - [[#leader][Leader]]
 - [[#org-mode][Org-mode]]
-  - [[#keybindings-1][Keybindings]]
+  - [[#keybindings][Keybindings]]
   - [[#functionality][Functionality]]
   - [[#ui][UI]]
 - [[#ui-1][UI]]
@@ -17,14 +17,15 @@
   - [[#treemacs][Treemacs]]
   - [[#theme][Theme]]
   - [[#dashboard][Dashboard]]
+  - [[#rainbow-delimiters][rainbow-delimiters]]
 - [[#functionality-1][Functionality]]
   - [[#snippets][Snippets]]
   - [[#projectile][Projectile]]
   - [[#version-control][Version control]]
+  - [[#pairs][Pairs]]
 - [[#languages][Languages]]
 
 * straight.el
-*** TODO Use straight.el hooks
 #+BEGIN_SRC elisp
   ;; straight.el
   (defvar bootstrap-version)
@@ -40,7 +41,7 @@
         (eval-print-last-sexp)))
     (load bootstrap-file nil 'nomessage))
 #+END_SRC
-* Keybindings
+* Evil
 ** Evil-mode
 #+BEGIN_SRC elisp
   ;; evil-mode
@@ -48,7 +49,7 @@
   (straight-use-package 'evil-collection)
 
   (setq evil-want-keybinding 'nil)
-  (evil-mode)
+  (evil-mode 1)
   (evil-collection-init)
 #+END_SRC
 ** Leader
@@ -154,7 +155,6 @@
   (doom-modeline-mode 1)
   (setq doom-modeline-height 35
         doom-modeline-bar-width 3
-        doom-modeline-minor-modes t
         doom-modeline-enable-word-count t
         doom-modeline-indent-info t)
 #+end_src
@@ -177,7 +177,6 @@
 ** Theme
 *** TODO Fonts
 *** TODO Port blueballs
-*** TODO Disable some UI elements
 #+begin_src elisp
   ;; theme
   (straight-use-package 'doom-themes)
@@ -187,13 +186,20 @@
   (global-display-line-numbers-mode)
   ;; highlight current line
   (global-hl-line-mode)
-  ;; hide scrollbars
+  ;; hide ui elements
   (scroll-bar-mode -1)
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
 #+end_src
 ** Dashboard
 #+begin_src elisp
   (straight-use-package 'dashboard)
   (dashboard-setup-startup-hook)
+#+end_src
+** rainbow-delimiters
+#+begin_src elisp
+  (straight-use-package 'rainbow-delimiters)
+  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 #+end_src
 * Functionality
 ** Snippets
@@ -217,7 +223,11 @@
   (straight-use-package 'magithub)
   (straight-use-package 'evil-magit)
 #+end_src
-* Languages
+** Pairs
+#+begin_src elisp
+  (electric-pair-mode)
+#+end_src
+* Languages 
 #+begin_src elisp
   ;; haskell
   (straight-use-package 'haskell-mode)

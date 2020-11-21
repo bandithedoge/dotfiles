@@ -17,7 +17,7 @@
 (straight-use-package 'evil-collection)
 
 (setq evil-want-keybinding 'nil)
-(evil-mode)
+(evil-mode 1)
 (evil-collection-init)
 
 ;; evil-mode leader keybindings
@@ -101,7 +101,6 @@
 (doom-modeline-mode 1)
 (setq doom-modeline-height 35
       doom-modeline-bar-width 3
-      doom-modeline-minor-modes t
       doom-modeline-enable-word-count t
       doom-modeline-indent-info t)
 
@@ -124,11 +123,16 @@
 (global-display-line-numbers-mode)
 ;; highlight current line
 (global-hl-line-mode)
-;; hide scrollbars
+;; hide ui elements
 (scroll-bar-mode -1)
+(menu-bar-mode -1)
+(tool-bar-mode -1)
 
 (straight-use-package 'dashboard)
 (dashboard-setup-startup-hook)
+
+(straight-use-package 'rainbow-delimiters)
+(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 
 ;; yasnippet
 (straight-use-package 'yasnippet)
@@ -143,6 +147,8 @@
 (straight-use-package 'magit-todos)
 (straight-use-package 'magithub)
 (straight-use-package 'evil-magit)
+
+(electric-pair-mode)
 
 ;; haskell
 (straight-use-package 'haskell-mode)
