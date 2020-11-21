@@ -157,7 +157,7 @@ XF86Explorer
 
 # web browser
 XF86HomePage
-	firefox
+	brave
 
 # calculator
 XF86Calculator
