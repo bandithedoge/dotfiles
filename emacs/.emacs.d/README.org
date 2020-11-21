@@ -1,7 +1,7 @@
 #+TITLE: Emacs
 #+PROPERTY: header-args :tangle init.el
 * =straight.el=
-** TODO Use straight.el hooks
+*** TODO Use straight.el hooks
 #+BEGIN_SRC elisp
   ;; straight.el
   (defvar bootstrap-version)
@@ -29,7 +29,7 @@
   (evil-collection-init)
 #+END_SRC
 ** Leader
-** TODO Organize keybindings
+*** TODO Organize keybindings
 #+BEGIN_SRC elisp
   ;; evil-mode leader keybindings
   (straight-use-package 'evil-leader)
@@ -57,13 +57,13 @@
     "t" 'treemacs)
 #+END_SRC
 * Org-mode
-** TODO Tangle on write
+*** TODO Tangle on write
 #+begin_src elisp
   ;; org mode
   (straight-use-package 'org)
 #+end_src
 ** Keybindings
-** TODO Improve keybindings
+*** TODO Improve keybindings
 #+begin_src elisp
   ;; org evil keybindings
   (straight-use-package 'evil-org)
@@ -94,7 +94,7 @@
 #+end_src
 * UI
 ** Ivy
-** TODO Fix search and order
+*** TODO Fix search and order
 #+begin_src elisp
   ;; ivy autocompletion
   (straight-use-package 'ivy)
@@ -124,7 +124,7 @@
   (which-key-mode)
 #+end_src
 ** Modeline
-** TODO Column and size indicator
+*** TODO Column and size indicator
 #+begin_src elisp
   ;; modeline
   (straight-use-package 'doom-modeline)
@@ -142,7 +142,7 @@
   (add-hook 'after-init-hook 'global-company-mode)
 #+end_src
 ** Treemacs
-** TODO Icons
+*** TODO Icons
 #+begin_src elisp
   ;; treemacs file tree
   (straight-use-package 'treemacs)
@@ -152,8 +152,8 @@
   (straight-use-package 'treemacs-projectile)
 #+end_src
 ** Theme
-** TODO Fonts
-** TODO Port blueballs
+*** TODO Fonts
+*** TODO Port blueballs
 #+begin_src elisp
   ;; theme
   (straight-use-package 'doom-themes)
@@ -186,7 +186,7 @@
   (straight-use-package 'projectile)
 #+end_src
 ** Version control
-** TODO Fix evil keybindings
+*** TODO Fix evil keybindings
 #+begin_src elisp
   (straight-use-package 'magit)
   (straight-use-package 'magit-todos)
