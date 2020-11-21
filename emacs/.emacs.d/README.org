@@ -1,0 +1,205 @@
+#+TITLE: Emacs
+#+PROPERTY: header-args :tangle init.el
+* =straight.el=
+** TODO Use straight.el hooks
+#+BEGIN_SRC elisp
+  ;; straight.el
+  (defvar bootstrap-version)
+  (let ((bootstrap-file
+         (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+        (bootstrap-version 5))
+    (unless (file-exists-p bootstrap-file)
+      (with-current-buffer
+          (url-retrieve-synchronously
+           "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+           'silent 'inhibit-cookies)
+        (goto-char (point-max))
+        (eval-print-last-sexp)))
+    (load bootstrap-file nil 'nomessage))
+#+END_SRC
+* Keybindings
+** Evil-mode
+#+BEGIN_SRC elisp
+  ;; evil-mode
+  (straight-use-package 'evil)
+  (straight-use-package 'evil-collection)
+
+  (setq evil-want-keybinding 'nil)
+  (evil-mode)
+  (evil-collection-init)
+#+END_SRC
+** Leader
+** TODO Organize keybindings
+#+BEGIN_SRC elisp
+  ;; evil-mode leader keybindings
+  (straight-use-package 'evil-leader)
+  (straight-use-package 'evil-god-state)
+
+  (global-evil-leader-mode)
+
+  (evil-leader/set-leader "<SPC>")
+  (evil-leader/set-key
+    "<SPC>" 'counsel-M-x'
+    "f" 'find-file
+    "b" 'counsel-switch-buffer
+    "S-<SPC>" 'evil-execute-in-god-state
+    "h" 'evil-window-left
+    "j" 'evil-window-down
+    "k" 'evil-window-up
+    "l" 'evil-window-right
+    "s" 'evil-window-split
+    "v" 'evil-window-vsplit
+    "W" 'evil-window-delete
+    "w" 'kill-current-buffer
+    "B" 'kill-buffer
+    "y" 'yas-insert-snippet
+    "g" 'magit
+    "t" 'treemacs)
+#+END_SRC
+* Org-mode
+** TODO Tangle on write
+#+begin_src elisp
+  ;; org mode
+  (straight-use-package 'org)
+#+end_src
+** Keybindings
+** TODO Improve keybindings
+#+begin_src elisp
+  ;; org evil keybindings
+  (straight-use-package 'evil-org)
+  (add-hook 'org-mode-hook 'evil-org-mode)
+#+end_src
+** Functionality
+#+begin_src elisp
+  ;; org table of contents
+  (straight-use-package 'toc-org)
+  (add-hook 'org-mode-hook 'toc-org-mode)
+#+end_src
+** UI
+#+begin_src elisp
+  ;; pretty org headings
+  (straight-use-package 'org-bullets)
+  (add-hook 'org-mode-hook #'org-bullets-mode)
+
+  ;; pretty org fonts
+  (straight-use-package 'org-variable-pitch)
+  (add-hook 'org-mode-hook 'org-variable-pitch-minor-mode)
+
+  ;; pretty org links
+  (straight-use-package 'org-link-beautify)
+  (org-link-beautify-mode 1)
+
+  ;; pretty org indents
+  (add-hook 'org-mode-hook 'org-indent-mode)
+#+end_src
+* UI
+** Ivy
+** TODO Fix search and order
+#+begin_src elisp
+  ;; ivy autocompletion
+  (straight-use-package 'ivy)
+  (ivy-mode 1)
+
+  ;; ivy-based menus
+  (straight-use-package 'counsel)
+  (counsel-mode 1)
+
+  ;; ivy completion strategy
+  (setq ivy-re-builders-alist
+        '((t . ivy--regex)))
+
+  ;; ivy icons
+  (straight-use-package 'all-the-icons-ivy)
+  (all-the-icons-ivy-setup)
+  (setq all-the-icons-ivy-file-commands
+        '(counsel-find-file))
+
+  (setq ivy-height 17
+        ivy-wrap t)
+#+end_src
+** which-key
+#+begin_src elisp
+  ;; which-key
+  (straight-use-package 'which-key)
+  (which-key-mode)
+#+end_src
+** Modeline
+** TODO Column and size indicator
+#+begin_src elisp
+  ;; modeline
+  (straight-use-package 'doom-modeline)
+  (doom-modeline-mode 1)
+  (setq doom-modeline-height 35
+        doom-modeline-bar-width 3
+        doom-modeline-minor-modes t
+        doom-modeline-enable-word-count t
+        doom-modeline-indent-info t)
+#+end_src
+** Autocomplete
+#+begin_src elisp
+  ;; company autocompletion
+  (straight-use-package 'company)
+  (add-hook 'after-init-hook 'global-company-mode)
+#+end_src
+** Treemacs
+** TODO Icons
+#+begin_src elisp
+  ;; treemacs file tree
+  (straight-use-package 'treemacs)
+  (straight-use-package 'treemacs-all-the-icons)
+  (straight-use-package 'treemacs-evil)
+  (straight-use-package 'treemacs-magit)
+  (straight-use-package 'treemacs-projectile)
+#+end_src
+** Theme
+** TODO Fonts
+** TODO Port blueballs
+#+begin_src elisp
+  ;; theme
+  (straight-use-package 'doom-themes)
+  (load-theme 'doom-dracula t)
+
+  ;; line numbers
+  (global-display-line-numbers-mode)
+  ;; highlight current line
+  (global-hl-line-mode)
+  ;; hide scrollbars
+  (scroll-bar-mode -1)
+#+end_src
+** Dashboard
+#+begin_src elisp
+  (straight-use-package 'dashboard)
+  (dashboard-setup-startup-hook)
+#+end_src
+* Functionality
+** Snippets
+#+begin_src elisp
+  ;; yasnippet
+  (straight-use-package 'yasnippet)
+  (yas-global-mode)
+
+  (straight-use-package 'yasnippet-snippets)
+#+end_src
+** Projectile
+#+begin_src elisp
+  ;; projectile
+  (straight-use-package 'projectile)
+#+end_src
+** Version control
+** TODO Fix evil keybindings
+#+begin_src elisp
+  (straight-use-package 'magit)
+  (straight-use-package 'magit-todos)
+  (straight-use-package 'magithub)
+  (straight-use-package 'evil-magit)
+#+end_src
+* Languages
+#+begin_src elisp
+  ;; haskell
+  (straight-use-package 'haskell-mode)
+  (straight-use-package 'company-ghc)
+
+  ;; html/css/js
+  (straight-use-package 'web-mode)
+  (straight-use-package 'company-web)
+#+end_src
