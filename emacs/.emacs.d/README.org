@@ -1,6 +1,6 @@
 #+TITLE: Emacs
 #+PROPERTY: header-args :tangle init.el
-* =straight.el=
+* straight.el
 *** TODO Use straight.el hooks
 #+BEGIN_SRC elisp
   ;; straight.el
