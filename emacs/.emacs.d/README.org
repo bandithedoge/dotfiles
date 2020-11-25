@@ -17,7 +17,6 @@
   - [[#treemacs][Treemacs]]
   - [[#theme][Theme]]
   - [[#dashboard][Dashboard]]
-  - [[#rainbow-delimiters][rainbow-delimiters]]
 - [[#functionality-1][Functionality]]
   - [[#snippets][Snippets]]
   - [[#projectile][Projectile]]
@@ -51,8 +50,12 @@
   (setq evil-want-keybinding 'nil)
   (evil-mode 1)
   (evil-collection-init)
+
+  (straight-use-package 'undo-fu)
+  (evil-set-undo-system 'undo-fu)
 #+END_SRC
 ** Leader
+*** TODO Move window keybindings
 *** TODO Organize keybindings
 #+BEGIN_SRC elisp
   ;; evil-mode leader keybindings
@@ -78,7 +81,8 @@
     "B" 'kill-buffer
     "y" 'yas-insert-snippet
     "g" 'magit
-    "t" 'treemacs)
+    "t" 'treemacs
+    "v" 'evil-visual-block)
 #+END_SRC
 * Org-mode
 *** TODO Tangle on write
@@ -87,7 +91,6 @@
   (straight-use-package 'org)
 #+end_src
 ** Keybindings
-*** TODO Improve keybindings
 #+begin_src elisp
   ;; org evil keybindings
   (straight-use-package 'evil-org)
@@ -100,6 +103,7 @@
   (add-hook 'org-mode-hook 'toc-org-mode)
 #+end_src
 ** UI
+*** TODO Monospace line numbers
 #+begin_src elisp
   ;; pretty org headings
   (straight-use-package 'org-bullets)
@@ -165,7 +169,8 @@
   (add-hook 'after-init-hook 'global-company-mode)
 #+end_src
 ** Treemacs
-*** TODO Icons
+*** TODO Prettier icons
+*** TODO No cursor and line numbers
 #+begin_src elisp
   ;; treemacs file tree
   (straight-use-package 'treemacs)
@@ -179,6 +184,8 @@
 *** TODO Port blueballs
 #+begin_src elisp
   ;; theme
+  (straight-use-package 'solaire-mode)
+  (solaire-global-mode +1)
   (straight-use-package 'doom-themes)
   (load-theme 'doom-dracula t)
 
@@ -190,16 +197,15 @@
   (scroll-bar-mode -1)
   (menu-bar-mode -1)
   (tool-bar-mode -1)
+
+  ;; rainbow delimiters
+  (straight-use-package 'rainbow-delimiters)
+  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 #+end_src
 ** Dashboard
 #+begin_src elisp
   (straight-use-package 'dashboard)
   (dashboard-setup-startup-hook)
-#+end_src
-** rainbow-delimiters
-#+begin_src elisp
-  (straight-use-package 'rainbow-delimiters)
-  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 #+end_src
 * Functionality
 ** Snippets
@@ -221,7 +227,9 @@
   (straight-use-package 'magit)
   (straight-use-package 'magit-todos)
   (straight-use-package 'magithub)
+
   (straight-use-package 'evil-magit)
+  (setq evil-magit-state 'normal)
 #+end_src
 ** Pairs
 #+begin_src elisp

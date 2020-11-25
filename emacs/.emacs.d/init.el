@@ -20,6 +20,9 @@
 (evil-mode 1)
 (evil-collection-init)
 
+(straight-use-package 'undo-fu)
+(evil-set-undo-system 'undo-fu)
+
 ;; evil-mode leader keybindings
 (straight-use-package 'evil-leader)
 (straight-use-package 'evil-god-state)
@@ -43,7 +46,8 @@
   "B" 'kill-buffer
   "y" 'yas-insert-snippet
   "g" 'magit
-  "t" 'treemacs)
+  "t" 'treemacs
+  "v" 'evil-visual-block)
 
 ;; org mode
 (straight-use-package 'org)
@@ -116,6 +120,8 @@
 (straight-use-package 'treemacs-projectile)
 
 ;; theme
+(straight-use-package 'solaire-mode)
+(solaire-global-mode +1)
 (straight-use-package 'doom-themes)
 (load-theme 'doom-dracula t)
 
@@ -128,11 +134,12 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 
-(straight-use-package 'dashboard)
-(dashboard-setup-startup-hook)
-
+;; rainbow delimiters
 (straight-use-package 'rainbow-delimiters)
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+
+(straight-use-package 'dashboard)
+(dashboard-setup-startup-hook)
 
 ;; yasnippet
 (straight-use-package 'yasnippet)
@@ -146,7 +153,9 @@
 (straight-use-package 'magit)
 (straight-use-package 'magit-todos)
 (straight-use-package 'magithub)
+
 (straight-use-package 'evil-magit)
+(setq evil-magit-state 'normal)
 
 (electric-pair-mode)
 
