@@ -1,136 +1,169 @@
-;; straight.el
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
+;; (defvar bootstrap-version)
+ ;; (let ((bootstrap-file
+ ;;        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+ ;;       (bootstrap-version 5))
+ ;;   (unless (file-exists-p bootstrap-file)
+ ;;     (with-current-buffer
+ ;;         (url-retrieve-synchronously
+ ;;          "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+ ;;          'silent 'inhibit-cookies)
+ ;;       (goto-char (point-max))
+ ;;       (eval-print-last-sexp)))
+ ;;   (load bootstrap-file nil 'nomessage))
+
+(require 'package)
+(setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                         ("org". "https://orgmode.org/elpa/")
+                         ("elpa" . "https://elpa.gnu.org/packages")))
+
+(package-initialize)
+(unless package-archive-contents
+ (package-refresh-contents))
+
+(unless (package-installed-p 'use-package)
+ (package-install 'use-package))
+
+(require 'use-package)
+(setq use-package-always-ensure t)
+
+(use-package undo-fu)
 
 ;; evil-mode
-(straight-use-package 'evil)
-(straight-use-package 'evil-collection)
+(use-package evil
+  :init
+  (setq evil-want-keybinding 'nil)
+  :config
+  (evil-mode 1)
+  (evil-set-undo-system 'undo-fu))
 
-(setq evil-want-keybinding 'nil)
-(evil-mode 1)
-(evil-collection-init)
+(use-package evil-collection
+  :after evil
+  :config
+  (evil-collection-init))
 
-(straight-use-package 'undo-fu)
-(evil-set-undo-system 'undo-fu)
+(use-package evil-commentary
+  :config
+  (evil-commentary-mode))
 
 ;; evil-mode leader keybindings
-(straight-use-package 'evil-leader)
-(straight-use-package 'evil-god-state)
+(use-package evil-god-state)
 
-(global-evil-leader-mode)
+(use-package evil-leader
+  :config
+  (global-evil-leader-mode)
+  (evil-leader/set-leader "<SPC>")
+  (evil-leader/set-key
+    "<SPC>" 'counsel-M-x'
+    "f" 'find-file
+    "b" 'counsel-switch-buffer
+    "S-<SPC>" 'evil-execute-in-god-state
+    "/" 'swiper
 
-(evil-leader/set-leader "<SPC>")
-(evil-leader/set-key
-  "<SPC>" 'counsel-M-x'
-  "f" 'find-file
-  "b" 'counsel-switch-buffer
-  "S-<SPC>" 'evil-execute-in-god-state
+    "h" 'evil-window-left
+    "j" 'evil-window-down
+    "k" 'evil-window-up
+    "l" 'evil-window-right
 
-  "h" 'evil-window-left
-  "j" 'evil-window-down
-  "k" 'evil-window-up
-  "l" 'evil-window-right
+    "H" 'evil-window-move-far-left
+    "J" 'evil-window-move-very-bottom
+    "K" 'evil-window-move-very-top
+    "L" 'evil-window-move-far-right
 
-  "H" 'evil-window-move-far-left
-  "J" 'evil-window-move-very-bottom
-  "K" 'evil-window-move-very-top
-  "L" 'evil-window-move-far-right
+    "s" 'evil-window-split
+    "S" 'evil-window-vsplit
+    "W" 'evil-window-delete
+    "w" 'kill-current-buffer
+    "B" 'kill-buffer
 
-  "s" 'evil-window-split
-  "S" 'evil-window-vsplit
-  "W" 'evil-window-delete
-  "w" 'kill-current-buffer
-  "B" 'kill-buffer
-
-  "y" 'yas-insert-snippet
-  "g" 'magit
-  "t" 'treemacs
-  "v" 'evil-visual-block)
+    "y" 'yas-insert-snippet
+    "g" 'magit
+    "t" 'treemacs
+    "v" 'evil-visual-block)
 
 ;; org mode
-(straight-use-package 'org)
+(use-package org
+  :config
+  (add-hook 'org-mode-hook 'org-indent-mode))
 
 ;; org evil keybindings
-(straight-use-package 'evil-org)
-(add-hook 'org-mode-hook 'evil-org-mode)
+(use-package evil-org
+  :config
+  (add-hook 'org-mode-hook 'evil-org-mode))
 
 ;; org table of contents
-(straight-use-package 'toc-org)
-(add-hook 'org-mode-hook 'toc-org-mode)
+(use-package toc-org
+  :config
+  (add-hook 'org-mode-hook 'toc-org-mode))
 
 ;; pretty org headings
-(straight-use-package 'org-bullets)
-(add-hook 'org-mode-hook #'org-bullets-mode)
+(use-package org-bullets
+  :config
+  (add-hook 'org-mode-hook #'org-bullets-mode))
 
 ;; pretty org fonts
-(straight-use-package 'org-variable-pitch)
-(add-hook 'org-mode-hook 'org-variable-pitch-minor-mode)
+(use-package org-variable-pitch
+  :config
+  (add-hook 'org-mode-hook 'org-variable-pitch-minor-mode))
 
 ;; pretty org links
-(straight-use-package 'org-link-beautify)
-(org-link-beautify-mode 1)
-
-;; pretty org indents
-(add-hook 'org-mode-hook 'org-indent-mode)
+(use-package org-link-beautify
+  :config
+  (org-link-beautify-mode 1))
 
 ;; ivy autocompletion
-(straight-use-package 'ivy)
-(ivy-mode 1)
+(use-package ivy
+  :config
+  (ivy-mode 1)
+  (setq ivy-re-builders-alist
+        '((t . ivy--regex)))
+  (setq ivy-height 17
+        ivy-wrap t))
 
 ;; ivy-based menus
-(straight-use-package 'counsel)
-(counsel-mode 1)
-
-;; ivy completion strategy
-(setq ivy-re-builders-alist
-      '((t . ivy--regex)))
+(use-package counsel
+  :config
+  (counsel-mode 1))
 
 ;; ivy icons
-(straight-use-package 'all-the-icons-ivy)
-(all-the-icons-ivy-setup)
-(setq all-the-icons-ivy-file-commands
-      '(counsel-find-file))
+(use-package all-the-icons-ivy
+  :config
+  (all-the-icons-ivy-setup)
+  (setq all-the-icons-ivy-file-commands
+          '(counsel-find-file)))
 
-(setq ivy-height 17
-      ivy-wrap t)
+(use-package swiper)
 
 ;; which-key
-(straight-use-package 'which-key)
-(which-key-mode)
+(use-package which-key
+  :config
+  (which-key-mode))
 
 ;; modeline
-(straight-use-package 'doom-modeline)
-(doom-modeline-mode 1)
-(setq doom-modeline-height 35
-      doom-modeline-bar-width 3
-      doom-modeline-enable-word-count t
-      doom-modeline-indent-info t)
+(use-package doom-modeline
+  :config
+  (doom-modeline-mode 1)
+  (setq doom-modeline-height 35
+        doom-modeline-bar-width 3
+        doom-modeline-enable-word-count t
+        doom-modeline-indent-info t))
 
 ;; company autocompletion
-(straight-use-package 'company)
-(add-hook 'after-init-hook 'global-company-mode)
+(use-package company
+  :config
+  (add-hook 'after-init-hook 'global-company-mode))
 
 ;; treemacs file tree
-(straight-use-package 'treemacs)
-(straight-use-package 'treemacs-all-the-icons)
-(straight-use-package 'treemacs-evil)
-(straight-use-package 'treemacs-magit)
-(straight-use-package 'treemacs-projectile)
+(use-package treemacs)
+(use-package treemacs-all-the-icons)
+(use-package treemacs-evil)
+(use-package treemacs-magit)
+(use-package treemacs-projectile)
 
 ;; theme
-(straight-use-package 'solaire-mode)
-(solaire-global-mode +1)
-(straight-use-package 'doom-themes)
+(use-package solaire-mode
+  :config
+  (solaire-global-mode +1))
+(use-package doom-themes)
 (load-theme 'doom-dracula t)
 
 ;; line numbers
@@ -141,39 +174,61 @@
 (scroll-bar-mode -1)
 (menu-bar-mode -1)
 (tool-bar-mode -1)
+(tooltip-mode -1)
 
 ;; rainbow delimiters
-(straight-use-package 'rainbow-delimiters)
-(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+(use-package rainbow-delimiters
+  :config
+  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
-(straight-use-package 'dashboard)
-(dashboard-setup-startup-hook)
+;; font
+(set-face-attribute 'default nil :font "FiraCode Nerd Font")
+
+(use-package dashboard
+  :config
+  (dashboard-setup-startup-hook))
 
 ;; yasnippet
-(straight-use-package 'yasnippet)
-(yas-global-mode)
+(use-package yasnippet
+  :config
+  (yas-global-mode))
 
-(straight-use-package 'yasnippet-snippets)
+(use-package yasnippet-snippets)
 
 ;; projectile
-(straight-use-package 'projectile)
+(use-package projectile)
 
-(straight-use-package 'magit)
-(straight-use-package 'magit-todos)
-(straight-use-package 'magithub)
+(use-package magit)
+(use-package magit-todos)
+(use-package magithub)
 
-(straight-use-package 'evil-magit)
-(setq evil-magit-state 'normal)
+(use-package evil-magit
+  :config
+  (setq evil-magit-state 'normal))
 
 (electric-pair-mode)
 
-(straight-use-package 'elcord)
-(elcord-mode)
+(use-package elcord
+  :config
+  (elcord-mode))
 
 ;; haskell
-(straight-use-package 'haskell-mode)
-(straight-use-package 'company-ghc)
+(use-package haskell-mode)
+(use-package company-ghc)
 
 ;; html/css/js
-(straight-use-package 'web-mode)
-(straight-use-package 'company-web)
+(use-package web-mode)
+(use-package company-web)
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(safe-local-variable-values
+   '((eval add-hook 'after-save-hook
+	   (lambda nil
+	     (if
+		 (y-or-n-p "Tangle?")
+		 (org-babel-tangle)))
+	   nil t))))
