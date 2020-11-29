@@ -35,15 +35,23 @@
   "f" 'find-file
   "b" 'counsel-switch-buffer
   "S-<SPC>" 'evil-execute-in-god-state
+
   "h" 'evil-window-left
   "j" 'evil-window-down
   "k" 'evil-window-up
   "l" 'evil-window-right
+
+  "H" 'evil-window-move-far-left
+  "J" 'evil-window-move-very-bottom
+  "K" 'evil-window-move-very-top
+  "L" 'evil-window-move-far-right
+
   "s" 'evil-window-split
-  "v" 'evil-window-vsplit
+  "S" 'evil-window-vsplit
   "W" 'evil-window-delete
   "w" 'kill-current-buffer
   "B" 'kill-buffer
+
   "y" 'yas-insert-snippet
   "g" 'magit
   "t" 'treemacs
@@ -158,6 +166,9 @@
 (setq evil-magit-state 'normal)
 
 (electric-pair-mode)
+
+(straight-use-package 'elcord)
+(elcord-mode)
 
 ;; haskell
 (straight-use-package 'haskell-mode)
