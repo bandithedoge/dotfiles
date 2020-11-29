@@ -1,15 +1,5 @@
-;; (defvar bootstrap-version)
- ;; (let ((bootstrap-file
- ;;        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
- ;;       (bootstrap-version 5))
- ;;   (unless (file-exists-p bootstrap-file)
- ;;     (with-current-buffer
- ;;         (url-retrieve-synchronously
- ;;          "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
- ;;          'silent 'inhibit-cookies)
- ;;       (goto-char (point-max))
- ;;       (eval-print-last-sexp)))
- ;;   (load bootstrap-file nil 'nomessage))
+(setq user-full-name "Mikołaj Lercher"
+      user-mail-address "bandithedoge@protonmail.com")
 
 (require 'package)
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
@@ -51,64 +41,46 @@
 (use-package evil-leader
   :config
   (global-evil-leader-mode)
-  (evil-leader/set-leader "<SPC>")
-  (evil-leader/set-key
-    "<SPC>" 'counsel-M-x'
-    "f" 'find-file
-    "b" 'counsel-switch-buffer
-    "S-<SPC>" 'evil-execute-in-god-state
-    "/" 'swiper
+  (evil-leader/set-leader "<SPC>"))
+(evil-leader/set-key
+  "<SPC>" 'counsel-M-x'
+  "f" 'find-file
+  "b" 'counsel-switch-buffer
+  "S-<SPC>" 'evil-execute-in-god-state
+  "/" 'swiper
 
-    "h" 'evil-window-left
-    "j" 'evil-window-down
-    "k" 'evil-window-up
-    "l" 'evil-window-right
+  "h" 'evil-window-left
+  "j" 'evil-window-down
+  "k" 'evil-window-up
+  "l" 'evil-window-right
 
-    "H" 'evil-window-move-far-left
-    "J" 'evil-window-move-very-bottom
-    "K" 'evil-window-move-very-top
-    "L" 'evil-window-move-far-right
+  "H" 'evil-window-move-far-left
+  "J" 'evil-window-move-very-bottom
+  "K" 'evil-window-move-very-top
+  "L" 'evil-window-move-far-right
 
-    "s" 'evil-window-split
-    "S" 'evil-window-vsplit
-    "W" 'evil-window-delete
-    "w" 'kill-current-buffer
-    "B" 'kill-buffer
+  "s" 'evil-window-split
+  "S" 'evil-window-vsplit
+  "W" 'evil-window-delete
+  "w" 'kill-current-buffer
+  "B" 'kill-buffer
 
-    "y" 'yas-insert-snippet
-    "g" 'magit
-    "t" 'treemacs
-    "v" 'evil-visual-block)
+  "y" 'yas-insert-snippet
+  "g" 'magit
+  "t" 'treemacs
+  "v" 'evil-visual-block)
 
-;; org mode
-(use-package org
+;; yasnippet
+(use-package yasnippet
   :config
-  (add-hook 'org-mode-hook 'org-indent-mode))
+  (yas-global-mode))
 
-;; org evil keybindings
-(use-package evil-org
-  :config
-  (add-hook 'org-mode-hook 'evil-org-mode))
+(use-package yasnippet-snippets)
 
-;; org table of contents
-(use-package toc-org
-  :config
-  (add-hook 'org-mode-hook 'toc-org-mode))
+;; projectile
+(use-package projectile)
 
-;; pretty org headings
-(use-package org-bullets
-  :config
-  (add-hook 'org-mode-hook #'org-bullets-mode))
-
-;; pretty org fonts
-(use-package org-variable-pitch
-  :config
-  (add-hook 'org-mode-hook 'org-variable-pitch-minor-mode))
-
-;; pretty org links
-(use-package org-link-beautify
-  :config
-  (org-link-beautify-mode 1))
+(use-package magit)
 
 ;; ivy autocompletion
 (use-package ivy
@@ -168,6 +140,7 @@
 
 ;; line numbers
 (global-display-line-numbers-mode)
+(setq display-line-numbers 'relative)
 ;; highlight current line
 (global-hl-line-mode)
 ;; hide ui elements
@@ -188,30 +161,6 @@
   :config
   (dashboard-setup-startup-hook))
 
-;; yasnippet
-(use-package yasnippet
-  :config
-  (yas-global-mode))
-
-(use-package yasnippet-snippets)
-
-;; projectile
-(use-package projectile)
-
-(use-package magit)
-(use-package magit-todos)
-(use-package magithub)
-
-(use-package evil-magit
-  :config
-  (setq evil-magit-state 'normal))
-
-(electric-pair-mode)
-
-(use-package elcord
-  :config
-  (elcord-mode))
-
 ;; haskell
 (use-package haskell-mode)
 (use-package company-ghc)
@@ -219,6 +168,36 @@
 ;; html/css/js
 (use-package web-mode)
 (use-package company-web)
+
+;; org mode
+(use-package org
+  :config
+  (add-hook 'org-mode-hook 'org-indent-mode))
+
+;; org evil keybindings
+(use-package evil-org
+  :config
+  (add-hook 'org-mode-hook 'evil-org-mode))
+
+;; org table of contents
+(use-package toc-org
+  :config
+  (add-hook 'org-mode-hook 'toc-org-mode))
+
+;; pretty org headings
+(use-package org-bullets
+  :config
+  (add-hook 'org-mode-hook #'org-bullets-mode))
+
+;; pretty org fonts
+(use-package org-variable-pitch
+  :config
+  (add-hook 'org-mode-hook 'org-variable-pitch-minor-mode))
+
+;; pretty org links
+(use-package org-link-beautify
+  :config
+  (org-link-beautify-mode 1))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
