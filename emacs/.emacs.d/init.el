@@ -24,12 +24,11 @@
   (setq evil-want-keybinding 'nil)
   :config
   (evil-mode 1)
-  (evil-set-undo-system 'undo-fu))
-
-(use-package evil-collection
-  :after evil
-  :config
-  (evil-collection-init))
+  (evil-set-undo-system 'undo-fu)
+  (use-package evil-collection
+    :after evil
+    :config
+    (evil-collection-init)))
 
 (use-package evil-commentary
   :config
@@ -42,6 +41,7 @@
   :config
   (global-evil-leader-mode)
   (evil-leader/set-leader "<SPC>"))
+
 (evil-leader/set-key
   "<SPC>" 'counsel-M-x'
   "f" 'find-file
@@ -73,9 +73,8 @@
 ;; yasnippet
 (use-package yasnippet
   :config
-  (yas-global-mode))
-
-(use-package yasnippet-snippets)
+  (yas-global-mode)
+  (use-package yasnippet-snippets))
 
 ;; projectile
 (use-package projectile)
@@ -95,19 +94,17 @@
   (setq ivy-re-builders-alist
         '((t . ivy--regex)))
   (setq ivy-height 17
-        ivy-wrap t))
+        ivy-wrap t)
+  (use-package all-the-icons-ivy
+    :config
+    (all-the-icons-ivy-setup)
+    (setq all-the-icons-ivy-file-commands
+          '(counsel-find-file))))
 
 ;; ivy-based menus
 (use-package counsel
   :config
   (counsel-mode 1))
-
-;; ivy icons
-(use-package all-the-icons-ivy
-  :config
-  (all-the-icons-ivy-setup)
-  (setq all-the-icons-ivy-file-commands
-          '(counsel-find-file)))
 
 (use-package swiper)
 
@@ -131,11 +128,12 @@
   (add-hook 'after-init-hook 'global-company-mode))
 
 ;; treemacs file tree
-(use-package treemacs)
-(use-package treemacs-all-the-icons)
-(use-package treemacs-evil)
-(use-package treemacs-magit)
-(use-package treemacs-projectile)
+(use-package treemacs
+  :config
+  (use-package treemacs-all-the-icons)
+  (use-package treemacs-evil)
+  (use-package treemacs-magit)
+  (use-package treemacs-projectile))
 
 ;; theme
 (use-package solaire-mode
@@ -168,42 +166,34 @@
   (dashboard-setup-startup-hook))
 
 ;; haskell
-(use-package haskell-mode)
-(use-package company-ghc)
+(use-package haskell-mode
+  :config
+  (use-package company-ghc))
 
 ;; html/css/js
-(use-package web-mode)
-(use-package company-web)
+(use-package web-mode
+  :config
+  (use-package company-web))
 
 ;; org mode
 (use-package org
   :config
-  (add-hook 'org-mode-hook 'org-indent-mode))
-
-;; org evil keybindings
-(use-package evil-org
-  :config
-  (add-hook 'org-mode-hook 'evil-org-mode))
-
-;; org table of contents
-(use-package toc-org
-  :config
-  (add-hook 'org-mode-hook 'toc-org-mode))
-
-;; pretty org headings
-(use-package org-bullets
-  :config
-  (add-hook 'org-mode-hook #'org-bullets-mode))
-
-;; pretty org fonts
-(use-package org-variable-pitch
-  :config
-  (add-hook 'org-mode-hook 'org-variable-pitch-minor-mode))
-
-;; pretty org links
-(use-package org-link-beautify
-  :config
-  (org-link-beautify-mode 1))
+  (add-hook 'org-mode-hook 'org-indent-mode)
+  (use-package evil-org
+    :config
+    (add-hook 'org-mode-hook 'evil-org-mode))
+  (use-package toc-org
+    :config
+    (add-hook 'org-mode-hook 'toc-org-mode))
+  (use-package org-bullets
+    :config
+    (add-hook 'org-mode-hook #'org-bullets-mode))
+  (use-package org-variable-pitch
+    :config
+    (add-hook 'org-mode-hook 'org-variable-pitch-minor-mode))
+  (use-package org-link-beautify
+    :config
+    (org-link-beautify-mode 1)))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
