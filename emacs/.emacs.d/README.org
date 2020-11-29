@@ -10,6 +10,8 @@
   - [[#snippets][Snippets]]
   - [[#projectile][Projectile]]
   - [[#version-control][Version control]]
+  - [[#pairs][Pairs]]
+  - [[#discord-rich-presence][Discord rich presence]]
 - [[#ui][UI]]
   - [[#ivy][Ivy]]
   - [[#which-key][which-key]]
@@ -125,6 +127,16 @@
 ** Version control
 #+begin_src elisp
   (use-package magit)
+#+end_src
+** Pairs
+#+begin_src elisp
+  (electric-pair-mode)
+#+end_src
+** Discord rich presence
+#+begin_src elisp
+  (use-package elcord
+    :config
+    (elcord-mode))
 #+end_src
 * UI
 ** Ivy

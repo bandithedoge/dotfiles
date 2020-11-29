@@ -82,6 +82,12 @@
 
 (use-package magit)
 
+(electric-pair-mode)
+
+(use-package elcord
+  :config
+  (elcord-mode))
+
 ;; ivy autocompletion
 (use-package ivy
   :config
