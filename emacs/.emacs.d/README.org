@@ -14,6 +14,7 @@
   - [[#discord-rich-presence][Discord rich presence]]
 - [[#ui][UI]]
   - [[#ivy][Ivy]]
+  - [[#ace][Ace]]
   - [[#which-key][which-key]]
   - [[#modeline][Modeline]]
   - [[#autocomplete][Autocomplete]]
@@ -64,12 +65,10 @@
     (evil-set-undo-system 'undo-fu)
     (use-package evil-collection
       :after evil
-      :config
-      (evil-collection-init)))
+      :config (evil-collection-init)))
 
   (use-package evil-commentary
-    :config
-    (evil-commentary-mode))
+    :config (evil-commentary-mode))
 #+END_SRC
 ** Leader
 #+BEGIN_SRC elisp
@@ -134,8 +133,7 @@
 ** Discord rich presence
 #+begin_src elisp
   (use-package elcord
-    :config
-    (elcord-mode))
+    :config (elcord-mode))
 #+end_src
 * UI
 ** Ivy
@@ -157,17 +155,20 @@
 
   ;; ivy-based menus
   (use-package counsel
-    :config
-    (counsel-mode 1))
+    :config (counsel-mode 1))
 
   (use-package swiper)
+#+end_src
+** Ace
+#+begin_src elisp
+  (use-package ace-popup-menu
+    :config (ace-popup-menu-mode 1))
 #+end_src
 ** which-key
 #+begin_src elisp
   ;; which-key
   (use-package which-key
-    :config
-    (which-key-mode))
+    :config (which-key-mode))
 #+end_src
 ** Modeline
 *** TODO Column and size indicator
@@ -185,29 +186,25 @@
 #+begin_src elisp
     ;; company autocompletion
     (use-package company
-      :config
-      (add-hook 'after-init-hook 'global-company-mode))
+      :config (add-hook 'after-init-hook 'global-company-mode))
 #+end_src
 ** Treemacs
 *** TODO Prettier icons
-*** TODO No cursor and line number
-*** TODO Keybindings
 #+begin_src elisp
-    ;; treemacs file tree
-    (use-package treemacs
-      :config
-      (use-package treemacs-all-the-icons)
-      (use-package treemacs-evil)
-      (use-package treemacs-magit)
-      (use-package treemacs-projectile))
+        ;; treemacs file tree
+        (use-package treemacs
+          :config
+          (use-package treemacs-all-the-icons)
+          (use-package treemacs-evil)
+          (use-package treemacs-magit)
+          (use-package treemacs-projectile))
 #+end_src
 ** Theme
 *** TODO Port blueballs
 #+begin_src elisp
   ;; theme
   (use-package solaire-mode
-    :config
-    (solaire-global-mode +1))
+    :config (solaire-global-mode +1))
   (use-package doom-themes)
   (load-theme 'doom-dracula t)
 
@@ -224,8 +221,7 @@
 
   ;; rainbow delimiters
   (use-package rainbow-delimiters
-    :config
-    (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+    :config (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
   ;; font
   (set-face-attribute 'default nil :font "FiraCode Nerd Font")
@@ -234,6 +230,7 @@
 #+begin_src elisp
   (use-package dashboard
     :config
+    (use-package dashboard-project-status)
     (dashboard-setup-startup-hook))
 #+end_src
 * Languages 
@@ -241,15 +238,13 @@
 #+begin_src elisp
   ;; haskell
   (use-package haskell-mode
-    :config
-    (use-package company-ghc))
+    :config (use-package company-ghc))
 #+end_src
 ** HTML/CSS/JS
 #+begin_src elisp
   ;; html/css/js
   (use-package web-mode
-    :config
-    (use-package company-web))
+    :config (use-package company-web))
 #+end_src
 ** Org
 *** TODO Evil TODO item control
@@ -257,32 +252,22 @@
 #+begin_src elisp
   ;; org mode
   (use-package org
-    :config
-    (add-hook 'org-mode-hook 'org-indent-mode)
+    :config (add-hook 'org-mode-hook 'org-indent-mode)
     (use-package evil-org
-      :config
-      (add-hook 'org-mode-hook 'evil-org-mode))
+      :config (add-hook 'org-mode-hook 'evil-org-mode))
     (use-package toc-org
-      :config
-      (add-hook 'org-mode-hook 'toc-org-mode))
+      :config (add-hook 'org-mode-hook 'toc-org-mode))
     (use-package org-bullets
-      :config
-      (add-hook 'org-mode-hook #'org-bullets-mode))
+      :config (add-hook 'org-mode-hook #'org-bullets-mode))
     (use-package org-variable-pitch
-      :config
-      (add-hook 'org-mode-hook 'org-variable-pitch-minor-mode))
+      :config (add-hook 'org-mode-hook 'org-variable-pitch-minor-mode))
     (use-package org-link-beautify
-      :config
-      (org-link-beautify-mode 1)))
+      :config (org-link-beautify-mode 1)))
 #+end_src
 * Misc
 ** Custom variables
 #+begin_src elisp
 (custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
  '(safe-local-variable-values
    '((eval add-hook 'after-save-hook
 	   (lambda nil

@@ -27,12 +27,10 @@
   (evil-set-undo-system 'undo-fu)
   (use-package evil-collection
     :after evil
-    :config
-    (evil-collection-init)))
+    :config (evil-collection-init)))
 
 (use-package evil-commentary
-  :config
-  (evil-commentary-mode))
+  :config (evil-commentary-mode))
 
 ;; evil-mode leader keybindings
 (use-package evil-god-state)
@@ -84,8 +82,7 @@
 (electric-pair-mode)
 
 (use-package elcord
-  :config
-  (elcord-mode))
+  :config (elcord-mode))
 
 ;; ivy autocompletion
 (use-package ivy
@@ -103,15 +100,16 @@
 
 ;; ivy-based menus
 (use-package counsel
-  :config
-  (counsel-mode 1))
+  :config (counsel-mode 1))
 
 (use-package swiper)
 
+(use-package ace-popup-menu
+  :config (ace-popup-menu-mode 1))
+
 ;; which-key
 (use-package which-key
-  :config
-  (which-key-mode))
+  :config (which-key-mode))
 
 ;; modeline
 (use-package doom-modeline
@@ -124,8 +122,7 @@
 
 ;; company autocompletion
 (use-package company
-  :config
-  (add-hook 'after-init-hook 'global-company-mode))
+  :config (add-hook 'after-init-hook 'global-company-mode))
 
 ;; treemacs file tree
 (use-package treemacs
@@ -137,8 +134,7 @@
 
 ;; theme
 (use-package solaire-mode
-  :config
-  (solaire-global-mode +1))
+  :config (solaire-global-mode +1))
 (use-package doom-themes)
 (load-theme 'doom-dracula t)
 
@@ -155,51 +151,39 @@
 
 ;; rainbow delimiters
 (use-package rainbow-delimiters
-  :config
-  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+  :config (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
 ;; font
 (set-face-attribute 'default nil :font "FiraCode Nerd Font")
 
 (use-package dashboard
   :config
+  (use-package dashboard-project-status)
   (dashboard-setup-startup-hook))
 
 ;; haskell
 (use-package haskell-mode
-  :config
-  (use-package company-ghc))
+  :config (use-package company-ghc))
 
 ;; html/css/js
 (use-package web-mode
-  :config
-  (use-package company-web))
+  :config (use-package company-web))
 
 ;; org mode
 (use-package org
-  :config
-  (add-hook 'org-mode-hook 'org-indent-mode)
+  :config (add-hook 'org-mode-hook 'org-indent-mode)
   (use-package evil-org
-    :config
-    (add-hook 'org-mode-hook 'evil-org-mode))
+    :config (add-hook 'org-mode-hook 'evil-org-mode))
   (use-package toc-org
-    :config
-    (add-hook 'org-mode-hook 'toc-org-mode))
+    :config (add-hook 'org-mode-hook 'toc-org-mode))
   (use-package org-bullets
-    :config
-    (add-hook 'org-mode-hook #'org-bullets-mode))
+    :config (add-hook 'org-mode-hook #'org-bullets-mode))
   (use-package org-variable-pitch
-    :config
-    (add-hook 'org-mode-hook 'org-variable-pitch-minor-mode))
+    :config (add-hook 'org-mode-hook 'org-variable-pitch-minor-mode))
   (use-package org-link-beautify
-    :config
-    (org-link-beautify-mode 1)))
+    :config (org-link-beautify-mode 1)))
 
 (custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
  '(safe-local-variable-values
    '((eval add-hook 'after-save-hook
 	   (lambda nil
