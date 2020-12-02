@@ -4,7 +4,7 @@
 - [[#personal][Personal]]
 - [[#package-management][Package management]]
 - [[#keybindings][Keybindings]]
-  - [[#evil-mode][Evil-mode]]
+  - [[#evil][Evil]]
   - [[#leader][Leader]]
 - [[#functionality][Functionality]]
   - [[#snippets][Snippets]]
@@ -20,6 +20,7 @@
   - [[#autocomplete][Autocomplete]]
   - [[#treemacs][Treemacs]]
   - [[#theme][Theme]]
+  - [[#ui-elements][UI elements]]
   - [[#dashboard][Dashboard]]
 - [[#languages][Languages]]
   - [[#haskell][Haskell]]
@@ -52,11 +53,10 @@
   (setq use-package-always-ensure t)
 #+END_SRC
 * Keybindings
-** Evil-mode
+** Evil
 #+BEGIN_SRC elisp
   (use-package undo-fu)
 
-  ;; evil-mode
   (use-package evil
     :init
     (setq evil-want-keybinding 'nil)
@@ -72,7 +72,6 @@
 #+END_SRC
 ** Leader
 #+BEGIN_SRC elisp
-  ;; evil-mode leader keybindings
   (use-package evil-god-state)
 
   (use-package evil-leader
@@ -159,7 +158,7 @@
 
   (use-package swiper)
 #+end_src
-** Ace
+** TODO Ace
 #+begin_src elisp
   (use-package ace-popup-menu
     :config (ace-popup-menu-mode 1))
@@ -171,7 +170,6 @@
     :config (which-key-mode))
 #+end_src
 ** Modeline
-*** TODO Column and size indicator
 #+begin_src elisp
     ;; modeline
     (use-package doom-modeline
@@ -191,7 +189,6 @@
 ** Treemacs
 *** TODO Prettier icons
 #+begin_src elisp
-        ;; treemacs file tree
         (use-package treemacs
           :config
           (use-package treemacs-all-the-icons)
@@ -202,29 +199,32 @@
 ** Theme
 *** TODO Port blueballs
 #+begin_src elisp
-  ;; theme
   (use-package solaire-mode
     :config (solaire-global-mode +1))
+
   (use-package doom-themes)
   (load-theme 'doom-dracula t)
 
-  ;; line numbers
-  (global-display-line-numbers-mode)
-  (setq display-line-numbers 'relative)
-  ;; highlight current line
+  (use-package rainbow-delimiters
+    :config (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+
+  (set-face-attribute 'default nil :font "FiraCode Nerd Font")
+#+end_src
+** UI elements
+#+begin_src elisp
+  (global-display-line-numbers-mode t)
+  (dolist (mode '(term-mode-hook
+                  treemacs-mode-hook))
+    (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
   (global-hl-line-mode)
-  ;; hide ui elements
+  (column-number-mode)
+  (visual-line-mode)
+
   (scroll-bar-mode -1)
   (menu-bar-mode -1)
   (tool-bar-mode -1)
   (tooltip-mode -1)
-
-  ;; rainbow delimiters
-  (use-package rainbow-delimiters
-    :config (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
-
-  ;; font
-  (set-face-attribute 'default nil :font "FiraCode Nerd Font")
 #+end_src
 ** Dashboard
 #+begin_src elisp
@@ -259,8 +259,6 @@
       :config (add-hook 'org-mode-hook 'toc-org-mode))
     (use-package org-bullets
       :config (add-hook 'org-mode-hook #'org-bullets-mode))
-    (use-package org-variable-pitch
-      :config (add-hook 'org-mode-hook 'org-variable-pitch-minor-mode))
     (use-package org-link-beautify
       :config (org-link-beautify-mode 1)))
 #+end_src

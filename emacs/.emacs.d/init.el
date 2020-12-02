@@ -18,7 +18,6 @@
 
 (use-package undo-fu)
 
-;; evil-mode
 (use-package evil
   :init
   (setq evil-want-keybinding 'nil)
@@ -32,7 +31,6 @@
 (use-package evil-commentary
   :config (evil-commentary-mode))
 
-;; evil-mode leader keybindings
 (use-package evil-god-state)
 
 (use-package evil-leader
@@ -124,7 +122,6 @@
 (use-package company
   :config (add-hook 'after-init-hook 'global-company-mode))
 
-;; treemacs file tree
 (use-package treemacs
   :config
   (use-package treemacs-all-the-icons)
@@ -132,29 +129,30 @@
   (use-package treemacs-magit)
   (use-package treemacs-projectile))
 
-;; theme
 (use-package solaire-mode
   :config (solaire-global-mode +1))
+
 (use-package doom-themes)
 (load-theme 'doom-dracula t)
 
-;; line numbers
-(global-display-line-numbers-mode)
-(setq display-line-numbers 'relative)
-;; highlight current line
+(use-package rainbow-delimiters
+  :config (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+
+(set-face-attribute 'default nil :font "FiraCode Nerd Font")
+
+(global-display-line-numbers-mode t)
+(dolist (mode '(term-mode-hook
+                treemacs-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
 (global-hl-line-mode)
-;; hide ui elements
+(column-number-mode)
+(visual-line-mode)
+
 (scroll-bar-mode -1)
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (tooltip-mode -1)
-
-;; rainbow delimiters
-(use-package rainbow-delimiters
-  :config (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
-
-;; font
-(set-face-attribute 'default nil :font "FiraCode Nerd Font")
 
 (use-package dashboard
   :config
@@ -178,12 +176,16 @@
     :config (add-hook 'org-mode-hook 'toc-org-mode))
   (use-package org-bullets
     :config (add-hook 'org-mode-hook #'org-bullets-mode))
-  (use-package org-variable-pitch
-    :config (add-hook 'org-mode-hook 'org-variable-pitch-minor-mode))
   (use-package org-link-beautify
     :config (org-link-beautify-mode 1)))
 
 (custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("bd70839b5711736e833507c9ae00dbc5e9b05eb97010faa86f35dfe8d841cf9e" default))
  '(safe-local-variable-values
    '((eval add-hook 'after-save-hook
 	   (lambda nil
@@ -191,3 +193,9 @@
 		 (y-or-n-p "Tangle?")
 		 (org-babel-tangle)))
 	   nil t))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
