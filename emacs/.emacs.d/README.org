@@ -218,8 +218,10 @@
     (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
   (global-hl-line-mode)
-  (column-number-mode)
   (visual-line-mode)
+
+  (column-number-mode)
+  (size-indication-mode)
 
   (scroll-bar-mode -1)
   (menu-bar-mode -1)
@@ -260,7 +262,9 @@
     (use-package org-bullets
       :config (add-hook 'org-mode-hook #'org-bullets-mode))
     (use-package org-link-beautify
-      :config (org-link-beautify-mode 1)))
+      :config (org-link-beautify-mode 1))
+    (use-package org-variable-pitch
+      :config (add-hook 'org-mode-hook 'org-variable-pitch-minor-mode)))
 #+end_src
 * Misc
 ** Custom variables
