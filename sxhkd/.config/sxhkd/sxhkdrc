@@ -157,7 +157,7 @@ XF86Explorer
 
 # web browser
 XF86HomePage
-	brave
+	vivaldi-stable
 
 # calculator
 XF86Calculator

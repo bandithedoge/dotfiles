@@ -25,6 +25,7 @@
 - [[#languages][Languages]]
   - [[#haskell][Haskell]]
   - [[#htmlcssjs][HTML/CSS/JS]]
+  - [[#python][Python]]
   - [[#org][Org]]
 - [[#misc][Misc]]
   - [[#custom-variables][Custom variables]]
@@ -38,7 +39,8 @@
 * Package management
 #+BEGIN_SRC elisp
   (require 'package)
-  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
+  (setq package-archives '(("elpy" . "http")
+                           ("melpa" . "https://melpa.org/packages/")
                            ("org". "https://orgmode.org/elpa/")
                            ("elpa" . "https://elpa.gnu.org/packages")))
 
@@ -208,7 +210,8 @@
   (use-package rainbow-delimiters
     :config (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
-  (set-face-attribute 'default nil :font "FiraCode Nerd Font")
+  (set-face-attribute 'default nil :font "FiraCode Nerd Font" :height 100)
+  (use-package fira-code-mode)
 #+end_src
 ** UI elements
 #+begin_src elisp
@@ -218,10 +221,11 @@
     (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
   (global-hl-line-mode)
-  (visual-line-mode)
+  (global-visual-line-mode)
 
   (column-number-mode)
   (size-indication-mode)
+  (which-function-mode)
 
   (scroll-bar-mode -1)
   (menu-bar-mode -1)
@@ -244,15 +248,20 @@
 #+end_src
 ** HTML/CSS/JS
 #+begin_src elisp
-  ;; html/css/js
   (use-package web-mode
     :config (use-package company-web))
 #+end_src
+** Python
+#+begin_src elisp
+  (use-package elpy
+    :defer t
+    :init (advice-add 'python-mode :before 'elpy-enable))
+#+end_src
+
 ** Org
 *** TODO Evil TODO item control
 *** TODO Monospace line numbers
 #+begin_src elisp
-  ;; org mode
   (use-package org
     :config (add-hook 'org-mode-hook 'org-indent-mode)
     (use-package evil-org

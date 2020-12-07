@@ -15,6 +15,7 @@ Plug 'alaviss/nim.nvim'
 Plug 'ChesleyTan/wordCount.vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'bandithedoge/blueballs.vim'
+Plug 'lifepillar/vim-colortemplate'
 call plug#end()
 
 let g:indent_guides_enable_on_vim_startup = 1

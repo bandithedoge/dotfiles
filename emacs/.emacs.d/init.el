@@ -2,7 +2,8 @@
       user-mail-address "bandithedoge@protonmail.com")
 
 (require 'package)
-(setq package-archives '(("melpa" . "https://melpa.org/packages/")
+(setq package-archives '(("elpy" . "http")
+                         ("melpa" . "https://melpa.org/packages/")
                          ("org". "https://orgmode.org/elpa/")
                          ("elpa" . "https://elpa.gnu.org/packages")))
 
@@ -138,7 +139,8 @@
 (use-package rainbow-delimiters
   :config (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
-(set-face-attribute 'default nil :font "FiraCode Nerd Font")
+(set-face-attribute 'default nil :font "FiraCode Nerd Font" :height 100)
+(use-package fira-code-mode)
 
 (global-display-line-numbers-mode t)
 (dolist (mode '(term-mode-hook
@@ -146,10 +148,11 @@
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 (global-hl-line-mode)
-(visual-line-mode)
+(global-visual-line-mode)
 
 (column-number-mode)
 (size-indication-mode)
+(which-function-mode)
 
 (scroll-bar-mode -1)
 (menu-bar-mode -1)
@@ -165,11 +168,13 @@
 (use-package haskell-mode
   :config (use-package company-ghc))
 
-;; html/css/js
 (use-package web-mode
   :config (use-package company-web))
 
-;; org mode
+(use-package elpy
+  :defer t
+  :init (advice-add 'python-mode :before 'elpy-enable))
+
 (use-package org
   :config (add-hook 'org-mode-hook 'org-indent-mode)
   (use-package evil-org
