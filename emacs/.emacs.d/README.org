@@ -12,6 +12,7 @@
   - [[#version-control][Version control]]
   - [[#pairs][Pairs]]
   - [[#discord-rich-presence][Discord rich presence]]
+  - [[#terminal-emulator][Terminal emulator]]
 - [[#ui][UI]]
   - [[#ivy][Ivy]]
   - [[#ace][Ace]]
@@ -20,6 +21,7 @@
   - [[#autocomplete][Autocomplete]]
   - [[#treemacs][Treemacs]]
   - [[#theme][Theme]]
+  - [[#fonts][Fonts]]
   - [[#ui-elements][UI elements]]
   - [[#dashboard][Dashboard]]
 - [[#languages][Languages]]
@@ -136,6 +138,10 @@
   (use-package elcord
     :config (elcord-mode))
 #+end_src
+** Terminal emulator
+#+begin_src elisp
+  (use-package vterm)
+#+end_src
 * UI
 ** Ivy
 *** TODO Fix search and order
@@ -209,9 +215,10 @@
 
   (use-package rainbow-delimiters
     :config (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
-
+#+end_src
+** Fonts
+#+begin_src elisp
   (set-face-attribute 'default nil :font "FiraCode Nerd Font" :height 100)
-  (use-package fira-code-mode)
 #+end_src
 ** UI elements
 #+begin_src elisp
@@ -257,7 +264,6 @@
     :defer t
     :init (advice-add 'python-mode :before 'elpy-enable))
 #+end_src
-
 ** Org
 *** TODO Evil TODO item control
 *** TODO Monospace line numbers
@@ -273,7 +279,8 @@
     (use-package org-link-beautify
       :config (org-link-beautify-mode 1))
     (use-package org-variable-pitch
-      :config (add-hook 'org-mode-hook 'org-variable-pitch-minor-mode)))
+      :config (add-hook 'org-mode-hook 'org-variable-pitch-minor-mode))
+    (use-package ox-pandoc))
 #+end_src
 * Misc
 ** Custom variables

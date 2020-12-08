@@ -83,6 +83,8 @@
 (use-package elcord
   :config (elcord-mode))
 
+(use-package vterm)
+
 ;; ivy autocompletion
 (use-package ivy
   :config
@@ -140,7 +142,6 @@
   :config (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
 (set-face-attribute 'default nil :font "FiraCode Nerd Font" :height 100)
-(use-package fira-code-mode)
 
 (global-display-line-numbers-mode t)
 (dolist (mode '(term-mode-hook
@@ -186,7 +187,8 @@
   (use-package org-link-beautify
     :config (org-link-beautify-mode 1))
   (use-package org-variable-pitch
-    :config (add-hook 'org-mode-hook 'org-variable-pitch-minor-mode)))
+    :config (add-hook 'org-mode-hook 'org-variable-pitch-minor-mode))
+  (use-package ox-pandoc))
 
 (custom-set-variables
  '(safe-local-variable-values
