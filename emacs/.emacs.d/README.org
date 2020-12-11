@@ -24,6 +24,7 @@
   - [[#fonts][Fonts]]
   - [[#ui-elements][UI elements]]
   - [[#dashboard][Dashboard]]
+  - [[#indentation][Indentation]]
 - [[#languages][Languages]]
   - [[#haskell][Haskell]]
   - [[#htmlcssjs][HTML/CSS/JS]]
@@ -246,6 +247,13 @@
     (use-package dashboard-project-status)
     (dashboard-setup-startup-hook))
 #+end_src
+** Indentation
+#+begin_src elisp
+  (use-package highlight-indent-guides
+    :config
+    (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+    (setq highlight-indent-guides-method 'column))
+#+end_src
 * Languages 
 ** Haskell
 #+begin_src elisp
@@ -280,19 +288,21 @@
       :config (org-link-beautify-mode 1))
     (use-package org-variable-pitch
       :config (add-hook 'org-mode-hook 'org-variable-pitch-minor-mode))
-    (use-package ox-pandoc))
+    (use-package ox-pandoc)
+    (use-package ox-hugo))
 #+end_src
 * Misc
 ** Custom variables
 #+begin_src elisp
-(custom-set-variables
- '(safe-local-variable-values
-   '((eval add-hook 'after-save-hook
-	   (lambda nil
-	     (if
-		 (y-or-n-p "Tangle?")
-		 (org-babel-tangle)))
-	   nil t))))
+  (custom-set-variables
+   '(safe-local-variable-values
+     '((eval add-hook 'after-save-hook
+             (lambda nil
+               (if
+                   (y-or-n-p "Tangle?")
+                   (org-babel-tangle)))
+             nil t))))
+  (add-to-list 'load-path "~/.emacs.d/blueballs/")
 #+end_src
 ** Tangle on save
 ;; Local Variables: 

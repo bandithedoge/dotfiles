@@ -165,6 +165,11 @@
   (use-package dashboard-project-status)
   (dashboard-setup-startup-hook))
 
+(use-package highlight-indent-guides
+  :config
+  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+  (setq highlight-indent-guides-method 'column))
+
 ;; haskell
 (use-package haskell-mode
   :config (use-package company-ghc))
@@ -188,9 +193,16 @@
     :config (org-link-beautify-mode 1))
   (use-package org-variable-pitch
     :config (add-hook 'org-mode-hook 'org-variable-pitch-minor-mode))
-  (use-package ox-pandoc))
+  (use-package ox-pandoc)
+  (use-package ox-hugo))
 
 (custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("c2b494f8df4df417c2c08d0297eadaa2fa9c51e9fff2e48d089d7db089ad5d84" default))
  '(safe-local-variable-values
    '((eval add-hook 'after-save-hook
 	   (lambda nil
@@ -198,3 +210,10 @@
 		 (y-or-n-p "Tangle?")
 		 (org-babel-tangle)))
 	   nil t))))
+(add-to-list 'load-path "~/.emacs.d/blueballs/")
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
