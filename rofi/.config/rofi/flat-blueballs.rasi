@@ -19,7 +19,7 @@
    blackselect:      #35384a;
    darkgray:         @blackselect;
    scrollbarcolor:   @maincolor;
-   font: "JetBrains Mono Nerd Font 13";
+   font: "FuraCode Nerd Font 12";
    background-color: @blackdarkest;
 }
 

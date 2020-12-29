@@ -32,7 +32,7 @@ modules-center = ${bars.centers}
 modules-right = ${bars.rights}
 
 background = ${color.bg0}
-font-0 = "JetBrainsMono Nerd Font:style=Regular:size=13;3"
+font-0 = "FuraCode Nerd Font:style=Regular:size=12;2"
 height = 25
 padding-right = 1
 
@@ -49,7 +49,7 @@ modules-center = ${bars.centers}
 modules-right = ${bars.rights}
 
 background = ${color.bg0}
-font-0 = "JetBrainsMono Nerd Font:style=Regular:size=13;3"
+font-0 = "FuraCode Nerd Font:style=Regular:size=12;2"
 height = 25
 padding-right = 1
 
@@ -66,7 +66,7 @@ modules-center = mpd
 modules-right = date
 
 background = ${color.bg0}
-font-0 = "JetBrainsMono Nerd Font:style=Regular:size=13;3"
+font-0 = "FuraCode Nerd Font:style=Regular:size=12;2"
 height = 25
 padding-right = 1
 

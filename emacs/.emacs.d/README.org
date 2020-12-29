@@ -237,7 +237,7 @@
 #+end_src
 ** Fonts
 #+begin_src elisp
-  (set-face-attribute 'default nil :font "JetBrains Mono Nerd Font-11")
+  (set-face-attribute 'default nil :font "FiraCode Nerd Font-11")
 #+end_src
 ** UI elements
 #+begin_src elisp

@@ -150,7 +150,7 @@
 (use-package rainbow-delimiters
   :config (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
-(set-face-attribute 'default nil :font "JetBrains Mono Nerd Font-11")
+(set-face-attribute 'default nil :font "FiraCode Nerd Font-11")
 
 (global-display-line-numbers-mode t)
 (dolist (mode '(term-mode-hook
