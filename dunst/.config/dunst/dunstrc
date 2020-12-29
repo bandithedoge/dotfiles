@@ -14,7 +14,7 @@
     separator_color = frame
     sort = yes
     idle_threshold = 120
-    font = FuraCode Nerd Font 11
+    font = JetBrains Mono Nerd Font 11
     line_height = 0
     markup = full
     format = "<b>%s</b>\n%b"

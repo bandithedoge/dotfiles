@@ -141,7 +141,7 @@
   (use-package treemacs-projectile))
 
 (use-package solaire-mode
-  :config (solaire-global-mode +1))
+  :hook (after-init . solaire-global-mode))
 
 (add-to-list 'load-path "~/data/git/blueballs-theme/blueballs.el")
 (add-to-list 'custom-theme-load-path "~/data/git/blueballs-theme/blueballs.el")
@@ -150,7 +150,7 @@
 (use-package rainbow-delimiters
   :config (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
-(set-face-attribute 'default nil :font "FiraCode Nerd Font" :height 100)
+(set-face-attribute 'default nil :font "JetBrains Mono Nerd Font-11")
 
 (global-display-line-numbers-mode t)
 (dolist (mode '(term-mode-hook
