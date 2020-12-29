@@ -165,7 +165,7 @@ XF86Calculator
 
 # music player
 XF86Tools
-	spotify
+	deezer
 
 # screenshot
 Print

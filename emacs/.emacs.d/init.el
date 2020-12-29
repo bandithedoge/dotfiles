@@ -2,8 +2,7 @@
       user-mail-address "bandithedoge@protonmail.com")
 
 (require 'package)
-(setq package-archives '(("elpy" . "http")
-                         ("melpa" . "https://melpa.org/packages/")
+(setq package-archives '(("melpa" . "https://melpa.org/packages/")
                          ("org". "https://orgmode.org/elpa/")
                          ("elpa" . "https://elpa.gnu.org/packages")))
 
@@ -21,16 +20,16 @@
 
 (use-package evil
   :init
-  (setq evil-want-keybinding 'nil)
+  (setq evil-want-keybinding 'nil
+        evil-respect-visual-line-mode t)
   :config
   (evil-mode 1)
   (evil-set-undo-system 'undo-fu)
   (use-package evil-collection
     :after evil
-    :config (evil-collection-init)))
-
-(use-package evil-commentary
-  :config (evil-commentary-mode))
+    :config (evil-collection-init))
+  (use-package evil-commentary
+    :config (evil-commentary-mode)))
 
 (use-package evil-god-state)
 
@@ -85,6 +84,14 @@
 
 (use-package vterm)
 
+(use-package pdf-tools)
+
+(use-package flycheck
+  :config
+  (global-flycheck-mode)
+  (use-package flycheck-inline
+    :config (add-hook 'flycheck-mode-hook #'flycheck-inline-mode)))
+
 ;; ivy autocompletion
 (use-package ivy
   :config
@@ -123,7 +130,8 @@
 
 ;; company autocompletion
 (use-package company
-  :config (add-hook 'after-init-hook 'global-company-mode))
+  :config (add-hook 'after-init-hook 'global-company-mode)
+  (use-package company-quickhelp))
 
 (use-package treemacs
   :config
@@ -135,8 +143,9 @@
 (use-package solaire-mode
   :config (solaire-global-mode +1))
 
-(use-package doom-themes)
-(load-theme 'doom-dracula t)
+(add-to-list 'load-path "~/data/git/blueballs-theme/blueballs.el")
+(add-to-list 'custom-theme-load-path "~/data/git/blueballs-theme/blueballs.el")
+(load-theme 'blueballs-dark t)
 
 (use-package rainbow-delimiters
   :config (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
@@ -153,7 +162,6 @@
 
 (column-number-mode)
 (size-indication-mode)
-(which-function-mode)
 
 (scroll-bar-mode -1)
 (menu-bar-mode -1)
@@ -177,12 +185,24 @@
 (use-package web-mode
   :config (use-package company-web))
 
+(use-package js2-mode
+  :config
+  (setq js2-highlight-level 3)
+  (add-hook 'js-mode-hook 'js2-minor-mode)
+  (use-package ac-js2
+    :config
+    (add-hook 'js2-minor-mode-hook 'ac-js2-mode)))
+
+(use-package vue-mode)
+
 (use-package elpy
   :defer t
   :init (advice-add 'python-mode :before 'elpy-enable))
 
 (use-package org
-  :config (add-hook 'org-mode-hook 'org-indent-mode)
+  :config
+  (add-hook 'org-mode-hook 'org-indent-mode)
+  (setq org-image-actual-width nil)
   (use-package evil-org
     :config (add-hook 'org-mode-hook 'evil-org-mode))
   (use-package toc-org
@@ -193,27 +213,17 @@
     :config (org-link-beautify-mode 1))
   (use-package org-variable-pitch
     :config (add-hook 'org-mode-hook 'org-variable-pitch-minor-mode))
+  (use-package org-tree-slide)
   (use-package ox-pandoc)
   (use-package ox-hugo))
 
+(use-package monkeytype)
+
 (custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   '("c2b494f8df4df417c2c08d0297eadaa2fa9c51e9fff2e48d089d7db089ad5d84" default))
  '(safe-local-variable-values
    '((eval add-hook 'after-save-hook
-	   (lambda nil
-	     (if
-		 (y-or-n-p "Tangle?")
-		 (org-babel-tangle)))
-	   nil t))))
-(add-to-list 'load-path "~/.emacs.d/blueballs/")
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+           (lambda nil
+             (if
+                 (y-or-n-p "Tangle?")
+                 (org-babel-tangle)))
+           nil t))))

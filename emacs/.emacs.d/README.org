@@ -13,6 +13,8 @@
   - [[#pairs][Pairs]]
   - [[#discord-rich-presence][Discord rich presence]]
   - [[#terminal-emulator][Terminal emulator]]
+  - [[#pdf-viewer][PDF viewer]]
+  - [[#syntax-checker][Syntax checker]]
 - [[#ui][UI]]
   - [[#ivy][Ivy]]
   - [[#ace][Ace]]
@@ -27,10 +29,13 @@
   - [[#indentation][Indentation]]
 - [[#languages][Languages]]
   - [[#haskell][Haskell]]
-  - [[#htmlcssjs][HTML/CSS/JS]]
+  - [[#web][Web]]
+  - [[#javascript][JavaScript]]
+  - [[#vue][Vue]]
   - [[#python][Python]]
   - [[#org][Org]]
 - [[#misc][Misc]]
+  - [[#typing-game][Typing game]]
   - [[#custom-variables][Custom variables]]
   - [[#tangle-on-save][Tangle on save]]
 
@@ -42,8 +47,7 @@
 * Package management
 #+BEGIN_SRC elisp
   (require 'package)
-  (setq package-archives '(("elpy" . "http")
-                           ("melpa" . "https://melpa.org/packages/")
+  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                            ("org". "https://orgmode.org/elpa/")
                            ("elpa" . "https://elpa.gnu.org/packages")))
 
@@ -64,16 +68,16 @@
 
   (use-package evil
     :init
-    (setq evil-want-keybinding 'nil)
+    (setq evil-want-keybinding 'nil
+          evil-respect-visual-line-mode t)
     :config
     (evil-mode 1)
     (evil-set-undo-system 'undo-fu)
     (use-package evil-collection
       :after evil
-      :config (evil-collection-init)))
-
-  (use-package evil-commentary
-    :config (evil-commentary-mode))
+      :config (evil-collection-init))
+    (use-package evil-commentary
+      :config (evil-commentary-mode)))
 #+END_SRC
 ** Leader
 #+BEGIN_SRC elisp
@@ -143,6 +147,19 @@
 #+begin_src elisp
   (use-package vterm)
 #+end_src
+** PDF viewer
+#+begin_src elisp
+  (use-package pdf-tools)
+#+end_src
+** Syntax checker
+#+begin_src elisp
+  (use-package flycheck
+    :config
+    (global-flycheck-mode)
+    (use-package flycheck-inline
+      :config (add-hook 'flycheck-mode-hook #'flycheck-inline-mode)))
+#+end_src
+
 * UI
 ** Ivy
 *** TODO Fix search and order
@@ -191,9 +208,10 @@
 #+end_src
 ** Autocomplete
 #+begin_src elisp
-    ;; company autocompletion
-    (use-package company
-      :config (add-hook 'after-init-hook 'global-company-mode))
+  ;; company autocompletion
+  (use-package company
+    :config (add-hook 'after-init-hook 'global-company-mode)
+    (use-package company-quickhelp))
 #+end_src
 ** Treemacs
 *** TODO Prettier icons
@@ -206,13 +224,13 @@
           (use-package treemacs-projectile))
 #+end_src
 ** Theme
-*** TODO Port blueballs
 #+begin_src elisp
   (use-package solaire-mode
     :config (solaire-global-mode +1))
 
-  (use-package doom-themes)
-  (load-theme 'doom-dracula t)
+  (add-to-list 'load-path "~/data/git/blueballs-theme/blueballs.el")
+  (add-to-list 'custom-theme-load-path "~/data/git/blueballs-theme/blueballs.el")
+  (load-theme 'blueballs-dark t)
 
   (use-package rainbow-delimiters
     :config (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
@@ -233,7 +251,6 @@
 
   (column-number-mode)
   (size-indication-mode)
-  (which-function-mode)
 
   (scroll-bar-mode -1)
   (menu-bar-mode -1)
@@ -261,11 +278,26 @@
   (use-package haskell-mode
     :config (use-package company-ghc))
 #+end_src
-** HTML/CSS/JS
+** Web
 #+begin_src elisp
   (use-package web-mode
     :config (use-package company-web))
 #+end_src
+** JavaScript
+#+begin_src elisp
+  (use-package js2-mode
+    :config
+    (setq js2-highlight-level 3)
+    (add-hook 'js-mode-hook 'js2-minor-mode)
+    (use-package ac-js2
+      :config
+      (add-hook 'js2-minor-mode-hook 'ac-js2-mode)))
+#+end_src
+** Vue
+#+begin_src elisp
+  (use-package vue-mode)
+#+end_src
+
 ** Python
 #+begin_src elisp
   (use-package elpy
@@ -274,10 +306,11 @@
 #+end_src
 ** Org
 *** TODO Evil TODO item control
-*** TODO Monospace line numbers
 #+begin_src elisp
   (use-package org
-    :config (add-hook 'org-mode-hook 'org-indent-mode)
+    :config
+    (add-hook 'org-mode-hook 'org-indent-mode)
+    (setq org-image-actual-width nil)
     (use-package evil-org
       :config (add-hook 'org-mode-hook 'evil-org-mode))
     (use-package toc-org
@@ -288,10 +321,16 @@
       :config (org-link-beautify-mode 1))
     (use-package org-variable-pitch
       :config (add-hook 'org-mode-hook 'org-variable-pitch-minor-mode))
+    (use-package org-tree-slide)
     (use-package ox-pandoc)
     (use-package ox-hugo))
 #+end_src
 * Misc
+** Typing game
+#+begin_src elisp
+  (use-package monkeytype)
+#+end_src
+
 ** Custom variables
 #+begin_src elisp
   (custom-set-variables
@@ -302,7 +341,6 @@
                    (y-or-n-p "Tangle?")
                    (org-babel-tangle)))
              nil t))))
-  (add-to-list 'load-path "~/.emacs.d/blueballs/")
 #+end_src
 ** Tangle on save
 ;; Local Variables: 
