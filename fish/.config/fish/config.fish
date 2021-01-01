@@ -1,4 +1,4 @@
-cbonsai -p
+status is-interactive && cbonsai -p
 
 set fish_greeting
 set TERM "xterm-256color"
@@ -33,4 +33,4 @@ alias yr='yay -Rns'
 alias ys='yay -Ss'
 alias yq='yay -Qs'
 
-#starship init fish | source
+starship init fish | source
