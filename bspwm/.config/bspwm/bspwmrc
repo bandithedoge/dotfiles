@@ -1,8 +1,5 @@
 #! /bin/bash
 
-# pywal colors
-wal -R -n
-
 # screens
 ~/.screenlayout/xrandr.sh
 
