@@ -55,24 +55,8 @@ super + ctrl + {m,x,y,z}
 #
 
 # focus the node in the given direction
-# Now with multi-monitor support. (should work like i3)
 super + {_,shift + }{h,j,k,l}
-    mode={f,s}; \
-    direction={west,south,north,east}; \
-    monitor=$(bspc query -M --names -m $direction); \
-    if bspc query -N -n $direction -m focused > /dev/null; then \
-        bspc node -$mode $direction; \
-    else; \
-        if [ $mode = "f" ]; then \
-            if bspc query -N -d ${monitor}:focused > /dev/null; then \
-                bspc node -$mode $direction; \
-            else; \
-                bspc monitor -f $direction; \
-            fi; \
-        else; \
-            bspc node -m $direction --follow; \
-        fi; \
-    fi
+	bspc node -{f,s} {west,south,north,east}
 
 # focus or send to the given desktop
 # Now supports multimonitor where each monitor
