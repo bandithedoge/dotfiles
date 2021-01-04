@@ -1,0 +1,11 @@
+format = """$cmd_duration$directory $git_branch$git_status
+$character"""
+
+[directory]
+truncate_to_repo = true
+format = "[$read_only]($read_only_style)[$path]($style)"
+style = "bold bright-white"
+read_only = ""
+
+[character]
+vicmd_symbol = "[❮](bold bright-white)"
