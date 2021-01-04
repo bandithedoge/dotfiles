@@ -19,9 +19,8 @@
 (use-package undo-fu)
 
 (use-package evil
-  :init
-  (setq evil-want-keybinding 'nil
-        evil-respect-visual-line-mode t)
+  :init (setq evil-want-keybinding 'nil
+              evil-respect-visual-line-mode t)
   :config
   (evil-mode 1)
   (evil-set-undo-system 'undo-fu)
@@ -36,35 +35,34 @@
 (use-package evil-leader
   :config
   (global-evil-leader-mode)
-  (evil-leader/set-leader "<SPC>"))
+  (evil-leader/set-leader "<SPC>")
+  (evil-leader/set-key
+    "<SPC>" 'counsel-M-x'
+    "f" 'find-file
+    "b" 'counsel-switch-buffer
+    "S-<SPC>" 'evil-execute-in-god-state
+    "/" 'swiper
 
-(evil-leader/set-key
-  "<SPC>" 'counsel-M-x'
-  "f" 'find-file
-  "b" 'counsel-switch-buffer
-  "S-<SPC>" 'evil-execute-in-god-state
-  "/" 'swiper
+    "h" 'evil-window-left
+    "j" 'evil-window-down
+    "k" 'evil-window-up
+    "l" 'evil-window-right
 
-  "h" 'evil-window-left
-  "j" 'evil-window-down
-  "k" 'evil-window-up
-  "l" 'evil-window-right
+    "H" 'evil-window-move-far-left
+    "J" 'evil-window-move-very-bottom
+    "K" 'evil-window-move-very-top
+    "L" 'evil-window-move-far-right
 
-  "H" 'evil-window-move-far-left
-  "J" 'evil-window-move-very-bottom
-  "K" 'evil-window-move-very-top
-  "L" 'evil-window-move-far-right
+    "s" 'evil-window-split
+    "S" 'evil-window-vsplit
+    "W" 'evil-window-delete
+    "w" 'kill-current-buffer
+    "B" 'kill-buffer
 
-  "s" 'evil-window-split
-  "S" 'evil-window-vsplit
-  "W" 'evil-window-delete
-  "w" 'kill-current-buffer
-  "B" 'kill-buffer
-
-  "y" 'yas-insert-snippet
-  "g" 'magit
-  "t" 'treemacs
-  "v" 'evil-visual-block)
+    "y" 'yas-insert-snippet
+    "g" 'magit
+    "t" 'treemacs
+    "v" 'evil-visual-block))
 
 ;; yasnippet
 (use-package yasnippet
@@ -90,7 +88,7 @@
   :config
   (global-flycheck-mode)
   (use-package flycheck-inline
-    :config (add-hook 'flycheck-mode-hook #'flycheck-inline-mode)))
+    :hook (flycheck-mode . flycheck-inline-mode)))
 
 ;; ivy autocompletion
 (use-package ivy
@@ -130,8 +128,8 @@
 
 ;; company autocompletion
 (use-package company
-  :config (add-hook 'after-init-hook 'global-company-mode)
-  (use-package company-quickhelp))
+  :hook (after-init . global-company-mode)
+  :config (use-package company-quickhelp))
 
 (use-package treemacs
   :config
@@ -141,7 +139,8 @@
   (use-package treemacs-projectile))
 
 (use-package solaire-mode
-  :hook (after-init . solaire-global-mode))
+  :hook (after-init . solaire-global-mode)
+  :config (solaire-mode-in-minibuffer))
 
 (add-to-list 'load-path "~/data/git/blueballs-theme/blueballs.el")
 (add-to-list 'custom-theme-load-path "~/data/git/blueballs-theme/blueballs.el")
@@ -174,9 +173,8 @@
   (dashboard-setup-startup-hook))
 
 (use-package highlight-indent-guides
-  :config
-  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
-  (setq highlight-indent-guides-method 'column))
+  :config (setq highlight-indent-guides-method 'column)
+  :hook (prog-mode . highlight-indent-guides-mode))
 
 ;; haskell
 (use-package haskell-mode
@@ -186,12 +184,11 @@
   :config (use-package company-web))
 
 (use-package js2-mode
+  :hook (js-mode)
   :config
   (setq js2-highlight-level 3)
-  (add-hook 'js-mode-hook 'js2-minor-mode)
   (use-package ac-js2
-    :config
-    (add-hook 'js2-minor-mode-hook 'ac-js2-mode)))
+    :hook (js2-minor-mode)))
 
 (use-package vue-mode)
 
@@ -200,8 +197,8 @@
   :init (advice-add 'python-mode :before 'elpy-enable))
 
 (use-package org
+  :hook (org-mode . org-indent-mode)
   :config
-  (add-hook 'org-mode-hook 'org-indent-mode)
   (setq org-image-actual-width nil)
   (use-package evil-org
     :config (add-hook 'org-mode-hook 'evil-org-mode))
