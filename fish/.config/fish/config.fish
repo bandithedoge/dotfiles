@@ -1,7 +1,7 @@
 status is-interactive && cbonsai -p
 
 set fish_greeting
-set TERM "xterm-256color"
+set TERM "xterm-kitty"
 
 fish_vi_key_bindings
 
