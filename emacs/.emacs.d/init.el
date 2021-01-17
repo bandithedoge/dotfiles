@@ -142,14 +142,14 @@
   :hook (after-init . solaire-global-mode)
   :config (solaire-mode-in-minibuffer))
 
-(add-to-list 'load-path "~/data/git/blueballs-theme/blueballs.el")
-(add-to-list 'custom-theme-load-path "~/data/git/blueballs-theme/blueballs.el")
+(add-to-list 'load-path "~/blueballs-emacs")
+(add-to-list 'custom-theme-load-path "~/blueballs-emacs")
 (load-theme 'blueballs-dark t)
 
 (use-package rainbow-delimiters
   :config (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
-(set-face-attribute 'default nil :font "FiraCode Nerd Font-11")
+(set-face-attribute 'default nil :font "FiraCode Nerd Font-14")
 
 (global-display-line-numbers-mode t)
 (dolist (mode '(term-mode-hook
@@ -217,10 +217,22 @@
 (use-package monkeytype)
 
 (custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(ac-js2 yasnippet-snippets which-key web-mode vue-mode vterm use-package undo-fu treemacs-projectile treemacs-magit treemacs-evil treemacs-all-the-icons toc-org solaire-mode rainbow-delimiters pdf-tools ox-pandoc ox-hugo org-variable-pitch org-tree-slide org-link-beautify org-bullets monkeytype js2-mode highlight-indent-guides flycheck-inline evil-org evil-leader evil-god-state evil-commentary evil-collection elpy elcord doom-modeline dashboard-project-status counsel company-web company-quickhelp company-ghc all-the-icons-ivy ace-popup-menu))
  '(safe-local-variable-values
    '((eval add-hook 'after-save-hook
-           (lambda nil
-             (if
-                 (y-or-n-p "Tangle?")
-                 (org-babel-tangle)))
-           nil t))))
+	   (lambda nil
+	     (if
+		 (y-or-n-p "Tangle?")
+		 (org-babel-tangle)))
+	   nil t))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
