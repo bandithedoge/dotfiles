@@ -1,7 +1,5 @@
-status is-interactive && cbonsai -p
-
 set fish_greeting
-set TERM "xterm-kitty"
+set TERM "xterm-256color"
 
 fish_vi_key_bindings
 
@@ -41,5 +39,11 @@ alias yi='yay -S'
 alias yr='yay -Rns'
 alias ys='yay -Ss'
 alias yq='yay -Qs'
+
+alias bi='brew install'
+alias bic='brew install --cask'
+alias br='brew uninstall'
+alias bs='brew search'
+alias bq='brew list'
 
 starship init fish | source
