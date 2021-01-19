@@ -227,8 +227,8 @@
     :hook (after-init . solaire-global-mode)
     :config (solaire-mode-in-minibuffer))
 
-  (add-to-list 'load-path "~/data/git/blueballs-theme/blueballs.el")
-  (add-to-list 'custom-theme-load-path "~/data/git/blueballs-theme/blueballs.el")
+  (add-to-list 'load-path "~/blueballs-emacs")
+  (add-to-list 'custom-theme-load-path "~/blueballs-emacs")
   (load-theme 'blueballs-dark t)
 
   (use-package rainbow-delimiters
@@ -236,7 +236,7 @@
 #+end_src
 ** Fonts
 #+begin_src elisp
-  (set-face-attribute 'default nil :font "FiraCode Nerd Font-11")
+  (set-face-attribute 'default nil :font "FiraCode Nerd Font-14")
 #+end_src
 ** UI elements
 #+begin_src elisp
