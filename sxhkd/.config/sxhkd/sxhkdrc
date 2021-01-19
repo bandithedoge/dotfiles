@@ -136,12 +136,12 @@ super + alt + r
 #
 
 # file explorer
-XF86Explorer
+super + F10
 	thunar
 
 # web browser
-XF86HomePage
-	vivaldi-stable
+XF86Search
+	qutebrowser
 
 # calculator
 XF86Calculator
@@ -160,7 +160,7 @@ super + a
 	pavucontrol
 
 # pass
-super + shift + p
+super + f7
   rofi-pass
 
 # discord
@@ -170,7 +170,7 @@ super + d
 # emacs
 super + e
 	emacsclient -c -a emacs
-
+	
 #
 # media control
 #

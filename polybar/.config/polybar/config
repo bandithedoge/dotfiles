@@ -16,7 +16,7 @@ red = #cf4e54
 [bars]
 lefts = bspwm title
 centers = 
-rights = xkeyboard sep cpu sep temperature sep memory sep pulseaudio sep date
+rights = xkeyboard sep network sep cpu sep memory sep pulseaudio sep date
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -73,6 +73,21 @@ padding-right = 1
 wm-restack = bspwm
 
 
+[bar/laptop]
+enable-ipc = true
+locale = pl_PL.UTF-8
+tray-position = right
+
+modules-left = ${bars.lefts}
+modules-center = ${bars.centers}
+modules-right = ${bars.rights}
+
+background = ${color.bg0}
+font-0 = "FuraCode Nerd Font:style=Regular:size=12;2"
+height = 25
+padding-right = 1
+
+wm-restack = bspwm
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 [module/sep]
@@ -145,7 +160,7 @@ label-foreground = ${color.fg2}
 [module/title]
 type = internal/xwindow
 format-padding = 1
-label-maxlen = 50
+label-maxlen = 20
 label-foreground = ${color.fg1}
 
 
@@ -197,3 +212,15 @@ ramp-0 = 
 ramp-1 = 
 ramp-2 = 
 ramp-foreground = ${color.fg2}
+
+[module/network]
+type = internal/network
+interface = wlp3s0
+
+format-connected = <label-connected>
+
+label-connected = 直 %essid%
+label-connected-foreground = ${color.fg2}
+label-connected-maxlen = 18
+label-disconnected = 睊
+label-disconnected-foreground = ${color.red}
