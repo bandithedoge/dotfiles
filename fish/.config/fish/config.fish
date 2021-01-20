@@ -1,7 +1,7 @@
 set fish_greeting
 set TERM "xterm-256color"
 
-fish_vi_key_bindings
+set PATH $PATH /Users/bandithedoge/.local/bin
 
 set fish_color_normal           '#d9dceb'
 set fish_color_command          '#69d26e'
