@@ -182,13 +182,12 @@
 
 (use-package web-mode
   :config (use-package company-web))
+(use-package web-beautify)
 
 (use-package js2-mode
-  :hook (js-mode)
-  :config
-  (setq js2-highlight-level 3)
-  (use-package ac-js2
-    :hook (js2-minor-mode)))
+  :config (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+  (use-package js2-refactor
+    :hook js2-mode))
 
 (use-package vue-mode)
 
@@ -222,7 +221,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(ac-js2 yasnippet-snippets which-key web-mode vue-mode vterm use-package undo-fu treemacs-projectile treemacs-magit treemacs-evil treemacs-all-the-icons toc-org solaire-mode rainbow-delimiters pdf-tools ox-pandoc ox-hugo org-variable-pitch org-tree-slide org-link-beautify org-bullets monkeytype js2-mode highlight-indent-guides flycheck-inline evil-org evil-leader evil-god-state evil-commentary evil-collection elpy elcord doom-modeline dashboard-project-status counsel company-web company-quickhelp company-ghc all-the-icons-ivy ace-popup-menu))
+   '(js2-refactor yasnippet-snippets which-key web-mode web-beautify vue-mode vterm use-package undo-fu treemacs-projectile treemacs-magit treemacs-evil treemacs-all-the-icons toc-org solaire-mode rainbow-delimiters pdf-tools ox-pandoc ox-hugo org-variable-pitch org-tree-slide org-link-beautify org-bullets monkeytype highlight-indent-guides flycheck-inline evil-org evil-leader evil-god-state evil-commentary evil-collection elpy elcord doom-modeline dashboard-project-status counsel company-web company-quickhelp company-ghc all-the-icons-ivy ace-popup-menu ac-js2))
  '(safe-local-variable-values
    '((eval add-hook 'after-save-hook
 	   (lambda nil

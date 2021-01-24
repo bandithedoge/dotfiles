@@ -40,12 +40,12 @@
   - [[#tangle-on-save][Tangle on save]]
 
 * Personal
-#+begin_src elisp
+#+begin_src emacs-lisp
   (setq user-full-name "Mikołaj Lercher"
         user-mail-address "bandithedoge@protonmail.com")
 #+end_src
 * Package management
-#+BEGIN_SRC elisp
+#+BEGIN_SRC emacs-lisp
   (require 'package)
   (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                            ("org" . "https://orgmode.org/elpa/")
@@ -63,7 +63,7 @@
 #+END_SRC
 * Keybindings
 ** Evil
-#+BEGIN_SRC elisp
+#+BEGIN_SRC emacs-lisp
   (use-package undo-fu)
 
   (use-package evil
@@ -79,7 +79,7 @@
       :config (evil-commentary-mode)))
 #+END_SRC
 ** Leader
-#+BEGIN_SRC elisp
+#+BEGIN_SRC emacs-lisp
   (use-package evil-god-state)
 
   (use-package evil-leader
@@ -116,7 +116,7 @@
 #+END_SRC
 * Functionality
 ** Snippets
-#+begin_src elisp
+#+begin_src emacs-lisp
   ;; yasnippet
   (use-package yasnippet
     :config
@@ -124,33 +124,33 @@
     (use-package yasnippet-snippets))
 #+end_src
 ** Projectile
-#+begin_src elisp
+#+begin_src emacs-lisp
   ;; projectile
   (use-package projectile)
 #+end_src
 ** Version control
-#+begin_src elisp
+#+begin_src emacs-lisp
   (use-package magit)
 #+end_src
 ** Pairs
-#+begin_src elisp
+#+begin_src emacs-lisp
   (electric-pair-mode)
 #+end_src
 ** Discord rich presence
-#+begin_src elisp
+#+begin_src emacs-lisp
   (use-package elcord
     :config (elcord-mode))
 #+end_src
 ** Terminal emulator
-#+begin_src elisp
+#+begin_src emacs-lisp
   (use-package vterm)
 #+end_src
 ** PDF viewer
-#+begin_src elisp
+#+begin_src emacs-lisp
   (use-package pdf-tools)
 #+end_src
 ** Syntax checker
-#+begin_src elisp
+#+begin_src emacs-lisp
   (use-package flycheck
     :config
     (global-flycheck-mode)
@@ -161,7 +161,7 @@
 * UI
 ** Ivy
 *** TODO Fix search and order
-#+begin_src elisp
+#+begin_src emacs-lisp
   ;; ivy autocompletion
   (use-package ivy
     :config
@@ -183,18 +183,18 @@
   (use-package swiper)
 #+end_src
 ** TODO Ace
-#+begin_src elisp
+#+begin_src emacs-lisp
   (use-package ace-popup-menu
     :config (ace-popup-menu-mode 1))
 #+end_src
 ** which-key
-#+begin_src elisp
+#+begin_src emacs-lisp
   ;; which-key
   (use-package which-key
     :config (which-key-mode))
 #+end_src
 ** Modeline
-#+begin_src elisp
+#+begin_src emacs-lisp
     ;; modeline
     (use-package doom-modeline
       :config
@@ -205,7 +205,7 @@
             doom-modeline-indent-info t))
 #+end_src
 ** Autocomplete
-#+begin_src elisp
+#+begin_src emacs-lisp
   ;; company autocompletion
   (use-package company
     :hook (after-init . global-company-mode)
@@ -213,7 +213,7 @@
 #+end_src
 ** Treemacs
 *** TODO Prettier icons
-#+begin_src elisp
+#+begin_src emacs-lisp
   (use-package treemacs
     :config
     (use-package treemacs-all-the-icons)
@@ -222,7 +222,7 @@
     (use-package treemacs-projectile))
 #+end_src
 ** Theme
-#+begin_src elisp
+#+begin_src emacs-lisp
   (use-package solaire-mode
     :hook (after-init . solaire-global-mode)
     :config (solaire-mode-in-minibuffer))
@@ -235,11 +235,11 @@
     :config (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 #+end_src
 ** Fonts
-#+begin_src elisp
+#+begin_src emacs-lisp
   (set-face-attribute 'default nil :font "FiraCode Nerd Font-14")
 #+end_src
 ** UI elements
-#+begin_src elisp
+#+begin_src emacs-lisp
   (global-display-line-numbers-mode t)
   (dolist (mode '(term-mode-hook
                   treemacs-mode-hook))
@@ -257,53 +257,52 @@
   (tooltip-mode -1)
 #+end_src
 ** Dashboard
-#+begin_src elisp
+#+begin_src emacs-lisp
   (use-package dashboard
     :config
     (use-package dashboard-project-status)
     (dashboard-setup-startup-hook))
 #+end_src
 ** Indentation
-#+begin_src elisp
+#+begin_src emacs-lisp
   (use-package highlight-indent-guides
     :config (setq highlight-indent-guides-method 'column)
     :hook (prog-mode . highlight-indent-guides-mode))
 #+end_src
 * Languages 
 ** Haskell
-#+begin_src elisp
+#+begin_src emacs-lisp
   ;; haskell
   (use-package haskell-mode
     :config (use-package company-ghc))
 #+end_src
 ** Web
-#+begin_src elisp
+#+begin_src emacs-lisp
   (use-package web-mode
     :config (use-package company-web))
+  (use-package web-beautify)
 #+end_src
 ** JavaScript
-#+begin_src elisp
-  (use-package js2-mode
-    :hook (js-mode)
-    :config
-    (setq js2-highlight-level 3)
-    (use-package ac-js2
-      :hook (js2-minor-mode)))
+#+begin_src emacs-lisp
+(use-package js2-mode
+  :config (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+  (use-package js2-refactor
+    :hook js2-mode))
 #+end_src
 ** Vue
-#+begin_src elisp
+#+begin_src emacs-lisp
   (use-package vue-mode)
 #+end_src
 
 ** Python
-#+begin_src elisp
+#+begin_src emacs-lisp
   (use-package elpy
     :defer t
     :init (advice-add 'python-mode :before 'elpy-enable))
 #+end_src
 ** Org
 *** TODO Evil TODO item control
-#+begin_src elisp
+#+begin_src emacs-lisp
   (use-package org
     :hook (org-mode . org-indent-mode)
     :config
@@ -324,12 +323,12 @@
 #+end_src
 * Misc
 ** Typing game
-#+begin_src elisp
+#+begin_src emacs-lisp
   (use-package monkeytype)
 #+end_src
 
 ** Custom variables
-#+begin_src elisp
+#+begin_src emacs-lisp
   (custom-set-variables
    '(safe-local-variable-values
      '((eval add-hook 'after-save-hook
