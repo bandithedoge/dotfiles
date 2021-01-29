@@ -305,8 +305,8 @@
 #+begin_src emacs-lisp
   (use-package org
     :hook (org-mode . org-indent-mode)
-    :config
-    (setq org-image-actual-width nil)
+    :config (setq org-image-actual-width nil
+                  org-startup-with-inline-images 'inlineimages)
     (use-package evil-org
       :config (add-hook 'org-mode-hook 'evil-org-mode))
     (use-package toc-org
