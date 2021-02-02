@@ -15,6 +15,7 @@
   - [[#terminal-emulator][Terminal emulator]]
   - [[#pdf-viewer][PDF viewer]]
   - [[#syntax-checker][Syntax checker]]
+  - [[#spell-checker][Spell checker]]
 - [[#ui][UI]]
   - [[#ivy][Ivy]]
   - [[#ace][Ace]]
@@ -112,6 +113,7 @@
       "y" 'yas-insert-snippet
       "g" 'magit
       "t" 'treemacs
+      "'" 'flyspell-correct-wrapper
       "v" 'evil-visual-block))
 #+END_SRC
 * Functionality
@@ -158,6 +160,14 @@
       :hook (flycheck-mode . flycheck-inline-mode)))
 #+end_src
 
+** Spell checker
+#+begin_src emacs-lisp
+(use-package flyspell-correct
+  :after flyspell
+  :hook (org-mode . flyspell-mode)
+  :config (use-package flyspell-correct-ivy
+             :config (setq flyspell-correct-interface #'flyspell-correct-ivy)))
+#+end_src
 * UI
 ** Ivy
 *** TODO Fix search and order

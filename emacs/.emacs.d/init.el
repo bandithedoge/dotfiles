@@ -62,6 +62,7 @@
     "y" 'yas-insert-snippet
     "g" 'magit
     "t" 'treemacs
+    "'" 'flyspell-correct-wrapper
     "v" 'evil-visual-block))
 
 ;; yasnippet
@@ -89,6 +90,12 @@
   (global-flycheck-mode)
   (use-package flycheck-inline
     :hook (flycheck-mode . flycheck-inline-mode)))
+
+(use-package flyspell-correct
+  :after flyspell
+  :hook (org-mode . flyspell-mode)
+  :config (use-package flyspell-correct-ivy
+             :config (setq flyspell-correct-interface #'flyspell-correct-ivy)))
 
 ;; ivy autocompletion
 (use-package ivy
@@ -216,10 +223,22 @@
 (use-package monkeytype)
 
 (custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(yasnippet-snippets which-key web-mode web-beautify vue-mode vterm use-package undo-fu treemacs-projectile treemacs-magit treemacs-evil treemacs-all-the-icons toc-org solaire-mode rainbow-delimiters pdf-tools ox-pandoc ox-hugo org-variable-pitch org-tree-slide org-link-beautify org-bullets monkeytype js2-refactor highlight-indent-guides flyspell-correct-ivy flycheck-vale flycheck-inline evil-org evil-leader evil-god-state evil-commentary evil-collection elpy elcord doom-modeline dashboard-project-status counsel company-web company-quickhelp company-ghc all-the-icons-ivy ace-popup-menu ac-js2))
  '(safe-local-variable-values
    '((eval add-hook 'after-save-hook
-           (lambda nil
-             (if
-                 (y-or-n-p "Tangle?")
-                 (org-babel-tangle)))
-           nil t))))
+	   (lambda nil
+	     (if
+		 (y-or-n-p "Tangle?")
+		 (org-babel-tangle)))
+	   nil t))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
