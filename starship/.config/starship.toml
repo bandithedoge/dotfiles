@@ -5,7 +5,10 @@ $character"""
 truncate_to_repo = true
 format = "[$read_only]($read_only_style)[$path]($style)"
 style = "bold bright-white"
-read_only = ""
+read_only = " "
 
 [character]
 vicmd_symbol = "[❮](bold bright-white)"
+
+[python]
+python_binary = "python3"

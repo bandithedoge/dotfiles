@@ -46,4 +46,8 @@ alias br='brew uninstall'
 alias bs='brew search'
 alias bq='brew list'
 
+alias pi='python3 -m pip install'
+alias pr='python3 -m pip uninstall'
+alias pq='python3 -m pip list'
+
 starship init fish | source
