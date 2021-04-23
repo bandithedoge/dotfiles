@@ -79,7 +79,7 @@
 (use-package elcord
   :config (elcord-mode))
 
-(use-package vterm)
+;; (use-package vterm)
 
 (use-package pdf-tools)
 
@@ -155,7 +155,7 @@
 (use-package rainbow-delimiters
   :config (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
-(set-face-attribute 'default nil :font "FiraCode Nerd Font-14")
+(set-face-attribute 'default nil :font "FiraCode Nerd Font-12")
 
 (global-display-line-numbers-mode t)
 (dolist (mode '(term-mode-hook
@@ -182,8 +182,8 @@
   :config (setq highlight-indent-guides-method 'column)
   :hook (prog-mode . highlight-indent-guides-mode))
 
-(use-package haskell-mode
-  :config (use-package company-ghc))
+;; (use-package haskell-mode
+;;   :config (use-package company-ghc))
 
 (use-package web-mode
   :config (use-package company-web))
@@ -227,17 +227,29 @@
                                                     ("DONE" . 9745)
                                                     ("[X]"  . 9745))
                   org-superstar-headline-bullets-list '("❋" "❂" "❀" "✿" "❖" "✣" "★"))) ;; custom UTF-8 bullets for headlines, avoids font size problems on Mac
-  (use-package org-link-beautify ;; render links with colors, icons and thumbnails
-    :hook (org-mode . org-link-beautify-mode))
+  (use-package org-download
+    :hook (org-mode . org-download-enable))
   (use-package ox-pandoc)) ;; export to other formats using pandoc, requires pandoc installed on the system
 
 (use-package monkeytype)
 
 (custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(org-download yasnippet-snippets which-key web-mode web-beautify vue-mode vterm use-package undo-fu treemacs-projectile treemacs-magit treemacs-evil treemacs-all-the-icons toc-org swift-mode solaire-mode rainbow-delimiters pdf-tools ox-pandoc org-superstar org-link-beautify monkeytype js2-refactor highlight-indent-guides haskell-mode flyspell-correct-ivy flycheck-swift flycheck-inline evil-org evil-leader evil-god-state evil-commentary evil-collection elpy elcord doom-modeline dashboard-project-status counsel company-web company-sourcekit company-quickhelp all-the-icons-ivy ace-popup-menu))
  '(safe-local-variable-values
    '((eval add-hook 'after-save-hook
-           (lambda nil
-             (if
-                 (y-or-n-p "Tangle?")
-                 (org-babel-tangle)))
-           nil t))))
+	   (lambda nil
+	     (if
+		 (y-or-n-p "Tangle?")
+		 (org-babel-tangle)))
+	   nil t))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

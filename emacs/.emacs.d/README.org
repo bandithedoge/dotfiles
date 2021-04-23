@@ -145,7 +145,7 @@ This is my configuration file for GNU Emacs in an Org document. A lot of it is t
 #+end_src
 ** Terminal emulator
 #+begin_src emacs-lisp
-  (use-package vterm)
+  ;; (use-package vterm)
 #+end_src
 ** PDF viewer
 #+begin_src emacs-lisp
@@ -247,7 +247,7 @@ This is my configuration file for GNU Emacs in an Org document. A lot of it is t
 #+end_src
 ** Fonts
 #+begin_src emacs-lisp
-(set-face-attribute 'default nil :font "FiraCode Nerd Font-14")
+(set-face-attribute 'default nil :font "FiraCode Nerd Font-12")
 #+end_src
 ** UI elements
 #+begin_src emacs-lisp
@@ -283,8 +283,8 @@ This is my configuration file for GNU Emacs in an Org document. A lot of it is t
 * Languages
 ** Haskell
 #+begin_src emacs-lisp
-(use-package haskell-mode
-  :config (use-package company-ghc))
+  ;; (use-package haskell-mode
+  ;;   :config (use-package company-ghc))
 #+end_src
 ** Web
 #+begin_src emacs-lisp
@@ -344,8 +344,8 @@ This is my configuration file for GNU Emacs in an Org document. A lot of it is t
                                                     ("DONE" . 9745)
                                                     ("[X]"  . 9745))
                   org-superstar-headline-bullets-list '("❋" "❂" "❀" "✿" "❖" "✣" "★"))) ;; custom UTF-8 bullets for headlines, avoids font size problems on Mac
-  (use-package org-link-beautify ;; render links with colors, icons and thumbnails
-    :hook (org-mode . org-link-beautify-mode))
+  (use-package org-download
+    :hook (org-mode . org-download-enable))
   (use-package ox-pandoc)) ;; export to other formats using pandoc, requires pandoc installed on the system
 #+end_src
 * Misc

@@ -1,3 +1,4 @@
+fish_vi_keybindings
 set fish_greeting
 set TERM "xterm-256color"
 
