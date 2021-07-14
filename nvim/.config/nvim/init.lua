@@ -46,38 +46,16 @@ packer.init({
         error_sym = ""
     }
 })
+
+packer.reset()
 -- }}}
+
 packer.startup(function()
-    packer.reset()
     use {'wbthomason/packer.nvim'}
+    -- ui {{{
     -- color scheme {{{
     use { 'blueballs-theme/blueballs-neovim',
         config = function() vim.cmd([[ colorscheme blueballs ]]) end }
-    -- }}}
-    -- fuzzy finder {{{
-    use { 'nvim-telescope/telescope.nvim', cmd = "Telescope",
-        requires = { {'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'} },
-        config = function()
-            require("telescope").setup {
-                defaults = {
-                    prompt_prefix = " "
-                },
-                pickers = {
-                    commands = {
-                        theme = "ivy"
-                    }
-                }
-            } end
-    }
-    -- }}}
-    -- treefuckingsitter mate {{{
-    use { 'nvim-treesitter/nvim-treesitter', run = ":TSUpdate",
-        config = function()
-            require('nvim-treesitter.configs').setup {
-                ensure_installed = "lua",
-                highlight = { enable = true }
-            } end
-        }
     -- }}}
     -- statusline {{{
     use { 'hoob3rt/lualine.nvim',
@@ -104,8 +82,49 @@ packer.startup(function()
     use { 'akinsho/nvim-bufferline.lua', requires = 'kyazdani42/nvim-web-devicons',
             config = function() require("bufferline").setup() end }
     -- }}}
-    -- file explorer {{{
-    use { 'kyazdani42/nvim-tree.lua', requires = 'kyazdani42/nvim-web-devicons', cmd = "NvimTreeToggle" }
+    -- window visibility {{{
+    use { 'sunjon/shade.nvim',
+        config = require("shade").setup() }
+    -- }}}
+    -- scrollbar {{{
+    use 'dstein64/nvim-scrollview'
+    -- }}}
+    -- }}}
+
+    -- text editing {{{
+    -- treefuckingsitter mate {{{
+    use { 'nvim-treesitter/nvim-treesitter', run = ":TSUpdate",
+        config = function()
+            require('nvim-treesitter.configs').setup {
+                ensure_installed = "lua",
+                highlight = { enable = true }
+            } end
+        }
+    -- }}}
+    -- lsp {{{
+    use { 'neovim/nvim-lspconfig',
+        config = function()
+            local lsp = require('lspconfig')
+            lsp.rls.setup{}
+            lsp.pyls.setup{}
+            lsp.gdscript.setup{}
+            lsp.bashls.setup{}
+            lsp.html.setup{}
+            lsp.cssls.setup{}
+            lsp.nimls.setup{}
+            lsp.jsonls.setup{}
+            lsp.clangd.setup{}
+        end}
+
+    use { "folke/trouble.nvim", requires = "kyazdani42/nvim-web-devicons",
+        config = function()
+            require('trouble').setup{}
+        end}
+
+    use { "glepnir/lspsaga.nvim", 
+        config = function()
+            require('lspsaga').init_lsp_saga()
+        end}
     -- }}}
     -- comments {{{
     use 'b3nj5m1n/kommentary'
@@ -114,19 +133,6 @@ packer.startup(function()
     use { 'windwp/nvim-autopairs', config = function()
         require('nvim-autopairs').setup()
     end }
-    -- }}}
-    -- discord rich presence {{{
-    use 'andweeb/presence.nvim'
-    -- }}}
-    -- scrollbar {{{
-    use 'dstein64/nvim-scrollview'
-    -- }}}
-    -- git {{{
-    use { 'TimUntersberger/neogit', cmd = "Neogit" }
-    -- }}}
-    -- window visibility {{{
-    use { 'sunjon/shade.nvim',
-        config = require("shade").setup() }
     -- }}}
     -- autocompletion {{{
         use { 'hrsh7th/nvim-compe',
@@ -198,44 +204,31 @@ packer.startup(function()
                 vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
             end}
     -- }}}
-    -- lsp {{{
-    use { 'neovim/nvim-lspconfig',
-        config = function()
-            local lsp = require('lspconfig')
-            lsp.rls.setup{}
-            lsp.pyls.setup{}
-            lsp.gdscript.setup{}
-            lsp.bashls.setup{}
-            lsp.html.setup{}
-            lsp.cssls.setup{}
-            lsp.nimls.setup{}
-            lsp.jsonls.setup{}
-            lsp.clangd.setup{}
-        end}
-
-    use { "folke/trouble.nvim", requires = "kyazdani42/nvim-web-devicons",
-        config = function()
-            require('trouble').setup{}
-        end}
     -- }}}
-    -- neorg {{{
-    use { 'vhyrro/neorg', requires = { 'nvim-lua/plenary.nvim' }, ft = "norg",
-    config = function()
-        require('neorg').setup {
-            load = {
-                ["core.defaults"] = {},
-                ["core.norg.concealer"] = {}
-            }
-        } end
+
+    -- utility {{{
+    -- fuzzy finder {{{
+    use { 'nvim-telescope/telescope.nvim', cmd = "Telescope",
+        requires = { {'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'} },
+        config = function()
+            require("telescope").setup {
+                defaults = {
+                    prompt_prefix = " "
+                },
+                pickers = {
+                    commands = {
+                        theme = "ivy"
+                    }
+                }
+            } end
     }
     -- }}}
-    -- heresy {{{
-    use {'kristijanhusak/orgmode.nvim', ft = "org",
+    -- git {{{
+    use { 'TimUntersberger/neogit', cmd = "Neogit" }
+    use { 'lewis6991/gitsigns.nvim', requires = 'nvim-lua/plenary.nvim',
         config = function()
-            require('orgmode').setup({
-                org_hide_leading_stars = true
-            })
-    end }
+            require('gitsigns').setup()
+        end}
     -- }}}
     -- keybindings {{{
     use { 'folke/which-key.nvim',
@@ -266,6 +259,35 @@ packer.startup(function()
                 h = { "<cmd>Telescope help_tags<cr>", "Help" }
             }, { prefix = "<leader>" })
         end }
+    -- }}}
+    -- file tree {{{
+    use { 'kyazdani42/nvim-tree.lua', requires = 'kyazdani42/nvim-web-devicons', cmd = "NvimTreeToggle" }
+    -- }}}
+    -- discord {{{
+    use 'andweeb/presence.nvim'
+    -- }}}
+    -- }}}
+
+    -- notes {{{
+    -- neorg {{{
+    use { 'vhyrro/neorg', requires = { 'nvim-lua/plenary.nvim' }, ft = "norg",
+    config = function()
+        require('neorg').setup {
+            load = {
+                ["core.defaults"] = {},
+                ["core.norg.concealer"] = {}
+            }
+        } end
+    }
+    -- }}}
+    -- heresy {{{
+    use {'kristijanhusak/orgmode.nvim', ft = "org",
+        config = function()
+            require('orgmode').setup({
+                org_hide_leading_stars = true
+            })
+    end }
+    -- }}}
     -- }}}
 end)
 -- }}}
