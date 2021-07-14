@@ -1,15 +1,3 @@
--- packer stuff {{{
-local execute = vim.api.nvim_command
-local fn = vim.fn
-
-local install_path = fn.stdpath('data')..'/site/pack/packer/opt/packer.nvim'
-
-if fn.empty(fn.glob(install_path)) > 0 then
-    fn.system({'git', 'clone', 'https://github.com/wbthomason/packer.nvim', install_path})
-    execute 'packadd packer.nvim'
-end
--- }}}
-
 -- general settings {{{
 vim.o.clipboard = vim.o.clipboard .. 'unnamedplus'
 vim.o.mouse = 'a'
@@ -34,20 +22,40 @@ if vim.fn.exists("g:fvim_loaded") then
         FVimCursorSmoothMove v:true
         FVimCursorSmoothBlink v:true
         FVimUIPopupMenu v:false
+        FVimBackgroundComposition 'none'
     ]])
 end
 -- }}}
 
 -- packages {{{
+-- packer {{{
+local execute = vim.api.nvim_command
+local fn = vim.fn
+local install_path = fn.stdpath('data')..'/site/pack/packer/opt/packer.nvim'
+
+if fn.empty(fn.glob(install_path)) > 0 then
+    fn.system({'git', 'clone', 'https://github.com/wbthomason/packer.nvim', install_path})
+    execute 'packadd packer.nvim'
+end
+
 vim.cmd [[packadd packer.nvim]]
-return require('packer').startup(function()
-    use 'wbthomason/packer.nvim'
+local packer = require('packer')
+
+packer.init({
+    display = {
+        error_sym = ""
+    }
+})
+-- }}}
+packer.startup(function()
+    packer.reset()
+    use {'wbthomason/packer.nvim'}
     -- color scheme {{{
-    use { 'NTBBloodbath/doom-one.nvim',
-        config = function() vim.cmd([[ colorscheme doom-one ]]) end }
+    use { 'blueballs-theme/blueballs-neovim',
+        config = function() vim.cmd([[ colorscheme blueballs ]]) end }
     -- }}}
     -- fuzzy finder {{{
-    use { 'nvim-telescope/telescope.nvim',
+    use { 'nvim-telescope/telescope.nvim', cmd = "Telescope",
         requires = { {'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'} },
         config = function()
             require("telescope").setup {
@@ -59,8 +67,7 @@ return require('packer').startup(function()
                         theme = "ivy"
                     }
                 }
-            }
-        end
+            } end
     }
     -- }}}
     -- treefuckingsitter mate {{{
@@ -78,7 +85,7 @@ return require('packer').startup(function()
         config = function()
             require('lualine').setup{
                 options = {
-                    theme = 'onedark',
+                    theme = 'blueballs',
                     component_separators = "",
                     section_separators = "",
                     extensions = { "nvim-tree" }
@@ -98,7 +105,7 @@ return require('packer').startup(function()
             config = function() require("bufferline").setup() end }
     -- }}}
     -- file explorer {{{
-    use { 'kyazdani42/nvim-tree.lua', requires = 'kyazdani42/nvim-web-devicons' }
+    use { 'kyazdani42/nvim-tree.lua', requires = 'kyazdani42/nvim-web-devicons', cmd = "NvimTreeToggle" }
     -- }}}
     -- comments {{{
     use 'b3nj5m1n/kommentary'
@@ -115,7 +122,7 @@ return require('packer').startup(function()
     use 'dstein64/nvim-scrollview'
     -- }}}
     -- git {{{
-    use 'TimUntersberger/neogit'
+    use { 'TimUntersberger/neogit', cmd = "Neogit" }
     -- }}}
     -- window visibility {{{
     use { 'sunjon/shade.nvim',
@@ -143,10 +150,12 @@ return require('packer').startup(function()
                         calc = true,
                         nvim_lsp = true,
                         nvim_lua = true,
-                        spell = true,
+                        spell = false,
                         tags = true,
                         treesitter = true,
-                        vsnip = false
+                        vsnip = false,
+                        orgmode = true,
+                        neorg = true
                     }
                 })
                 local t = function(str)
@@ -203,6 +212,30 @@ return require('packer').startup(function()
             lsp.jsonls.setup{}
             lsp.clangd.setup{}
         end}
+
+    use { "folke/trouble.nvim", requires = "kyazdani42/nvim-web-devicons",
+        config = function()
+            require('trouble').setup{}
+        end}
+    -- }}}
+    -- neorg {{{
+    use { 'vhyrro/neorg', requires = { 'nvim-lua/plenary.nvim' }, ft = "norg",
+    config = function()
+        require('neorg').setup {
+            load = {
+                ["core.defaults"] = {},
+                ["core.norg.concealer"] = {}
+            }
+        } end
+    }
+    -- }}}
+    -- heresy {{{
+    use {'kristijanhusak/orgmode.nvim', ft = "org",
+        config = function()
+            require('orgmode').setup({
+                org_hide_leading_stars = true
+            })
+    end }
     -- }}}
     -- keybindings {{{
     use { 'folke/which-key.nvim',
