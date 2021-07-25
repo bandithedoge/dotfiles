@@ -77,10 +77,6 @@ packer.startup(function()
     use { 'akinsho/nvim-bufferline.lua', requires = 'kyazdani42/nvim-web-devicons',
             config = function() require("bufferline").setup() end }
     -- }}}
-    -- window visibility {{{
-    use { 'sunjon/shade.nvim',
-        config = require("shade").setup() }
-    -- }}}
     -- scrollbar {{{
     use 'dstein64/nvim-scrollview'
     -- }}}
