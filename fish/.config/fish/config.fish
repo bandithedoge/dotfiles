@@ -1,4 +1,4 @@
-fish_vi_keybindings
+fish_vi_key_bindings
 set fish_greeting
 set TERM "xterm-256color"
 
@@ -36,19 +36,9 @@ alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -i'
 
-alias yi='yay -S'
-alias yr='yay -Rns'
-alias ys='yay -Ss'
-alias yq='yay -Qs'
-
-alias bi='brew install'
-alias bic='brew install --cask'
-alias br='brew uninstall'
-alias bs='brew search'
-alias bq='brew list'
-
-alias pi='python3 -m pip install'
-alias pr='python3 -m pip uninstall'
-alias pq='python3 -m pip list'
+alias pi='paru -S'
+alias pr='paru -Rns'
+alias ps='paru -Ss'
+alias pq='paru -Qs'
 
 starship init fish | source
