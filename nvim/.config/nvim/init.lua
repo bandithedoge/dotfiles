@@ -18,14 +18,6 @@ vim.o.guifont = "FiraCode Nerd Font:h16"
 vim.api.nvim_set_keymap('n', "<C-ScrollWheelUp>", ":set guifont=+<cr>", { silent = true })
 vim.api.nvim_set_keymap('n', "<C-ScrollWheelDown>", ":set guifont=-<cr>", { silent = true })
 
-if vim.fn.exists("g:fvim_loaded") then
-    vim.cmd([[
-        FVimCursorSmoothMove v:true
-        FVimCursorSmoothBlink v:true
-        FVimUIPopupMenu v:false
-        FVimBackgroundComposition 'none'
-    ]])
-end
 -- }}}
 
 -- packages {{{
@@ -105,8 +97,9 @@ packer.startup(function()
     use { 'neovim/nvim-lspconfig',
         config = function()
             local lsp = require('lspconfig')
+
             lsp.rls.setup{}
-            lsp.pyls.setup{}
+            lsp.pyright.setup{}
             lsp.gdscript.setup{}
             lsp.bashls.setup{}
             lsp.html.setup{}
@@ -114,6 +107,15 @@ packer.startup(function()
             lsp.nimls.setup{}
             lsp.jsonls.setup{}
             lsp.clangd.setup{}
+            lsp.solargraph.setup{}
+
+            require('nvim-treesitter.parsers').get_parser_configs().norg = {
+                install_info = {
+                    url = 'https://github.com/vhyrro/tree-sitter-norg',
+                    files = { 'src/parser.c' },
+                    branch = 'main',
+                }
+            }
         end}
 
     use { "folke/trouble.nvim", requires = "kyazdani42/nvim-web-devicons",
@@ -234,16 +236,35 @@ packer.startup(function()
         end}
     -- }}}
     -- file tree {{{
-    use { 'kyazdani42/nvim-tree.lua', requires = 'kyazdani42/nvim-web-devicons', cmd = "NvimTreeToggle" }
+    use { 'kyazdani42/nvim-tree.lua', requires = 'kyazdani42/nvim-web-devicons', config = function()
+        local tree_cb = require('nvim-tree.config').nvim_tree_callback
+
+        vim.g.nvim_tree_auto_open = 1
+        vim.g.nvim_tree_auto_close = 1
+        vim.g.nvim_tree_follow = 1
+        vim.g.nvim_tree_indent_markers = 1
+        vim.g.nvim_tree_highlight_opened_files = 1
+        vim.g.nvim_tree_lsp_diagnostics = 1
+
+        vim.g.nvim_tree_bindings = {
+            { key = "h", cb = tree_cb("dir_up") },
+            { key = "l", cb = tree_cb("cd") }
+        }
+    end}
     -- }}}
     -- discord {{{
     use 'andweeb/presence.nvim'
+    -- }}}
+    -- mkdir {{{
+    use { 'jghauser/mkdir.nvim', config = function()
+        require('mkdir')
+    end }
     -- }}}
     -- }}}
 
     -- notes {{{
     -- neorg {{{
-    use { 'vhyrro/neorg', requires = { 'nvim-lua/plenary.nvim' }, ft = "norg",
+    use { 'vhyrro/neorg', requires = { 'nvim-lua/plenary.nvim' }, branch = "unstable", ft = "norg",
     config = function()
         require('neorg').setup {
             load = {
@@ -267,44 +288,53 @@ packer.startup(function()
     use { 'folke/which-key.nvim',
     config = function() 
         local wk = require('which-key')
+        vim.api.nvim_set_keymap('n', "<BS>", ":WhichKey \\\\<cr>", { silent = true })
 
         wk.setup {
             ignore_missing = true
         }
         wk.register({
-            ["<space>"] = { "<cmd>Telescope commands<cr>", "Enter command" },
-            f = {
-                name = "+File",
-                f = { "<cmd>Telescope file_browser<cr>", "Find" },
-                n = { "<cmd>enew<cr>", "New" },
-                c = { "<cmd>bd<cr>", "Close" },
-                C = { "<cmd>bd!<cr>", "Close without saving" },
-                j = { "<cmd>BufferLineCycleNext<cr>", "Next buffer" },
-                k = { "<cmd>BufferLineCyclePrev<cr>", "Previous buffer" },
-                J = { "<cmd>BufferLineMoveNext<cr>", "Move buffer forwards" },
-                K = { "<cmd>BufferLineMovePrev<cr>", "Move buffer backwards" },
+            ["<leader>"] = {
+                ["<space>"] = { "<cmd>Telescope commands<cr>", "Enter command" },
+                f = {
+                    name = "+File",
+                    f = { "<cmd>Telescope file_browser<cr>", "Find" },
+                    n = { "<cmd>enew<cr>", "New" },
+                    c = { "<cmd>bd<cr>", "Close" },
+                    C = { "<cmd>bd!<cr>", "Close without saving" },
+                    j = { "<cmd>BufferLineCycleNext<cr>", "Next buffer" },
+                    k = { "<cmd>BufferLineCyclePrev<cr>", "Previous buffer" },
+                    J = { "<cmd>BufferLineMoveNext<cr>", "Move buffer forwards" },
+                    K = { "<cmd>BufferLineMovePrev<cr>", "Move buffer backwards" },
+                },
+                p = {
+                    name = "+Packer",
+                    s = { "<cmd>PackerSync<cr>", "Sync" },
+                    c = { "<cmd>PackerCompile<cr>", "Compile" },
+                    C = { "<cmd>PackerClean<cr>", "Clean" },
+                    i = { "<cmd>PackerInstall<cr>", "Install" },
+                },
+                t = {
+                    name = "+Telescope",
+                    t = { "<cmd>Telescope<cr>", "Telescope"},
+                    h = { "<cmd>Telescope help_tags<cr>", "Help" },
+                    H = { "<cmd>Telescope highlights<cr>", "Highlight groups"},
+                    C = { "<cmd>Telescope command_history<cr>", "Command history"},
+                    f = { "<cmd>Telescope oldfiles<cr>", "File history"},
+                    s = { "<cmd>Telescope symbols", "Symbols"},
+                },
+                o = {
+                    name = "+Open",
+                    d = { }
+                },
+                T = { "<cmd>NvimTreeToggle<cr>", "File tree" },
+                b = { "<cmd>Telescope buffers<cr>", "Buffers" },
+                g = { "<cmd>Neogit<cr>", "Git" },
             },
-            p = {
-                name = "+Packer",
-                s = { "<cmd>PackerSync<cr>", "Sync" },
-                c = { "<cmd>PackerCompile<cr>", "Compile" },
-                C = { "<cmd>PackerClean<cr>", "Clean" },
-                i = { "<cmd>PackerInstall<cr>", "Install" },
-            },
-            t = {
-                name = "+Telescope",
-                t = { "<cmd>Telescope<cr>", "Telescope"},
-                h = { "<cmd>Telescope help_tags<cr>", "Help" },
-                H = { "<cmd>Telescope highlights<cr>", "Highlight groups"},
-                C = { "<cmd>Telescope command_history<cr>", "Command history"},
-                f = { "<cmd>Telescope oldfiles<cr>", "File history"},
-                s = { "<cmd>Telescope symbols", "Symbols"},
-            },
-            T = { "<cmd>NvimTreeToggle<cr>", "File tree" },
-            b = { "<cmd>Telescope buffers<cr>", "Buffers" },
-            g = { "<cmd>Neogit<cr>", "Git" },
-            c = { "<cmd>Cheatsheet<cr>", "Cheat sheet"}
-        }, { prefix = "<leader>" })
+            ["\\"] = {
+                h = { "<cmd>Lspsaga lsp_finder<cr>", "Cursor word reference"}
+            }
+        })
     end }
     -- }}}
 end)
