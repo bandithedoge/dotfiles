@@ -18,6 +18,9 @@ vim.o.guifont = "FiraCode Nerd Font:h16"
 vim.api.nvim_set_keymap('n', "<C-ScrollWheelUp>", ":set guifont=+<cr>", { silent = true })
 vim.api.nvim_set_keymap('n', "<C-ScrollWheelDown>", ":set guifont=-<cr>", { silent = true })
 
+vim.api.nvim_set_keymap('n', "<cr>", ":noh<cr>", { silent = true })
+vim.api.nvim_set_keymap('n', "<tab>", "za", { silent = true })
+vim.api.nvim_set_keymap('n', "<s-tab>", "zA", { silent = true })
 -- }}}
 
 -- packages {{{
@@ -241,7 +244,7 @@ packer.startup(function()
 
         vim.g.nvim_tree_auto_open = 1
         vim.g.nvim_tree_auto_close = 1
-        vim.g.nvim_tree_follow = 1
+        vim.g.nvim_tree_follow = 0
         vim.g.nvim_tree_indent_markers = 1
         vim.g.nvim_tree_highlight_opened_files = 1
         vim.g.nvim_tree_lsp_diagnostics = 1
@@ -293,6 +296,7 @@ packer.startup(function()
         wk.setup {
             ignore_missing = true
         }
+
         wk.register({
             ["<leader>"] = {
                 ["<space>"] = { "<cmd>Telescope commands<cr>", "Enter command" },
@@ -325,7 +329,8 @@ packer.startup(function()
                 },
                 o = {
                     name = "+Open",
-                    d = { }
+                    d = { "<cmd>:cd ~/dotfiles/<cr> <cmd>:e README.md<cr>", "Dotfiles", },
+                    s = { "<cmd>:cd ~/sql/<cr> <cmd>:e README.md<cr>", "School", },
                 },
                 T = { "<cmd>NvimTreeToggle<cr>", "File tree" },
                 b = { "<cmd>Telescope buffers<cr>", "Buffers" },
