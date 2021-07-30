@@ -205,14 +205,6 @@ packer.startup(function()
     -- comments {{{
     use "b3nj5m1n/kommentary"
     -- }}}
-    -- autopairs {{{
-    use {
-        "windwp/nvim-autopairs",
-        config = function()
-            require("nvim-autopairs").setup()
-        end,
-    }
-    -- }}}
     -- autocompletion {{{
     use {
         "hrsh7th/nvim-compe",
