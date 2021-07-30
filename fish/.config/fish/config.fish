@@ -2,7 +2,7 @@ fish_vi_key_bindings
 set fish_greeting
 set TERM "xterm-256color"
 
-set PATH $PATH /Users/bandithedoge/.local/bin
+set PATH $PATH ~/.local/bin ~/node_modules/.bin
 
 set fish_color_normal           '#d9dceb'
 set fish_color_command          '#69d26e'
@@ -20,9 +20,9 @@ set fish_cursor_insert      line
 set fish_cursor_replace_one underscore
 set fish_cursor_visual      block
 
-bind f '__fzf_search_current_dir'
-bind u '__fzf_search_history'
-bind V '__fzf_search_shell_variables'
+bind f '_fzf_search_directory'
+bind u '_fzf_search_history'
+bind V '_fzf_search_variables'
 
 alias s='sudo'
 alias c='clear'
