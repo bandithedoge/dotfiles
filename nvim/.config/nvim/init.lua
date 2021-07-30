@@ -84,13 +84,21 @@ packer.startup(function()
 
     -- text editing {{{
     -- treefuckingsitter mate {{{
-    use { 'nvim-treesitter/nvim-treesitter', run = ":TSUpdate",
-        config = function()
-            require('nvim-treesitter.configs').setup {
-                ensure_installed = "lua",
-                highlight = { enable = true }
-            } end
-        }
+    use { 'nvim-treesitter/nvim-treesitter', run = ":TSUpdate", config = function()
+        require('nvim-treesitter.configs').setup {
+            ensure_installed = "lua",
+            highlight = { enable = true }
+        } end
+    }
+
+    use { 'p00f/nvim-ts-rainbow', requires = 'nvim-treesitter/nvim-treesitter', config = function()
+        require('nvim-treesitter.configs').setup {
+            rainbow = {
+                enable = true,
+                extended_mode = true
+            }
+        } end
+    }
     -- }}}
     -- lsp {{{
     use { 'neovim/nvim-lspconfig',
@@ -98,7 +106,7 @@ packer.startup(function()
             local lsp = require('lspconfig')
 
             lsp.rls.setup{}
-            lsp.pyright.setup{}
+            lsp.jedi_language_server.setup{}
             lsp.gdscript.setup{}
             lsp.bashls.setup{}
             lsp.html.setup{}
@@ -107,6 +115,7 @@ packer.startup(function()
             lsp.jsonls.setup{}
             lsp.clangd.setup{}
             lsp.solargraph.setup{}
+            lsp.hls.setup{}
 
             require('nvim-treesitter.parsers').get_parser_configs().norg = {
                 install_info = {
