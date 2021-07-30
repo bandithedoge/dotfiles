@@ -49,35 +49,39 @@ packer.init({
 -- }}}
 
 packer.startup(function()
-    use("wbthomason/packer.nvim")
+    use "wbthomason/packer.nvim"
     -- ui {{{
     -- color scheme {{{
-    use({
+    use {
         "blueballs-theme/blueballs-neovim",
         config = function()
             vim.cmd([[ colorscheme blueballs ]])
         end,
-    })
+    }
     -- }}}
     -- statusline {{{
-    --[[ use { 'hoob3rt/lualine.nvim',
-        requires = 'kyazdani42/nvim-web-devicons',
+    use {
+        "hoob3rt/lualine.nvim",
+        requires = "kyazdani42/nvim-web-devicons",
         config = function()
-            require('lualine').setup{
+            require("lualine").setup {
                 options = {
-                    theme = 'blueballs',
+                    theme = "blueballs",
                     component_separators = "",
                     section_separators = "",
-                    extensions = { "nvim-tree" }
-                }
+                },
+                extensions = { "nvim-tree" },
+                sections = {
+                    lualine_a = { "mode" },
+                    lualine_b = { { "filename", path = 1 } },
+                    lualine_c = { "branch", "diff" },
+                    lualine_x = { { "diagnostics", sources = { "nvim_lsp" } } },
+                    lualine_y = { "encoding", "fileformat", "filetype" },
+                    lualine_z = { "location", "progress" },
+                },
             }
-        end } ]]
-    use({
-        "famiu/feline.nvim",
-        config = function()
-            require("feline").setup()
         end,
-    })
+    }
     -- }}}
     -- indent guides {{{
     use({
@@ -131,7 +135,6 @@ packer.startup(function()
     -- lsp {{{
     use({
         "neovim/nvim-lspconfig",
-        event = "InsertEnter",
         config = function()
             local lsp = require("lspconfig")
 
@@ -271,6 +274,7 @@ packer.startup(function()
     -- formatter {{{
     use({
         "mhartington/formatter.nvim",
+        cmd = { "Format", "FormatWrite" },
         config = function()
             require("formatter").setup({
                 filetype = {
