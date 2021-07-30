@@ -39,10 +39,12 @@ local packer = require('packer')
 packer.init({
     display = {
         error_sym = ""
+    },
+    profile = {
+        enable = true
     }
 })
 
-packer.reset()
 -- }}}
 
 packer.startup(function()
@@ -53,7 +55,7 @@ packer.startup(function()
         config = function() vim.cmd([[ colorscheme blueballs ]]) end }
     -- }}}
     -- statusline {{{
-    use { 'hoob3rt/lualine.nvim',
+    --[[ use { 'hoob3rt/lualine.nvim',
         requires = 'kyazdani42/nvim-web-devicons',
         config = function()
             require('lualine').setup{
@@ -64,10 +66,13 @@ packer.startup(function()
                     extensions = { "nvim-tree" }
                 }
             }
-        end }
+        end } ]]
+    use { 'famiu/feline.nvim', config = function()
+        require('feline').setup()
+    end}
     -- }}}
     -- indent guides {{{
-    use { 'glepnir/indent-guides.nvim',
+    use { 'glepnir/indent-guides.nvim', event = "BufRead",
         config = function() require('indent_guides').setup({
             indent_tab_guides = true
         })
@@ -104,7 +109,7 @@ packer.startup(function()
     use { 'p00f/nvim-ts-rainbow', requires = 'nvim-treesitter/nvim-treesitter' }
     -- }}}
     -- lsp {{{
-    use { 'neovim/nvim-lspconfig',
+    use { 'neovim/nvim-lspconfig', event = "InsertEnter",
         config = function()
             local lsp = require('lspconfig')
 
@@ -122,30 +127,31 @@ packer.startup(function()
 
         end}
 
-    use { "folke/trouble.nvim", requires = "kyazdani42/nvim-web-devicons",
-        config = function()
-            require('trouble').setup{}
-        end}
+    use {
+        { "folke/trouble.nvim",
+            requires = "kyazdani42/nvim-web-devicons",
+            config = function()
+                require('trouble').setup{}
+            end},
+        { "glepnir/lspsaga.nvim", 
+            config = function()
+                require('lspsaga').init_lsp_saga()
+            end},
+        { 'onsails/lspkind-nvim',
+            config = function()
+                require('lspkind').init()
+            end},
+        { 'kosayoda/nvim-lightbulb',
+            config = function()
+                vim.cmd [[autocmd CursorHold,CursorHoldI * lua require('nvim-lightbulb').update_lightbulb()]]
+            end},
+        { 'ray-x/lsp_signature.nvim',
+            config = function()
+                require('lsp_signature').setup()
+            end},
+        after = 'neovim/nvim-lspconfig'
+    }
 
-    use { "glepnir/lspsaga.nvim", 
-        config = function()
-            require('lspsaga').init_lsp_saga()
-        end}
-
-    use { 'onsails/lspkind-nvim',
-        config = function()
-            require('lspkind').init()
-        end}
-
-    use { 'kosayoda/nvim-lightbulb',
-        config = function()
-            vim.cmd [[autocmd CursorHold,CursorHoldI * lua require('nvim-lightbulb').update_lightbulb()]]
-        end}
-
-    use { 'ray-x/lsp_signature.nvim',
-        config = function()
-            require('lsp_signature').setup()
-        end}
     -- }}}
     -- comments {{{
     use 'b3nj5m1n/kommentary'
@@ -231,6 +237,8 @@ packer.startup(function()
     -- fuzzy finder {{{
     use { 'nvim-telescope/telescope.nvim',
         requires = { {'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'} },
+        cmd = "Telescope",
+        -- module = "telescope",
         config = function()
             require("telescope").setup {
                 defaults = {
@@ -250,16 +258,17 @@ packer.startup(function()
     -- use { 'TimUntersberger/neogit', cmd = "Neogit" }
     use { 'kdheepak/lazygit.nvim', cmd = "LazyGit" }
 
-    use { 'lewis6991/gitsigns.nvim', requires = 'nvim-lua/plenary.nvim',
+    use { 'lewis6991/gitsigns.nvim', requires = 'nvim-lua/plenary.nvim', event = "BufRead",
         config = function()
             require('gitsigns').setup()
         end}
     -- }}}
     -- file tree {{{
-    use { 'kyazdani42/nvim-tree.lua', requires = 'kyazdani42/nvim-web-devicons', config = function()
+    use { 'kyazdani42/nvim-tree.lua', requires = 'kyazdani42/nvim-web-devicons',
+    cmd = { "NvimTreeToggle", "NvimTreeClose", "NvimTreeOpen" },
+    config = function()
         local tree_cb = require('nvim-tree.config').nvim_tree_callback
 
-        vim.g.nvim_tree_auto_open = 1
         vim.g.nvim_tree_auto_close = 1
         vim.g.nvim_tree_follow = 0
         vim.g.nvim_tree_indent_markers = 1
@@ -276,7 +285,8 @@ packer.startup(function()
     use 'andweeb/presence.nvim'
     -- }}}
     -- mkdir {{{
-    use { 'jghauser/mkdir.nvim', config = function()
+    use { 'jghauser/mkdir.nvim', event = "BufWritePre",
+    config = function()
         require('mkdir')
     end }
     -- }}}
@@ -334,6 +344,7 @@ packer.startup(function()
                     c = { "<cmd>PackerCompile<cr>", "Compile" },
                     C = { "<cmd>PackerClean<cr>", "Clean" },
                     i = { "<cmd>PackerInstall<cr>", "Install" },
+                    p = { "<cmd>PackerProfile<cr>", "Profile"},
                 },
                 t = {
                     name = "+Telescope",
@@ -360,4 +371,5 @@ packer.startup(function()
     end }
     -- }}}
 end)
+
 -- }}}
