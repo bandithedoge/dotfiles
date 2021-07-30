@@ -6,7 +6,7 @@ vim.wo.cursorline = true
 vim.o.termguicolors = true
 vim.g.mapleader = " "
 vim.wo.foldmethod = "marker"
-vim.opt.timeoutlen = 300
+vim.opt.timeoutlen = 0
 vim.o.redrawtime = 10000
 
 vim.opt.expandtab = true
@@ -87,18 +87,21 @@ packer.startup(function()
     use { 'nvim-treesitter/nvim-treesitter', run = ":TSUpdate", config = function()
         require('nvim-treesitter.configs').setup {
             ensure_installed = "lua",
-            highlight = { enable = true }
-        } end
+            highlight = { enable = true },
+            rainbow = { enable = true, extended_mode = true }
+        }
+
+        require('nvim-treesitter.parsers').get_parser_configs().norg = {
+            install_info = {
+                url = 'https://github.com/vhyrro/tree-sitter-norg',
+                files = { 'src/parser.c' },
+                branch = 'main',
+                }
+            }
+        end
     }
 
-    use { 'p00f/nvim-ts-rainbow', requires = 'nvim-treesitter/nvim-treesitter', config = function()
-        require('nvim-treesitter.configs').setup {
-            rainbow = {
-                enable = true,
-                extended_mode = true
-            }
-        } end
-    }
+    use { 'p00f/nvim-ts-rainbow', requires = 'nvim-treesitter/nvim-treesitter' }
     -- }}}
     -- lsp {{{
     use { 'neovim/nvim-lspconfig',
@@ -117,13 +120,6 @@ packer.startup(function()
             lsp.solargraph.setup{}
             lsp.hls.setup{}
 
-            require('nvim-treesitter.parsers').get_parser_configs().norg = {
-                install_info = {
-                    url = 'https://github.com/vhyrro/tree-sitter-norg',
-                    files = { 'src/parser.c' },
-                    branch = 'main',
-                }
-            }
         end}
 
     use { "folke/trouble.nvim", requires = "kyazdani42/nvim-web-devicons",
@@ -134,6 +130,21 @@ packer.startup(function()
     use { "glepnir/lspsaga.nvim", 
         config = function()
             require('lspsaga').init_lsp_saga()
+        end}
+
+    use { 'onsails/lspkind-nvim',
+        config = function()
+            require('lspkind').init()
+        end}
+
+    use { 'kosayoda/nvim-lightbulb',
+        config = function()
+            vim.cmd [[autocmd CursorHold,CursorHoldI * lua require('nvim-lightbulb').update_lightbulb()]]
+        end}
+
+    use { 'ray-x/lsp_signature.nvim',
+        config = function()
+            require('lsp_signature').setup()
         end}
     -- }}}
     -- comments {{{
@@ -236,7 +247,8 @@ packer.startup(function()
     use { {'sudormrfbin/cheatsheet.nvim'}, {'nvim-telescope/telescope-symbols.nvim'}, after = "telescope.nvim" }
     -- }}}
     -- git {{{
-    use { 'TimUntersberger/neogit', cmd = "Neogit" }
+    -- use { 'TimUntersberger/neogit', cmd = "Neogit" }
+    use { 'kdheepak/lazygit.nvim', cmd = "LazyGit" }
 
     use { 'lewis6991/gitsigns.nvim', requires = 'nvim-lua/plenary.nvim',
         config = function()
@@ -339,7 +351,7 @@ packer.startup(function()
                 },
                 T = { "<cmd>NvimTreeToggle<cr>", "File tree" },
                 b = { "<cmd>Telescope buffers<cr>", "Buffers" },
-                g = { "<cmd>Neogit<cr>", "Git" },
+                g = { "<cmd>LazyGit<cr>", "Git" },
             },
             ["\\"] = {
                 h = { "<cmd>Lspsaga lsp_finder<cr>", "Cursor word reference"}
