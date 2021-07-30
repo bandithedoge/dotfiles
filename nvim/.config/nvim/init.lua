@@ -28,23 +28,23 @@ vim.api.nvim_set_keymap("n", "<s-tab>", "zA", { silent = true })
 -- packer {{{
 local execute = vim.api.nvim_command
 local fn = vim.fn
-local install_path = fn.stdpath("data") .. "/site/pack/packer/opt/packer.nvim"
+local install_path = fn.stdpath "data" .. "/site/pack/packer/opt/packer.nvim"
 
 if fn.empty(fn.glob(install_path)) > 0 then
-    fn.system({ "git", "clone", "https://github.com/wbthomason/packer.nvim", install_path })
-    execute("packadd packer.nvim")
+    fn.system { "git", "clone", "https://github.com/wbthomason/packer.nvim", install_path }
+    execute "packadd packer.nvim"
 end
 
-local packer = require("packer")
+local packer = require "packer"
 
-packer.init({
+packer.init {
     display = {
         error_sym = "",
     },
     profile = {
         enable = true,
     },
-})
+}
 
 -- }}}
 
@@ -55,7 +55,7 @@ packer.startup(function()
     use {
         "blueballs-theme/blueballs-neovim",
         config = function()
-            vim.cmd([[ colorscheme blueballs ]])
+            vim.cmd [[ colorscheme blueballs ]]
         end,
     }
     -- }}}
@@ -84,41 +84,41 @@ packer.startup(function()
     }
     -- }}}
     -- indent guides {{{
-    use({
+    use {
         "glepnir/indent-guides.nvim",
         event = "BufRead",
         config = function()
-            require("indent_guides").setup({
+            require("indent_guides").setup {
                 indent_tab_guides = true,
-            })
+            }
         end,
-    })
+    }
     -- }}}
     -- bufferline {{{
-    use({
+    use {
         "akinsho/nvim-bufferline.lua",
         requires = "kyazdani42/nvim-web-devicons",
         config = function()
             require("bufferline").setup()
         end,
-    })
+    }
     -- }}}
     -- scrollbar {{{
-    use("dstein64/nvim-scrollview")
+    use "dstein64/nvim-scrollview"
     -- }}}
     -- }}}
 
     -- text editing {{{
     -- treefuckingsitter mate {{{
-    use({
+    use {
         "nvim-treesitter/nvim-treesitter",
         run = ":TSUpdate",
         config = function()
-            require("nvim-treesitter.configs").setup({
+            require("nvim-treesitter.configs").setup {
                 ensure_installed = "lua",
                 highlight = { enable = true },
                 rainbow = { enable = true, extended_mode = true },
-            })
+            }
 
             require("nvim-treesitter.parsers").get_parser_configs().norg = {
                 install_info = {
@@ -128,36 +128,50 @@ packer.startup(function()
                 },
             }
         end,
-    })
+    }
 
-    use({ "p00f/nvim-ts-rainbow", requires = "nvim-treesitter/nvim-treesitter" })
+    use {
+        { "p00f/nvim-ts-rainbow" },
+        {
+            "windwp/nvim-autopairs",
+            config = function()
+                require("nvim-autopairs").setup()
+                require("nvim-autopairs.completion.compe").setup {
+                    map_cr = true,
+                    map_complete = true,
+                }
+            end,
+        },
+        requires = "nvim-treesitter/nvim-treesitter",
+        after = "nvim-treesitter",
+    }
     -- }}}
     -- lsp {{{
-    use({
+    use {
         "neovim/nvim-lspconfig",
         config = function()
-            local lsp = require("lspconfig")
+            local lsp = require "lspconfig"
 
-            lsp.rls.setup({})
-            lsp.jedi_language_server.setup({})
-            lsp.gdscript.setup({})
-            lsp.bashls.setup({})
-            lsp.html.setup({})
-            lsp.cssls.setup({})
-            lsp.nimls.setup({})
-            lsp.jsonls.setup({})
-            lsp.clangd.setup({})
-            lsp.solargraph.setup({})
-            lsp.hls.setup({})
+            lsp.rls.setup {}
+            lsp.jedi_language_server.setup {}
+            lsp.gdscript.setup {}
+            lsp.bashls.setup {}
+            lsp.html.setup {}
+            lsp.cssls.setup {}
+            lsp.nimls.setup {}
+            lsp.jsonls.setup {}
+            lsp.clangd.setup {}
+            lsp.solargraph.setup {}
+            lsp.hls.setup {}
         end,
-    })
+    }
 
-    use({
+    use {
         {
             "folke/trouble.nvim",
             requires = "kyazdani42/nvim-web-devicons",
             config = function()
-                require("trouble").setup({})
+                require("trouble").setup {}
             end,
         },
         {
@@ -175,7 +189,7 @@ packer.startup(function()
         {
             "kosayoda/nvim-lightbulb",
             config = function()
-                vim.cmd([[autocmd CursorHold,CursorHoldI * lua require('nvim-lightbulb').update_lightbulb()]])
+                vim.cmd [[autocmd CursorHold,CursorHoldI * lua require('nvim-lightbulb').update_lightbulb()]]
             end,
         },
         {
@@ -184,26 +198,26 @@ packer.startup(function()
                 require("lsp_signature").setup()
             end,
         },
-        after = "neovim/nvim-lspconfig",
-    })
+        after = "nvim-lspconfig",
+    }
 
     -- }}}
     -- comments {{{
-    use("b3nj5m1n/kommentary")
+    use "b3nj5m1n/kommentary"
     -- }}}
     -- autopairs {{{
-    use({
+    use {
         "windwp/nvim-autopairs",
         config = function()
             require("nvim-autopairs").setup()
         end,
-    })
+    }
     -- }}}
     -- autocompletion {{{
-    use({
+    use {
         "hrsh7th/nvim-compe",
         config = function()
-            require("compe").setup({
+            require("compe").setup {
                 enabled = true,
                 autocomplete = true,
                 debug = false,
@@ -229,14 +243,14 @@ packer.startup(function()
                     orgmode = true,
                     neorg = true,
                 },
-            })
+            }
             local t = function(str)
                 return vim.api.nvim_replace_termcodes(str, true, true, true)
             end
 
             local check_back_space = function()
-                local col = vim.fn.col(".") - 1
-                if col == 0 or vim.fn.getline("."):sub(col, col):match("%s") then
+                local col = vim.fn.col "." - 1
+                if col == 0 or vim.fn.getline("."):sub(col, col):match "%s" then
                     return true
                 else
                     return false
@@ -248,19 +262,19 @@ packer.startup(function()
             --- jump to prev/next snippet's placeholder
             _G.tab_complete = function()
                 if vim.fn.pumvisible() == 1 then
-                    return t("<C-n>")
+                    return t "<C-n>"
                 elseif check_back_space() then
-                    return t("<Tab>")
+                    return t "<Tab>"
                 else
                     return vim.fn["compe#complete"]()
                 end
             end
             _G.s_tab_complete = function()
                 if vim.fn.pumvisible() == 1 then
-                    return t("<C-p>")
+                    return t "<C-p>"
                 else
                     -- If <S-Tab> is not working in your terminal, change it to <C-h>
-                    return t("<S-Tab>")
+                    return t "<S-Tab>"
                 end
             end
 
@@ -269,14 +283,14 @@ packer.startup(function()
             vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", { expr = true })
             vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", { expr = true })
         end,
-    })
+    }
     -- }}}
     -- formatter {{{
-    use({
+    use {
         "mhartington/formatter.nvim",
         cmd = { "Format", "FormatWrite" },
         config = function()
-            require("formatter").setup({
+            require("formatter").setup {
                 filetype = {
                     lua = {
                         function()
@@ -288,20 +302,20 @@ packer.startup(function()
                         end,
                     },
                 },
-            })
+            }
         end,
-    })
+    }
     -- }}}
     -- }}}
 
     -- utility {{{
     -- fuzzy finder {{{
-    use({
+    use {
         "nvim-telescope/telescope.nvim",
         requires = { { "nvim-lua/popup.nvim" }, { "nvim-lua/plenary.nvim" } },
         cmd = "Telescope",
         config = function()
-            require("telescope").setup({
+            require("telescope").setup {
                 defaults = {
                     prompt_prefix = " ",
                 },
@@ -310,27 +324,27 @@ packer.startup(function()
                         theme = "ivy",
                     },
                 },
-            })
+            }
         end,
-    })
+    }
 
-    use({ { "sudormrfbin/cheatsheet.nvim" }, { "nvim-telescope/telescope-symbols.nvim" }, after = "telescope.nvim" })
+    use { { "sudormrfbin/cheatsheet.nvim" }, { "nvim-telescope/telescope-symbols.nvim" }, after = "telescope.nvim" }
     -- }}}
     -- git {{{
     -- use { 'TimUntersberger/neogit', cmd = "Neogit" }
-    use({ "kdheepak/lazygit.nvim", cmd = "LazyGit" })
+    use { "kdheepak/lazygit.nvim", cmd = "LazyGit" }
 
-    use({
+    use {
         "lewis6991/gitsigns.nvim",
         requires = "nvim-lua/plenary.nvim",
         event = "BufRead",
         config = function()
             require("gitsigns").setup()
         end,
-    })
+    }
     -- }}}
     -- file tree {{{
-    use({
+    use {
         "kyazdani42/nvim-tree.lua",
         requires = "kyazdani42/nvim-web-devicons",
         cmd = { "NvimTreeToggle", "NvimTreeClose", "NvimTreeOpen" },
@@ -344,68 +358,68 @@ packer.startup(function()
             vim.g.nvim_tree_lsp_diagnostics = 1
 
             vim.g.nvim_tree_bindings = {
-                { key = "h", cb = tree_cb("dir_up") },
-                { key = "l", cb = tree_cb("cd") },
+                { key = "h", cb = tree_cb "dir_up" },
+                { key = "l", cb = tree_cb "cd" },
             }
         end,
-    })
+    }
     -- }}}
     -- discord {{{
-    use("andweeb/presence.nvim")
+    use "andweeb/presence.nvim"
     -- }}}
     -- mkdir {{{
-    use({
+    use {
         "jghauser/mkdir.nvim",
         event = "BufWritePre",
         config = function()
-            require("mkdir")
+            require "mkdir"
         end,
-    })
+    }
     -- }}}
     -- }}}
 
     -- notes {{{
     -- neorg {{{
-    use({
+    use {
         "vhyrro/neorg",
         requires = { "nvim-lua/plenary.nvim" },
         branch = "unstable",
         ft = "norg",
         config = function()
-            require("neorg").setup({
+            require("neorg").setup {
                 load = {
                     ["core.defaults"] = {},
                     ["core.norg.concealer"] = {},
                 },
-            })
+            }
         end,
-    })
+    }
     -- }}}
     -- heresy {{{
-    use({
+    use {
         "kristijanhusak/orgmode.nvim",
         ft = "org",
         config = function()
-            require("orgmode").setup({
+            require("orgmode").setup {
                 org_hide_leading_stars = true,
-            })
+            }
         end,
-    })
+    }
     -- }}}
     -- }}}
 
     -- keybindings {{{
-    use({
+    use {
         "folke/which-key.nvim",
         config = function()
-            local wk = require("which-key")
+            local wk = require "which-key"
             vim.api.nvim_set_keymap("n", "<BS>", ":WhichKey \\\\<cr>", { silent = true })
 
-            wk.setup({
+            wk.setup {
                 ignore_missing = true,
-            })
+            }
 
-            wk.register({
+            wk.register {
                 ["<leader>"] = {
                     ["<space>"] = { "<cmd>Telescope commands<cr>", "Enter command" },
                     f = {
@@ -449,9 +463,9 @@ packer.startup(function()
                     h = { "<cmd>Lspsaga lsp_finder<cr>", "Cursor word reference" },
                     f = { "<cmd>Format<cr>", "Format file" },
                 },
-            })
+            }
         end,
-    })
+    }
     -- }}}
 end)
 
