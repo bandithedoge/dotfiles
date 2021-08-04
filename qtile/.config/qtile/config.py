@@ -63,13 +63,14 @@ keys = [
     EzKey("M-C-r", lazy.restart()),
     EzKey("M-C-q", lazy.shutdown()),
 
+    EzKey("M-<space>", lazy.spawn("rofi -show drun")),
     EzKey("M-<Escape>", lazy.run_extension(extension.CommandSet(
         commands = {
             "shutdown": "runit-init 0"
         }
     ))),
 
-    KeyChord([mod], "space", [
+    KeyChord([mod], "BackSpace", [
         EzKey("<space>", lazy.spawn("rofi -show drun")),
         EzKey("S-<space>", lazy.spawn("rofi -show run")),
         EzKey("k", lazy.spawn("rofi-keepassxc -d keepass/pass.kdbx")),

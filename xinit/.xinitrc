@@ -4,6 +4,7 @@
 exec xmodmap ~/.Xmodmap &
 exec lxsession &
 
+exec nitrogen --restore &
 exec picom &
 
 exec qtile start
