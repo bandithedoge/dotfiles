@@ -2,6 +2,7 @@
 
 vim.o.clipboard = vim.o.clipboard .. "unnamedplus"
 vim.o.mouse = "a"
+vim.o.hidden = true
 vim.opt.relativenumber = true
 vim.wo.cursorline = true
 vim.o.termguicolors = true
@@ -16,8 +17,6 @@ vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 
 vim.o.guifont = "FiraCode Nerd Font:h16"
-vim.api.nvim_set_keymap("n", "<C-ScrollWheelUp>", ":set guifont=+<cr>", { silent = true })
-vim.api.nvim_set_keymap("n", "<C-ScrollWheelDown>", ":set guifont=-<cr>", { silent = true })
 
 vim.api.nvim_set_keymap("n", "<cr>", ":noh<cr>", { silent = true })
 vim.api.nvim_set_keymap("n", "<tab>", "za", { silent = true })
@@ -106,6 +105,17 @@ packer.startup(function()
     -- scrollbar {{{
     use "dstein64/nvim-scrollview"
     -- }}}
+    -- color highlights {{{
+    use {
+        "norcalli/nvim-colorizer.lua",
+        config = function()
+            require("colorizer").setup()
+        end,
+    }
+    -- }}}
+    -- close buffers {{{
+    use "kazhala/close-buffers.nvim"
+    -- }}}
     -- }}}
 
     -- text editing {{{
@@ -114,19 +124,23 @@ packer.startup(function()
         "nvim-treesitter/nvim-treesitter",
         run = ":TSUpdate",
         config = function()
+            local parsers = require("nvim-treesitter.parsers").get_parser_configs()
+
+            parsers.norg = {
+                install_info = {
+                    url = "https://github.com/vhyrro/tree-sitter-norg",
+                    files = { "src/parser.c", "src/scanner.cc" },
+                    branch = "main",
+                },
+            }
+
             require("nvim-treesitter.configs").setup {
                 ensure_installed = "lua",
                 highlight = { enable = true },
                 rainbow = { enable = true, extended_mode = true },
             }
 
-            require("nvim-treesitter.parsers").get_parser_configs().norg = {
-                install_info = {
-                    url = "https://github.com/vhyrro/tree-sitter-norg",
-                    files = { "src/parser.c" },
-                    branch = "main",
-                },
-            }
+            require("nvim-treesitter.install").compilers = { "clang", "clang++" }
         end,
     }
 
@@ -153,12 +167,11 @@ packer.startup(function()
             local lsp = require "lspconfig"
 
             lsp.rls.setup {}
-            lsp.jedi_language_server.setup {}
+            lsp.pylsp.setup {}
             lsp.gdscript.setup {}
             lsp.bashls.setup {}
             lsp.html.setup {}
             lsp.cssls.setup {}
-            lsp.nimls.setup {}
             lsp.jsonls.setup {}
             lsp.clangd.setup {}
             lsp.solargraph.setup {}
@@ -178,6 +191,19 @@ packer.startup(function()
             "glepnir/lspsaga.nvim",
             config = function()
                 require("lspsaga").init_lsp_saga()
+
+                vim.api.nvim_set_keymap(
+                    "n",
+                    "<C-j>",
+                    ":lua require('lspsaga.action').smart_scroll_with_saga(1)<cr>",
+                    { silent = true }
+                )
+                vim.api.nvim_set_keymap(
+                    "n",
+                    "<C-k>",
+                    ":lua require('lspsaga.action').smart_scroll_with_saga(-1)<cr>",
+                    { silent = true }
+                )
             end,
         },
         {
@@ -190,12 +216,6 @@ packer.startup(function()
             "kosayoda/nvim-lightbulb",
             config = function()
                 vim.cmd [[autocmd CursorHold,CursorHoldI * lua require('nvim-lightbulb').update_lightbulb()]]
-            end,
-        },
-        {
-            "ray-x/lsp_signature.nvim",
-            config = function()
-                require("lsp_signature").setup()
             end,
         },
         after = "nvim-lspconfig",
@@ -339,7 +359,6 @@ packer.startup(function()
     use {
         "kyazdani42/nvim-tree.lua",
         requires = "kyazdani42/nvim-web-devicons",
-        cmd = { "NvimTreeToggle", "NvimTreeClose", "NvimTreeOpen" },
         config = function()
             local tree_cb = require("nvim-tree.config").nvim_tree_callback
 
@@ -348,6 +367,7 @@ packer.startup(function()
             vim.g.nvim_tree_indent_markers = 1
             vim.g.nvim_tree_highlight_opened_files = 1
             vim.g.nvim_tree_lsp_diagnostics = 1
+            vim.g.nvim_tree_update_cwd = 1
 
             vim.g.nvim_tree_bindings = {
                 { key = "h", cb = tree_cb "dir_up" },
@@ -381,7 +401,27 @@ packer.startup(function()
             require("neorg").setup {
                 load = {
                     ["core.defaults"] = {},
-                    ["core.norg.concealer"] = {},
+                    ["core.norg.concealer"] = {
+                        config = {
+                            icons = {
+                                heading = {
+                                    enabled = true,
+                                    level_1 = {
+                                        icon = "♠",
+                                    },
+                                    level_2 = {
+                                        icon = "♣",
+                                    },
+                                    level_3 = {
+                                        icon = "♥",
+                                    },
+                                    level_4 = {
+                                        icon = "♦",
+                                    },
+                                },
+                            },
+                        },
+                    },
                 },
             }
         end,
@@ -394,10 +434,24 @@ packer.startup(function()
         config = function()
             require("orgmode").setup {
                 org_hide_leading_stars = true,
+                org_indent_mode = "indent",
+            }
+        end,
+    }
+    use {
+        "akinsho/org-bullets.nvim",
+        after = "orgmode.nvim",
+        config = function()
+            require("org-bullets").setup {
+                symbols = { "♠", "♣", "♥", "♦" },
             }
         end,
     }
     -- }}}
+    -- }}}
+
+    -- language-specific {{{
+    use { "alaviss/nim.nvim", ft = "nim" }
     -- }}}
 
     -- keybindings {{{
@@ -409,22 +463,12 @@ packer.startup(function()
 
             wk.setup {
                 ignore_missing = true,
+                icons = { separator = "ﰲ" },
             }
 
             wk.register {
                 ["<leader>"] = {
                     ["<space>"] = { "<cmd>Telescope commands<cr>", "Enter command" },
-                    f = {
-                        name = "+File",
-                        f = { "<cmd>Telescope file_browser<cr>", "Find" },
-                        n = { "<cmd>enew<cr>", "New" },
-                        c = { "<cmd>bd<cr>", "Close" },
-                        C = { "<cmd>bd!<cr>", "Close without saving" },
-                        j = { "<cmd>BufferLineCycleNext<cr>", "Next buffer" },
-                        k = { "<cmd>BufferLineCyclePrev<cr>", "Previous buffer" },
-                        J = { "<cmd>BufferLineMoveNext<cr>", "Move buffer forwards" },
-                        K = { "<cmd>BufferLineMovePrev<cr>", "Move buffer backwards" },
-                    },
                     p = {
                         name = "+Packer",
                         s = { "<cmd>PackerSync<cr>", "Sync" },
@@ -433,27 +477,38 @@ packer.startup(function()
                         i = { "<cmd>PackerInstall<cr>", "Install" },
                         p = { "<cmd>PackerProfile<cr>", "Profile" },
                     },
-                    t = {
-                        name = "+Telescope",
+                    f = {
+                        name = "+Find",
+                        f = { "<cmd>Telescope file_browser", "File" },
                         t = { "<cmd>Telescope<cr>", "Telescope" },
                         h = { "<cmd>Telescope help_tags<cr>", "Help" },
                         H = { "<cmd>Telescope highlights<cr>", "Highlight groups" },
-                        C = { "<cmd>Telescope command_history<cr>", "Command history" },
-                        f = { "<cmd>Telescope oldfiles<cr>", "File history" },
+                        c = { "<cmd>Telescope command_history<cr>", "Command history" },
+                        o = { "<cmd>Telescope oldfiles<cr>", "File history" },
                         s = { "<cmd>Telescope symbols", "Symbols" },
                     },
                     o = {
                         name = "+Open",
-                        d = { "<cmd>:cd ~/dotfiles/<cr> <cmd>:e README.md<cr>", "Dotfiles" },
-                        s = { "<cmd>:cd ~/sql/<cr> <cmd>:e README.md<cr>", "School" },
+                        d = { "<cmd>:cd ~/dotfiles/<cr> <cmd>:NvimTreeOpen<cr>", "Dotfiles" },
+                        s = { "<cmd>:cd ~/sql/<cr> <cmd>:NvimTreeOpen<cr>", "School" },
                     },
-                    T = { "<cmd>NvimTreeToggle<cr>", "File tree" },
-                    b = { "<cmd>Telescope buffers<cr>", "Buffers" },
+                    t = { "<cmd>NvimTreeToggle<cr>", "File tree" },
                     g = { "<cmd>LazyGit<cr>", "Git" },
+                    -- window/buffer management
+                    b = { "<cmd>Telescope buffers<cr>", "Buffers" },
+                    w = { "<cmd>:bd<cr>", "Close buffer" },
+                    W = { "<cmd>:close<cr>", "Close window" },
+                    n = { "<cmd>:new<cr>", "New window (horizontal)" },
+                    N = { "<cmd>:vnew<cr>", "New window (vertical)" },
                 },
+
                 ["\\"] = {
-                    h = { "<cmd>Lspsaga lsp_finder<cr>", "Cursor word reference" },
                     f = { "<cmd>Format<cr>", "Format file" },
+                    t = { "<cmd>TroubleToggle<cr>", "Trouble" },
+                    r = { "<cmd>Lspsaga rename<cr>", "Rename" },
+                    h = { "<cmd>Lspsaga hover_doc<cr>", "Documentation" },
+                    s = { "<cmd>Lspsaga signature_help<cr>", "Signature" },
+                    p = { "<cmd>Lspsaga preview_definition<cr>", "Preview definition" },
                 },
             }
         end,
