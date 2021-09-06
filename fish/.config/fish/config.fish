@@ -3,7 +3,7 @@ set fish_greeting
 
 set TERM "xterm-256color"
 set EDITOR "nvim"
-set PATH $PATH ~/.local/bin ~/node_modules/.bin ~/.nimble/bin
+set PATH $PATH ~/.local/bin ~/.yarn/bin ~/.nimble/bin
 set QT_QPA_PLATFORMTHEME "gtk2"
 
 set fish_color_normal           '#d9dceb'
