@@ -532,3 +532,4 @@ packer.startup(function()
 end)
 
 -- }}}
+-- vim: fdm=marker
