@@ -1,7 +1,8 @@
 fish_vi_key_bindings
 set fish_greeting
-set TERM "xterm-256color"
 
+set TERM "xterm-256color"
+set EDITOR "nvim"
 set PATH $PATH ~/.local/bin ~/node_modules/.bin ~/.nimble/bin
 set QT_QPA_PLATFORMTHEME "gtk2"
 

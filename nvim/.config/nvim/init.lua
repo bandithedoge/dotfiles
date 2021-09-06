@@ -313,6 +313,21 @@ packer.startup(function()
                             }
                         end,
                     },
+                    python = {
+                        function()
+                            return {
+                                exe = "yapf",
+                                args = { "-i" },
+                                stdin = false,
+                            }
+                        end,
+                        function()
+                            return {
+                                exe = "isort",
+                                stdin = false,
+                            }
+                        end,
+                    },
                 },
             }
         end,
@@ -362,7 +377,7 @@ packer.startup(function()
         config = function()
             local tree_cb = require("nvim-tree.config").nvim_tree_callback
 
-            vim.g.nvim_tree_auto_close = 1
+            vim.g.nvim_tree_auto_close = 0
             vim.g.nvim_tree_follow = 0
             vim.g.nvim_tree_indent_markers = 1
             vim.g.nvim_tree_highlight_opened_files = 1
@@ -479,7 +494,7 @@ packer.startup(function()
                     },
                     f = {
                         name = "+Find",
-                        f = { "<cmd>Telescope file_browser", "File" },
+                        f = { "<cmd>Telescope file_browser<cr>", "File" },
                         t = { "<cmd>Telescope<cr>", "Telescope" },
                         h = { "<cmd>Telescope help_tags<cr>", "Help" },
                         H = { "<cmd>Telescope highlights<cr>", "Highlight groups" },
