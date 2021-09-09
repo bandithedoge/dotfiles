@@ -182,7 +182,10 @@ screens = [
                 ),
                 widget.Systray(),
                 icon("﨎"),
-                widget.ThermalSensor(foreground=colors["fg"]),
+                widget.ThermalSensor(
+                    foreground=colors["fg"],
+                    foreground_alert=colors["red"]
+                    ),
                 icon("﬙"),
                 widget.CPUGraph(
                     border_color=colors["accent"],
@@ -215,7 +218,7 @@ screens = [
                 ),
                 icon("直"),
                 widget.Wlan(
-                    interface="wlp3s0",
+                    interface="wlan0",
                     format="{essid}",
                     max_chars=20,
                 ),

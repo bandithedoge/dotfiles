@@ -1,3 +1,4 @@
+-- vim: fdm=marker
 -- general settings {{{
 
 vim.o.clipboard = vim.o.clipboard .. "unnamedplus"
@@ -16,11 +17,16 @@ vim.opt.shiftwidth = 4
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 
+-- vim.o.wrap = true
+-- vim.o.linebreak = true
+
 vim.o.guifont = "FiraCode Nerd Font:h16"
 
 vim.api.nvim_set_keymap("n", "<cr>", ":noh<cr>", { silent = true })
 vim.api.nvim_set_keymap("n", "<tab>", "za", { silent = true })
 vim.api.nvim_set_keymap("n", "<s-tab>", "zA", { silent = true })
+vim.api.nvim_set_keymap("n", "j", "gj", { silent = true })
+vim.api.nvim_set_keymap("n", "k", "gk", { silent = true })
 -- }}}
 
 -- packages {{{
@@ -84,11 +90,10 @@ packer.startup(function()
     -- }}}
     -- indent guides {{{
     use {
-        "glepnir/indent-guides.nvim",
-        event = "BufRead",
+        "lukas-reineke/indent-blankline.nvim",
         config = function()
-            require("indent_guides").setup {
-                indent_tab_guides = true,
+            require("indent_blankline").setup {
+                show_current_context = true,
             }
         end,
     }
@@ -135,7 +140,7 @@ packer.startup(function()
             }
 
             require("nvim-treesitter.configs").setup {
-                ensure_installed = "lua",
+                ensure_installed = { "lua", "norg" },
                 highlight = { enable = true },
                 rainbow = { enable = true, extended_mode = true },
             }
@@ -467,6 +472,7 @@ packer.startup(function()
 
     -- language-specific {{{
     use { "alaviss/nim.nvim", ft = "nim" }
+    use "nanotee/nvim-lua-guide"
     -- }}}
 
     -- keybindings {{{
@@ -532,4 +538,3 @@ packer.startup(function()
 end)
 
 -- }}}
--- vim: fdm=marker

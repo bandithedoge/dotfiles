@@ -1,11 +1,10 @@
 #!/bin/bash
 /usr/bin/pipewire & /usr/bin/pipewire-pulse & /usr/bin/pipewire-media-session &
 
-exec setxkbmap -layout "pl" -option "ctrl:swapcaps" &
-exec xmodmap ~/.Xmodmap &
-
 exec lxsession &
 exec nitrogen --restore &
 exec picom &
 
-exec qtile start
+exec setxkbmap -layout pl -option ctrl:swapcaps &
+
+exec qtile start 
