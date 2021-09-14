@@ -228,7 +228,7 @@ packer.startup(function()
     -- }}}
     -- autocompletion {{{
     use {
-        "https://github.com/hrsh7th/nvim-cmp",
+        "hrsh7th/nvim-cmp",
         requires = {
             {
                 "hrsh7th/cmp-nvim-lsp",
@@ -247,7 +247,17 @@ packer.startup(function()
                 },
                 mapping = {
                     ["<C-Space>"] = cmp.mapping.complete(),
-                    
+                    ["<C-j>"] = cmp.mapping.select_next_item(),
+                    ["<C-k>"] = cmp.mapping.select_prev_item(),
+                    ["<C-h>"] = cmp.mapping.scroll_docs(-4),
+                    ["<C-l>"] = cmp.mapping.scroll_docs(4),
+                    ["<C-c>"] = cmp.mapping.close(),
+                },
+                formatting = {
+                    format = function(entry, vim_item)
+                        vim_item.kind = require("lspkind").presets.default[vim_item.kind]
+                        return vim_item
+                    end
                 },
                 sources = {
                     { name = "orgmode" },
