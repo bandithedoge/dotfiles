@@ -1,6 +1,5 @@
 -- vim: fdm=marker
 -- general settings {{{
-
 vim.o.clipboard = vim.o.clipboard .. "unnamedplus"
 vim.o.mouse = "a"
 vim.o.hidden = true
@@ -8,17 +7,21 @@ vim.opt.relativenumber = true
 vim.wo.cursorline = true
 vim.o.termguicolors = true
 vim.g.mapleader = " "
-vim.wo.foldmethod = "marker"
 vim.opt.timeoutlen = 0
 vim.o.redrawtime = 10000
+vim.o.linebreak = true
 
 vim.opt.expandtab = true
 vim.opt.shiftwidth = 4
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 
--- vim.o.wrap = true
--- vim.o.linebreak = true
+vim.wo.foldmethod = "expr"
+vim.wo.foldexpr = "nvim_treesitter#foldexpr()"
+vim.wo.foldtext = [[substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g').'...'.trim(getline(v:foldend)) ]]
+vim.wo.fillchars = "fold: "
+vim.wo.foldnestmax = 3
+vim.wo.foldminlines = 1
 
 vim.o.guifont = "FiraCode Nerd Font:h16"
 
@@ -330,7 +333,7 @@ packer.startup(function()
         end,
     }
 
-    use { { "sudormrfbin/cheatsheet.nvim" }, { "nvim-telescope/telescope-symbols.nvim" }, after = "telescope.nvim" }
+    use { { "nvim-telescope/telescope-symbols.nvim" }, after = "telescope.nvim" }
     -- }}}
     -- git {{{
     -- use { 'TimUntersberger/neogit', cmd = "Neogit" }
@@ -405,19 +408,22 @@ packer.startup(function()
                                         icon = "♠",
                                     },
                                     level_2 = {
-                                        icon = "♣",
+                                        icon = " ♣",
                                     },
                                     level_3 = {
-                                        icon = "♥",
+                                        icon = "  ♥",
                                     },
                                     level_4 = {
-                                        icon = "♦",
+                                        icon = "   ♦",
                                     },
                                 },
                             },
                         },
                     },
                 },
+                hook = function()
+                    vim.opt.shiftwidth = 2
+                end
             }
         end,
     }
@@ -492,7 +498,8 @@ packer.startup(function()
                         H = { "<cmd>Telescope highlights<cr>", "Highlight groups" },
                         c = { "<cmd>Telescope command_history<cr>", "Command history" },
                         o = { "<cmd>Telescope oldfiles<cr>", "File history" },
-                        s = { "<cmd>Telescope symbols", "Symbols" },
+                        s = { "<cmd>Telescope symbols<cr>", "Symbols" },
+                        r = { "<cmd>Telescope reloader<cr>", "Reload module"}
                     },
                     o = {
                         name = "+Open",
