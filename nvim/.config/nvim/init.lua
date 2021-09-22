@@ -333,7 +333,7 @@ packer.startup(function()
         end,
     }
 
-    use { { "nvim-telescope/telescope-symbols.nvim" }, after = "telescope.nvim" }
+    use { "nvim-telescope/telescope-symbols.nvim", after = "telescope.nvim" }
     -- }}}
     -- git {{{
     -- use { 'TimUntersberger/neogit', cmd = "Neogit" }
