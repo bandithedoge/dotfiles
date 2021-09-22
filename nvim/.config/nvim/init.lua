@@ -257,7 +257,7 @@ packer.startup(function()
                     format = function(entry, vim_item)
                         vim_item.kind = require("lspkind").presets.default[vim_item.kind]
                         return vim_item
-                    end
+                    end,
                 },
                 sources = {
                     { name = "orgmode" },
@@ -448,6 +448,17 @@ packer.startup(function()
     -- language-specific {{{
     use { "alaviss/nim.nvim", ft = "nim" }
     use "nanotee/nvim-lua-guide"
+    use {
+        "folke/lua-dev.nvim",
+        ft = "lua",
+        config = function()
+            require("lspconfig").sumneko_lua.setup(require("lua-dev").setup {
+                lspconfig = {
+                    cmd = { "lua-language-server" },
+                },
+            })
+        end,
+    }
     -- }}}
 
     -- keybindings {{{
