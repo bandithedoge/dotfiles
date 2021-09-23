@@ -168,17 +168,11 @@ packer.startup(function()
         "neovim/nvim-lspconfig",
         config = function()
             local lsp = require "lspconfig"
+            local servers = {"rls", "pylsp", "gdscript", "bashls", "html", "cssls", "jsonls", "clangd", "solargraph", "hls"}
 
-            lsp.rls.setup {}
-            lsp.pylsp.setup {}
-            lsp.gdscript.setup {}
-            lsp.bashls.setup {}
-            lsp.html.setup {}
-            lsp.cssls.setup {}
-            lsp.jsonls.setup {}
-            lsp.clangd.setup {}
-            lsp.solargraph.setup {}
-            lsp.hls.setup {}
+            for _, server in ipairs(servers) do
+                lsp[server].setup {}
+            end
         end,
     }
 
