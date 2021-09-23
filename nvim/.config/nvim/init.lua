@@ -96,6 +96,9 @@ packer.startup(function()
         config = function()
             require("indent_blankline").setup {
                 show_current_context = true,
+                use_treesitter = true,
+                filetype_exclude = {"help", "NvimTree", "packer", "TelescopePrompt"},
+                buftype_exclude = {"terminal"}
             }
         end,
     }
@@ -144,7 +147,10 @@ packer.startup(function()
             require("nvim-treesitter.configs").setup {
                 ensure_installed = { "lua", "norg" },
                 highlight = { enable = true },
+                indent = {enable = true},
+                autopairs = {enable = true},
                 rainbow = { enable = true, extended_mode = true },
+                playground = { enable = true}
             }
 
             require("nvim-treesitter.install").compilers = { "clang", "clang++" }
@@ -153,10 +159,17 @@ packer.startup(function()
 
     use {
         { "p00f/nvim-ts-rainbow" },
+        { "nvim-treesitter/playground", cmd = "TSPlaygroundToggle"},
         {
             "windwp/nvim-autopairs",
             config = function()
-                require("nvim-autopairs").setup()
+                require("nvim-autopairs").setup {
+                    enable_check_bracket_line = false,
+                    check_ts = true,
+                }
+                require("nvim-autopairs.completion.cmp").setup()
+
+                vim.cmd [[ autocmd FileType tsplayground :setlocal shiftwidth=2 ]]
             end,
         },
         requires = "nvim-treesitter/nvim-treesitter",
