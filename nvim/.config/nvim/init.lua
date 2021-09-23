@@ -16,9 +16,8 @@ vim.opt.shiftwidth = 4
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 
-vim.wo.foldmethod = "expr"
-vim.wo.foldexpr = "nvim_treesitter#foldexpr()"
-vim.wo.foldtext = [[substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g').'...'.trim(getline(v:foldend)) ]]
+vim.wo.foldmethod = "marker"
+vim.wo.foldtext = [[substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g').'  ' ]]
 vim.wo.fillchars = "fold: "
 vim.wo.foldnestmax = 3
 vim.wo.foldminlines = 1
@@ -422,7 +421,7 @@ packer.startup(function()
                     },
                 },
                 hook = function()
-                    vim.opt.shiftwidth = 2
+                    vim.bo.shiftwidth = 2
                 end
             }
         end,
