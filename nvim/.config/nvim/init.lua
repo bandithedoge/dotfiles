@@ -170,8 +170,13 @@ packer.startup(function()
             local lsp = require "lspconfig"
             local servers = {"rls", "pylsp", "gdscript", "bashls", "html", "cssls", "jsonls", "clangd", "solargraph", "hls"}
 
+            local capabilities = vim.lsp.protocol.make_client_capabilities()
+            capabilities.textDocument.completion.completionItem.snippetSupport = true
+
             for _, server in ipairs(servers) do
-                lsp[server].setup {}
+                lsp[server].setup {
+                    capabilities = capabilities
+                }
             end
         end,
     }
@@ -382,7 +387,6 @@ packer.startup(function()
         "vhyrro/neorg",
         requires = { "nvim-lua/plenary.nvim" },
         branch = "unstable",
-        ft = "norg",
         config = function()
             require("neorg").setup {
                 load = {
