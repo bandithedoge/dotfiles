@@ -97,8 +97,8 @@ packer.startup(function()
             require("indent_blankline").setup {
                 show_current_context = true,
                 use_treesitter = true,
-                filetype_exclude = {"help", "NvimTree", "packer", "TelescopePrompt"},
-                buftype_exclude = {"terminal"}
+                filetype_exclude = { "help", "NvimTree", "packer", "TelescopePrompt" },
+                buftype_exclude = { "terminal" },
             }
         end,
     }
@@ -147,10 +147,10 @@ packer.startup(function()
             require("nvim-treesitter.configs").setup {
                 ensure_installed = { "lua", "norg" },
                 highlight = { enable = true },
-                indent = {enable = true},
-                autopairs = {enable = true},
+                indent = { enable = true },
+                autopairs = { enable = true },
                 rainbow = { enable = true, extended_mode = true },
-                playground = { enable = true}
+                playground = { enable = true },
             }
 
             require("nvim-treesitter.install").compilers = { "clang", "clang++" }
@@ -159,7 +159,7 @@ packer.startup(function()
 
     use {
         { "p00f/nvim-ts-rainbow" },
-        { "nvim-treesitter/playground", cmd = "TSPlaygroundToggle"},
+        { "nvim-treesitter/playground", cmd = "TSPlaygroundToggle" },
         {
             "windwp/nvim-autopairs",
             config = function()
@@ -181,14 +181,25 @@ packer.startup(function()
         "neovim/nvim-lspconfig",
         config = function()
             local lsp = require "lspconfig"
-            local servers = {"rls", "pylsp", "gdscript", "bashls", "html", "cssls", "jsonls", "clangd", "solargraph", "hls"}
+            local servers = {
+                "rls",
+                "pylsp",
+                "gdscript",
+                "bashls",
+                "html",
+                "cssls",
+                "jsonls",
+                "clangd",
+                "solargraph",
+                "hls",
+            }
 
             local capabilities = vim.lsp.protocol.make_client_capabilities()
             capabilities.textDocument.completion.completionItem.snippetSupport = true
 
             for _, server in ipairs(servers) do
                 lsp[server].setup {
-                    capabilities = capabilities
+                    capabilities = capabilities,
                 }
             end
         end,
@@ -433,7 +444,7 @@ packer.startup(function()
                 },
                 hook = function()
                     vim.bo.shiftwidth = 2
-                end
+                end,
             }
         end,
     }
@@ -509,7 +520,7 @@ packer.startup(function()
                         c = { "<cmd>Telescope command_history<cr>", "Command history" },
                         o = { "<cmd>Telescope oldfiles<cr>", "File history" },
                         s = { "<cmd>Telescope symbols<cr>", "Symbols" },
-                        r = { "<cmd>Telescope reloader<cr>", "Reload module"}
+                        r = { "<cmd>Telescope reloader<cr>", "Reload module" },
                     },
                     o = {
                         name = "+Open",
