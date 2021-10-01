@@ -83,7 +83,7 @@ packer.startup(function()
                     lualine_b = { { "filename", path = 1 } },
                     lualine_c = { "branch", "diff" },
                     lualine_x = { { "diagnostics", sources = { "nvim_lsp" } } },
-                    lualine_y = { "encoding", "fileformat", "filetype" },
+                    lualine_y = { { "bo:shiftwidth" }, "fileformat", "filetype" },
                     lualine_z = { "location", "progress" },
                 },
             }
@@ -194,8 +194,9 @@ packer.startup(function()
                 "hls",
             }
 
-            local capabilities = vim.lsp.protocol.make_client_capabilities()
-            capabilities.textDocument.completion.completionItem.snippetSupport = true
+            local capabilities = require("cmp_nvim_lsp").update_capabilities(
+                vim.lsp.protocol.make_client_capabilities()
+            )
 
             for _, server in ipairs(servers) do
                 lsp[server].setup {
@@ -251,22 +252,27 @@ packer.startup(function()
     -- comments {{{
     use "b3nj5m1n/kommentary"
     -- }}}
+    -- snippets {{{
+    use "L3MON4D3/LuaSnip"
+    -- }}}
     -- autocompletion {{{
     use {
         "hrsh7th/nvim-cmp",
         requires = {
-            {
-                "hrsh7th/cmp-nvim-lsp",
-                "hrsh7th/cmp-path",
-                "hrsh7th/cmp-nvim-lua",
-                "ray-x/cmp-treesitter",
-                { "L3MON4D3/LuaSnip", requires = "saadparwaiz1/cmp_luasnip" },
-            },
-            after = "nvim-cmp",
+            "hrsh7th/cmp-nvim-lsp",
+            "hrsh7th/cmp-path",
+            "hrsh7th/cmp-nvim-lua",
+            "ray-x/cmp-treesitter",
+            "saadparwaiz1/cmp_luasnip",
         },
         config = function()
             local cmp = require "cmp"
             cmp.setup {
+                snippet = {
+                    expand = function(args)
+                        require("luasnip").lsp_expand(args.body)
+                    end,
+                },
                 completion = {
                     completeopt = "menu,menuone,noinsert",
                 },
@@ -276,7 +282,7 @@ packer.startup(function()
                     ["<C-k>"] = cmp.mapping.select_prev_item(),
                     ["<C-h>"] = cmp.mapping.scroll_docs(-4),
                     ["<C-l>"] = cmp.mapping.scroll_docs(4),
-                    ["<C-c>"] = cmp.mapping.close(),
+                    ["<esc>"] = cmp.mapping.close(),
                 },
                 formatting = {
                     format = function(entry, vim_item)
@@ -377,16 +383,23 @@ packer.startup(function()
         config = function()
             local tree_cb = require("nvim-tree.config").nvim_tree_callback
 
-            vim.g.nvim_tree_auto_close = 0
-            vim.g.nvim_tree_follow = 0
-            vim.g.nvim_tree_indent_markers = 1
-            vim.g.nvim_tree_highlight_opened_files = 1
-            vim.g.nvim_tree_lsp_diagnostics = 1
-            vim.g.nvim_tree_update_cwd = 1
-
-            vim.g.nvim_tree_bindings = {
-                { key = "h", cb = tree_cb "dir_up" },
-                { key = "l", cb = tree_cb "cd" },
+            require("nvim-tree").setup {
+                hijack_cursor = true,
+                update_cwd = true,
+                lsp_diagnostics = true,
+                update_focused_file = {
+                    enable = true,
+                    update_cwd = true,
+                },
+                view = {
+                    auto_resize = false,
+                    mappings = {
+                        list = {
+                            { key = "h", cb = tree_cb "dir_up" },
+                            { key = "l", cb = tree_cb "cd" },
+                        },
+                    },
+                },
             }
         end,
     }
