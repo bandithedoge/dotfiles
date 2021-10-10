@@ -15,6 +15,7 @@ with import <nixpkgs> {};
         rubyPackages.solargraph
         # }}}
     ];
+
     programs = {
         home-manager = {
             enable = true;
