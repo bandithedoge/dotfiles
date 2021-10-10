@@ -182,7 +182,7 @@ packer.startup(function()
         config = function()
             local lsp = require "lspconfig"
             local servers = {
-                "rls",
+                "rust-analyzer",
                 "pylsp",
                 "gdscript",
                 "bashls",
@@ -192,6 +192,7 @@ packer.startup(function()
                 "clangd",
                 "solargraph",
                 "hls",
+                "rnix",
             }
 
             local capabilities = require("cmp_nvim_lsp").update_capabilities(
