@@ -6,6 +6,7 @@ with import <nixpkgs> {};
         neovim
         fd
         neofetch
+        clang
         # language servers {{{
         rnix-lsp
         rust-analyzer
@@ -13,6 +14,7 @@ with import <nixpkgs> {};
         nodePackages.bash-language-server
         clang-tools
         rubyPackages.solargraph
+        luajitPackages.lua-lsp
         # }}}
     ];
 

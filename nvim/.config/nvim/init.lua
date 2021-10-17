@@ -138,14 +138,14 @@ packer.startup(function()
 
             parsers.norg = {
                 install_info = {
-                    url = "https://github.com/vhyrro/tree-sitter-norg",
+                    url = "https://github.com/nvim-neorg/tree-sitter-norg",
                     files = { "src/parser.c", "src/scanner.cc" },
                     branch = "main",
                 },
             }
 
             require("nvim-treesitter.configs").setup {
-                ensure_installed = { "lua", "norg" },
+                ensure_installed = { "lua" },
                 highlight = { enable = true },
                 indent = { enable = true },
                 autopairs = { enable = true },
@@ -250,6 +250,28 @@ packer.startup(function()
     }
 
     -- }}}
+    -- dap {{{
+    use {
+        "rcarriga/nvim-dap-ui",
+        requires = { "mfussenegger/nvim-dap" },
+        config = function()
+            require("dapui").setup()
+            local dap = require "dap"
+            dap.adapters.ruby = {
+                type = "executable",
+                command = "readapt",
+                args = { "stdio" },
+            }
+            dap.configurations.ruby = {
+                {
+                    type = "ruby",
+                    request = "launch",
+                    useBundler = false,
+                },
+            }
+        end,
+    }
+    -- }}}
     -- comments {{{
     use "b3nj5m1n/kommentary"
     -- }}}
@@ -283,7 +305,6 @@ packer.startup(function()
                     ["<C-k>"] = cmp.mapping.select_prev_item(),
                     ["<C-h>"] = cmp.mapping.scroll_docs(-4),
                     ["<C-l>"] = cmp.mapping.scroll_docs(4),
-                    ["<esc>"] = cmp.mapping.close(),
                 },
                 formatting = {
                     format = function(entry, vim_item)
