@@ -1,0 +1,58 @@
+-- vim: ft=haskell
+Config {
+      font = "xft:Roboto Condensed:pixelsize=13,FiraCode Nerd Font:pixelsize=16"
+    , additionalFonts = ["xft:FiraCode Nerd Font:size=10"]
+    , textOffset = 16
+    , textOffsets = [16]
+    , bgColor = "#20222c"
+    , fgColor = "#d9dceb"
+    , position = TopW L 100
+    , commands = [
+        Run XMonadLog,
+        Run BatteryP
+            ["BAT0"]
+            [
+                "-t", "<acstatus>  <left>%",
+                "--",
+                "-O", "",
+                "-i", "",
+                "-o", ""
+            ]
+            10
+        , Run Date
+            "   %A %d %B %Y     %H:%M:%S"
+            "date"
+            10
+        , Run Cpu
+            ["-t", "﬙   <total>%"]
+            10
+        , Run Memory
+            ["-t", "   <used>M"]
+            10
+        , Run Alsa
+            "default"
+            "Master"
+            [
+                "-t", "墳  <volume>%"
+            ]
+        , Run ThermalZone
+            0
+            ["-t", "﨎  <temp>°C"]
+            10
+        , Run Kbd []
+        , Run Locks
+        , Run DynNetwork
+            [
+                "-t", "歷   <dev>      <rx>   祝   <tx>",
+                "-S", "True"
+            ]
+            10
+        , Run Wireless
+            ""
+            ["-t", "直   <ssid>"]
+            10
+    ]
+    , sepChar = "%"
+    , alignSep = "}{"
+    , template = "%XMonadLog% }{ %dynnetwork%   %wi%       %kbd% <fc=#eb585f>%locks%</fc>  %alsa:default:Master%   %battery%   %thermal0%   %cpu%   %memory%   %date%  "
+}

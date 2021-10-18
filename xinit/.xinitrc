@@ -8,4 +8,4 @@ exec picom &
 exec setxkbmap -layout pl -option ctrl:swapcaps &
 exec xinput set-prop "TPPS/2 IBM TrackPoint" "libinput Accel Speed" -0.5 &
 
-exec qtile start 
+exec xmonad
