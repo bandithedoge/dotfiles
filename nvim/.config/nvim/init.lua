@@ -16,6 +16,9 @@ vim.opt.shiftwidth = 4
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 
+vim.cmd [[au FileType nix,norg :setlocal shiftwidth=2]]
+vim.cmd [[au BufReadPre *.nfo :setlocal fileencodings=cp437,utf-8]]
+
 vim.wo.foldmethod = "marker"
 vim.wo.foldtext = [[substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g').'  ' ]]
 vim.wo.fillchars = "fold: "
@@ -96,9 +99,11 @@ packer.startup(function()
         config = function()
             require("indent_blankline").setup {
                 show_current_context = true,
+                char_list = { "|", "¦", "┆", "┊" },
                 use_treesitter = true,
                 filetype_exclude = { "help", "NvimTree", "packer", "TelescopePrompt" },
                 buftype_exclude = { "terminal" },
+                show_foldtext = false,
             }
         end,
     }
@@ -153,7 +158,7 @@ packer.startup(function()
                 playground = { enable = true },
             }
 
-            require("nvim-treesitter.install").compilers = { "clang", "clang++" }
+            require("nvim-treesitter.install").compilers = { "cc", "clang", "clang++" }
         end,
     }
 
@@ -175,80 +180,6 @@ packer.startup(function()
         requires = "nvim-treesitter/nvim-treesitter",
         after = "nvim-treesitter",
     }
-    -- }}}
-    -- lsp {{{
-    use {
-        "neovim/nvim-lspconfig",
-        config = function()
-            local lsp = require "lspconfig"
-            local servers = {
-                "rust-analyzer",
-                "pylsp",
-                "gdscript",
-                "bashls",
-                "html",
-                "cssls",
-                "jsonls",
-                "clangd",
-                "solargraph",
-                "hls",
-                "rnix",
-            }
-
-            local capabilities = require("cmp_nvim_lsp").update_capabilities(
-                vim.lsp.protocol.make_client_capabilities()
-            )
-
-            for _, server in ipairs(servers) do
-                lsp[server].setup {
-                    capabilities = capabilities,
-                }
-            end
-        end,
-    }
-
-    use {
-        {
-            "folke/trouble.nvim",
-            requires = "kyazdani42/nvim-web-devicons",
-            config = function()
-                require("trouble").setup {}
-            end,
-        },
-        {
-            "glepnir/lspsaga.nvim",
-            config = function()
-                require("lspsaga").init_lsp_saga()
-
-                vim.api.nvim_set_keymap(
-                    "n",
-                    "<C-j>",
-                    ":lua require('lspsaga.action').smart_scroll_with_saga(1)<cr>",
-                    { silent = true }
-                )
-                vim.api.nvim_set_keymap(
-                    "n",
-                    "<C-k>",
-                    ":lua require('lspsaga.action').smart_scroll_with_saga(-1)<cr>",
-                    { silent = true }
-                )
-            end,
-        },
-        {
-            "onsails/lspkind-nvim",
-            config = function()
-                require("lspkind").init()
-            end,
-        },
-        {
-            "kosayoda/nvim-lightbulb",
-            config = function()
-                vim.cmd [[autocmd CursorHold,CursorHoldI * lua require('nvim-lightbulb').update_lightbulb()]]
-            end,
-        },
-        after = "nvim-lspconfig",
-    }
-
     -- }}}
     -- dap {{{
     use {
@@ -325,6 +256,80 @@ packer.startup(function()
         end,
     }
     -- }}}
+    -- lsp {{{
+    use {
+        "neovim/nvim-lspconfig",
+        config = function()
+            local lsp = require "lspconfig"
+            local servers = {
+                "rust_analyzer",
+                "pylsp",
+                "gdscript",
+                "bashls",
+                "html",
+                "cssls",
+                "jsonls",
+                "clangd",
+                "solargraph",
+                "hls",
+                "rnix",
+            }
+
+            local capabilities = require("cmp_nvim_lsp").update_capabilities(
+                vim.lsp.protocol.make_client_capabilities()
+            )
+
+            for _, server in ipairs(servers) do
+                lsp[server].setup {
+                    capabilities = capabilities,
+                }
+            end
+        end,
+    }
+
+    use {
+        {
+            "folke/trouble.nvim",
+            requires = "kyazdani42/nvim-web-devicons",
+            config = function()
+                require("trouble").setup {}
+            end,
+        },
+        {
+            "glepnir/lspsaga.nvim",
+            config = function()
+                require("lspsaga").init_lsp_saga()
+
+                vim.api.nvim_set_keymap(
+                    "n",
+                    "<C-j>",
+                    ":lua require('lspsaga.action').smart_scroll_with_saga(1)<cr>",
+                    { silent = true }
+                )
+                vim.api.nvim_set_keymap(
+                    "n",
+                    "<C-k>",
+                    ":lua require('lspsaga.action').smart_scroll_with_saga(-1)<cr>",
+                    { silent = true }
+                )
+            end,
+        },
+        {
+            "onsails/lspkind-nvim",
+            config = function()
+                require("lspkind").init()
+            end,
+        },
+        {
+            "kosayoda/nvim-lightbulb",
+            config = function()
+                vim.cmd [[autocmd CursorHold,CursorHoldI * lua require('nvim-lightbulb').update_lightbulb()]]
+            end,
+        },
+        after = "nvim-lspconfig",
+    }
+
+    -- }}}
     -- formatter {{{
     use {
         "mhartington/formatter.nvim",
@@ -353,6 +358,14 @@ packer.startup(function()
                             return {
                                 exe = "isort",
                                 stdin = false,
+                            }
+                        end,
+                    },
+                    nix = {
+                        function()
+                            return {
+                                exe = "nixfmt",
+                                stdin = true,
                             }
                         end,
                     },
@@ -408,7 +421,6 @@ packer.startup(function()
             require("nvim-tree").setup {
                 hijack_cursor = true,
                 update_cwd = true,
-                lsp_diagnostics = true,
                 update_focused_file = {
                     enable = true,
                     update_cwd = true,
@@ -477,9 +489,6 @@ packer.startup(function()
                         },
                     },
                 },
-                hook = function()
-                    vim.bo.shiftwidth = 2
-                end,
             }
         end,
     }
