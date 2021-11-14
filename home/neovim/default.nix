@@ -65,7 +65,7 @@
       orgmode-nvim
     ];
     extraConfig = ''
-      set runtimepath ^=~/dotfiles/nix/.config/nixpkgs/home/neovim/
+      set runtimepath ^=${../neovim}
       lua << EOF
         require("config.init")
       EOF

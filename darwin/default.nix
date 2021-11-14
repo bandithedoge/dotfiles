@@ -3,7 +3,7 @@
 {
   users.users."bandithedoge" = { name = "bandithedoge";};
   services.nix-daemon.enable = true;
-  environment.darwinConfig = "$HOME/.config/nixpkgs/darwin";
+  environment.darwinConfig = ../darwin;
   environment.shells = [
     "/bin/zsh"
     pkgs.fish
