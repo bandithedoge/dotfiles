@@ -1,9 +1,0 @@
-# send desktop notifications for every step
-notify_each_step = true
-
-# clean cache
-cleanup = true
-
-# custom commands
-[commands]
-"Orphan Cleanup" = "sudo pacman -Rs $(pacman -Qtdq)" # remove orphaned packages

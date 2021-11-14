@@ -1,7 +1,0 @@
-configuration {
-    theme: "flat-blueballs.rasi";
-    window-format: "{t}";
-    scroll-method: 1;
-    drun-display-format: "{name}";
-    show-icons: true;
-}
