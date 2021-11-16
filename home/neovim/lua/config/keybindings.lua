@@ -9,14 +9,6 @@ wk.setup {
 wk.register {
     ["<leader>"] = {
         ["<space>"] = { "<cmd>Telescope commands<cr>", "Enter command" },
-        p = {
-            name = "+Packer",
-            s = { "<cmd>PackerSync<cr>", "Sync" },
-            c = { "<cmd>PackerCompile<cr>", "Compile" },
-            C = { "<cmd>PackerClean<cr>", "Clean" },
-            i = { "<cmd>PackerInstall<cr>", "Install" },
-            p = { "<cmd>PackerProfile<cr>", "Profile" },
-        },
         f = {
             name = "+Find",
             f = { "<cmd>Telescope file_browser<cr>", "File" },

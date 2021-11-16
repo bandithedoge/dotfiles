@@ -1,6 +1,7 @@
 { pkgs, home-manager, inputs, ... }:
 
 {
+  imports = [ ./neovim ];
   home.sessionVariables = { EDITOR = "nvim"; };
 
   home.packages = with pkgs; [
@@ -19,6 +20,9 @@
     nodejs
     yarn
     wrangler
+    hub
+    nix-update
+    smartmontools
   ];
 
   programs = {

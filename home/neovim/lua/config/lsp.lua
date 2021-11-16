@@ -1,48 +1,48 @@
 -- nvim-lspconfig {{{
-local lsp = require "lspconfig"
+local lsp = require("lspconfig")
 local servers = {
-    "rust_analyzer",
-    "pylsp",
-    "gdscript",
-    "bashls",
-    "html",
-    "cssls",
-    "jsonls",
-    "clangd",
-    "solargraph",
-    "hls",
-    "rnix",
+	"rust_analyzer",
+	"pylsp",
+	"gdscript",
+	"bashls",
+	"html",
+	"cssls",
+	"jsonls",
+	"clangd",
+	"solargraph",
+	"hls",
+	"rnix",
 }
 
-local capabilities = require("cmp_nvim_lsp").update_capabilities(
-    vim.lsp.protocol.make_client_capabilities()
-)
+local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 for _, server in ipairs(servers) do
-    lsp[server].setup {
-        capabilities = capabilities,
-    }
+	lsp[server].setup({
+		capabilities = capabilities,
+		settings = {
+			json = {
+				schemas = require("schemastore").json.schemas(),
+			},
+		},
+	})
 end
 -- }}}
 
 -- trouble.nvim {{{
-require("trouble").setup {}
+require("trouble").setup({})
 -- }}}
 
 -- lspsaga.nvim {{{
 require("lspsaga").init_lsp_saga()
 
+vim.api.nvim_set_keymap("n", "<C-j>", ":lua require('lspsaga.action').smart_scroll_with_saga(1)<cr>", {
+	silent = true,
+})
 vim.api.nvim_set_keymap(
-    "n",
-    "<C-j>",
-    ":lua require('lspsaga.action').smart_scroll_with_saga(1)<cr>",
-    { silent = true }
-)
-vim.api.nvim_set_keymap(
-    "n",
-    "<C-k>",
-    ":lua require('lspsaga.action').smart_scroll_with_saga(-1)<cr>",
-    { silent = true }
+	"n",
+	"<C-k>",
+	":lua require('lspsaga.action').smart_scroll_with_saga(-1)<cr>",
+	{ silent = true }
 )
 -- }}}
 
@@ -51,5 +51,5 @@ require("lspkind").init()
 -- }}}
 
 -- nvim-lightbulb {{{
-vim.cmd [[autocmd CursorHold,CursorHoldI * lua require('nvim-lightbulb').update_lightbulb()]]
+vim.cmd([[autocmd CursorHold,CursorHoldI * lua require('nvim-lightbulb').update_lightbulb()]])
 -- }}}

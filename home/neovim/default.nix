@@ -40,6 +40,7 @@
       telescope-nvim
       telescope-symbols-nvim
       lazygit-nvim
+      /* FTerm-nvim */
       # keybindings
       which-key-nvim
       # lsp
@@ -48,6 +49,8 @@
       lspsaga-nvim
       lspkind-nvim
       nvim-lightbulb
+      SchemaStore-nvim
+      /* nvim-lint */
       # completion
       luasnip
       nvim-cmp

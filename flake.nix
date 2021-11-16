@@ -1,4 +1,11 @@
 {
+  nixConfig = {
+    extra-substituters = "https://nix-community.cachix.org";
+    extra-trusted-public-keys = [
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+    ];
+  };
+
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/master";
     darwin.url = "github:lnl7/nix-darwin/master";
@@ -9,8 +16,7 @@
     neovim-nightly-overlay.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs =
-    { self, darwin, nixpkgs, home-manager, neovim-nightly-overlay, ... }@inputs:
+  outputs = { self, darwin, nixpkgs, home-manager, ... }@inputs:
 
     let
 
@@ -18,7 +24,7 @@
         home-manager = {
           useGlobalPkgs = true;
           useUserPackages = true;
-          users.bandithedoge = {imports = [./home ./home/neovim];};
+          users.bandithedoge = { imports = [ ./home ]; };
         };
       };
 
@@ -29,6 +35,7 @@
         system = "x86_64-darwin";
         modules = [
           { nixpkgs.overlays = overlays; }
+          ./common
           ./darwin
           home-manager.darwinModule
           hmModule

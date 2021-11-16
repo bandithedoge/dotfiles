@@ -1,16 +1,17 @@
 { config, pkgs, inputs, ... }:
 
 {
-  users.users."bandithedoge" = { name = "bandithedoge";};
   services.nix-daemon.enable = true;
   environment.darwinConfig = ../darwin;
-  environment.shells = [
-    "/bin/zsh"
-    pkgs.fish
-    pkgs.bashInteractive
-  ];
 
-  programs.fish.enable = true;
+  networking = {
+    hostName = "machine";
+    localHostName = "machine";
+    computerName = "Double Quarter Pounder with Cheese";
+
+    knownNetworkServices = [ "Ethernet" ];
+    dns = [ "1.1.1.1" "1.0.0.1" "2606:4700:4700::1111" "2606:4700:4700::1001" ];
+  };
 
   services.skhd = {
     enable = true;
@@ -73,6 +74,7 @@
       "quicklook-json"
       "quicklookapk"
       "quicknfo"
+      "safari-technology-preview"
       "soulseek"
       "steam"
       "strawberry"
@@ -83,6 +85,8 @@
       "transmission"
       "xbar"
       "vscodium"
+      "openemu"
+      "vamiga"
     ];
 
     masApps = {
@@ -106,5 +110,29 @@
     ];
     serviceConfig.KeepAlive = true;
     serviceConfig.ProcessType = "Interactive";
+  };
+
+  system.defaults = {
+    LaunchServices.LSQuarantine = false;
+
+    NSGlobalDomain = {
+      AppleInterfaceStyle = "Dark";
+      AppleShowAllExtensions = true;
+      NSAutomaticCapitalizationEnabled = false;
+      NSAutomaticSpellingCorrectionEnabled = false;
+      NSNavPanelExpandedStateForSaveMode = true;
+      NSNavPanelExpandedStateForSaveMode2 = true;
+    };
+
+    dock = {
+      orientation = "right";
+      show-recents = false;
+    };
+
+    finder = {
+      AppleShowAllExtensions = true;
+      QuitMenuItem = true;
+      _FXShowPosixPathInTitle = true;
+    };
   };
 }
