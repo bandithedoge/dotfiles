@@ -38,7 +38,7 @@ require("formatter").setup {
 -- }}}
 
 -- presence.nvim {{{
---[[ require("presence"):setup({
+require("presence"):setup({
     main_image = "file",
-}) ]]
+})
 -- }}}

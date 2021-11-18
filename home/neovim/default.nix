@@ -5,7 +5,7 @@
     python39Packages.python-lsp-server
     nodePackages.bash-language-server
     nodePackages.vscode-langservers-extracted
-    clang-tools
+    # clang-tools
     rubyPackages_3_0.solargraph
     haskell-language-server
     rnix-lsp
@@ -39,8 +39,7 @@
       nvim-tree-lua
       telescope-nvim
       telescope-symbols-nvim
-      lazygit-nvim
-      /* FTerm-nvim */
+      FTerm-nvim
       # keybindings
       which-key-nvim
       # lsp
@@ -48,9 +47,8 @@
       trouble-nvim
       lspsaga-nvim
       lspkind-nvim
-      nvim-lightbulb
       SchemaStore-nvim
-      /* nvim-lint */
+      nvim-lint
       # completion
       luasnip
       nvim-cmp
@@ -68,7 +66,7 @@
       orgmode-nvim
     ];
     extraConfig = ''
-      set runtimepath ^=${../neovim}
+      set runtimepath ^=${./.}
       lua << EOF
         require("config.init")
       EOF

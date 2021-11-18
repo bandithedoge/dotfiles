@@ -1,13 +1,30 @@
 { pkgs, home-manager, inputs, ... }:
 
-{
+let
+  rebuild = pkgs.writeShellScriptBin "rebuild" ''
+    #!/usr/bin/env bash
+
+    while getopts o flag
+    do
+      case "$\{flag\}" in
+        o) nix flake update ~/dotfiles;;
+      esac
+    done
+
+    nix flake lock ~/dotfiles
+    ${if pkgs.stdenv.isDarwin then "darwin-rebuild" else "nixos-rebuild"}\
+      switch --flake ~/dotfiles
+    nix-collect-garbage
+  '';
+in {
   imports = [ ./neovim ];
   home.sessionVariables = { EDITOR = "nvim"; };
 
   home.packages = with pkgs; [
+    rebuild
     fd
     neofetch
-    clang_12
+    # clang
     nix-du
     nixfmt
     hactool
@@ -23,6 +40,9 @@
     hub
     nix-update
     smartmontools
+    nim
+    unar
+    tree
   ];
 
   programs = {
@@ -39,20 +59,7 @@
         cleanup = true;
         brew.greedy_cask = true;
         disable = [ "gnome_shell_extensions" "git_repos" "vim" "nix" ];
-        commands = {
-          "Nix" =
-            "nix-channel --update; darwin-rebuild switch; nix-collect-garbage --delete-older-than 7d";
-        };
-      };
-    };
-
-    lf = {
-      enable = true;
-      settings = {
-        ignorecase = true;
-        icons = true;
-        hidden = true;
-        wrapscroll = true;
+        commands = { "Nix" = "${rebuild}"; };
       };
     };
 
@@ -79,10 +86,28 @@
     # }}}
 
     # shell {{{
+    lf = {
+      enable = true;
+      settings = {
+        ignorecase = true;
+        icons = true;
+        hidden = true;
+        wrapscroll = true;
+      };
+      previewer.source = pkgs.writeShellScript "pv.sh" ''
+        #!/usr/bin/env bash
+
+        case "$1" in
+          *.tar*) ${pkgs.unar}/bin/lsar "$1" | tail -n +2 | tree --fromfile .;;
+        esac
+      '';
+    };
+
     starship.enable = true;
     bat.enable = true;
     fzf.enable = true;
     tmux.enable = true;
+
     lsd = {
       enable = true;
       enableAliases = true;
@@ -91,7 +116,7 @@
     skim = {
       enable = true;
       enableFishIntegration = true;
-      defaultOptions = [ "--height 70%" "--prompt ❯" ];
+      defaultOptions = [ "--height 70%" "--prompt '❯ '" ];
     };
 
     fish = {

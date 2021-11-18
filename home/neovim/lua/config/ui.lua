@@ -78,3 +78,11 @@ require("telescope").setup {
     },
 }
 -- }}}
+
+-- FTerm.nvim {{{
+local fterm = require("FTerm")
+
+fterm_lazygit = fterm:new({
+    cmd = "lazygit"
+})
+-- }}}
