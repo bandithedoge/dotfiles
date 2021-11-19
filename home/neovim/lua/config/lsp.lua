@@ -49,3 +49,18 @@ vim.api.nvim_set_keymap(
 -- lspkind-nvim {{{
 require("lspkind").init()
 -- }}}
+
+-- nvim-lint {{{
+require("lint").linters_by_ft = {
+	lua = { "luacheck" },
+	cpp = { "clangtidy" },
+	nix = { "nix", "statix" },
+	html = { "tidy" },
+	markdown = { "markdownlint", "languagetool" },
+	norg = { "languagetool" },
+	python = { "pylint" },
+	sh = { "shellcheck" },
+}
+
+vim.cmd([[ au InsertLeave <buffer> lua require("lint").try_lint()]])
+-- }}}

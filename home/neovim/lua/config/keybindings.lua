@@ -24,10 +24,11 @@ wk.register {
             name = "+Open",
             d = { "<cmd>:cd ~/dotfiles/<cr> <cmd>:NvimTreeOpen<cr>", "Dotfiles" },
             s = { "<cmd>:cd ~/sql/<cr> <cmd>:NvimTreeOpen<cr>", "School" },
+            g = { "<cmd>:cd ~/git/<cr> <cmd>:NvimTreeOpen<cr>", "Git" },
         },
         t = { "<cmd>NvimTreeToggle<cr>", "File tree" },
         g = { "<cmd>:lua fterm_lazygit:toggle()<cr>", "Git" },
-        T = { "<cmd>:lua require('FTerm').toggle()<cr>", "Terminal"},
+        T = { "<cmd>:lua require('FTerm').toggle()<cr>", "Terminal" },
         -- window/buffer management
         b = { "<cmd>Telescope buffers<cr>", "Buffers" },
         w = { "<cmd>:bd<cr>", "Close buffer" },
@@ -39,6 +40,10 @@ wk.register {
     ["\\"] = {
         f = { "<cmd>Format<cr>", "Format file" },
         t = { "<cmd>TroubleToggle<cr>", "Trouble" },
+        a = { "<cmd>Telescope lsp_code_actions<cr>", "Code actions" },
+        d = { "<cmd>Telescope lsp_definitions<cr>", "Definition" },
+        D = { "<cmd>Telescope lsp_type_definitions<cr>", "Type definition" },
+        i = { "<cmd>Telescope lsp_implementations<cr>", "Implementation" },
         r = { "<cmd>Lspsaga rename<cr>", "Rename" },
         h = { "<cmd>Lspsaga hover_doc<cr>", "Documentation" },
         s = { "<cmd>Lspsaga signature_help<cr>", "Signature" },

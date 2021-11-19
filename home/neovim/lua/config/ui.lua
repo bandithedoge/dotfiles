@@ -67,22 +67,77 @@ require("nvim-tree").setup {
 -- }}}
 
 -- telescope.nvim {{{
-require("telescope").setup {
+local telescope = require "telescope"
+local actions = require "telescope.actions"
+
+telescope.setup {
     defaults = {
         prompt_prefix = " ",
+        border = true,
+        mappings = {
+            i = {
+                ["<esc>"] = actions.close,
+                ["<C-j>"] = actions.move_selection_next,
+                ["<C-k>"] = actions.move_selection_previous,
+            },
+        },
     },
     pickers = {
         commands = {
             theme = "ivy",
+            border = false,
+        },
+        command_history = {
+            theme = "ivy",
+            border = false,
+        },
+        reloader = {
+            theme = "ivy",
+            border = false,
+        },
+        builtin = {
+            theme = "ivy",
+            border = false,
+            preview = false,
+        },
+        highlights = {
+            layout_strategy = "vertical",
+        },
+        symbols = {
+            theme = "cursor",
+            border = false,
+        },
+        lsp_code_actions = {
+            theme = "cursor",
+            border = false,
+        },
+        lsp_definitions = {
+            theme = "cursor",
+            border = false,
+        },
+        lsp_type_definitions = {
+            theme = "cursor",
+            border = false,
+        },
+        lsp_implementations = {
+            theme = "cursor",
+            border = false,
         },
     },
 }
+
+telescope.load_extension "fzy_native"
+telescope.load_extension "dap"
 -- }}}
 
 -- FTerm.nvim {{{
-local fterm = require("FTerm")
+local fterm = require "FTerm"
 
-fterm_lazygit = fterm:new({
-    cmd = "lazygit"
-})
+fterm_lazygit = fterm:new {
+    cmd = "lazygit",
+}
+-- }}}
+
+-- Shade.nvim {{{
+require("shade").setup()
 -- }}}

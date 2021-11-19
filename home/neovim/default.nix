@@ -9,6 +9,13 @@
     rubyPackages_3_0.solargraph
     haskell-language-server
     rnix-lsp
+    luajitPackages.luacheck
+    html-tidy
+    languagetool
+    nodePackages.markdownlint-cli2
+    python39Packages.pylint
+    shellcheck
+    statix
   ];
 
   programs.neovim = {
@@ -39,7 +46,10 @@
       nvim-tree-lua
       telescope-nvim
       telescope-symbols-nvim
+      telescope-dap-nvim
+      telescope-fzy-native-nvim
       FTerm-nvim
+      Shade-nvim
       # keybindings
       which-key-nvim
       # lsp

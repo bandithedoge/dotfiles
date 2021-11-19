@@ -98,7 +98,8 @@ in {
         #!/usr/bin/env bash
 
         case "$1" in
-          *.tar*) ${pkgs.unar}/bin/lsar "$1" | tail -n +2 | tree --fromfile .;;
+          *.tar* | *.zip | *.7z | *.rar | *.iso)
+            ${pkgs.unar}/bin/lsar "$1" | tail -n +2 | tree -C --fromfile .;;
         esac
       '';
     };
