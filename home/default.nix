@@ -1,4 +1,4 @@
-{ pkgs, home-manager, inputs, ... }:
+{ pkgs, home-manager, inputs, nix-colors, ... }:
 
 let
   rebuild = pkgs.writeShellScriptBin "rebuild" ''
@@ -44,6 +44,8 @@ in {
     unar
     tree
   ];
+
+  colorscheme = inputs.nix-colors.colorSchemes.dracula;
 
   programs = {
     home-manager = {

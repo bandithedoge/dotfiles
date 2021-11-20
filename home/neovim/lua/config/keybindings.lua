@@ -11,7 +11,7 @@ wk.register {
         ["<space>"] = { "<cmd>Telescope commands<cr>", "Enter command" },
         f = {
             name = "+Find",
-            f = { "<cmd>Telescope file_browser<cr>", "File" },
+            f = { "<cmd>lua require('telescope.builtin').file_browser({hidden = true})<cr>", "File" },
             t = { "<cmd>Telescope<cr>", "Telescope" },
             h = { "<cmd>Telescope help_tags<cr>", "Help" },
             H = { "<cmd>Telescope highlights<cr>", "Highlight groups" },
