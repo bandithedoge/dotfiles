@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "cachix": {
+      "locked": {
+        "lastModified": 1637448181,
+        "narHash": "sha256-ujcXli4esmtIHUBjE1BjmMuBWrcNvlHZrVXx56i5B1M=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "d5b65f812cd4f5a8fa74b406075b59a46f1cfd98",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-21.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "darwin": {
       "inputs": {
         "nixpkgs": [
@@ -59,11 +75,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1637188941,
-        "narHash": "sha256-4aA5iNVhSDbKjsPeG4n0SvfPQ3sd9ve23b05bVztSq4=",
+        "lastModified": 1637516270,
+        "narHash": "sha256-qTffAQ0kWA2qXMJUVMDsgXVbzMNI0BfR78vB/4QFA+o=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "d85bf67c48f5c64ca39d3d48375e742e16933f4f",
+        "rev": "15ae861e1bfad90e0d14106551544e9e07cbcb10",
         "type": "github"
       },
       "original": {
@@ -82,11 +98,11 @@
       },
       "locked": {
         "dir": "contrib",
-        "lastModified": 1637202500,
-        "narHash": "sha256-WNnV0oJ1xTw2JzbEobXhUzkSMqlSmLEjLQCkY8AbcK8=",
+        "lastModified": 1637551292,
+        "narHash": "sha256-+W2o/dyMucFQ2RzS3Zge2wkB4MbwMUhDKD5o30WsF6A=",
         "owner": "neovim",
         "repo": "neovim",
-        "rev": "36538417f027758ee50faf50c5e4dcc6cb73431d",
+        "rev": "64abd7be7993ed3fa031b5d71a4482871108093a",
         "type": "github"
       },
       "original": {
@@ -105,11 +121,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1637223217,
-        "narHash": "sha256-dPKKP1UGD1yjJYSJLT/j2QFq93gHe96NDUuGTv2PtyQ=",
+        "lastModified": 1637569122,
+        "narHash": "sha256-daz/59RqzFBt2XXLZ+LpnNvz56XuKddPIrOnmpyDazA=",
         "owner": "nix-community",
         "repo": "neovim-nightly-overlay",
-        "rev": "a6becb3c0fa8188d374f93163aa121523bc017d7",
+        "rev": "fcae6ab8bbde4c39ba6a6c0a202639ecad9984da",
         "type": "github"
       },
       "original": {
@@ -118,28 +134,29 @@
         "type": "github"
       }
     },
-    "nix-colors": {
+    "nixos-hardware": {
       "locked": {
-        "lastModified": 1636465788,
-        "narHash": "sha256-/88/gm4hydW5MnCNgE3GU4AE8v9TSJZJgHJQ32+XKSE=",
-        "owner": "misterio77",
-        "repo": "nix-colors",
-        "rev": "72fb3549d0e224750e3839528539a4e57a98b133",
+        "lastModified": 1637564544,
+        "narHash": "sha256-wwdjkfdQEbFn+Gr1iBiA5DGgl+Q7PASL83Swo/Wqwy0=",
+        "owner": "nixos",
+        "repo": "nixos-hardware",
+        "rev": "08cda8e3a5a4e685af525e5a589dfeb74267d505",
         "type": "github"
       },
       "original": {
-        "owner": "misterio77",
-        "repo": "nix-colors",
+        "owner": "nixos",
+        "ref": "master",
+        "repo": "nixos-hardware",
         "type": "github"
       }
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1637260480,
-        "narHash": "sha256-30zER4eCAwKDXlsI+0CteyEiQ6oTTBGR8Mk6q/G6gyc=",
+        "lastModified": 1637605846,
+        "narHash": "sha256-Llelj1pYeAhGLftPxM2ixSgAfdPBAZOnpBZtpvaZ3Xo=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "6456bfce6df43b7a6cf88fe205ad4fe338ab460b",
+        "rev": "d00918ccaf7e1532d35db2f1e3d44db3da39b851",
         "type": "github"
       },
       "original": {
@@ -149,13 +166,35 @@
         "type": "github"
       }
     },
+    "nixpkgs-wayland": {
+      "inputs": {
+        "cachix": "cachix",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1637594999,
+        "narHash": "sha256-Vo8opA6KIhKNtGIkufSG0nnc8MQev4goYl3CQQ79v0Y=",
+        "owner": "nix-community",
+        "repo": "nixpkgs-wayland",
+        "rev": "65202808382266d5b039e180581772e4ab2e9700",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "nixpkgs-wayland",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "darwin": "darwin",
         "home-manager": "home-manager",
         "neovim-nightly-overlay": "neovim-nightly-overlay",
-        "nix-colors": "nix-colors",
-        "nixpkgs": "nixpkgs"
+        "nixos-hardware": "nixos-hardware",
+        "nixpkgs": "nixpkgs",
+        "nixpkgs-wayland": "nixpkgs-wayland"
       }
     }
   },

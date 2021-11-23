@@ -10,7 +10,6 @@ local servers = {
 	"jsonls",
 	"clangd",
 	"solargraph",
-	"hls",
 	"rnix",
 }
 
@@ -57,7 +56,6 @@ require("lint").linters_by_ft = {
 	nix = { "nix", "statix" },
 	html = { "tidy" },
 	markdown = { "markdownlint", "languagetool" },
-	norg = { "languagetool" },
 	python = { "pylint" },
 	sh = { "shellcheck" },
 }

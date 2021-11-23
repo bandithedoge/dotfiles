@@ -4,17 +4,15 @@ let
   rebuild = pkgs.writeShellScriptBin "rebuild" ''
     #!/usr/bin/env bash
 
-    while getopts o flag
-    do
-      case "$\{flag\}" in
-        o) nix flake update ~/dotfiles;;
-      esac
-    done
-
+    ${if pkgs.stdenv.isDarwin then "darwin-rebuid" else "sudo nixos-rebuild"} switch --flake ~/dotfiles --impure
+    sudo nix-collect-garbage
+    sudo nix-env -p /nix/var/nix/profiles/system --delete-generations +3
+  '';
+  update = pkgs.writeShellScriptBin "update" ''
+    nix flake update ~/dotfiles
     nix flake lock ~/dotfiles
-    ${if pkgs.stdenv.isDarwin then "darwin-rebuild" else "nixos-rebuild"}\
-      switch --flake ~/dotfiles
-    nix-collect-garbage
+    rebuild
+    nix-store --optimize
   '';
 in {
   imports = [ ./neovim ];
@@ -22,6 +20,7 @@ in {
 
   home.packages = with pkgs; [
     rebuild
+    update
     fd
     neofetch
     # clang
@@ -44,8 +43,6 @@ in {
     unar
     tree
   ];
-
-  colorscheme = inputs.nix-colors.colorSchemes.dracula;
 
   programs = {
     home-manager = {
