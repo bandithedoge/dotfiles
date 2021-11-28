@@ -74,6 +74,7 @@ telescope.setup {
     defaults = {
         prompt_prefix = " ",
         border = true,
+        borderchars = { " ", " ", " ", " ", " ", " ", " ", " " },
         mappings = {
             i = {
                 ["<esc>"] = actions.close,
@@ -135,6 +136,12 @@ local fterm = require "FTerm"
 
 fterm_lazygit = fterm:new {
     cmd = "lazygit",
+    hl = "NormalPopover",
+    border = "solid",
+    dimensions = {
+        height = 0.9,
+        width = 0.9,
+    },
 }
 -- }}}
 
