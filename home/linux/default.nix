@@ -1,7 +1,6 @@
 { home-manager, pkgs, ... }:
 let colors = import ../blueballs.nix;
 in {
-  imports = [ ./x ];
 
   # river {{{
   xdg.configFile."river/init" = {
@@ -20,17 +19,71 @@ in {
       riverctl map normal $mod+Shift J swap next
       riverctl map normal $mod+Shift K swap previous
 
-      riverctl map normal $mod H focus-output previous
-      riverctl map normal $mod L focus-output next
-      riverctl map normal $mod+Shift H send-to-output previous
-      riverctl map normal $mod+Shift L send-to-output next
+      for i in $(seq 1 9)
+      do
+        tags=$((1 << ($i - 1)))
+
+        riverctl map normal $mod $i set-focused-tags $tags
+        riverctl map normal $mod+Shift $i set-view-tags $tags
+        riverctl map normal $mod+Control $i toggle-focused-tags $tags
+        riverctl map normal $mod+Shift+Control $i toggle-view-tags $tags
+      done
+
+      riverctl map normal $mod H send-layout-cmd rivertile "main-ratio -0.03"
+      riverctl map normal $mod L send-layout-cmd rivertile "main-ratio +0.03"
+      riverctl map normal $mod+Shift H send-layout-cmd rivertile "main-count +1"
+      riverctl map normal $mod+Shift L send-layout-cmd rivertile "main-count -1"
+
+      riverctl map normal $mod+Control H send-layout-cmd rivertile "main-location left"
+      riverctl map normal $mod+Control J send-layout-cmd rivertile "main-location bottom"
+      riverctl map normal $mod+Control K send-layout-cmd rivertile "main-location top"
+      riverctl map normal $mod+Control L send-layout-cmd rivertile "main-location right"
 
       riverctl map-pointer normal $mod BTN_LEFT move-view
       riverctl map-pointer normal $mod BTN_RIGHT resize-view
 
+      riverctl map normal $mod F toggle-fullscreen
+      riverctl map normal $mod T toggle-float
 
+      riverctl float-filter-add app-id float
+
+      riverctl background-color ${
+        "0x" + pkgs.lib.strings.removePrefix "#" colors.bg
+      }
+      riverctl border-color-focused ${
+        "0x" + pkgs.lib.strings.removePrefix "#" colors.accent
+      }
+      riverctl border-color-unfocused ${
+        "0x" + pkgs.lib.strings.removePrefix "#" colors.bg
+      }
+
+      riverctl default-layout rivertile
+      exec rivertile -view-padding 5 -outer-padding 5 -main-ratio 0.5
     '';
   };
+  # }}}
+
+  # waybar {{{
+  programs.waybar = {
+    enable = true;
+    systemd.enable = false;
+    settings = [{
+      layer = "top";
+      position = "top";
+      modules-left = [ "sway/mode" "sway/workspaces" "sway/window" ];
+      modules-right = ["clock"];
+      modules = {
+        "clock" = {
+          format = "{:%A %d %B %t %T}";
+          interval = 1;
+        };
+      };
+    }];
+  };
+  # }}}
+
+  # yambar {{{
+  xdg.configFile."yambar/config.yml".text = "";
   # }}}
 
   # sway {{{
@@ -133,7 +186,14 @@ in {
   };
   # }}}
 
-  home.packages = with pkgs; [ river ];
+  home.packages = with pkgs; [
+    river
+    wlr-randr
+    yambar
+    wayvnc
+    swaylock
+    swayidle
+  ];
 
   programs = {
     qutebrowser.enable = true;

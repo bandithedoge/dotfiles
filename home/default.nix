@@ -1,29 +1,32 @@
-{ pkgs, home-manager, inputs, nix-colors, ... }:
+{ pkgs, home-manager, nix-colors, ... }:
 
 let
   rebuild = pkgs.writeShellScriptBin "rebuild" ''
     #!/usr/bin/env bash
 
-    ${if pkgs.stdenv.isDarwin then "darwin-rebuid" else "sudo nixos-rebuild"} switch --flake ~/dotfiles --impure
-    sudo nix-collect-garbage
-    sudo nix-env -p /nix/var/nix/profiles/system --delete-generations +3
+    ${
+      if pkgs.stdenv.isDarwin then "darwin-rebuid" else "sudo nixos-rebuild"
+    } switch --flake ~/dotfiles --impure
   '';
   update = pkgs.writeShellScriptBin "update" ''
     nix flake update ~/dotfiles
     nix flake lock ~/dotfiles
     rebuild
+    sudo nix-collect-garbage > /dev/null
+    sudo nix-env -p /nix/var/nix/profiles/system --delete-generations +3
     nix-store --optimize
   '';
 in {
   imports = [ ./neovim ];
-  home.sessionVariables = { EDITOR = "nvim"; };
 
+  home.sessionVariables = { EDITOR = "nvim"; };
   home.packages = with pkgs; [
     rebuild
     update
     fd
     neofetch
-    # clang
+    clang
+    keepassxc
     nix-du
     nixfmt
     hactool
@@ -42,6 +45,9 @@ in {
     nim
     unar
     tree
+    librespeed-cli
+    htop
+    gh
   ];
 
   programs = {
@@ -81,7 +87,6 @@ in {
       userEmail = "bandithedoge@protonmail.com";
     };
     lazygit.enable = true;
-    gh.enable = true;
     # }}}
 
     # shell {{{

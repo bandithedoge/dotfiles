@@ -24,7 +24,11 @@
         };
       };
 
-      overlays = with inputs; [ neovim-nightly-overlay.overlay ];
+      overlays = with inputs;
+        [
+          neovim-nightly-overlay.overlay
+          # nixpkgs-wayland.overlay
+        ];
 
     in {
       darwinConfigurations."machine" = darwin.lib.darwinSystem {

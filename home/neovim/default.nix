@@ -27,6 +27,7 @@
         tree-sitter-lua
         tree-sitter-norg
         tree-sitter-haskell
+        tree-sitter-cpp
       ]))
       nvim-ts-rainbow
       playground
