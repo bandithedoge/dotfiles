@@ -1,6 +1,7 @@
 { pkgs, home-manager, nix-colors, ... }:
 
 let
+
   rebuild = pkgs.writeShellScriptBin "rebuild" ''
     #!/usr/bin/env bash
 
@@ -8,6 +9,7 @@ let
       if pkgs.stdenv.isDarwin then "darwin-rebuild" else "sudo nixos-rebuild"
     } switch --flake ~/dotfiles --impure
   '';
+
   update = pkgs.writeShellScriptBin "update" ''
     sudo nix-collect-garbage
     nix flake update ~/dotfiles
@@ -16,6 +18,7 @@ let
     sudo nix-env -p /nix/var/nix/profiles/system --delete-generations +3
     nix-store --optimize
   '';
+
 in {
   imports = [ ./neovim ];
 
@@ -27,7 +30,6 @@ in {
     neofetch
     clang
     keepassxc
-    nix-du
     nixfmt
     hactool
     rclone
@@ -37,11 +39,6 @@ in {
     ruby_3_0
     stylua
     nodejs
-    yarn
-    wrangler
-    hub
-    nix-update
-    smartmontools
     nim
     unar
     tree
@@ -56,18 +53,6 @@ in {
       path = "...";
     };
 
-    topgrade = {
-      enable = true;
-      settings = {
-        assume_yes = true;
-        set_title = true;
-        cleanup = true;
-        brew.greedy_cask = true;
-        disable = [ "gnome_shell_extensions" "git_repos" "vim" "nix" ];
-        commands = { "Nix" = "${rebuild}"; };
-      };
-    };
-
     # text editors {{{
     vscode = {
       enable = true;
@@ -80,16 +65,27 @@ in {
     };
     # }}}
 
-    # git {{{
-    git = {
-      enable = true;
-      userName = "bandithedoge";
-      userEmail = "bandithedoge@protonmail.com";
-    };
-    lazygit.enable = true;
-    # }}}
-
     # shell {{{
+    lazygit.enable = true;
+    topgrade = {
+      enable = true;
+      settings = {
+        assume_yes = true;
+        set_title = true;
+        cleanup = true;
+        brew.greedy_cask = true;
+        disable = [
+          "gnome_shell_extensions"
+          "git_repos"
+          "vim"
+          "nix"
+          "system"
+          "brew_cask"
+          "brew_formula"
+        ];
+        commands = { "Nix" = "${rebuild}"; };
+      };
+    };
     lf = {
       enable = true;
       settings = {
@@ -188,4 +184,5 @@ in {
     };
     # }}}
   };
+
 }

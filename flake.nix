@@ -38,7 +38,10 @@
           ./common
           ./darwin
           home-manager.darwinModule
-          hmModule
+          (nixpkgs.lib.mkMerge [
+            hmModule
+            { home-manager.users.bandithedoge.imports = [ ./home/darwin ]; }
+          ])
         ];
       };
       nixosConfigurations.thonkpad = nixpkgs.lib.nixosSystem {
