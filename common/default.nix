@@ -23,8 +23,6 @@
 
   users.users."bandithedoge" = {
     name = "bandithedoge";
-    /* home = "/home/bandithedoge"; */
-    isNormalUser = true;
     shell = pkgs.fish;
   };
   environment.shells = [ pkgs.fish pkgs.bashInteractive ];

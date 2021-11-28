@@ -87,6 +87,7 @@
       "vscodium"
       "openemu"
       "vamiga"
+      "openmw"
     ];
 
     masApps = {

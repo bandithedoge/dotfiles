@@ -14,7 +14,10 @@
     "/mnt/data" = {
       device = "/dev/disk/by-label/shit";
       fsType = "ntfs";
-      options = [ "rw" "uid=${builtins.toString config.users.users."bandithedoge".uid}" ];
+      options = [
+        "rw"
+        "uid=${builtins.toString config.users.users."bandithedoge".uid}"
+      ];
     };
   };
 
@@ -59,6 +62,7 @@
 
   users.users."bandithedoge" = {
     extraGroups = [ "wheel" "networkmanager" ];
+    isNormalUser = true;
     uid = 1001;
   };
 }

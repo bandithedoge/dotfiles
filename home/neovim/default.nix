@@ -5,7 +5,6 @@
     python39Packages.python-lsp-server
     nodePackages.bash-language-server
     nodePackages.vscode-langservers-extracted
-    clang-tools
     rubyPackages_3_0.solargraph
     rnix-lsp
     luajitPackages.luacheck
@@ -22,13 +21,14 @@
     package = pkgs.neovim-nightly;
     plugins = with pkgs.vimPlugins; [
       # treesitter
-      (nvim-treesitter.withPlugins (plugins: with plugins; [
-        tree-sitter-nix
-        tree-sitter-lua
-        tree-sitter-norg
-        tree-sitter-haskell
-        tree-sitter-cpp
-      ]))
+      (nvim-treesitter.withPlugins (plugins:
+        with plugins; [
+          tree-sitter-nix
+          tree-sitter-lua
+          tree-sitter-norg
+          tree-sitter-haskell
+          tree-sitter-cpp
+        ]))
       nvim-ts-rainbow
       playground
       nvim-autopairs

@@ -5,14 +5,14 @@ let
     #!/usr/bin/env bash
 
     ${
-      if pkgs.stdenv.isDarwin then "darwin-rebuid" else "sudo nixos-rebuild"
+      if pkgs.stdenv.isDarwin then "darwin-rebuild" else "sudo nixos-rebuild"
     } switch --flake ~/dotfiles --impure
   '';
   update = pkgs.writeShellScriptBin "update" ''
+    sudo nix-collect-garbage
     nix flake update ~/dotfiles
     nix flake lock ~/dotfiles
     rebuild
-    sudo nix-collect-garbage > /dev/null
     sudo nix-env -p /nix/var/nix/profiles/system --delete-generations +3
     nix-store --optimize
   '';
