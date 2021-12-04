@@ -7,7 +7,7 @@ let
 
     ${
       if pkgs.stdenv.isDarwin then "darwin-rebuild" else "sudo nixos-rebuild"
-    } switch --flake ~/dotfiles --impure
+    } switch --flake ~/dotfiles --impure -vv
   '';
 
   update = pkgs.writeShellScriptBin "update" ''
@@ -45,9 +45,6 @@ in {
     librespeed-cli
     htop
     gh
-    pandoc
-    glow
-    imv
   ];
 
   programs = {
