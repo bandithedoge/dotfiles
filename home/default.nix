@@ -2,12 +2,14 @@
 
 let
 
+  rice = import ../rice.nix;
+
   rebuild = pkgs.writeShellScriptBin "rebuild" ''
     #!/usr/bin/env bash
 
     ${
       if pkgs.stdenv.isDarwin then "darwin-rebuild" else "sudo nixos-rebuild"
-    } switch --flake ~/dotfiles --impure -vv
+    } switch --flake ~/dotfiles --impure -v
   '';
 
   update = pkgs.writeShellScriptBin "update" ''
@@ -22,14 +24,16 @@ let
 in {
   imports = [ ./neovim ];
 
-  home.sessionVariables = { EDITOR = "nvim"; };
+  home.sessionVariables = {
+    EDITOR = "nvim";
+    LF_ICONS = "${builtins.readFile ./icons}";
+  };
   home.packages = with pkgs; [
     rebuild
     update
     fd
     neofetch
     clang
-    keepassxc
     nixfmt
     hactool
     rclone
@@ -100,6 +104,7 @@ in {
         case "$1" in
           *.tar* | *.zip | *.7z | *.rar | *.iso)
             ${pkgs.unar}/bin/lsar "$1" | tail -n +2 | tree -C --fromfile .;;
+          *) ${pkgs.bat}/bin/bat --paging never --theme base16 "$1";;
         esac
       '';
     };
@@ -183,6 +188,46 @@ in {
       ];
     };
     # }}}
+
+    kitty = {
+      enable = true;
+      font = {
+        name = rice.monoFont;
+        size = 16;
+      };
+      settings = {
+        cursor_shape = "beam";
+        enable_audio_bell = false;
+        macos_titlebar_color = "background";
+        disable_ligatures = "cursor";
+        window_padding_width = 10;
+
+        foreground = rice.fg;
+        background = rice.bg;
+        selection_foreground = rice.fg;
+        selection_background = rice.selection;
+        cursor = rice.fg;
+        cursor_text_color = "background";
+
+        color0 = rice.bg0;
+        color1 = rice.red;
+        color2 = rice.green;
+        color3 = rice.yellow;
+        color4 = rice.blue;
+        color5 = rice.purple;
+        color6 = rice.cyan;
+        color7 = rice.fg;
+
+        color8 = rice.comment;
+        color9 = rice.red1;
+        color10 = rice.green1;
+        color11 = rice.yellow1;
+        color12 = rice.blue1;
+        color13 = rice.purple1;
+        color14 = rice.cyan1;
+        color15 = rice.accent;
+      };
+    };
   };
 
 }

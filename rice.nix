@@ -47,4 +47,6 @@
   orange = "#d7953f";
   orange0 = "#9c6e31";
   orange1 = "#edc186";
+
+  monoFont = "FiraCode Nerd Font";
 }

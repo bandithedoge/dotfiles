@@ -30,5 +30,10 @@
   };
   environment.shells = [ pkgs.fish pkgs.bashInteractive ];
 
+  fonts.fonts = with pkgs; [
+    (nerdfonts.override { fonts = [ "FiraCode" ]; })
+    roboto
+  ];
+
   programs.fish.enable = true;
 }
