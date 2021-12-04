@@ -86,19 +86,15 @@ telescope.setup {
     pickers = {
         commands = {
             theme = "ivy",
-            border = false,
         },
         command_history = {
             theme = "ivy",
-            border = false,
         },
         reloader = {
             theme = "ivy",
-            border = false,
         },
         builtin = {
             theme = "ivy",
-            border = false,
             preview = false,
         },
         highlights = {
@@ -106,23 +102,18 @@ telescope.setup {
         },
         symbols = {
             theme = "cursor",
-            border = false,
         },
         lsp_code_actions = {
             theme = "cursor",
-            border = false,
         },
         lsp_definitions = {
             theme = "cursor",
-            border = false,
         },
         lsp_type_definitions = {
             theme = "cursor",
-            border = false,
         },
         lsp_implementations = {
             theme = "cursor",
-            border = false,
         },
     },
 }

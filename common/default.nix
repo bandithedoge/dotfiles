@@ -19,7 +19,10 @@
     trustedUsers = [ "root" "@wheel" "bandithedoge" ];
   };
 
-  nixpkgs.config.allowBroken = true;
+  nixpkgs.config = {
+    allowBroken = true;
+    allowUnfree = true;
+  };
 
   users.users."bandithedoge" = {
     name = "bandithedoge";

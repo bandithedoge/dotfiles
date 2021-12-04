@@ -3,7 +3,7 @@
 {
   imports = [ /etc/nixos/hardware-configuration.nix ];
 
-  environment.systemPackages = with pkgs; [ connman-gtk ];
+  environment.systemPackages = with pkgs; [ connman-gtk alsa-utils ];
 
   boot = {
     loader = { systemd-boot.enable = true; };
@@ -41,6 +41,20 @@
   };
 
   hardware.opengl.enable = true;
+
+  security.rtkit.enable = true;
+
+  services.pipewire = {
+    enable = true;
+    media-session.enable = true;
+
+    pulse.enable = true;
+    jack.enable = true;
+    alsa = {
+      enable = true;
+      support32Bit = true;
+    };
+  };
 
   fonts.fonts = with pkgs; [
     (nerdfonts.override { fonts = [ "FiraCode" ]; })

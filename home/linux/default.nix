@@ -58,32 +58,20 @@ in {
       }
 
       riverctl default-layout rivertile
-      exec rivertile -view-padding 5 -outer-padding 5 -main-ratio 0.5
+
+      exec rivertile -view-padding 5 -outer-padding 5 -main-ratio 0.5 &
+
+      waybar
     '';
   };
   # }}}
 
-  # waybar {{{
-  programs.waybar = {
-    enable = true;
-    systemd.enable = false;
-    settings = [{
-      layer = "top";
-      position = "top";
-      modules-left = [ "sway/mode" "sway/workspaces" "sway/window" ];
-      modules-right = ["clock"];
-      modules = {
-        "clock" = {
-          format = "{:%A %d %B %t %T}";
-          interval = 1;
-        };
-      };
-    }];
-  };
-  # }}}
-
   # yambar {{{
-  xdg.configFile."yambar/config.yml".text = "";
+  xdg.configFile."yambar/config.yml".text = ''
+    bar:
+      location: top
+      height: 25
+  '';
   # }}}
 
   # sway {{{
@@ -92,7 +80,7 @@ in {
     wrapperFeatures.gtk = true;
     config = {
       modifier = "Mod4";
-      menu = "${pkgs.rofi}/bin/wofi";
+      menu = "${pkgs.wofi}/bin/wofi";
       terminal = "${pkgs.foot}/bin/foot";
       fonts = { };
 
@@ -193,10 +181,117 @@ in {
     wayvnc
     swaylock
     swayidle
+    milkytracker
   ];
 
   programs = {
     qutebrowser.enable = true;
+
+    # waybar {{{
+    waybar = {
+      enable = true;
+      systemd.enable = false;
+      settings = [{
+        layer = "top";
+        position = "top";
+        modules-left =
+          [ "sway/mode" "sway/workspaces" "sway/window" "river/tags" ];
+        modules-right = [
+          "network"
+          "battery"
+          "temperature"
+          "memory"
+          "disk"
+          "cpu"
+          "pulseaudio"
+          "clock#date"
+          "clock#time"
+        ];
+        modules = {
+          "clock#date".format = "  {:%A %d %B}";
+          "clock#time" = {
+            format = "  {:%T}";
+            interval = 1;
+          };
+          "cpu".format = "  {usage}%";
+          "battery" = {
+            format = "{icon}  {capacity}%";
+            format-charging = "ﮣ {icon}  {capacity}%";
+            format-icons = [ "" "" "" "" "" "" "" "" "" "" "" ];
+            states = { "low" = 20; };
+          };
+          "disk".format = "  {free}";
+          "memory".format = "  {used:0.1} GiB";
+          "network" = {
+            format-wifi =
+              "直  {essid} 祝 {bandwidthUpBits}  {bandwidthDownBits}";
+            format-ethernet = "   祝 {bandwidthUpBits}  {bandwidthDownBits}";
+            format-disconnected = "";
+          };
+          "pulseaudio" = {
+            format = "{icon}  {volume}%";
+            format-icons = { "speaker" = [ "奄" "奔" "墳" ]; };
+            format-muted = "ﱝ";
+            on-click = "amixer set Master toggle";
+          };
+          "temperature" = {
+            critical-threshold = 70;
+            format = "{icon}  {temperatureC}°C";
+            format-icons = [ "" "" "" "" "" ];
+          };
+        };
+      }];
+      style = ''
+        * {
+          padding: 0;
+          font-family: Roboto Condensed, FiraCode Nerd Font;
+          font-size: 13px;
+        }
+
+        window#waybar {
+          background-color: ${colors.bg};
+          color: ${colors.fg};
+        }
+
+        .modules-right {
+          margin: 0;
+        }
+
+        #clock, #cpu, #battery, #disk, #memory, #network, #pulseaudio, #temperature {
+          background-color: ${colors.bg2};
+          padding: 0 5px;
+          margin-right: 10px;
+        }
+
+        #pulseaudio.muted, #network.disconnected, #battery.low, #temperature.critical {
+          color: ${colors.red};
+        }
+
+        #window {
+          margin-left: 10px;
+        }
+
+        #workspaces {
+          margin: 0;
+        }
+
+        #workspaces button {
+          background: ${colors.bg2};
+          border-radius: 0;
+          color: ${colors.fg};
+        }
+
+        #workspaces button.focused, #mode {
+          background: ${colors.accent0};
+          color: ${colors.accent1};
+        }
+
+        #mode {
+          padding: 0 5px;
+        }
+      '';
+    };
+    # }}}
 
     # foot {{{
     foot = {

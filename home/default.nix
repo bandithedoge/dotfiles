@@ -45,6 +45,9 @@ in {
     librespeed-cli
     htop
     gh
+    pandoc
+    glow
+    imv
   ];
 
   programs = {

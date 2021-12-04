@@ -78,7 +78,7 @@
       nvim-dap-ui
       # writing
       neorg
-      orgmode-nvim
+      orgmode
     ];
     extraConfig = ''
       set runtimepath ^=${./.}
