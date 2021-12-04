@@ -49,7 +49,7 @@
       "cantata"
       "discord-canary"
       "eloston-chromium"
-      "font-fira-code-nerd-font"
+      "font-jetbrains-mono-nerd-font"
       "iina"
       "iterm2"
       "jdownloader"

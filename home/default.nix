@@ -49,6 +49,7 @@ in {
     librespeed-cli
     htop
     gh
+    pistol
   ];
 
   programs = {
@@ -102,9 +103,9 @@ in {
         #!/usr/bin/env bash
 
         case "$1" in
-          *.tar* | *.zip | *.7z | *.rar | *.iso)
-            ${pkgs.unar}/bin/lsar "$1" | tail -n +2 | tree -C --fromfile .;;
-          *) ${pkgs.bat}/bin/bat --paging never --theme base16 "$1";;
+          *.tar* | *.zip | *.7z | *.rar | *.iso | *.jar)
+            ${pkgs.unar}/bin/lsar "$1" | tail -n +2 | tree -C --fromfile . ;;
+          *) ${pkgs.pistol}/bin/pistol "$1" ;;
         esac
       '';
     };
@@ -198,9 +199,12 @@ in {
       settings = {
         cursor_shape = "beam";
         enable_audio_bell = false;
-        macos_titlebar_color = "background";
         disable_ligatures = "cursor";
         window_padding_width = 10;
+        adjust_column_width = -1;
+
+        macos_titlebar_color = "background";
+        macos_thicken_font = "0.25";
 
         foreground = rice.fg;
         background = rice.bg;
@@ -209,7 +213,7 @@ in {
         cursor = rice.fg;
         cursor_text_color = "background";
 
-        color0 = rice.bg0;
+        color0 = rice.bg2;
         color1 = rice.red;
         color2 = rice.green;
         color3 = rice.yellow;
