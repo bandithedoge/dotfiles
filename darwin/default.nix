@@ -47,7 +47,6 @@
       "betterdiscord-installer"
       "blackhole-2ch"
       "cantata"
-      "cyberduck"
       "discord-canary"
       "eloston-chromium"
       "font-fira-code-nerd-font"
@@ -76,7 +75,6 @@
       "safari-technology-preview"
       "soulseek"
       "steam"
-      "strawberry"
       "suspicious-package"
       "syncthing"
       "telegram"
@@ -89,11 +87,9 @@
     ];
 
     masApps = {
-      "Numbers" = 409203825;
       "Messenger" = 1480068668;
       "Pages" = 409201541;
       "RetroClip" = 1332064978;
-      "Keynote" = 409183694;
     };
   };
 
