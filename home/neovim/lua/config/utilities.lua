@@ -1,4 +1,11 @@
 -- formatter.nvim {{{
+local prettier = function()
+    return {
+        exe = "prettier",
+        stdin = true,
+    }
+end
+
 require("formatter").setup {
     filetype = {
         lua = {
@@ -33,6 +40,13 @@ require("formatter").setup {
                 }
             end,
         },
+        html = { prettier },
+        javascript = { prettier },
+        json = { prettier },
+        css = { prettier },
+        markdown = { prettier },
+        yaml = { prettier },
+        toml = { prettier },
     },
 }
 -- }}}
