@@ -193,14 +193,14 @@ in {
       enable = true;
       font = {
         name = rice.monoFont;
-        size = 16;
+        size = if pkgs.stdenv.isDarwin then 16 else 14;
       };
       settings = {
         cursor_shape = "beam";
         enable_audio_bell = false;
         disable_ligatures = "cursor";
         window_padding_width = 10;
-        adjust_column_width = -1;
+        adjust_column_width = if pkgs.stdenv.isDarwin then -1 else 0;
 
         macos_titlebar_color = "background";
         macos_thicken_font = "0.25";

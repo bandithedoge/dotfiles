@@ -93,7 +93,7 @@ in {
     config = {
       modifier = "Mod4";
       menu = "${pkgs.rofi}/bin/wofi";
-      terminal = "${pkgs.foot}/bin/foot";
+      terminal = "${pkgs.kitty}/bin/kitty";
       fonts = { };
 
       input."*" = {
