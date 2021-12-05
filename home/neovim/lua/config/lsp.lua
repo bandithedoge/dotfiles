@@ -60,5 +60,5 @@ require("lint").linters_by_ft = {
     sh = { "shellcheck" },
 }
 
-vim.cmd [[ au InsertLeave <buffer> lua require("lint").try_lint()]]
+vim.cmd [[ au InsertLeave,BufWinEnter * :lua require("lint").try_lint() ]]
 -- }}}

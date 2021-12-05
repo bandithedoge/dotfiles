@@ -16,6 +16,7 @@ in {
     python39Packages.pylint
     shellcheck
     statix
+    nodePackages.prettier
   ];
 
   programs.neovim = {
@@ -29,6 +30,7 @@ in {
           tree-sitter-lua
           tree-sitter-norg
           tree-sitter-cpp
+          tree-sitter-python
         ]))
       nvim-ts-rainbow
       playground
