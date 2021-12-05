@@ -15,6 +15,12 @@
     ];
     extraOptions = ''
       extra-experimental-features = nix-command flakes
+      allow-dirty = true
+      auto-optimise-store = true
+      keep-derivations = false
+      min-free = ${toString (512 * 1024 * 1024)}
+      substitute = true
+      warn-dirty = false
     '';
     trustedUsers = [ "root" "@wheel" "bandithedoge" ];
   };
@@ -29,6 +35,11 @@
     shell = pkgs.fish;
   };
   environment.shells = [ pkgs.fish pkgs.bashInteractive ];
+
+  fonts.fonts = with pkgs; [
+    (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
+    roboto
+  ];
 
   programs.fish.enable = true;
 }

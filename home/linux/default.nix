@@ -1,5 +1,5 @@
 { home-manager, pkgs, ... }:
-let colors = import ../blueballs.nix;
+let colors = import ../../rice.nix;
 in {
 
   # river {{{
