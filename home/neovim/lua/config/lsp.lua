@@ -49,6 +49,16 @@ vim.api.nvim_set_keymap(
 require("lspkind").init()
 -- }}}
 
+-- lsp_signature.nvim {{{
+require("lsp_signature").setup {
+    bind = true,
+    handler_opts = {
+        border = "none",
+    },
+    hint_prefix = "漣",
+}
+-- }}}
+
 -- nvim-lint {{{
 require("lint").linters_by_ft = {
     lua = { "luacheck" },

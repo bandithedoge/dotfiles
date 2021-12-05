@@ -41,6 +41,7 @@ in {
       # ui
       blueballs-neovim
       lualine-nvim
+      lualine-lsp-progress
       bufferline-nvim
       indent-blankline-nvim
       nvim-colorizer-lua
@@ -57,6 +58,7 @@ in {
       # lsp
       nvim-lspconfig
       trouble-nvim
+      lsp_signature-nvim
       lspsaga-nvim
       lspkind-nvim
       SchemaStore-nvim

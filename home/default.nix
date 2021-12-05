@@ -49,6 +49,7 @@ in {
     librespeed-cli
     htop
     gh
+    pandoc
   ];
 
   programs = {
