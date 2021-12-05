@@ -1,4 +1,6 @@
-{ pkgs, inputs, ... }: {
+{ pkgs, inputs, ... }:
+let rice = import ../../rice.nix;
+in {
 
   home.packages = with pkgs; [
     rust-analyzer
@@ -82,6 +84,7 @@
     extraConfig = ''
       set runtimepath ^=${./.}
       lua << EOF
+        vim.o.guifont = "${rice.monoFont}:h16"
         require("config.init")
       EOF
     '';

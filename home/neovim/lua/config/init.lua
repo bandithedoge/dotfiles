@@ -24,8 +24,6 @@ vim.defer_fn(function()
     vim.wo.foldnestmax = 3
     vim.wo.foldminlines = 1
 
-    vim.o.guifont = "FiraCode Nerd Font:h16"
-
     vim.api.nvim_set_keymap("n", "<cr>", ":noh<cr>", { silent = true })
     vim.api.nvim_set_keymap("n", "<tab>", "za", { silent = true })
     vim.api.nvim_set_keymap("n", "<s-tab>", "zA", { silent = true })

@@ -48,5 +48,5 @@
   orange0 = "#9c6e31";
   orange1 = "#edc186";
 
-  monoFont = "JedBrainsMono Nerd Font";
+  monoFont = "JetBrainsMono Nerd Font Mono";
 }
