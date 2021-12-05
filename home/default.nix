@@ -193,7 +193,7 @@ in {
       enable = true;
       font = {
         name = rice.monoFont;
-        size = if pkgs.stdenv.isDarwin then 16 else 14;
+        size = if pkgs.stdenv.isDarwin then 16 else 12;
       };
       settings = {
         cursor_shape = "beam";
@@ -204,6 +204,14 @@ in {
 
         macos_titlebar_color = "background";
         macos_thicken_font = "0.25";
+
+        tab_bar_style = "powerline";
+        active_tab_foreground = rice.accent1;
+        active_tab_background = rice.accent0;
+        inactive_tab_foreground = rice.comment;
+        inactive_tab_background = rice.bg2;
+        active_border_color = rice.accent;
+        inactive_border_color = rice.bg2;
 
         foreground = rice.fg;
         background = rice.bg;
