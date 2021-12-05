@@ -17,6 +17,7 @@ in {
     shellcheck
     statix
     nodePackages.prettier
+    nodePackages.prettier-plugin-toml
   ];
 
   programs.neovim = {
