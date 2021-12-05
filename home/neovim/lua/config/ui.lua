@@ -143,6 +143,11 @@ fterm_lazygit = fterm:new {
         width = 0.9,
     },
 }
+
+fterm_float = fterm:new {
+    hl = "NormalPopover",
+    border = "solid",
+}
 -- }}}
 
 -- Shade.nvim {{{

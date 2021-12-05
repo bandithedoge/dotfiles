@@ -28,7 +28,7 @@ wk.register {
         },
         t = { "<cmd>NvimTreeToggle<cr>", "File tree" },
         g = { "<cmd>:lua fterm_lazygit:toggle()<cr>", "Git" },
-        T = { "<cmd>:lua require('FTerm').toggle()<cr>", "Terminal" },
+        T = { "<cmd>:lua fterm_float:toggle()<cr>", "Terminal" },
         -- window/buffer management
         b = { "<cmd>Telescope buffers<cr>", "Buffers" },
         w = { "<cmd>:bd<cr>", "Close buffer" },

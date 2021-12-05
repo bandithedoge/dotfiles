@@ -25,14 +25,7 @@ in {
     package = pkgs.neovim-nightly;
     plugins = with pkgs.vimPlugins; [
       # treesitter
-      (nvim-treesitter.withPlugins (plugins:
-        with plugins; [
-          tree-sitter-nix
-          tree-sitter-lua
-          tree-sitter-norg
-          tree-sitter-cpp
-          tree-sitter-python
-        ]))
+      (nvim-treesitter.withPlugins (p: builtins.attrValues p))
       nvim-ts-rainbow
       playground
       nvim-autopairs
@@ -88,7 +81,7 @@ in {
       set runtimepath ^=${./.}
       lua << EOF
         vim.o.guifont = "${rice.monoFont}:h16"
-        require("config.init")
+        require("config")
       EOF
     '';
   };
