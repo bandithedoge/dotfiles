@@ -72,6 +72,6 @@
   users.users."bandithedoge" = {
     extraGroups = [ "wheel" "networkmanager" ];
     isNormalUser = true;
-    uid = 1001;
+    uid = 1000;
   };
 }
