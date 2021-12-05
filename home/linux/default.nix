@@ -193,6 +193,7 @@ in {
     wayvnc
     swaylock
     swayidle
+    milkytracker
   ];
 
   programs = {

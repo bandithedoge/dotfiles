@@ -85,6 +85,7 @@
       "openemu"
       "vamiga"
       "openmw"
+      "vcv-rack"
     ];
 
     masApps = {
