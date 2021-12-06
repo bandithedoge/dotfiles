@@ -1,5 +1,5 @@
 { home-manager, pkgs, ... }:
-let colors = import ../../rice.nix;
+let rice = import ../../rice.nix;
 in {
 
   # river {{{
@@ -10,7 +10,7 @@ in {
 
       mod="Mod1"
 
-      riverctl map normal $mod Return spawn foot
+      riverctl map normal $mod Return spawn ${rice.terminal}
       riverctl map normal $mod W close
       riverctl map normal $mod+Control Q exit
 
@@ -48,13 +48,13 @@ in {
       riverctl float-filter-add app-id float
 
       riverctl background-color ${
-        "0x" + pkgs.lib.strings.removePrefix "#" colors.bg
+        "0x" + pkgs.lib.strings.removePrefix "#" rice.bg
       }
       riverctl border-color-focused ${
-        "0x" + pkgs.lib.strings.removePrefix "#" colors.accent
+        "0x" + pkgs.lib.strings.removePrefix "#" rice.accent
       }
       riverctl border-color-unfocused ${
-        "0x" + pkgs.lib.strings.removePrefix "#" colors.bg
+        "0x" + pkgs.lib.strings.removePrefix "#" rice.bg
       }
 
       riverctl default-layout rivertile
@@ -63,27 +63,54 @@ in {
   };
   # }}}
 
-  # waybar {{{
-  programs.waybar = {
-    enable = true;
-    systemd.enable = false;
-    settings = [{
-      layer = "top";
-      position = "top";
-      modules-left = [ "sway/mode" "sway/workspaces" "sway/window" ];
-      modules-right = ["clock"];
-      modules = {
-        "clock" = {
-          format = "{:%A %d %B %t %T}";
-          interval = 1;
-        };
-      };
-    }];
-  };
-  # }}}
-
   # yambar {{{
-  xdg.configFile."yambar/config.yml".text = "";
+  xdg.configFile."yambar/config.yml".text =
+    let colors = color: pkgs.lib.strings.removePrefix "#" color + "ff";
+    in builtins.toJSON {
+      bar = {
+        location = "top";
+        height = 24;
+        spacing = 5;
+        background = colors rice.bg;
+        foreground = colors rice.fg;
+        font = rice.uiFont + ":pixelsize=14";
+        left = [
+          {
+            "i3".content."".map = {
+              tag = "state";
+              default.string = {
+                text = "{name}";
+                deco.background.color = colors rice.bg2;
+                foreground = colors rice.comment;
+                font = rice.monoFont;
+                margin = 5;
+              };
+              values.focused.string = {
+                text = "{name}";
+                deco.background.color = colors rice.accent0;
+                foreground = colors rice.accent1;
+                font = rice.monoFont;
+                margin = 10;
+              };
+            };
+          }
+          {
+            "i3".content.current.string = {
+              text = "{application}";
+              foreground = colors rice.comment;
+            };
+          }
+          { "i3".content.current.string.text = "{title}"; }
+        ];
+        right = [{
+          "clock" = {
+            time-format = "%H:%M:%S";
+            content.string.text = "{time}";
+          };
+          # { "i3".content.current.string.text = "{mode}"; }
+        }];
+      };
+    };
   # }}}
 
   # sway {{{
@@ -93,7 +120,7 @@ in {
     config = {
       modifier = "Mod4";
       menu = "${pkgs.rofi}/bin/wofi";
-      terminal = "${pkgs.kitty}/bin/kitty";
+      terminal = rice.terminal;
       fonts = { };
 
       input."*" = {
@@ -106,7 +133,7 @@ in {
         outer = 5;
       };
 
-      colors = with colors; {
+      colors = with rice; {
         background = bg;
         focused = {
           background = accent0;
@@ -193,53 +220,8 @@ in {
     wayvnc
     swaylock
     swayidle
-    milkytracker
+    /* vcv-rack */
   ];
 
-  programs = {
-    qutebrowser.enable = true;
-
-    # foot {{{
-    foot = {
-      enable = true;
-      settings = {
-        main = {
-          font = "FiraCode Nerd Font:size=10";
-          pad = "10x10center";
-        };
-        cursor = {
-          style = "beam";
-          blink = "yes";
-        };
-        mouse.hide-when-typing = "yes";
-        colors = (builtins.mapAttrs
-          (key: color: pkgs.lib.strings.removePrefix "#" color) (with colors; {
-            foreground = fg;
-            background = bg;
-            selection-foreground = fg0;
-            selection-background = selection;
-            urls = accent;
-
-            regular0 = bg0;
-            regular1 = red;
-            regular2 = green;
-            regular3 = yellow;
-            regular4 = blue;
-            regular5 = purple;
-            regular6 = cyan;
-            regular7 = fg;
-
-            bright0 = comment;
-            bright1 = red1;
-            bright2 = green1;
-            bright3 = yellow1;
-            bright4 = blue1;
-            bright5 = purple1;
-            bright6 = cyan1;
-            bright7 = accent;
-          }));
-      };
-    };
-    # }}}
-  };
+  programs = { qutebrowser.enable = true; };
 }

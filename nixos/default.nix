@@ -6,6 +6,7 @@
   environment.systemPackages = with pkgs; [ connman-gtk alsa-utils ];
 
   boot = {
+    kernelPackages = pkgs.linuxPackages_xanmod;
     loader = { systemd-boot.enable = true; };
     supportedFilesystems = [ "ntfs" ];
   };
@@ -74,4 +75,6 @@
     isNormalUser = true;
     uid = 1000;
   };
+
+  programs.ccache.enable = true;
 }

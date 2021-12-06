@@ -49,4 +49,7 @@
   orange1 = "#edc186";
 
   monoFont = "JetBrainsMono Nerd Font Mono";
+  uiFont = "Roboto Condensed";
+
+  terminal = "kitty";
 }
