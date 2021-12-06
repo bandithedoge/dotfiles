@@ -190,6 +190,7 @@ in {
     };
     # }}}
 
+    # terminal {{{
     kitty = {
       enable = true;
       font = {
@@ -238,6 +239,52 @@ in {
         color13 = rice.purple1;
         color14 = rice.cyan1;
         color15 = rice.accent;
+      };
+    };
+    # }}}
+
+    mpv = {
+      enable = true;
+      scripts = with pkgs.mpvScripts; [
+        cutter
+        thumbnail
+        sponsorblock
+        youtube-quality
+      ];
+    };
+
+    zathura = {
+      enable = true;
+      options = {
+        page-padding = 10;
+        show-hidden = true;
+
+        font = rice.uiFont + " 12";
+        default-bg = rice.bg;
+        default-fg = rice.fg;
+        inputbar-bg = rice.bg2;
+        inputbar-fg = rice.fg;
+        notification-bg = rice.bg2;
+        notification-fg = rice.fg;
+        notification-error-bg = rice.red0;
+        notification-error-fg = rice.red1;
+        notification-warning-bg = rice.orange0;
+        notification-warning-fg = rice.orange1;
+        statusbar-bg = rice.bg2;
+        statusbar-fg = rice.comment;
+        highlight-color = rice.selection;
+        highlight-fg = rice.accent;
+        highlight-active-color = rice.accent;
+        completion-bg = rice.bg2;
+        completion-fg = rice.fg;
+        completion-highlight-fg = rice.accent1;
+        completion-highlight-bg = rice.accent0;
+        render-loading-bg = rice.bg2;
+        render-loading-fg = rice.fg;
+        index-bg = rice.bg2;
+        index-fg = rice.fg;
+        index-active-bg = rice.accent0;
+        index-active-fg = rice.accent1;
       };
     };
   };

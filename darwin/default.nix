@@ -34,7 +34,7 @@
       "tblock/tap"
     ];
 
-    brews = [ "innoextract" "mpd" "ntfs-3g-mac" ];
+    brews = [ "innoextract" "mpd" "ntfs-3g-mac" "svn" ];
 
     casks = [
       "adoptopenjdk"
@@ -86,6 +86,8 @@
       "vamiga"
       "openmw"
       "vcv-rack"
+      "milkytracker"
+      "font-roboto"
     ];
 
     masApps = {
