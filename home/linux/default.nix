@@ -104,55 +104,45 @@ in {
       foreground = colors rice.fg;
       font = rice.uiFont + ":size=14";
       left = [
-        /* {
-             "i3" = {
-               sort = "ascending";
-               content."".map = {
-                 tag = "state";
-                 default.string = {
-                   text = "{name}";
-                   deco.background.color = colors rice.bg2;
-                   foreground = colors rice.comment;
-                   font = rice.monoFont;
-                   margin = spacing;
-                 };
-                 values.focused.string = {
-                   text = "{name}";
-                   deco.background.color = colors rice.accent0;
-                   foreground = colors rice.accent1;
-                   font = rice.monoFont;
-                   margin = spacing;
-                 };
-               };
-             };
-           }
-           {
-             "i3".content.current.string = {
-               text = "{application}";
-               foreground = colors rice.comment;
-             };
-           }
-           { "i3".content.current.string.text = "{title}"; }
-        */
         {
           "river" = {
-            content.map = {
-              tag = "state";
-              values.unfocused.string = {
-                text = "{id}";
-                deco.background.color = colors rice.bg2;
-                foreground = colors rice.comment;
-                font = rice.monoFont;
-                margin = spacing;
+            content.map = let
+              tagmap = {
+                tag = "focused";
+                values = {
+                  true.string = {
+                    text = "{id}";
+                    deco.background.color = colors rice.accent0;
+                    foreground = colors rice.accent1;
+                    font = rice.monoFont;
+                    margin = spacing;
+                  };
+                  false.string = {
+                    text = "{id}";
+                    deco.background.color = colors rice.bg2;
+                    foreground = colors rice.comment;
+                    font = rice.monoFont;
+                    margin = spacing;
+                  };
+                };
               };
-              values.focused.string = {
-                text = "{id}";
-                deco.background.color = colors rice.accent0;
-                foreground = colors rice.accent1;
-                font = rice.monoFont;
-                margin = spacing;
+            in {
+              tag = "occupied";
+              values.false.map = {
+                tag = "focused";
+                values = {
+                  true = tagmap.values.true;
+                  false.empty = { };
+                };
               };
+              values.true.map = tagmap;
             };
+          };
+        }
+        {
+          "river" = {
+            content.empty = { };
+            title.string.text = "{title}";
           };
         }
       ];
