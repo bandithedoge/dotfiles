@@ -9,6 +9,7 @@ vim.defer_fn(function()
     vim.opt.timeoutlen = 0
     vim.o.redrawtime = 10000
     vim.o.linebreak = true
+    vim.o.conceallevel = 2
 
     vim.opt.expandtab = true
     vim.opt.shiftwidth = 4

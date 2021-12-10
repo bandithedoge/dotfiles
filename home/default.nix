@@ -91,7 +91,7 @@ in {
         commands = { "Nix" = "${rebuild}"; };
       };
     };
-    lf = {
+    lf = rec {
       enable = true;
       settings = {
         ignorecase = true;
@@ -99,6 +99,7 @@ in {
         hidden = true;
         wrapscroll = true;
       };
+      commands = { fzf = "$fd . -d1 | sk --preview ${previewer.source}"; };
       previewer.source = pkgs.writeShellScript "pv.sh" ''
         #!/usr/bin/env bash
 
@@ -123,7 +124,7 @@ in {
     skim = {
       enable = true;
       enableFishIntegration = true;
-      defaultOptions = [ "--height 70%" "--prompt '❯ '" ];
+      defaultOptions = [ "--prompt '❯ '" ];
     };
 
     fish = {

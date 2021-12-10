@@ -1,9 +1,15 @@
 { config, pkgs, ... }:
 
-{
+let
+  rice = import ../rice.nix;
+  launchwm = pkgs.writeShellScriptBin "launchwm" ''
+    #!/usr/bin/env bash
+    XKB_DEFAULT_OPTIONS=caps:ctrl_modifier XKB_DEFAULT_LAYOUT=pl ${rice.wm}
+  '';
+in {
   imports = [ /etc/nixos/hardware-configuration.nix ];
 
-  environment.systemPackages = with pkgs; [ connman-gtk alsa-utils ];
+  environment.systemPackages = with pkgs; [ launchwm connman-gtk alsa-utils ];
 
   boot = {
     kernelPackages = pkgs.linuxPackages_xanmod;
@@ -59,11 +65,12 @@
 
   services.greetd = {
     enable = true;
+    vt = 2;
     settings = {
       default_session = {
         command = "${
             pkgs.lib.makeBinPath [ pkgs.greetd.tuigreet ]
-          }/tuigreet -tr --cmd sway";
+          }/tuigreet -tr --cmd launchwm";
       };
     };
   };
@@ -77,4 +84,7 @@
   };
 
   programs.ccache.enable = true;
+
+  services.devmon.enable = true;
+  programs.udevil.enable = true;
 }

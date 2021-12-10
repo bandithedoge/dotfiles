@@ -48,8 +48,10 @@
   orange0 = "#9c6e31";
   orange1 = "#edc186";
 
-  monoFont = "JetBrainsMono Nerd Font Mono";
+  monoFont = "JetBrainsMono Nerd Font";
   uiFont = "Roboto Condensed";
 
   terminal = "kitty";
+  wm = "river";
+  menu = "wofi --show drun";
 }
