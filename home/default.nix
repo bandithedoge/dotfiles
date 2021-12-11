@@ -50,6 +50,7 @@ in {
     htop
     gh
     pandoc
+    keepassxc
   ];
 
   programs = {

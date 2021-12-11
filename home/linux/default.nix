@@ -247,4 +247,6 @@ in {
       };
     };
   };
+
+  services = { syncthing.enable = true; };
 }
