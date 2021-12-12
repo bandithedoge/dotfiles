@@ -21,7 +21,8 @@ let
     nix-store --optimize
   '';
 
-in {
+in
+{
   imports = [ ./neovim ];
 
   home.sessionVariables = {
@@ -204,7 +205,7 @@ in {
         enable_audio_bell = false;
         disable_ligatures = "cursor";
         window_padding_width = 10;
-        adjust_column_width = if pkgs.stdenv.isDarwin then -1 else 0;
+        adjust_column_width = -1;
 
         macos_titlebar_color = "background";
         macos_thicken_font = "0.25";

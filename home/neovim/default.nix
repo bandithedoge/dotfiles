@@ -58,7 +58,6 @@ in {
       Shade-nvim
       blueballs-neovim
       bufferline-nvim
-      git-blame-nvim
       gitsigns-nvim
       indent-blankline-nvim
       lualine-lsp-progress
