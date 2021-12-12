@@ -59,16 +59,38 @@ require("lsp_signature").setup {
 }
 -- }}}
 
--- nvim-lint {{{
-require("lint").linters_by_ft = {
-    lua = { "luacheck" },
-    cpp = { "clangtidy" },
-    nix = { "nix", "statix" },
-    html = { "tidy" },
-    markdown = { "markdownlint", "languagetool" },
-    python = { "pylint" },
-    sh = { "shellcheck" },
+-- null-ls.nvim {{{
+local null_ls = require "null-ls"
+
+null_ls.config {
+    sources = {
+        null_ls.builtins.formatting.black,
+        null_ls.builtins.formatting.isort,
+        null_ls.builtins.formatting.clang_format,
+        null_ls.builtins.formatting.codespell,
+        null_ls.builtins.formatting.fixjson,
+        null_ls.builtins.formatting.prettier,
+        null_ls.builtins.formatting.rubocop,
+        null_ls.builtins.formatting.rustfmt,
+        null_ls.builtins.formatting.shfmt,
+        null_ls.builtins.formatting.stylua,
+
+        null_ls.builtins.diagnostics.codespell,
+        null_ls.builtins.diagnostics.cppcheck,
+        null_ls.builtins.diagnostics.flake8,
+        null_ls.builtins.diagnostics.luacheck,
+        null_ls.builtins.diagnostics.markdownlint,
+        null_ls.builtins.diagnostics.rubocop,
+        null_ls.builtins.diagnostics.shellcheck,
+        null_ls.builtins.diagnostics.statix,
+        null_ls.builtins.diagnostics.stylelint,
+        null_ls.builtins.diagnostics.yamllint,
+
+        null_ls.builtins.code_actions.gitsigns,
+        null_ls.builtins.code_actions.shellcheck,
+        null_ls.builtins.code_actions.statix,
+    },
 }
 
-vim.cmd [[ au TextChanged,InsertLeave,BufWinEnter * :lua require("lint").try_lint() ]]
+lsp["null-ls"].setup {}
 -- }}}

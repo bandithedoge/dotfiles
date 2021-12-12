@@ -10,7 +10,7 @@ require("lualine").setup {
         lualine_a = { "mode" },
         lualine_b = { { "filename", path = 1 } },
         lualine_c = { "branch", "diff", "lsp_progress" },
-        lualine_x = { { "diagnostics", sources = { "nvim_lsp" } } },
+        lualine_x = { { "diagnostics", sources = { "nvim_diagnostic" } } },
         lualine_y = { { "bo:shiftwidth" }, "fileformat", "filetype" },
         lualine_z = { "location", "progress" },
     },

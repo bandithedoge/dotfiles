@@ -3,21 +3,36 @@ let rice = import ../../rice.nix;
 in {
 
   home.packages = with pkgs; [
+    # rust
     rust-analyzer
+    rustfmt
+    # python
     python39Packages.python-lsp-server
+    python39Packages.isort
+    python39Packages.flake8
+    black
+    codespell
+    # shell
     nodePackages.bash-language-server
-    nodePackages.vscode-langservers-extracted
-    rubyPackages_3_0.solargraph
-    rnix-lsp
-    luajitPackages.luacheck
-    html-tidy
-    languagetool
-    nodePackages.markdownlint-cli2
-    python39Packages.pylint
     shellcheck
-    statix
+    shfmt
+    # web
+    nodePackages.vscode-langservers-extracted
+    nodePackages.fixjson
+    nodePackages.stylelint
+    yamllint
     nodePackages.prettier
-    nodePackages.prettier-plugin-toml
+    nodePackages.markdownlint-cli2
+    # ruby
+    solargraph
+    rubocop
+    # nix
+    rnix-lsp
+    statix
+    # lua
+    luajitPackages.luacheck
+    # c
+    cppcheck
   ];
 
   programs.neovim = {
@@ -33,9 +48,9 @@ in {
       nvim-web-devicons
       plenary-nvim
       popup-nvim
+      nui-nvim
       # utilities
       kommentary
-      formatter-nvim
       vim-automkdir
       presence-nvim
       # ui
@@ -62,7 +77,7 @@ in {
       lspsaga-nvim
       lspkind-nvim
       SchemaStore-nvim
-      nvim-lint
+      null-ls-nvim
       # completion
       luasnip
       nvim-cmp

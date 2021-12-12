@@ -54,7 +54,6 @@
       "iterm2"
       "jdownloader"
       "kapitainsky-rclone-browser"
-      "keepassxc"
       "loopback"
       "lulu"
       "macfuse"

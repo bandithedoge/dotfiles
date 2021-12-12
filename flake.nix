@@ -1,7 +1,7 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/master";
-    nixos-hardware.url = "github:nixos/nixos-hardware/master";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixos-hardware.url = "github:nixos/nixos-hardware";
     darwin.url = "github:lnl7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
@@ -24,17 +24,13 @@
         };
       };
 
-      overlays = with inputs;
-        [
-          neovim-nightly-overlay.overlay
-          # nixpkgs-wayland.overlay
-        ];
+      overlays = with inputs; [ neovim-nightly-overlay.overlay ];
 
     in {
       darwinConfigurations."machine" = darwin.lib.darwinSystem {
         system = "x86_64-darwin";
         modules = [
-          { nixpkgs.overlays = overlays; }
+          { nixpkgs.overlays = overlays ++ [ (import ./darwin/overlay) ]; }
           ./common
           ./darwin
           home-manager.darwinModule
@@ -46,7 +42,7 @@
       };
       nixosConfigurations.thonkpad = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        extraArgs = { inputs = inputs; };
+        extraArgs = { inherit inputs; };
         modules = [
           { nixpkgs.overlays = overlays; }
           ./common

@@ -38,7 +38,7 @@ wk.register {
     },
 
     ["\\"] = {
-        f = { "<cmd>Format<cr>", "Format file" },
+        f = { "<cmd>:lua vim.lsp.buf.formatting()<cr>", "Format file" },
         t = { "<cmd>TroubleToggle<cr>", "Trouble" },
         a = { "<cmd>Telescope lsp_code_actions<cr>", "Code actions" },
         d = { "<cmd>Telescope lsp_definitions<cr>", "Definition" },
