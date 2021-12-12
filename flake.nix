@@ -26,11 +26,12 @@
 
       overlays = with inputs; [ neovim-nightly-overlay.overlay ];
 
-    in {
+    in
+    {
       darwinConfigurations."machine" = darwin.lib.darwinSystem {
         system = "x86_64-darwin";
         modules = [
-          { nixpkgs.overlays = overlays ++ [ (import ./darwin/overlay) ]; }
+          { nixpkgs.overlays = overlays; }
           ./common
           ./darwin
           home-manager.darwinModule
