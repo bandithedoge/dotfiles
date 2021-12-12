@@ -10,6 +10,7 @@
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     neovim-nightly-overlay.inputs.nixpkgs.follows = "nixpkgs";
+    firefox-darwin.url = "github:bandithedoge/nixpkgs-firefox-darwin";
   };
 
   outputs = { self, darwin, nixpkgs, home-manager, nixos-hardware, ... }@inputs:
@@ -26,12 +27,11 @@
 
       overlays = with inputs; [ neovim-nightly-overlay.overlay ];
 
-    in
-    {
+    in {
       darwinConfigurations."machine" = darwin.lib.darwinSystem {
         system = "x86_64-darwin";
         modules = [
-          { nixpkgs.overlays = overlays; }
+          { nixpkgs.overlays = overlays ++ [ inputs.firefox-darwin.overlay ]; }
           ./common
           ./darwin
           home-manager.darwinModule

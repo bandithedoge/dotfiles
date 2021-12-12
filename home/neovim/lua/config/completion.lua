@@ -11,7 +11,7 @@ cmp.setup {
     preselect = cmp.PreselectMode.None,
     mapping = {
         ["<C-Space>"] = cmp.mapping.complete(),
-        ["<C-CR>"] = cmp.mapping.confirm(),
+        ["<C-CR>"] = cmp.mapping.confirm { select = true },
         ["<C-j>"] = cmp.mapping.select_next_item { behavior = cmp.SelectBehavior.Select },
         ["<C-k>"] = cmp.mapping.select_prev_item { behavior = cmp.SelectBehavior.Select },
         ["<C-h>"] = cmp.mapping.scroll_docs(-4),

@@ -21,8 +21,7 @@ let
     nix-store --optimize
   '';
 
-in
-{
+in {
   imports = [ ./neovim ];
 
   home.sessionVariables = {
@@ -200,7 +199,9 @@ in
         name = rice.monoFont;
         size = if pkgs.stdenv.isDarwin then 16 else 12;
       };
+      keybindings = { "ctrl+enter" = "no_op"; };
       settings = {
+        term = "xterm-kitty";
         cursor_shape = "beam";
         enable_audio_bell = false;
         disable_ligatures = "cursor";
@@ -245,6 +246,11 @@ in
       };
     };
     # }}}
+
+    firefox = {
+      enable = true;
+      package = pkgs.firefox-beta-bin;
+    };
 
     mpv = {
       enable = true;

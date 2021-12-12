@@ -65,10 +65,11 @@ local null_ls = require "null-ls"
 null_ls.config {
     sources = {
         null_ls.builtins.formatting.black,
-        null_ls.builtins.formatting.isort,
         null_ls.builtins.formatting.clang_format,
         null_ls.builtins.formatting.codespell,
         null_ls.builtins.formatting.fixjson,
+        null_ls.builtins.formatting.isort,
+        null_ls.builtins.formatting.nixfmt,
         null_ls.builtins.formatting.prettier,
         null_ls.builtins.formatting.rubocop,
         null_ls.builtins.formatting.rustfmt,
@@ -79,7 +80,7 @@ null_ls.config {
         null_ls.builtins.diagnostics.cppcheck,
         null_ls.builtins.diagnostics.flake8,
         null_ls.builtins.diagnostics.luacheck,
-        null_ls.builtins.diagnostics.markdownlint,
+        null_ls.builtins.diagnostics.markdownlint.with { command = "markdownlint-cli2" },
         null_ls.builtins.diagnostics.rubocop,
         null_ls.builtins.diagnostics.shellcheck,
         null_ls.builtins.diagnostics.statix,
