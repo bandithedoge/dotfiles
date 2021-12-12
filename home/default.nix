@@ -29,28 +29,28 @@ in {
     LF_ICONS = "${builtins.readFile ./icons}";
   };
   home.packages = with pkgs; [
-    rebuild
-    update
-    fd
-    neofetch
     clang
-    nixfmt
+    fd
+    gh
     hactool
-    rclone
+    htop
     imagemagick
+    keepassxc
+    librespeed-cli
     mpc_cli
     ncdu
+    neofetch
+    nim
+    nixfmt
+    nodejs
+    pandoc
+    rclone
+    rebuild
     ruby_3_0
     stylua
-    nodejs
-    nim
-    unar
     tree
-    librespeed-cli
-    htop
-    gh
-    pandoc
-    keepassxc
+    unar
+    update
   ];
 
   programs = {
@@ -81,13 +81,13 @@ in {
         cleanup = true;
         brew.greedy_cask = true;
         disable = [
-          "gnome_shell_extensions"
-          "git_repos"
-          "vim"
-          "nix"
-          "system"
           "brew_cask"
           "brew_formula"
+          "git_repos"
+          "gnome_shell_extensions"
+          "nix"
+          "system"
+          "vim"
         ];
         commands = { "Nix" = "${rebuild}"; };
       };
