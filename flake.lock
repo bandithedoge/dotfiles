@@ -220,6 +220,21 @@
         "type": "github"
       }
     },
+    "nur": {
+      "locked": {
+        "lastModified": 1639332730,
+        "narHash": "sha256-mzTGTfYkA3Pnzub3XOJJGEEcU2xMDJ443Cq6bUvWB1A=",
+        "owner": "nix-community",
+        "repo": "NUR",
+        "rev": "1822d09bf5890f8911ff6390abdce74353fadfad",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "NUR",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "darwin": "darwin",
@@ -228,7 +243,8 @@
         "neovim-nightly-overlay": "neovim-nightly-overlay",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_2",
-        "nixpkgs-wayland": "nixpkgs-wayland"
+        "nixpkgs-wayland": "nixpkgs-wayland",
+        "nur": "nur"
       }
     }
   },

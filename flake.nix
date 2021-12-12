@@ -6,10 +6,11 @@
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
-    nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
+    nur.url = "github:nix-community/NUR";
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     neovim-nightly-overlay.inputs.nixpkgs.follows = "nixpkgs";
+    nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
+    nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
     firefox-darwin.url = "github:bandithedoge/nixpkgs-firefox-darwin";
   };
 
@@ -25,7 +26,7 @@
         };
       };
 
-      overlays = with inputs; [ neovim-nightly-overlay.overlay ];
+      overlays = with inputs; [ neovim-nightly-overlay.overlay nur.overlay ];
 
     in {
       darwinConfigurations."machine" = darwin.lib.darwinSystem {
@@ -34,8 +35,7 @@
           { nixpkgs.overlays = overlays ++ [ inputs.firefox-darwin.overlay ]; }
           ./common
           ./darwin
-          home-manager.darwinModule
-          (nixpkgs.lib.mkMerge [
+          home-manager.darwinModule (nixpkgs.lib.mkMerge [
             hmModule
             { home-manager.users.bandithedoge.imports = [ ./home/darwin ]; }
           ])

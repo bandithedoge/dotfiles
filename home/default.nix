@@ -1,4 +1,4 @@
-{ pkgs, home-manager, nix-colors, ... }:
+{ pkgs, home-manager, ... }:
 
 let
 
@@ -247,10 +247,63 @@ in {
     };
     # }}}
 
+    # web browser {{{
     firefox = {
       enable = true;
-      package = pkgs.firefox-beta-bin;
+      package = if pkgs.stdenv.isDarwin then
+        pkgs.firefox-beta-bin
+      else
+        pkgs.firefox-beta;
+      extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+        auto-tab-discard
+        betterttv
+        buster-captcha-solver
+        canvasblocker
+        clearurls
+        close-other-windows
+        facebook-container
+        gesturefy
+        greasemonkey
+        h264ify
+        honey
+        https-everywhere
+        i-dont-care-about-cookies
+        localcdn
+        netflix-1080p
+        octolinker
+        octotree
+        old-reddit-redirect
+        polish-dictionary
+        privacy-possum
+        reddit-enhancement-suite
+        refined-github
+        sponsorblock
+        stylus
+        tabcenter-reborn
+        terms-of-service-didnt-read
+        translate-web-pages
+        tridactyl
+        ublock-origin
+        unpaywall
+        view-image
+        violentmonkey
+        wayback-machine
+      ];
+      profiles."main" = {
+        name = "main";
+        settings = {
+          "app.update.auto" = false;
+          "browser.autofocus" = false;
+          "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+        };
+        userChrome = ''
+          :root {
+            --toolbar-bgcolor: ${rice.bg} !important;
+          }
+        '';
+      };
     };
+    # }}}
 
     mpv = {
       enable = true;
