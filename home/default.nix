@@ -297,12 +297,12 @@ in {
           "app.update.auto" = false;
           "browser.autofocus" = false;
           "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+          "layers.acceleration.force-enabled" = true;
+          "gfx.webrender.all" = true;
+          "svg.context-properties.content.enabled" = true;
         };
-        userChrome = ''
-          :root {
-            --toolbar-bgcolor: ${rice.bg} !important;
-          }
-        '';
+        userChrome = builtins.readFile (builtins.fetchurl
+          "https://git.sr.ht/~ranmaru/ff-vertical-tabs/blob/master/userChrome.css");
       };
     };
     # }}}
