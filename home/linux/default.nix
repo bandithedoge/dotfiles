@@ -245,6 +245,80 @@ in {
         a = "https://wiki.archlinux.org/?search={}";
         n = "https://nixos.wiki/index.php?search={}";
       };
+      settings = {
+        scrolling.smooth = true;
+        fonts = {
+          default_family = rice.uiFont;
+          default_size = "14px";
+        };
+        colors = {
+          completion = {
+            inherit (rice) fg;
+            even.bg = rice.bg1;
+            match.fg = rice.accent;
+            odd.bg = rice.bg;
+            scrollbar = {
+              inherit (rice) bg;
+              fg = rice.accent;
+            };
+            item.selected = {
+              border = {
+                bottom = rice.accent0;
+                top = rice.accent0;
+              };
+              bg = rice.accent0;
+              fg = rice.accent1;
+              match.fg = rice.bg;
+            };
+            category = {
+              bg = rice.bg2;
+              fg = rice.accent;
+              border = {
+                bottom = rice.bg2;
+                top = rice.bg2;
+              };
+            };
+          };
+          contextmenu = {
+            disabled = {
+              bg = rice.bg2;
+              fg = rice.comment;
+            };
+            menu = {
+              bg = rice.bg2;
+              inherit (rice) fg;
+            };
+            selected = {
+              bg = rice.accent0;
+              fg = rice.accent1;
+            };
+          };
+          downloads = {
+            bar.bg = rice.bg;
+            error = {
+              bg = rice.red0;
+              fg = rice.red1;
+            };
+            start = {
+              bg = rice.bg2;
+              inherit (rice) fg;
+            };
+            stop = {
+              bg = rice.green0;
+              fg = rice.green1;
+            };
+            system = {
+              bg = "none";
+              fg = "none";
+            };
+          };
+          hints = {
+            bg = rice.bg2;
+            inherit (rice) fg;
+            match.fg = rice.accent;
+          };
+        };
+      };
     };
   };
 

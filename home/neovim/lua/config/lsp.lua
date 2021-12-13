@@ -70,7 +70,7 @@ null_ls.config {
         null_ls.builtins.formatting.fixjson,
         null_ls.builtins.formatting.isort,
         null_ls.builtins.formatting.nixfmt,
-        null_ls.builtins.formatting.prettier,
+        null_ls.builtins.formatting.prettier.with { extra_args = { "--tab-width", "4" } },
         null_ls.builtins.formatting.rubocop,
         null_ls.builtins.formatting.rustfmt,
         null_ls.builtins.formatting.shfmt,
