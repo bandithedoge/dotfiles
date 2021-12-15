@@ -324,7 +324,7 @@ in {
         show-hidden = true;
 
         font = rice.uiFont + " 12";
-        default-bg = rice.bg;
+        default-bg = rice.bg0;
         default-fg = rice.fg;
         inputbar-bg = rice.bg2;
         inputbar-fg = rice.fg;
@@ -350,6 +350,7 @@ in {
         index-active-bg = rice.accent0;
         index-active-fg = rice.accent1;
 
+        recolor = true;
         recolor-lightcolor = rice.bg;
         recolor-darkcolor = rice.fg;
       };
