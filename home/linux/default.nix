@@ -2,17 +2,17 @@
 let rice = import ../../rice.nix;
 in {
   home.packages = with pkgs; [
-    river
-    wlr-randr
-    yambar
-    wayvnc
-    swaylock
-    swayidle
-    wofi
-    pavucontrol
     flat-remix-icon-theme
-    vcv-rack
     milkytracker
+    pavucontrol
+    river
+    swayidle
+    swaylock
+    vcv-rack
+    wayvnc
+    wlr-randr
+    wofi
+    yambar
   ];
 
   # river {{{
@@ -131,7 +131,7 @@ in {
               values.false.map = {
                 tag = "focused";
                 values = {
-                  true = tagmap.values.true;
+                  inherit (tagmap.values) true;
                   false.empty = { };
                 };
               };
@@ -237,6 +237,7 @@ in {
   # }}}
 
   programs = {
+    # web browser {{{
     qutebrowser = {
       enable = true;
       searchEngines = {
@@ -317,9 +318,128 @@ in {
             inherit (rice) fg;
             match.fg = rice.accent;
           };
+          keyhint = {
+            bg = rice.bg2;
+            inherit (rice) fg;
+            suffix.fg = rice.accent;
+          };
+          messages = {
+            error = {
+              bg = rice.red0;
+              fg = rice.red1;
+              border = rice.red;
+            };
+            info = {
+              bg = rice.blue0;
+              fg = rice.blue1;
+              border = rice.blue;
+            };
+            warning = {
+              bg = rice.orange0;
+              fg = rice.orange1;
+              border = rice.orange;
+            };
+          };
+          prompts = {
+            bg = rice.bg2;
+            inherit (rice) fg;
+            border = rice.bg;
+            selected = {
+              bg = rice.accent0;
+              fg = rice.accent1;
+            };
+          };
+          statusbar = {
+            caret = {
+              bg = rice.yellow0;
+              fg = rice.yellow1;
+              selection = {
+                bg = rice.orange0;
+                fg = rice.orange1;
+              };
+            };
+            command = {
+              bg = rice.bg2;
+              inherit (rice) fg;
+              private = {
+                bg = rice.purple0;
+                fg = rice.purple1;
+              };
+            };
+            insert = {
+              bg = rice.green0;
+              fg = rice.green1;
+            };
+            normal = {
+              bg = rice.bg2;
+              inherit (rice) fg;
+            };
+            passthrough = {
+              bg = rice.blue0;
+              fg = rice.blue1;
+            };
+            private = {
+              bg = rice.purple0;
+              fg = rice.purple1;
+            };
+            progress.bg = rice.accent;
+            url = {
+              inherit (rice) fg;
+              error.fg = rice.red;
+              hover.fg = rice.accent;
+              warn.fg = rice.orange;
+              success = {
+                http.fg = rice.green;
+                https.fg = rice.green;
+              };
+            };
+          };
+          tabs = let
+            defaultSelected = {
+              bg = rice.accent0;
+              fg = rice.accent1;
+            };
+          in{
+            bar.bg = rice.bg0;
+            even = {
+              inherit (rice) fg;
+              bg = rice.bg1;
+            };
+            odd = {
+              inherit (rice) fg;
+              bg = rice.bg2;
+            };
+            selected = {
+              even = {
+                bg = rice.accent0;
+                fg = rice.accent1;
+              };
+            };
+            pinned = {
+              even = {
+                bg = rice.bg1;
+                fg = rice.accent;
+              };
+              odd = {
+                bg = rice.bg2;
+                fg = rice.accent;
+              };
+              selected = {
+                even = defaultSelected;
+                odd = defaultSelected;
+              };
+            };
+            indicator = {
+              error = rice.red;
+              start = rice.blue;
+              stop = rice.green;
+              system = "none";
+            };
+          };
         };
       };
     };
+    # }}}
   };
 
   services = { syncthing.enable = true; };
