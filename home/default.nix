@@ -22,7 +22,7 @@ let
   '';
 
 in {
-  imports = [ ./neovim ];
+  imports = [ ./editors ];
 
   home.sessionVariables = {
     EDITOR = "nvim";
@@ -35,12 +35,10 @@ in {
     hactool
     htop
     imagemagick
-    keepassxc
     librespeed-cli
     mpc_cli
     ncdu
     neofetch
-    nim
     nixfmt
     nodejs
     pandoc
@@ -128,6 +126,11 @@ in {
       enable = true;
       enableFishIntegration = true;
       defaultOptions = [ "--prompt '❯ '" ];
+    };
+
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
     };
 
     fish = {

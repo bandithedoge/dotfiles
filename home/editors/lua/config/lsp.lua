@@ -1,16 +1,17 @@
 -- nvim-lspconfig {{{
 local lsp = require "lspconfig"
 local servers = {
-    "rust_analyzer",
-    "pylsp",
-    "gdscript",
     "bashls",
-    "html",
-    "cssls",
-    "jsonls",
     "clangd",
-    "solargraph",
+    "cssls",
+    "gdscript",
+    "html",
+    "jsonls",
+    "nimls",
+    "pylsp",
     "rnix",
+    "rust_analyzer",
+    "solargraph",
 }
 
 local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
@@ -62,7 +63,7 @@ require("lsp_signature").setup {
 -- null-ls.nvim {{{
 local null_ls = require "null-ls"
 
-null_ls.config {
+null_ls.setup {
     sources = {
         null_ls.builtins.formatting.black,
         null_ls.builtins.formatting.clang_format,
@@ -72,16 +73,14 @@ null_ls.config {
         null_ls.builtins.formatting.nixfmt,
         null_ls.builtins.formatting.prettier.with { extra_args = { "--tab-width", "4" } },
         null_ls.builtins.formatting.rubocop,
-        null_ls.builtins.formatting.rustfmt,
         null_ls.builtins.formatting.shfmt,
         null_ls.builtins.formatting.stylua,
 
-        null_ls.builtins.diagnostics.codespell,
         null_ls.builtins.diagnostics.cppcheck,
         null_ls.builtins.diagnostics.flake8,
         null_ls.builtins.diagnostics.luacheck,
         null_ls.builtins.diagnostics.markdownlint.with { command = "markdownlint-cli2" },
-        null_ls.builtins.diagnostics.rubocop,
+        -- null_ls.builtins.diagnostics.rubocop,
         null_ls.builtins.diagnostics.shellcheck,
         null_ls.builtins.diagnostics.statix,
         null_ls.builtins.diagnostics.stylelint,
@@ -92,6 +91,4 @@ null_ls.config {
         null_ls.builtins.code_actions.statix,
     },
 }
-
-lsp["null-ls"].setup {}
 -- }}}

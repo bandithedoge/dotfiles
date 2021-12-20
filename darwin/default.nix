@@ -24,6 +24,7 @@
 
   homebrew = {
     enable = true;
+    autoUpdate = true;
     cleanup = "zap";
 
     taps = [
@@ -37,7 +38,6 @@
     brews = [ "innoextract" "mpd" "ntfs-3g-mac" "svn" ];
 
     casks = [
-      "adoptopenjdk"
       "android-platform-tools"
       "anydesk"
       "apparency"
@@ -46,6 +46,7 @@
       "balenaetcher"
       "betterdiscord-installer"
       "blackhole-2ch"
+      "blender"
       "cantata"
       "discord-canary"
       "eloston-chromium"
@@ -55,6 +56,7 @@
       "iterm2"
       "jdownloader"
       "kapitainsky-rclone-browser"
+      "keepassxc"
       "loopback"
       "lulu"
       "macfuse"
@@ -82,6 +84,8 @@
       "suspicious-package"
       "syncthing"
       "telegram"
+      "temurin"
+      "temurin8"
       "the-unarchiver"
       "transmission"
       "vamiga"
@@ -125,6 +129,7 @@
     dock = {
       orientation = "right";
       show-recents = false;
+      showhidden = true;
     };
 
     finder = {

@@ -9,24 +9,32 @@
     nur.url = "github:nix-community/NUR";
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     neovim-nightly-overlay.inputs.nixpkgs.follows = "nixpkgs";
+    emacs-overlay.url = "github:nix-community/emacs-overlay";
+    nix-doom-emacs.url = "github:nix-community/nix-doom-emacs";
+    nix-doom-emacs.inputs.emacs-overlay.url =
+      "github:nix-community/emacs-overlay";
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
     firefox-darwin.url = "github:bandithedoge/nixpkgs-firefox-darwin";
   };
 
   outputs = { self, darwin, nixpkgs, home-manager, nixos-hardware, ... }@inputs:
-
     let
-
       hmModule = {
         home-manager = {
           useGlobalPkgs = true;
           useUserPackages = true;
-          users.bandithedoge = { imports = [ ./home ]; };
+          users.bandithedoge = {
+            imports = with inputs; [ ./home nix-doom-emacs.hmModule ];
+          };
         };
       };
 
-      overlays = with inputs; [ neovim-nightly-overlay.overlay nur.overlay ];
+      overlays = with inputs; [
+        neovim-nightly-overlay.overlay
+        nur.overlay
+        emacs-overlay.overlay
+      ];
 
     in {
       darwinConfigurations."machine" = darwin.lib.darwinSystem {
@@ -35,7 +43,8 @@
           { nixpkgs.overlays = overlays ++ [ inputs.firefox-darwin.overlay ]; }
           ./common
           ./darwin
-          home-manager.darwinModule (nixpkgs.lib.mkMerge [
+          home-manager.darwinModule
+          (nixpkgs.lib.mkMerge [
             hmModule
             { home-manager.users.bandithedoge.imports = [ ./home/darwin ]; }
           ])

@@ -21,6 +21,7 @@
       min-free = ${toString (512 * 1024 * 1024)}
       substitute = true
       warn-dirty = false
+      pure-eval = false
     '';
     trustedUsers = [ "root" "@wheel" "bandithedoge" ];
   };

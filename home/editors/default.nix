@@ -33,6 +33,8 @@ in {
     luajitPackages.luacheck
     # c
     cppcheck
+    # nim
+    nimlsp
   ];
 
   programs.neovim = {
@@ -53,6 +55,7 @@ in {
       kommentary
       presence-nvim
       vim-automkdir
+      direnv-vim
       # ui
       FTerm-nvim
       Shade-nvim
@@ -100,6 +103,21 @@ in {
         vim.o.guifont = "${rice.monoFont}:h16"
         require("config")
       EOF
+    '';
+  };
+
+  programs.doom-emacs = {
+    enable = true;
+    emacsPackage =
+      if pkgs.stdenv.isDarwin then pkgs.emacsMacport else pkgs.emacs;
+    emacsPackagesOverlay = self: super:
+      with pkgs.emacsPackages; {
+        gitignore-mode = git-modes;
+        gitconfig-mode = git-modes;
+      };
+    doomPrivateDir = ./doom.d;
+    extraConfig = ''
+      (setq doom-font (font-spec :family "${rice.monoFont}" :size 14))
     '';
   };
 }

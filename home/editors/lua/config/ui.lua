@@ -5,7 +5,15 @@ require("lualine").setup {
         component_separators = "",
         section_separators = "",
     },
-    extensions = { "nvim-tree" },
+    extensions = {
+        "nvim-tree",
+        {
+            sections = {
+                lualine_a = { "mode" },
+            },
+            filetypes = { "Trouble" },
+        },
+    },
     sections = {
         lualine_a = { "mode" },
         lualine_b = { { "filename", path = 1 } },
