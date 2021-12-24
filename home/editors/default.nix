@@ -35,6 +35,8 @@ in {
     cppcheck
     # nim
     nimlsp
+    # go
+    gopls
   ];
 
   programs.neovim = {
@@ -62,11 +64,17 @@ in {
       blueballs-neovim
       bufferline-nvim
       gitsigns-nvim
+      neogit
       indent-blankline-nvim
       lualine-lsp-progress
       lualine-nvim
       nvim-colorizer-lua
-      nvim-tree-lua
+      (chadtree.overrideAttrs (old: {
+        buildInputs = [ pkgs.python3 ];
+        buildPhase = ''
+          python3 -m chadtree deps --nvim
+        '';
+      }))
       telescope-dap-nvim
       telescope-fzy-native-nvim
       telescope-nvim
@@ -96,11 +104,14 @@ in {
       # writing
       neorg
       orgmode
+      # language-specific
+      nim-vim
     ];
     extraConfig = ''
       set runtimepath ^=${./.}
       lua << EOF
         vim.o.guifont = "${rice.monoFont}:h16"
+
         require("config")
       EOF
     '';

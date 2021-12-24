@@ -16,7 +16,7 @@ vim.defer_fn(function()
     vim.opt.tabstop = 4
     vim.opt.softtabstop = 4
 
-    vim.cmd [[au FileType nix,norg :setlocal shiftwidth=2]]
+    vim.cmd [[au FileType nix,norg,CHADTree :setlocal shiftwidth=2]]
     vim.cmd [[au BufReadPre *.nfo :setlocal fileencodings=cp437,utf-8]]
 
     vim.wo.foldmethod = "marker"

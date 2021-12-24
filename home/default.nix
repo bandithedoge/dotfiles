@@ -49,6 +49,7 @@ in {
     tree
     unar
     update
+    xplr
   ];
 
   manual.html.enable = true;
@@ -73,6 +74,7 @@ in {
 
     # shell {{{
     lazygit.enable = true;
+
     topgrade = {
       enable = true;
       settings = {
@@ -92,6 +94,7 @@ in {
         commands = { "Nix" = "${rebuild}"; };
       };
     };
+
     lf = rec {
       enable = true;
       settings = {
@@ -112,7 +115,14 @@ in {
       '';
     };
 
-    starship.enable = true;
+    starship = {
+      enable = true;
+      settings = {
+        format = ''
+          $all$character
+        '';
+      };
+    };
     bat.enable = true;
     fzf.enable = true;
     tmux.enable = true;

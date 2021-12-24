@@ -22,12 +22,12 @@ wk.register {
         },
         o = {
             name = "+Open",
-            d = { "<cmd>:cd ~/dotfiles/<cr> <cmd>:NvimTreeOpen<cr>", "Dotfiles" },
-            s = { "<cmd>:cd ~/sql/<cr> <cmd>:NvimTreeOpen<cr>", "School" },
-            g = { "<cmd>:cd ~/git/<cr> <cmd>:NvimTreeOpen<cr>", "Git" },
+            d = { "<cmd>:cd ~/dotfiles/<cr>", "Dotfiles" },
+            s = { "<cmd>:cd ~/sql/<cr>", "School" },
+            g = { "<cmd>:cd ~/git/<cr>", "Git" },
         },
-        t = { "<cmd>NvimTreeToggle<cr>", "File tree" },
-        g = { "<cmd>:lua fterm_lazygit:toggle()<cr>", "Git" },
+        t = { "<cmd>CHADopen<cr>", "File tree" },
+        g = { "<cmd>:Neogit<cr>", "Git" },
         T = { "<cmd>:lua fterm_float:toggle()<cr>", "Terminal" },
         -- window/buffer management
         b = { "<cmd>Telescope buffers<cr>", "Buffers" },

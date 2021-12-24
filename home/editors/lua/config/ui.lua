@@ -7,6 +7,7 @@ require("lualine").setup {
     },
     extensions = {
         "nvim-tree",
+        "chadtree",
         {
             sections = {
                 lualine_a = { "mode" },
@@ -34,7 +35,7 @@ require("indent_blankline").setup {
     show_current_context = true,
     char_list = { "|", "¦", "┆", "┊" },
     use_treesitter = true,
-    filetype_exclude = { "help", "NvimTree", "packer", "TelescopePrompt" },
+    filetype_exclude = { "help", "NvimTree", "CHADTree", "packer", "TelescopePrompt" },
     buftype_exclude = { "terminal" },
     show_foldtext = false,
 }
@@ -48,30 +49,19 @@ require("colorizer").setup()
 require("gitsigns").setup()
 -- }}}
 
--- nvim-tree.lua {{{
-local tree_cb = require("nvim-tree.config").nvim_tree_callback
-
-require("nvim-tree").setup {
-    hijack_cursor = true,
-    update_cwd = true,
-    update_focused_file = {
-        enable = false,
+-- chadtree {{{
+vim.api.nvim_set_var("chadtree_settings", {
+    xdg = true,
+    options = {
+        show_hidden = true,
     },
     view = {
-        auto_resize = false,
-        mappings = {
-            list = {
-                { key = "h", cb = tree_cb "dir_up" },
-                { key = "l", cb = tree_cb "cd" },
-            },
-        },
+        width = 30,
     },
-    filters = {
-        custom = {
-            ".DS_Store",
-        },
+    theme = {
+        icon_glyph_set = "devicons",
     },
-}
+})
 -- }}}
 
 -- telescope.nvim {{{
@@ -159,5 +149,5 @@ fterm_float = fterm:new {
 -- }}}
 
 -- Shade.nvim {{{
-require("shade").setup()
+-- require("shade").setup()
 -- }}}

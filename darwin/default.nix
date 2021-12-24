@@ -35,7 +35,7 @@
       "tblock/tap"
     ];
 
-    brews = [ "innoextract" "mpd" "ntfs-3g-mac" "svn" ];
+    brews = [ "innoextract" "mpd" "ntfs-3g-mac" "svn" "trash" ];
 
     casks = [
       "android-platform-tools"
