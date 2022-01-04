@@ -1,3 +1,4 @@
+local vim = _G.vim
 vim.defer_fn(function()
     vim.o.clipboard = vim.o.clipboard .. "unnamedplus"
     vim.o.mouse = "a"

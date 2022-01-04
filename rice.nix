@@ -1,4 +1,4 @@
-{
+rec {
   bg = "#20222c";
   bg0 = "#181a23";
   bg1 = "#262935";
@@ -47,6 +47,34 @@
   orange = "#d7953f";
   orange0 = "#9c6e31";
   orange1 = "#edc186";
+
+  base00 = bg;
+  base01 = bg1;
+  base02 = bg2;
+  base03 = comment;
+  
+  base04 = fg2;
+  base05 = fg;
+  base06 = fg0;
+  base07 = fg0;
+
+  base08 = red;
+  base09 = orange;
+  base0A = yellow;
+  base0B = green;
+  base0C = cyan;
+  base0D = blue;
+  base0E = purple;
+  base0F = accent;
+
+  base10 = bg;
+  base11 = bg0;
+  base12 = red1;
+  base13 = yellow1;
+  base14 = green1;
+  base15 = cyan1;
+  base16 = blue1;
+  base17 = purple1;
 
   monoFont = "JetBrainsMono Nerd Font";
   uiFont = "Roboto Condensed";

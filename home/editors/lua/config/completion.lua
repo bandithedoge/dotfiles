@@ -18,10 +18,9 @@ cmp.setup {
         ["<C-l>"] = cmp.mapping.scroll_docs(4),
     },
     formatting = {
-        format = function(entry, vim_item)
-            vim_item.kind = require("lspkind").presets.default[vim_item.kind]
-            return vim_item
-        end,
+        format = require("lspkind").cmp_format {
+            with_text = true,
+        },
     },
     sources = {
         { name = "orgmode" },
@@ -32,5 +31,9 @@ cmp.setup {
         { name = "neorg" },
         { name = "luasnip" },
         { name = "latex_symbols" },
+    },
+    experimental = {
+        ghost_text = true,
+        native_menu = true,
     },
 }

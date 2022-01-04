@@ -1,7 +1,7 @@
 { pkgs, inputs, ... }:
 let rice = import ../../rice.nix;
 in {
-
+  # lsp/linters/formatters {{{
   home.packages = with pkgs; [
     # rust
     rust-analyzer
@@ -38,7 +38,9 @@ in {
     # go
     gopls
   ];
+  # }}}
 
+  # neovim {{{
   programs.neovim = {
     enable = true;
     package = pkgs.neovim-nightly;
@@ -116,7 +118,9 @@ in {
       EOF
     '';
   };
+  # }}}
 
+  # doom emacs {{{
   programs.doom-emacs = {
     enable = true;
     emacsPackage =
@@ -131,4 +135,17 @@ in {
       (setq doom-font (font-spec :family "${rice.monoFont}" :size 14))
     '';
   };
+  # }}}
+
+  # vscode {{{
+  programs.vscode = {
+    enable = true;
+    package = pkgs.vscodium;
+    extensions = with pkgs.vscode-extensions; [
+      coenraads.bracket-pair-colorizer
+      eamodio.gitlens
+      mvllow.rose-pine
+    ];
+  };
+  # }}}
 }

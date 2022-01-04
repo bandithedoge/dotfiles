@@ -2,7 +2,7 @@
 
 {
   services.nix-daemon.enable = true;
-  environment.darwinConfig = ../darwin;
+  environment.darwinConfig = ./.;
 
   networking = {
     hostName = "machine";
@@ -35,7 +35,7 @@
       "tblock/tap"
     ];
 
-    brews = [ "innoextract" "mpd" "ntfs-3g-mac" "svn" "trash" ];
+    brews = [ "libusb" "innoextract" "mpd" "ntfs-3g-mac" "svn" "trash" ];
 
     casks = [
       "android-platform-tools"
@@ -50,6 +50,7 @@
       "cantata"
       "discord-canary"
       "eloston-chromium"
+      "firefox-beta"
       "font-jetbrains-mono-nerd-font"
       "font-roboto"
       "iina"
@@ -57,6 +58,7 @@
       "jdownloader"
       "kapitainsky-rclone-browser"
       "keepassxc"
+      "kitty"
       "loopback"
       "lulu"
       "macfuse"
@@ -68,6 +70,8 @@
       "multimc"
       "musicbrainz-picard"
       "nfov"
+      "obs"
+      "obs-virtualcam"
       "openemu"
       "openmw"
       "prusaslicer"
@@ -79,6 +83,7 @@
       "quicklookapk"
       "quicknfo"
       "safari-technology-preview"
+      "schism-tracker"
       "soulseek"
       "steam"
       "suspicious-package"
@@ -90,6 +95,7 @@
       "transmission"
       "vamiga"
       "vcv-rack"
+      "vscodium"
       "xbar"
     ];
 

@@ -1,3 +1,4 @@
+local vim = _G.vim
 -- nvim-lspconfig {{{
 local lsp = require "lspconfig"
 local servers = {
@@ -55,9 +56,10 @@ require("lspkind").init()
 require("lsp_signature").setup {
     bind = true,
     handler_opts = {
-        border = "none",
+        border = "solid",
     },
     hint_prefix = "漣",
+    floating_window_above_cur_line = true,
 }
 -- }}}
 

@@ -62,6 +62,7 @@
        :lang
        (cc +lsp)
        emacs-lisp
+       (go +lsp)
        (json +lsp)
        lua
        markdown

@@ -1,3 +1,4 @@
+local vim = _G.vim
 -- lualine {{{
 require("lualine").setup {
     options = {

@@ -1,3 +1,4 @@
+local vim = _G.vim
 local wk = require "which-key"
 vim.api.nvim_set_keymap("n", "<BS>", ":WhichKey \\\\<cr>", { silent = true })
 
@@ -27,7 +28,7 @@ wk.register {
             g = { "<cmd>:cd ~/git/<cr>", "Git" },
         },
         t = { "<cmd>CHADopen<cr>", "File tree" },
-        g = { "<cmd>:Neogit<cr>", "Git" },
+        g = { "<cmd>:lua fterm_lazygit:toggle()<cr>", "Git" },
         T = { "<cmd>:lua fterm_float:toggle()<cr>", "Terminal" },
         -- window/buffer management
         b = { "<cmd>Telescope buffers<cr>", "Buffers" },

@@ -22,55 +22,125 @@ let
   '';
 
 in {
-  imports = [ ./editors ];
-
-  home.sessionVariables = {
-    EDITOR = "nvim";
-    LF_ICONS = "${builtins.readFile ./icons}";
-  };
-  home.packages = with pkgs; [
-    clang
-    fd
-    gh
-    hactool
-    htop
-    imagemagick
-    librespeed-cli
-    mpc_cli
-    ncdu
-    neofetch
-    nixfmt
-    nodejs
-    pandoc
-    rclone
-    rebuild
-    ruby_3_0
-    stylua
-    tree
-    unar
-    update
-    xplr
-  ];
+  imports = [ ./editors ./garbage ];
 
   manual.html.enable = true;
+
+  home = {
+    sessionVariables = {
+      EDITOR = "nvim";
+      LF_ICONS = "${builtins.readFile ./icons}";
+      TERM = "xterm-256color";
+    };
+    packages = with pkgs; [
+      fd
+      gh
+      hactool
+      htop
+      imagemagick
+      librespeed-cli
+      mpc_cli
+      ncdu
+      neofetch
+      nixfmt
+      nodejs
+      pandoc
+      rclone
+      rebuild
+      ruby_3_0
+      stylua
+      tree
+      unar
+      update
+    ];
+    shellAliases = {
+      s = "sudo";
+      c = "clear";
+      e = "exit";
+      b = "bash -c";
+      v = "nvim";
+
+      ni = "nix-env -i";
+      nr = "nix-env -e";
+      ns = "nix-env -qas";
+      nq = "nix-env -q";
+
+      pi = "paru -S";
+      pr = "paru -Rns";
+      ps = "paru -Ss";
+      pq = "paru -Qs";
+
+      bi = "brew install";
+      br = "brew uninstall";
+      bs = "brew search";
+      bq = "brew list";
+    };
+  };
+
+  home.file.${
+    (if pkgs.stdenv.isDarwin then
+      "Library/Application Support/"
+    else
+      home-manager.cfg.configHome) + "discordcanary/settings.json"
+  }.text = builtins.toJSON {
+    enableHardwareAcceleration = false;
+    SKIP_HOST_UPDATE = true;
+    UPDATE_ENDPOINT = "https://updates.goosemod.com/goosemod";
+    NEW_UPDATE_ENDPOINT = "https://updates.goosemod.com/goosemod";
+  };
+  home.file.${
+    (if pkgs.stdenv.isDarwin then
+      "Library/Application Support/"
+    else
+      home-manager.cfg.configHome) + "BetterDiscord/data/canary/custom.css"
+  }.text = with rice; ''
+    @import url(https://discordstyles.github.io/RadialStatus/dist/RadialStatus.css);
+
+    :root {
+      --rs-small-spacing: 2px;
+      --rs-medium-spacing: 3px;
+      --rs-large-spacing: 4px;
+
+      --rs-small-width: 2px;
+      --rs-medium-width: 3px;
+      --rs-large-width: 4px;
+
+      --rs-avatar-shape: 50%;
+
+      --rs-online-color: ${base0B};
+      --rs-idle-color: ${base0A};
+      --rs-dnd-color: ${base08};
+      --rs-offline-color: ${base02};
+      --rs-streaming-color: ${base0E};
+      --rs-invisible-color: ${base02};
+      --rs-phone-color: var(--rs-online-color);
+
+      --rs-phone-visible: block;
+    }
+
+    .compact-T3H92H .headerText-3Uvj1Y > span::before {
+      content: ""; 
+      width: calc(100% + 6px); 
+      height: 100%;
+      border-radius: 5px;
+      background-color: currentColor; 
+      opacity: 0.3; 
+      position: absolute; 
+      top: 0; 
+      left: -4px;
+      z-index: -1;
+    }
+
+    .compact-T3H92H .headerText-3Uvj1Y > span::after {
+      content: ":";
+    }
+  '';
 
   programs = {
     home-manager = {
       enable = true;
       path = "...";
     };
-
-    # text editors {{{
-    vscode = {
-      enable = true;
-      package = pkgs.vscodium;
-      extensions = with pkgs.vscode-extensions; [
-        coenraads.bracket-pair-colorizer
-        eamodio.gitlens
-        mvllow.rose-pine
-      ];
-    };
-    # }}}
 
     # shell {{{
     lazygit.enable = true;
@@ -103,7 +173,6 @@ in {
         hidden = true;
         wrapscroll = true;
       };
-      commands = { fzf = "$fd . -d1 | sk --preview ${previewer.source}"; };
       previewer.source = pkgs.writeShellScript "pv.sh" ''
         #!/usr/bin/env bash
 
@@ -113,19 +182,30 @@ in {
           *) ${pkgs.pistol}/bin/pistol "$1" ;;
         esac
       '';
+      keybindings = {
+        f = ''
+          $lf -remote "send $id select '$(fd . -H -d1 -c always | sk --ansi || true)'"
+        '';
+        x = "cut";
+        d = "delete";
+        gG = "$lazygit -p $PWD";
+      };
     };
 
     starship = {
       enable = true;
       settings = {
-        format = ''
-          $all$character
-        '';
+        golang.symbol = "";
+        lua.symbol = "";
+        nim.symbol = "";
+        nix_shell.symbol = "";
+        python.symbol = "";
+        ruby.symbol = "";
+        rust.symbol = "";
+        time = { disabled = false; };
       };
     };
     bat.enable = true;
-    fzf.enable = true;
-    tmux.enable = true;
 
     lsd = {
       enable = true;
@@ -135,7 +215,12 @@ in {
     skim = {
       enable = true;
       enableFishIntegration = true;
-      defaultOptions = [ "--prompt '❯ '" ];
+      defaultOptions = with rice; [
+        "--prompt='❯ '"
+        "--color=bg+:${base02},bg:${base00},spinner:${base0F},hl:${base0F},fg:${base04},header:${base0F},info:${base0A},pointer:${base0F},marker:${base0C},fg+:${base06},prompt:${base0F},hl+:${base0D}"
+        "--tabstop=4"
+        "--bind=ctrl-d:half-page-down,ctrl-u:half-page-up"
+      ];
     };
 
     direnv = {
@@ -145,65 +230,35 @@ in {
 
     fish = {
       enable = true;
-      interactiveShellInit = ''
-        fish_vi_key_bindings
-        set fish_greeting
-
-        set TERM "xterm-256color"
-        set PATH $PATH ~/.local/bin ~/.yarn/bin ~/.nimble/bin
-        set fish_color_normal           '#d9dceb'
-        set fish_color_command          '#69d26e'
-        set fish_color_quote            '#d7953f'
-        set fish_color_redirection      '#b96be1'
-        set fish_color_end              '#e1c85c'
-        set fish_color_error            '#eb585f'
-        set fish_color_param            '#d9dceb'
-        set fish_color_comment          '#474dab'
-
-        set fish_color_autosuggestion   '#474dab'
-
-        set fish_cursor_default     block
-        set fish_cursor_insert      line
-        set fish_cursor_replace_one underscore
-        set fish_cursor_visual      block
-      '';
-      shellAliases = {
-        s = "sudo";
-        c = "clear";
-        e = "exit";
-        b = "bash -c";
-        v = "nvim";
-
-        ni = "nix-env -i";
-        nr = "nix-env -e";
-        ns = "nix-env -qas";
-        nq = "nix-env -q";
-
-        pi = "paru -S";
-        pr = "paru -Rns";
-        ps = "paru -Ss";
-        pq = "paru -Qs";
-
-        bi = "brew install";
-        br = "brew uninstall";
-        bs = "brew search";
-        bq = "brew list";
-      };
-      plugins = [
-        # {
-        #   name = "fenv";
-        #   src = fetchGit {
-        #     url = "https://github.com/oh-my-fish/plugin-foreign-env";
-        #   };
-        # }
-        # {
-        #   name = "autopair";
-        #   src = fetchGit {
-        #     url = "https://github.com/jorgebucaran/autopair.fish";
-        #     ref = "main";
-        #   };
-        # }
-      ];
+      interactiveShellInit = with rice;
+        ''
+          set fish_color_autosuggestion '${base03}'
+          set fish_color_cancel -r
+          set fish_color_command green #white
+          set fish_color_comment '${base03}'
+          set fish_color_cwd green
+          set fish_color_cwd_root red
+          set fish_color_end brblack #blue
+          set fish_color_error red --bold
+          set fish_color_escape yellow #green
+          set fish_color_history_current --bold
+          set fish_color_host normal
+          set fish_color_match --background=brblue
+          set fish_color_normal normal
+          set fish_color_operator blue #green
+          set fish_color_param '${base04}'
+          set fish_color_quote yellow #brblack
+          set fish_color_redirection cyan
+          set fish_color_search_match bryellow --background='${base02}'
+          set fish_color_selection white --bold --background='${base02}'
+          set fish_color_status red
+          set fish_color_user brgreen
+          set fish_color_valid_path --underline
+          set fish_pager_color_completion normal
+          set fish_pager_color_description yellow --dim
+          set fish_pager_color_prefix white --bold #--underline
+          set fish_pager_color_progress brwhite --background='${base02}'
+        '' + builtins.readFile ./fish.fish;
     };
     # }}}
 
@@ -215,49 +270,48 @@ in {
         size = if pkgs.stdenv.isDarwin then 16 else 12;
       };
       keybindings = { "ctrl+enter" = "no_op"; };
-      settings = {
+      settings = with rice; {
         term = "xterm-kitty";
         cursor_shape = "beam";
         enable_audio_bell = false;
         disable_ligatures = "cursor";
         window_padding_width = 10;
         adjust_column_width = -1;
+        tab_bar_style = "powerline";
 
         macos_titlebar_color = "background";
         macos_thicken_font = "0.25";
 
-        tab_bar_style = "powerline";
-        active_tab_foreground = rice.accent1;
-        active_tab_background = rice.accent0;
-        inactive_tab_foreground = rice.comment;
-        inactive_tab_background = rice.bg2;
-        active_border_color = rice.accent;
-        inactive_border_color = rice.bg2;
+        background = base00;
+        foreground = base05;
+        selection_background = base05;
+        selection_foreground = base00;
+        url_color = base0F;
+        cursor = base05;
+        active_border_color = base0F;
+        inactive_border_color = base01;
+        active_tab_background = base0F;
+        active_tab_foreground = base00;
+        inactive_tab_background = base02;
+        inactive_tab_foreground = base05;
 
-        foreground = rice.fg;
-        background = rice.bg;
-        selection_foreground = rice.fg;
-        selection_background = rice.selection;
-        cursor = rice.fg;
-        cursor_text_color = "background";
+        color0 = base01;
+        color1 = base08;
+        color2 = base0B;
+        color3 = base09;
+        color4 = base0D;
+        color5 = base0E;
+        color6 = base0C;
+        color7 = base06;
 
-        color0 = rice.bg2;
-        color1 = rice.red;
-        color2 = rice.green;
-        color3 = rice.yellow;
-        color4 = rice.blue;
-        color5 = rice.purple;
-        color6 = rice.cyan;
-        color7 = rice.fg;
-
-        color8 = rice.comment;
-        color9 = rice.red1;
-        color10 = rice.green1;
-        color11 = rice.yellow1;
-        color12 = rice.blue1;
-        color13 = rice.purple1;
-        color14 = rice.cyan1;
-        color15 = rice.accent;
+        color8 = base02;
+        color9 = base12;
+        color10 = base14;
+        color11 = base13;
+        color12 = base16;
+        color13 = base17;
+        color14 = base15;
+        color15 = base0F;
       };
     };
     # }}}
@@ -265,10 +319,8 @@ in {
     # web browser {{{
     firefox = {
       enable = true;
-      package = if pkgs.stdenv.isDarwin then
-        pkgs.firefox-beta-bin
-      else
-        pkgs.firefox-unwrapped;
+      package =
+        if pkgs.stdenv.isDarwin then pkgs.dummy else pkgs.firefox-unwrapped;
       extensions = with pkgs.nur.repos.rycee.firefox-addons; [
         auto-tab-discard
         betterttv
@@ -302,7 +354,6 @@ in {
         unpaywall
         view-image
         violentmonkey
-        wayback-machine
       ];
       profiles."main" = {
         name = "main";
@@ -332,40 +383,32 @@ in {
 
     zathura = {
       enable = true;
-      options = {
+      options = with rice; {
         page-padding = 10;
         show-hidden = true;
-
-        font = rice.uiFont + " 12";
-        default-bg = rice.bg0;
-        default-fg = rice.fg;
-        inputbar-bg = rice.bg2;
-        inputbar-fg = rice.fg;
-        notification-bg = rice.bg2;
-        notification-fg = rice.fg;
-        notification-error-bg = rice.red0;
-        notification-error-fg = rice.red1;
-        notification-warning-bg = rice.orange0;
-        notification-warning-fg = rice.orange1;
-        statusbar-bg = rice.bg2;
-        statusbar-fg = rice.comment;
-        highlight-color = rice.selection;
-        highlight-fg = rice.accent;
-        highlight-active-color = rice.accent;
-        completion-bg = rice.bg2;
-        completion-fg = rice.fg;
-        completion-highlight-fg = rice.accent1;
-        completion-highlight-bg = rice.accent0;
-        render-loading-bg = rice.bg2;
-        render-loading-fg = rice.fg;
-        index-bg = rice.bg2;
-        index-fg = rice.fg;
-        index-active-bg = rice.accent0;
-        index-active-fg = rice.accent1;
-
+        font = uiFont + " 12";
         recolor = true;
-        recolor-lightcolor = rice.bg;
-        recolor-darkcolor = rice.fg;
+
+        default-bg = base00;
+        default-fg = base01;
+        statusbar-fg = base04;
+        statusbar-bg = base02;
+        inputbar-bg = base00;
+        inputbar-fg = base07;
+        notification-bg = base00;
+        notification-fg = base07;
+        notification-error-bg = base00;
+        notification-error-fg = base08;
+        notification-warning-bg = base00;
+        notification-warning-fg = base09;
+        highlight-color = base0A;
+        highlight-active-color = base0D;
+        completion-bg = base01;
+        completion-fg = base0D;
+        completion-highlight-fg = base0F;
+        completion-highlight-bg = base02;
+        recolor-lightcolor = base00;
+        recolor-darkcolor = base06;
       };
     };
   };

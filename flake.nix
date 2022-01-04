@@ -11,11 +11,9 @@
     neovim-nightly-overlay.inputs.nixpkgs.follows = "nixpkgs";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     nix-doom-emacs.url = "github:nix-community/nix-doom-emacs";
-    nix-doom-emacs.inputs.emacs-overlay.url =
-      "github:nix-community/emacs-overlay";
+    nix-doom-emacs.inputs.emacs-overlay.follows = "emacs-overlay";
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
-    firefox-darwin.url = "github:bandithedoge/nixpkgs-firefox-darwin";
   };
 
   outputs = { self, darwin, nixpkgs, home-manager, nixos-hardware, ... }@inputs:
@@ -31,6 +29,7 @@
       };
 
       overlays = with inputs; [
+        (self: super: { dummy = super.hello; })
         neovim-nightly-overlay.overlay
         nur.overlay
         emacs-overlay.overlay
@@ -40,7 +39,7 @@
       darwinConfigurations."machine" = darwin.lib.darwinSystem {
         system = "x86_64-darwin";
         modules = [
-          { nixpkgs.overlays = overlays ++ [ inputs.firefox-darwin.overlay ]; }
+          { nixpkgs.overlays = overlays; }
           ./common
           ./darwin
           home-manager.darwinModule
