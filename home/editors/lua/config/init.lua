@@ -11,6 +11,7 @@ vim.defer_fn(function()
     vim.o.redrawtime = 10000
     vim.o.linebreak = true
     vim.o.conceallevel = 2
+    vim.o.completeopt = "menu,menuone,noinsert"
 
     vim.opt.expandtab = true
     vim.opt.shiftwidth = 4
@@ -34,12 +35,13 @@ vim.defer_fn(function()
 
     vim.cmd [[ colorscheme blueballs ]]
 
-    require "config.treesitter"
-    require "config.utilities"
-    require "config.ui"
-    require "config.keybindings"
-    require "config.lsp"
     require "config.completion"
-    require "config.nvim-dap"
+    require "config.dap"
+    require "config.keybindings"
+    require "config.langspec"
+    require "config.lsp"
+    require "config.treesitter"
+    require "config.ui"
+    require "config.utilities"
     require "config.writing"
 end, 70)

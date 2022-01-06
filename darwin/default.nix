@@ -28,10 +28,11 @@
     cleanup = "zap";
 
     taps = [
+      "gromgit/fuse"
       "homebrew/cask"
       "homebrew/cask-fonts"
       "homebrew/cask-versions"
-      "gromgit/fuse"
+      "homebrew/services"
       "tblock/tap"
     ];
 

@@ -1,5 +1,8 @@
 local vim = _G.vim
 -- lualine {{{
+local gps = require "nvim-gps"
+gps.setup()
+
 require("lualine").setup {
     options = {
         theme = "blueballs",
@@ -19,16 +22,31 @@ require("lualine").setup {
     sections = {
         lualine_a = { "mode" },
         lualine_b = { { "filename", path = 1 } },
-        lualine_c = { "branch", "diff", "lsp_progress" },
-        lualine_x = { { "diagnostics", sources = { "nvim_diagnostic" } } },
-        lualine_y = { { "bo:shiftwidth" }, "fileformat", "filetype" },
+        lualine_c = {
+            { "diagnostics", sources = { "nvim_diagnostic" }, update_in_insert = true },
+            { gps.get_location, cond = gps.is_available },
+        },
+        lualine_x = { "diff" },
+        lualine_y = {
+            {
+                function()
+                    return " " .. vim.bo.shiftwidth
+                end,
+            },
+            "fileformat",
+            "filetype",
+        },
         lualine_z = { "location", "progress" },
     },
+    tabline = {
+        lualine_a = { "buffers" },
+        lualine_b = {},
+        lualine_c = {},
+        lualine_x = { "lsp_progress" },
+        lualine_y = { "branch" },
+        lualine_z = { { "tabs", mode = 1 } },
+    },
 }
--- }}}
-
--- nvim-bufferline.lua {{{
-require("bufferline").setup()
 -- }}}
 
 -- indent-blankline.nvim {{{
@@ -87,11 +105,7 @@ telescope.setup {
             theme = "ivy",
             border = false,
         },
-        command_history = {
-            theme = "ivy",
-            border = false,
-        },
-        reloader = {
+        diagnostics = {
             theme = "ivy",
             border = false,
         },
@@ -147,8 +161,4 @@ fterm_float = fterm:new {
     hl = "NormalPopover",
     border = "solid",
 }
--- }}}
-
--- Shade.nvim {{{
--- require("shade").setup()
 -- }}}

@@ -1,5 +1,6 @@
 local vim = _G.vim
 local wk = require "which-key"
+local t = require "telescope.builtin"
 vim.api.nvim_set_keymap("n", "<BS>", ":WhichKey \\\\<cr>", { silent = true })
 
 wk.setup {
@@ -12,14 +13,36 @@ wk.register {
         ["<space>"] = { "<cmd>Telescope commands<cr>", "Enter command" },
         f = {
             name = "+Find",
-            f = { "<cmd>lua require('telescope.builtin').file_browser({hidden = true})<cr>", "File" },
-            t = { "<cmd>Telescope<cr>", "Telescope" },
-            h = { "<cmd>Telescope help_tags<cr>", "Help" },
-            H = { "<cmd>Telescope highlights<cr>", "Highlight groups" },
-            c = { "<cmd>Telescope command_history<cr>", "Command history" },
-            o = { "<cmd>Telescope oldfiles<cr>", "File history" },
-            s = { "<cmd>Telescope symbols<cr>", "Symbols" },
-            r = { "<cmd>Telescope reloader<cr>", "Reload module" },
+            t = {
+                function()
+                    t.builtin()
+                end,
+                "Telescope",
+            },
+            h = {
+                function()
+                    t.help_tags()
+                end,
+                "Help",
+            },
+            H = {
+                function()
+                    t.highlights()
+                end,
+                "Highlight groups",
+            },
+            o = {
+                function()
+                    t.oldfiles()
+                end,
+                "File history",
+            },
+            s = {
+                function()
+                    t.symbols()
+                end,
+                "Symbols",
+            },
         },
         o = {
             name = "+Open",
@@ -31,7 +54,12 @@ wk.register {
         g = { "<cmd>:lua fterm_lazygit:toggle()<cr>", "Git" },
         T = { "<cmd>:lua fterm_float:toggle()<cr>", "Terminal" },
         -- window/buffer management
-        b = { "<cmd>Telescope buffers<cr>", "Buffers" },
+        b = {
+            function()
+                t.buffers()
+            end,
+            "Buffers",
+        },
         w = { "<cmd>:bd<cr>", "Close buffer" },
         W = { "<cmd>:close<cr>", "Close window" },
         n = { "<cmd>:new<cr>", "New window (horizontal)" },
@@ -39,12 +67,25 @@ wk.register {
     },
 
     ["\\"] = {
-        f = { "<cmd>:lua vim.lsp.buf.formatting()<cr>", "Format file" },
+        f = {
+            function()
+                vim.lsp.buf.formatting()
+            end,
+            "Format file",
+        },
         t = { "<cmd>TroubleToggle<cr>", "Trouble" },
-        a = { "<cmd>Telescope lsp_code_actions<cr>", "Code actions" },
-        d = { "<cmd>Telescope lsp_definitions<cr>", "Definition" },
-        D = { "<cmd>Telescope lsp_type_definitions<cr>", "Type definition" },
-        i = { "<cmd>Telescope lsp_implementations<cr>", "Implementation" },
+        a = {
+            function()
+                t.lsp_code_actions()
+            end,
+            "Code actions",
+        },
+        d = {
+            function()
+                t.diagnostics()
+            end,
+            "Diagnostics",
+        },
         r = { "<cmd>Lspsaga rename<cr>", "Rename" },
         h = { "<cmd>Lspsaga hover_doc<cr>", "Documentation" },
         s = { "<cmd>Lspsaga signature_help<cr>", "Signature" },

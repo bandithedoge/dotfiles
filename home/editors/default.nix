@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ pkgs, ... }@inputs:
 let rice = import ../../rice.nix;
 in {
   # lsp/linters/formatters {{{
@@ -20,7 +20,6 @@ in {
     nodePackages.fixjson
     nodePackages.markdownlint-cli2
     nodePackages.prettier
-    nodePackages.stylelint
     nodePackages.vscode-langservers-extracted
     yamllint
     # ruby
@@ -43,7 +42,6 @@ in {
   # neovim {{{
   programs.neovim = {
     enable = true;
-    package = pkgs.neovim-nightly;
     plugins = with pkgs.vimPlugins; [
       # treesitter
       (nvim-treesitter.withPlugins builtins.attrValues)
@@ -56,31 +54,31 @@ in {
       plenary-nvim
       popup-nvim
       # utilities
-      kommentary
+      comment-nvim
+      direnv-vim
       presence-nvim
       vim-automkdir
-      direnv-vim
       # ui
       FTerm-nvim
       Shade-nvim
       blueballs-neovim
-      bufferline-nvim
       gitsigns-nvim
-      neogit
       indent-blankline-nvim
       lualine-lsp-progress
       lualine-nvim
+      neogit
       nvim-colorizer-lua
+      nvim-gps
+      telescope-dap-nvim
+      telescope-fzy-native-nvim
+      telescope-nvim
+      telescope-symbols-nvim
       (chadtree.overrideAttrs (old: {
         buildInputs = [ pkgs.python3 ];
         buildPhase = ''
           python3 -m chadtree deps --nvim
         '';
       }))
-      telescope-dap-nvim
-      telescope-fzy-native-nvim
-      telescope-nvim
-      telescope-symbols-nvim
       # keybindings
       which-key-nvim
       # lsp
@@ -90,13 +88,16 @@ in {
       lspsaga-nvim
       null-ls-nvim
       nvim-lspconfig
-      trouble-nvim
       # completion
+      cmp-cmdline
+      cmp-emoji
       cmp-latex-symbols
       cmp-nvim-lsp
+      cmp-nvim-lsp-document-symbol
       cmp-nvim-lua
       cmp-path
       cmp-treesitter
+      cmp-under-comparator
       cmp_luasnip
       luasnip
       nvim-cmp
@@ -107,6 +108,7 @@ in {
       neorg
       orgmode
       # language-specific
+      crates-nvim
       nim-vim
     ];
     extraConfig = ''
@@ -122,7 +124,7 @@ in {
 
   # doom emacs {{{
   programs.doom-emacs = {
-    enable = true;
+    # enable = true;
     emacsPackage =
       if pkgs.stdenv.isDarwin then pkgs.emacsMacport else pkgs.emacs;
     emacsPackagesOverlay = self: super:

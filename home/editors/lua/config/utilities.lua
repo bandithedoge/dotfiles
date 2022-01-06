@@ -1,5 +1,3 @@
--- presence.nvim {{{
-require("presence"):setup {
-    main_image = "file",
-}
+-- comment.nvim {{{
+require("Comment").setup()
 -- }}}

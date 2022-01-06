@@ -7,8 +7,6 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     nur.url = "github:nix-community/NUR";
-    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
-    neovim-nightly-overlay.inputs.nixpkgs.follows = "nixpkgs";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     nix-doom-emacs.url = "github:nix-community/nix-doom-emacs";
     nix-doom-emacs.inputs.emacs-overlay.follows = "emacs-overlay";
@@ -30,7 +28,6 @@
 
       overlays = with inputs; [
         (self: super: { dummy = super.hello; })
-        neovim-nightly-overlay.overlay
         nur.overlay
         emacs-overlay.overlay
       ];

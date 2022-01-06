@@ -9,7 +9,6 @@ local servers = {
     "gopls",
     "html",
     "jsonls",
-    "nimls",
     "pylsp",
     "rnix",
     "rust_analyzer",
@@ -28,10 +27,6 @@ for _, server in ipairs(servers) do
         },
     }
 end
--- }}}
-
--- trouble.nvim {{{
-require("trouble").setup {}
 -- }}}
 
 -- lspsaga.nvim {{{
@@ -65,44 +60,31 @@ require("lsp_signature").setup {
 
 -- null-ls.nvim {{{
 local null_ls = require "null-ls"
-local helpers = require "null-ls.helpers"
 
-null_ls.setup {
-    sources = {
-        null_ls.builtins.formatting.black,
-        null_ls.builtins.formatting.clang_format,
-        null_ls.builtins.formatting.fixjson,
-        null_ls.builtins.formatting.isort,
-        null_ls.builtins.formatting.nixfmt,
-        null_ls.builtins.formatting.prettier.with { extra_args = { "--tab-width", "4" } },
-        null_ls.builtins.formatting.rubocop,
-        null_ls.builtins.formatting.shfmt,
-        null_ls.builtins.formatting.stylua,
-        {
-            name = "nimpretty",
-            filetypes = { ["nim"] = true },
-            method = require("null-ls").methods.FORMATTING,
-            generator = helpers.formatter_factory {
-                command = "nimpretty",
-                args = { "$FILENAME", "--out:/dev/stdout" },
-                to_stdin = false,
-                from_stderr = true,
-                to_temp_file = true,
-            },
-        },
+null_ls.setup()
 
-        null_ls.builtins.diagnostics.cppcheck,
-        null_ls.builtins.diagnostics.flake8,
-        null_ls.builtins.diagnostics.luacheck,
-        null_ls.builtins.diagnostics.markdownlint.with { command = "markdownlint-cli2" },
-        null_ls.builtins.diagnostics.shellcheck,
-        null_ls.builtins.diagnostics.statix,
-        null_ls.builtins.diagnostics.stylelint,
-        null_ls.builtins.diagnostics.yamllint,
+null_ls.register {
+    null_ls.builtins.formatting.black,
+    null_ls.builtins.formatting.clang_format,
+    null_ls.builtins.formatting.fixjson,
+    null_ls.builtins.formatting.isort,
+    null_ls.builtins.formatting.nimpretty,
+    null_ls.builtins.formatting.nixfmt,
+    null_ls.builtins.formatting.prettier.with { extra_args = { "--tab-width", "4" } },
+    null_ls.builtins.formatting.rubocop,
+    null_ls.builtins.formatting.shfmt,
+    null_ls.builtins.formatting.stylua,
 
-        null_ls.builtins.code_actions.gitsigns,
-        null_ls.builtins.code_actions.shellcheck,
-        null_ls.builtins.code_actions.statix,
-    },
+    null_ls.builtins.diagnostics.cppcheck,
+    null_ls.builtins.diagnostics.flake8,
+    null_ls.builtins.diagnostics.luacheck,
+    null_ls.builtins.diagnostics.markdownlint.with { command = "markdownlint-cli2" },
+    null_ls.builtins.diagnostics.shellcheck,
+    null_ls.builtins.diagnostics.statix,
+    null_ls.builtins.diagnostics.yamllint,
+
+    null_ls.builtins.code_actions.gitsigns,
+    null_ls.builtins.code_actions.shellcheck,
+    null_ls.builtins.code_actions.statix,
 }
 -- }}}

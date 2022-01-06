@@ -5,9 +5,6 @@ cmp.setup {
             require("luasnip").lsp_expand(args.body)
         end,
     },
-    completion = {
-        completeopt = "menu,menuone,noinsert",
-    },
     preselect = cmp.PreselectMode.None,
     mapping = {
         ["<C-Space>"] = cmp.mapping.complete(),
@@ -23,17 +20,39 @@ cmp.setup {
         },
     },
     sources = {
-        { name = "orgmode" },
-        { name = "nvim_lsp" },
-        { name = "path" },
-        { name = "nvim_lua" },
-        { name = "treesitter" },
-        { name = "neorg" },
-        { name = "luasnip" },
+        { name = "crates" },
+        { name = "emoji" },
         { name = "latex_symbols" },
+        { name = "luasnip" },
+        { name = "neorg" },
+        { name = "nvim_lsp" },
+        { name = "nvim_lua" },
+        { name = "orgmode" },
+        { name = "path" },
+        { name = "treesitter" },
     },
-    experimental = {
-        ghost_text = true,
-        native_menu = true,
+    sorting = {
+        comparators = {
+            cmp.config.compare.exact,
+            cmp.config.compare.offset,
+            cmp.config.compare.score,
+            require("cmp-under-comparator").under,
+            cmp.config.compare.kind,
+            cmp.config.compare.sort_text,
+            cmp.config.compare.length,
+            cmp.config.compare.order,
+        },
     },
 }
+
+cmp.setup.cmdline(":", {
+    sources = {
+        { name = "cmdline" },
+        { name = "path" },
+    },
+})
+
+cmp.setup.cmdline("/", {
+    { name = "buffer" },
+    { name = "nvim_lsp_document_symbol" },
+})
