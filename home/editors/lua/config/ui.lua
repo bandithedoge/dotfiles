@@ -68,19 +68,30 @@ require("colorizer").setup()
 require("gitsigns").setup()
 -- }}}
 
--- chadtree {{{
-vim.api.nvim_set_var("chadtree_settings", {
-    xdg = true,
-    options = {
-        show_hidden = true,
+-- nvim-tree.lua {{{
+local tree_cb = require("nvim-tree.config").nvim_tree_callback
+
+require("nvim-tree").setup {
+    hijack_cursor = true,
+    update_cwd = true,
+    update_focused_file = {
+        enable = false,
     },
     view = {
-        width = 30,
+        auto_resize = false,
+        mappings = {
+            list = {
+                { key = "h", cb = tree_cb "dir_up" },
+                { key = "l", cb = tree_cb "cd" },
+            },
+        },
     },
-    theme = {
-        icon_glyph_set = "devicons",
+    filters = {
+        custom = {
+            ".DS_Store",
+        },
     },
-})
+}
 -- }}}
 
 -- telescope.nvim {{{

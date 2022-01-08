@@ -50,7 +50,12 @@ wk.register {
             s = { "<cmd>:cd ~/sql/<cr>", "School" },
             g = { "<cmd>:cd ~/git/<cr>", "Git" },
         },
-        t = { "<cmd>CHADopen<cr>", "File tree" },
+        t = {
+            function()
+                require("nvim-tree").toggle()
+            end,
+            "File tree",
+        },
         g = { "<cmd>:lua fterm_lazygit:toggle()<cr>", "Git" },
         T = { "<cmd>:lua fterm_float:toggle()<cr>", "Terminal" },
         -- window/buffer management

@@ -69,16 +69,11 @@ in {
       neogit
       nvim-colorizer-lua
       nvim-gps
+      nvim-tree-lua
       telescope-dap-nvim
       telescope-fzy-native-nvim
       telescope-nvim
       telescope-symbols-nvim
-      (chadtree.overrideAttrs (old: {
-        buildInputs = [ pkgs.python3 ];
-        buildPhase = ''
-          python3 -m chadtree deps --nvim
-        '';
-      }))
       # keybindings
       which-key-nvim
       # lsp
