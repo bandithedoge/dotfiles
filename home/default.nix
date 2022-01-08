@@ -42,6 +42,7 @@ in {
       mpc_cli
       ncdu
       neofetch
+      nix-diff
       nixfmt
       nodejs
       pandoc
