@@ -63,6 +63,8 @@ in {
     };
   };
 
+  musnix.enable = true;
+
   services.greetd = {
     enable = true;
     vt = 2;
