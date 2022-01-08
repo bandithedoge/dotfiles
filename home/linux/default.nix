@@ -1,18 +1,18 @@
 { home-manager, pkgs, ... }:
 let rice = import ../../rice.nix;
 in {
+  imports = [ ./audio.nix ];
   home.packages = with pkgs; [
     flat-remix-icon-theme
-    milkytracker
     pavucontrol
     river
     swayidle
     swaylock
-    vcv-rack
     wayvnc
     wlr-randr
     wofi
     yambar
+    wl-clipboard
   ];
 
   # river {{{
@@ -399,7 +399,7 @@ in {
               bg = rice.accent0;
               fg = rice.accent1;
             };
-          in{
+          in {
             bar.bg = rice.bg0;
             even = {
               inherit (rice) fg;
@@ -443,4 +443,12 @@ in {
   };
 
   services = { syncthing.enable = true; };
+
+  gtk = {
+    enable = true;
+    iconTheme = {
+      package = pkgs.flat-remix-icon-theme;
+      name = "Flat Remix";
+    };
+  };
 }

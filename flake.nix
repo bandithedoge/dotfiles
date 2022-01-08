@@ -12,9 +12,12 @@
     nix-doom-emacs.inputs.emacs-overlay.follows = "emacs-overlay";
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
+    musnix.url = "github:musnix/musnix";
+    firefox-darwin.url = "github:bandithedoge/nixpkgs-firefox-darwin";
   };
 
-  outputs = { self, darwin, nixpkgs, home-manager, nixos-hardware, ... }@inputs:
+  outputs = { self, darwin, nixpkgs, home-manager, nixos-hardware, musnix, ... }@inputs:
+
     let
       hmModule = {
         home-manager = {
@@ -54,6 +57,7 @@
           ./common
           ./nixos
           nixos-hardware.nixosModules.lenovo-thinkpad-t440p
+          musnix.nixosModules.musnix
           home-manager.nixosModules.home-manager
           (nixpkgs.lib.mkMerge [
             hmModule
