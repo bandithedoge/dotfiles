@@ -1,24 +1,21 @@
-{ pkgs, inputs, home-manager, ... }:
-let rice = import ../../rice.nix;
+{ pkgs, config, ... }:
+let
+  rice = import ../../rice.nix;
+  configPath = if pkgs.stdenv.isDarwin then
+    "Library/Application Support/"
+  else
+    config.xdg.configHome;
 in {
   # discord {{{
-  home.file.${
-    (if pkgs.stdenv.isDarwin then
-      "Library/Application Support/"
-    else
-      home-manager.cfg.configHome) + "discordcanary/settings.json"
-  }.text = builtins.toJSON {
-    enableHardwareAcceleration = false;
-    SKIP_HOST_UPDATE = true;
-    UPDATE_ENDPOINT = "https://updates.goosemod.com/goosemod";
-    NEW_UPDATE_ENDPOINT = "https://updates.goosemod.com/goosemod";
-  };
-  home.file.${
-    (if pkgs.stdenv.isDarwin then
-      "Library/Application Support/"
-    else
-      home-manager.cfg.configHome) + "BetterDiscord/data/canary/custom.css"
-  }.text = with rice;
+  home.file.${configPath + "discordcanary/settings.json"}.text =
+    builtins.toJSON {
+      enableHardwareAcceleration = false;
+      SKIP_HOST_UPDATE = true;
+      UPDATE_ENDPOINT = "https://updates.goosemod.com/goosemod";
+      NEW_UPDATE_ENDPOINT = "https://updates.goosemod.com/goosemod";
+    };
+  home.file.${configPath + "BetterDiscord/data/canary/custom.css"}.text =
+    with rice;
     ''
       @import url(https://mr-miner1.github.io/Better-Badges/src/badges.css);
       @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/SettingsModal/SettingsModal.css);

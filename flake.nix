@@ -16,7 +16,8 @@
     firefox-darwin.url = "github:bandithedoge/nixpkgs-firefox-darwin";
   };
 
-  outputs = { self, darwin, nixpkgs, home-manager, nixos-hardware, musnix, ... }@inputs:
+  outputs =
+    { self, darwin, nixpkgs, home-manager, nixos-hardware, musnix, ... }@inputs:
 
     let
       hmModule = {
