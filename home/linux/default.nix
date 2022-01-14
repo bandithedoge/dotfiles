@@ -1,9 +1,10 @@
-{ home-manager, pkgs, ... }:
+{ config, pkgs, ... }:
 let rice = import ../../rice.nix;
 in {
   imports = [ ./audio.nix ];
   home.packages = with pkgs; [
     flat-remix-icon-theme
+    imv
     pavucontrol
     river
     swayidle
@@ -20,13 +21,13 @@ in {
     let colors = color: "0x" + pkgs.lib.strings.removePrefix "#" color;
     in {
       executable = true;
-      text = ''
+      text = with rice; ''
         #!/usr/bin/env bash
 
         mod="Mod4"
 
-        riverctl map normal $mod Return spawn ${rice.terminal}
-        riverctl map normal $mod Space spawn "${rice.menu}"
+        riverctl map normal $mod Return spawn ${terminal}
+        riverctl map normal $mod Space spawn "${menu}"
         riverctl map normal $mod W close
         riverctl map normal $mod+Control Q exit
 
@@ -63,9 +64,9 @@ in {
 
         riverctl float-filter-add app-id float
 
-        riverctl background-color ${colors rice.bg0}
-        riverctl border-color-focused ${colors rice.accent}
-        riverctl border-color-unfocused ${colors rice.bg}
+        riverctl background-color ${colors base00}
+        riverctl border-color-focused ${colors base0F}
+        riverctl border-color-unfocused ${colors base00}
 
         riverctl default-layout rivertile
         exec yambar &
@@ -75,380 +76,266 @@ in {
   # }}}
 
   # yambar {{{
-  xdg.configFile."yambar/config.yml".text = let
-    colors = color: pkgs.lib.strings.removePrefix "#" color + "ff";
-    spacing = 5;
-    module = text: {
-      inherit text;
-      margin = spacing;
-      deco.background.color = colors rice.bg2;
-    };
-    icon = text:
-      module text // {
-        font = rice.monoFont + ":size=12";
-        deco.background.color = colors rice.bg;
+  xdg.configFile."yambar/config.yml".text = with rice;
+    let
+      color = hex: pkgs.lib.strings.removePrefix "#" hex + "ff";
+      spacing = 5;
+      module = text: {
+        inherit text;
+        margin = spacing;
+        deco.background.color = color base02;
       };
-    module_red = text: (module text) // { foreground = colors rice.red; };
-    bitrate = [
-      { string = icon ""; }
-      { string = module "{rx-bitrate} Mb/s"; }
-      { string = icon "祝"; }
-      { string = module "{tx-bitrate} Mb/s"; }
-    ];
-  in builtins.toJSON {
-    bar = {
-      location = "top";
-      height = 24;
-      inherit spacing;
-      background = colors rice.bg;
-      foreground = colors rice.fg;
-      font = rice.uiFont + ":size=14";
-      left = [
-        {
-          "river" = {
-            content.map = let
-              tagmap = {
-                tag = "focused";
-                values = {
-                  true.string = {
-                    text = "{id}";
-                    deco.background.color = colors rice.accent0;
-                    foreground = colors rice.accent1;
-                    font = rice.monoFont;
-                    margin = spacing;
-                  };
-                  false.string = {
-                    text = "{id}";
-                    deco.background.color = colors rice.bg2;
-                    foreground = colors rice.comment;
-                    font = rice.monoFont;
-                    margin = spacing;
+      icon = text:
+        module text // {
+          font = rice.monoFont + ":size=12";
+          deco.background.color = color base01;
+        };
+      module_red = text: (module text) // { foreground = color base08; };
+      bitrate = [
+        { string = icon ""; }
+        { string = module "{rx-bitrate} Mb/s"; }
+        { string = icon "祝"; }
+        { string = module "{tx-bitrate} Mb/s"; }
+      ];
+    in builtins.toJSON {
+      bar = {
+        location = "top";
+        height = 24;
+        inherit spacing;
+        background = color base01;
+        foreground = color base05;
+        font = uiFont + ":size=14";
+        left = [
+          {
+            "river" = {
+              content.map = let
+                tagmap = {
+                  tag = "focused";
+                  values = {
+                    true.string = {
+                      text = "{id}";
+                      deco.background.color = color base0F;
+                      foreground = color base00;
+                      font = monoFont;
+                      margin = spacing;
+                    };
+                    false.string = {
+                      text = "{id}";
+                      deco.background.color = color base02;
+                      foreground = color base03;
+                      font = monoFont;
+                      margin = spacing;
+                    };
                   };
                 };
+              in {
+                tag = "occupied";
+                values.false.map = {
+                  tag = "focused";
+                  values = {
+                    inherit (tagmap.values) true;
+                    false.empty = { };
+                  };
+                };
+                values.true.map = tagmap;
               };
-            in {
-              tag = "occupied";
-              values.false.map = {
-                tag = "focused";
+            };
+          }
+          {
+            "river" = {
+              content.empty = { };
+              title.string.text = "{title}";
+            };
+          }
+        ];
+        right = [
+          {
+            "network" = {
+              name = "wlp3s0";
+              content.map = {
+                tag = "state";
                 values = {
-                  inherit (tagmap.values) true;
-                  false.empty = { };
+                  down = [
+                    { string = icon "睊"; }
+                    { string = module_red "Disconnected"; }
+                  ];
+                  up = bitrate
+                    ++ [ { string = icon "直"; } { string = module "{ssid}"; } ];
                 };
               };
-              values.true.map = tagmap;
             };
-          };
-        }
-        {
-          "river" = {
-            content.empty = { };
-            title.string.text = "{title}";
-          };
-        }
-      ];
-      right = [
-        {
-          "network" = {
-            name = "wlp3s0";
-            content.map = {
-              tag = "state";
-              values = {
-                down = [
-                  { string = icon "睊"; }
-                  {
-                    string = (module "Disconnected") // {
-                      foreground = colors rice.red;
-                    };
-                  }
-                ];
-                up = bitrate
-                  ++ [ { string = icon "直"; } { string = module "{ssid}"; } ];
+          }
+          {
+            "network" = {
+              name = "enp0s25";
+              content.map = {
+                tag = "state";
+                values = {
+                  down = [
+                    { string = icon ""; }
+                    { string = module_red "Disconnected"; }
+                  ];
+                  up = [{ string = icon ""; }] ++ bitrate;
+                };
               };
             };
-          };
-        }
-        {
-          "network" = {
-            name = "enp0s25";
-            content.map = {
-              tag = "state";
-              values = {
-                down = [
-                  { string = icon ""; }
-                  {
-                    string = (module "Disconnected") // {
-                      foreground = colors rice.red;
-                    };
-                  }
-                ];
-                up = [{ string = icon ""; }] ++ bitrate;
+          }
+          {
+            "battery" = {
+              name = "BAT0";
+              content.map = {
+                tag = "state";
+                values = {
+                  full = [ { string = icon ""; } { string = module "Full"; } ];
+                  charging = [
+                    { string = icon ""; }
+                    { string = module "{capacity}%"; }
+                  ];
+                  discharging = [
+                    { string = icon ""; }
+                    { string = module "{capacity}%"; }
+                  ];
+                  unknown = [
+                    { string = icon ""; }
+                    { string = module "{capacity}%"; }
+                  ];
+                };
               };
             };
-          };
-        }
-        {
-          "battery" = {
-            name = "BAT0";
-            content.map = {
-              tag = "state";
-              values = {
-                full = [ { string = icon ""; } { string = module "Full"; } ];
-                charging =
-                  [ { string = icon ""; } { string = module "{capacity}%"; } ];
-                discharging =
-                  [ { string = icon ""; } { string = module "{capacity}%"; } ];
-                unknown =
-                  [ { string = icon ""; } { string = module "{capacity}%"; } ];
+          }
+          {
+            "alsa" = {
+              card = "default";
+              mixer = "Master";
+              content.map = {
+                on-click = "${pkgs.pavucontrol}/bin/pavucontrol";
+                tag = "muted";
+                values = {
+                  false = [
+                    { string = icon "墳"; }
+                    { string = module "{percent}%"; }
+                  ];
+                  true =
+                    [ { string = icon "婢"; } { string = module_red "Muted"; } ];
+                };
               };
             };
-          };
-        }
-        {
-          "alsa" = {
-            card = "default";
-            mixer = "Master";
-            content.map = {
-              on-click = "${pkgs.pavucontrol}/bin/pavucontrol";
-              tag = "muted";
-              values = {
-                false =
-                  [ { string = icon "墳"; } { string = module "{percent}%"; } ];
-                true =
-                  [ { string = icon "婢"; } { string = module_red "Muted"; } ];
-              };
+          }
+          {
+            "clock" = {
+              date-format = "%A %d %B";
+              content =
+                [ { string = icon ""; } { string = module "{date}"; } ];
             };
-          };
-        }
-        {
-          "clock" = {
-            date-format = "%A %d %B";
-            content = [ { string = icon ""; } { string = module "{date}"; } ];
-          };
-        }
-        {
-          "clock" = {
-            time-format = "%H:%M:%S";
-            content = [ { string = icon ""; } { string = module "{time}"; } ];
-          };
-        }
-      ];
+          }
+          {
+            "clock" = {
+              time-format = "%H:%M:%S";
+              content =
+                [ { string = icon ""; } { string = module "{time}"; } ];
+            };
+          }
+        ];
+      };
     };
-  };
   # }}}
 
-  programs = {
-    # web browser {{{
-    qutebrowser = {
-      enable = true;
-      searchEngines = {
-        DEFAULT = "https://searx.be/search?q={}";
-        g = "https://www.google.com/search?q={}";
-        a = "https://wiki.archlinux.org/?search={}";
-        n = "https://nixos.wiki/index.php?search={}";
-      };
-      settings = {
-        scrolling.smooth = true;
-        fonts = {
-          default_family = rice.uiFont;
-          default_size = "14px";
-        };
-        colors = {
-          completion = {
-            inherit (rice) fg;
-            even.bg = rice.bg1;
-            match.fg = rice.accent;
-            odd.bg = rice.bg;
-            scrollbar = {
-              inherit (rice) bg;
-              fg = rice.accent;
-            };
-            item.selected = {
-              border = {
-                bottom = rice.accent0;
-                top = rice.accent0;
-              };
-              bg = rice.accent0;
-              fg = rice.accent1;
-              match.fg = rice.bg;
-            };
-            category = {
-              bg = rice.bg2;
-              fg = rice.accent;
-              border = {
-                bottom = rice.bg2;
-                top = rice.bg2;
-              };
-            };
-          };
-          contextmenu = {
-            disabled = {
-              bg = rice.bg2;
-              fg = rice.comment;
-            };
-            menu = {
-              bg = rice.bg2;
-              inherit (rice) fg;
-            };
-            selected = {
-              bg = rice.accent0;
-              fg = rice.accent1;
-            };
-          };
-          downloads = {
-            bar.bg = rice.bg;
-            error = {
-              bg = rice.red0;
-              fg = rice.red1;
-            };
-            start = {
-              bg = rice.bg2;
-              inherit (rice) fg;
-            };
-            stop = {
-              bg = rice.green0;
-              fg = rice.green1;
-            };
-            system = {
-              bg = "none";
-              fg = "none";
-            };
-          };
-          hints = {
-            bg = rice.bg2;
-            inherit (rice) fg;
-            match.fg = rice.accent;
-          };
-          keyhint = {
-            bg = rice.bg2;
-            inherit (rice) fg;
-            suffix.fg = rice.accent;
-          };
-          messages = {
-            error = {
-              bg = rice.red0;
-              fg = rice.red1;
-              border = rice.red;
-            };
-            info = {
-              bg = rice.blue0;
-              fg = rice.blue1;
-              border = rice.blue;
-            };
-            warning = {
-              bg = rice.orange0;
-              fg = rice.orange1;
-              border = rice.orange;
-            };
-          };
-          prompts = {
-            bg = rice.bg2;
-            inherit (rice) fg;
-            border = rice.bg;
-            selected = {
-              bg = rice.accent0;
-              fg = rice.accent1;
-            };
-          };
-          statusbar = {
-            caret = {
-              bg = rice.yellow0;
-              fg = rice.yellow1;
-              selection = {
-                bg = rice.orange0;
-                fg = rice.orange1;
-              };
-            };
-            command = {
-              bg = rice.bg2;
-              inherit (rice) fg;
-              private = {
-                bg = rice.purple0;
-                fg = rice.purple1;
-              };
-            };
-            insert = {
-              bg = rice.green0;
-              fg = rice.green1;
-            };
-            normal = {
-              bg = rice.bg2;
-              inherit (rice) fg;
-            };
-            passthrough = {
-              bg = rice.blue0;
-              fg = rice.blue1;
-            };
-            private = {
-              bg = rice.purple0;
-              fg = rice.purple1;
-            };
-            progress.bg = rice.accent;
-            url = {
-              inherit (rice) fg;
-              error.fg = rice.red;
-              hover.fg = rice.accent;
-              warn.fg = rice.orange;
-              success = {
-                http.fg = rice.green;
-                https.fg = rice.green;
-              };
-            };
-          };
-          tabs = let
-            defaultSelected = {
-              bg = rice.accent0;
-              fg = rice.accent1;
-            };
-          in {
-            bar.bg = rice.bg0;
-            even = {
-              inherit (rice) fg;
-              bg = rice.bg1;
-            };
-            odd = {
-              inherit (rice) fg;
-              bg = rice.bg2;
-            };
-            selected = {
-              even = {
-                bg = rice.accent0;
-                fg = rice.accent1;
-              };
-            };
-            pinned = {
-              even = {
-                bg = rice.bg1;
-                fg = rice.accent;
-              };
-              odd = {
-                bg = rice.bg2;
-                fg = rice.accent;
-              };
-              selected = {
-                even = defaultSelected;
-                odd = defaultSelected;
-              };
-            };
-            indicator = {
-              error = rice.red;
-              start = rice.blue;
-              stop = rice.green;
-              system = "none";
-            };
-          };
-        };
-      };
-    };
-    # }}}
-  };
-
-  services = { syncthing.enable = true; };
-
   gtk = {
+    # {{{
     enable = true;
+    font = {
+      name = rice.uiFont;
+      size = 12;
+    };
     iconTheme = {
       package = pkgs.flat-remix-icon-theme;
       name = "Flat Remix";
     };
-  };
+    theme = {
+      package = pkgs.materia-theme;
+      name = "Materia-dark";
+    };
+  }; # }}}
+
+  programs.rofi = {
+    # {{{
+    enable = true;
+    package = pkgs.nur.repos.kira-bruneau.rofi-wayland;
+    font = rice.uiFont + " 12";
+    extraConfig = {
+      modi = "drun,run,power:${./bin/rofi/power.py}";
+      drun-match-fields = "name,exec";
+      drun-display-format = "{name}";
+      show-icons = true;
+      scroll-method = 1;
+      kb-row-up = "Control+k";
+      kb-row-down = "Control+j";
+      kb-mode-next = "Control+l";
+      kb-mode-previous = "Control+h";
+      kb-mode-complete = "";
+      kb-remove-to-eol = "";
+      kb-accept-entry = "Return";
+      kb-remove-char-back = "BackSpace";
+    };
+    theme = with rice;
+      let
+        inherit (config.lib.formats.rasi) mkLiteral;
+        padding = mkLiteral "5px";
+      in {
+        "*" = {
+          border-color = mkLiteral base0F;
+          background-color = mkLiteral base00;
+          text-color = mkLiteral base05;
+        };
+
+        mainbox.children =
+          map mkLiteral [ "inputbar" "message" "mode-switcher" "listview" ];
+
+        window = {
+          border = mkLiteral "2px";
+          anchor = mkLiteral "north";
+        };
+
+        entry = { inherit padding; };
+
+        prompt = {
+          inherit padding;
+          background-color = mkLiteral base0F;
+          text-color = mkLiteral base00;
+        };
+
+        listview.scrollbar = true;
+
+        scrollbar.handle-color = mkLiteral base0F;
+
+        element = {
+          background-color = mkLiteral "transparent";
+          padding = mkLiteral "2px 5px";
+        };
+        element-icon = {
+          background-color = mkLiteral "inherit";
+          padding = mkLiteral "0 5px";
+        };
+        "element.selected.normal".background-color = mkLiteral base02;
+        element-text = {
+          background-color = mkLiteral "inherit";
+          highlight = mkLiteral "bold ${base0F}";
+        };
+
+        "element.urgent".text-color = mkLiteral base08;
+        "element.active".text-color = mkLiteral base0B;
+        "element.selected.urgent".background-color = mkLiteral base08;
+        "element.selected.active".background-color = mkLiteral base0B;
+
+        button.text-color = mkLiteral base03;
+        "button.selected".text-color = mkLiteral base05;
+      };
+  }; # }}}
+
+  programs.mako = {
+    # {{{
+    enable = true;
+  }; # }}}
+
+  services = { syncthing.enable = true; };
 }

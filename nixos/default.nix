@@ -17,6 +17,14 @@ in {
     supportedFilesystems = [ "ntfs" ];
   };
 
+  services.dbus = {
+    enable = true;
+    packages = with pkgs; [ gnome3.dconf ];
+  };
+
+  programs.dconf.enable = true;
+
+  # drives {{{
   fileSystems = {
     "/mnt/data" = {
       device = "/dev/disk/by-label/shit";
@@ -28,6 +36,11 @@ in {
     };
   };
 
+  services.devmon.enable = true;
+  programs.udevil.enable = true;
+  # }}}
+
+  # hardware {{{
   powerManagement = {
     enable = true;
     powertop.enable = true;
@@ -35,25 +48,32 @@ in {
 
   services.thermald.enable = true;
   services.tlp.enable = true;
+  services.logind.lidSwitch = "hybrid-sleep";
+  hardware.opengl.enable = true;
+  # }}}
 
-  services.logind = { lidSwitch = "hybrid-sleep"; };
-
+  # networking {{{
   networking = { hostName = "thonkpad"; };
 
   services.connman = { enable = true; };
+  services.openssh = {
+    enable = true;
+    startWhenNeeded = true;
+  };
 
   networking.wireless = {
     enable = true;
     userControlled.enable = true;
   };
+  # }}}
 
-  hardware.opengl.enable = true;
-
+  # audio {{{
   security.rtkit.enable = true;
 
   services.pipewire = {
     enable = true;
-    media-session.enable = true;
+    media-session.enable = false;
+    wireplumber.enable = true;
 
     pulse.enable = true;
     jack.enable = true;
@@ -64,6 +84,7 @@ in {
   };
 
   musnix.enable = true;
+  # }}}
 
   services.greetd = {
     enable = true;
@@ -86,7 +107,5 @@ in {
   };
 
   programs.ccache.enable = true;
-
-  services.devmon.enable = true;
-  programs.udevil.enable = true;
+  programs.steam.enable = true;
 }

@@ -22,17 +22,19 @@ let
   '';
 
 in {
-  imports = [ ./editors ./garbage ];
+  imports = [ ./editors ./garbage ./web ];
 
   manual.html.enable = true;
 
   home = {
     sessionVariables = {
       EDITOR = "nvim";
+      BROWSER = "qutebrowser";
       LF_ICONS = "${builtins.readFile ./icons}";
       TERM = "xterm-256color";
     };
     packages = with pkgs; [
+      clang
       fd
       gh
       hactool
@@ -257,60 +259,6 @@ in {
         color13 = base17;
         color14 = base15;
         color15 = base0F;
-      };
-    };
-    # }}}
-
-    # web browser {{{
-    firefox = {
-      enable = true;
-      package =
-        if pkgs.stdenv.isDarwin then pkgs.dummy else pkgs.firefox-unwrapped;
-      extensions = with pkgs.nur.repos.rycee.firefox-addons; [
-        auto-tab-discard
-        betterttv
-        buster-captcha-solver
-        canvasblocker
-        clearurls
-        close-other-windows
-        facebook-container
-        gesturefy
-        greasemonkey
-        h264ify
-        honey
-        https-everywhere
-        i-dont-care-about-cookies
-        netflix-1080p
-        octolinker
-        octotree
-        old-reddit-redirect
-        polish-dictionary
-        privacy-possum
-        reddit-enhancement-suite
-        refined-github
-        sponsorblock
-        stylus
-        tabcenter-reborn
-        terms-of-service-didnt-read
-        translate-web-pages
-        tridactyl
-        ublock-origin
-        unpaywall
-        view-image
-        violentmonkey
-      ];
-      profiles."main" = {
-        name = "main";
-        settings = {
-          "app.update.auto" = false;
-          "browser.autofocus" = false;
-          "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
-          "layers.acceleration.force-enabled" = true;
-          "gfx.webrender.all" = true;
-          "svg.context-properties.content.enabled" = true;
-        };
-        userChrome = builtins.readFile (builtins.fetchurl
-          "https://git.sr.ht/~ranmaru/ff-vertical-tabs/blob/master/userChrome.css");
       };
     };
     # }}}

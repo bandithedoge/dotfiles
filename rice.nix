@@ -81,5 +81,5 @@ rec {
 
   terminal = "kitty";
   wm = "river";
-  menu = "wofi --show drun";
+  menu = "rofi -show drun";
 }
