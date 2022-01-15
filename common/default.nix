@@ -1,4 +1,4 @@
-{ pkgs, ... }: {
+{ pkgs, inputs, ... }: {
   nix = {
     package = pkgs.nixFlakes;
     binaryCaches = [

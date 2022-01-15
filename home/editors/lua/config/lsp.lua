@@ -29,20 +29,6 @@ for _, server in ipairs(servers) do
 end
 -- }}}
 
--- lspsaga.nvim {{{
-require("lspsaga").init_lsp_saga()
-
-vim.api.nvim_set_keymap("n", "<C-j>", ":lua require('lspsaga.action').smart_scroll_with_saga(1)<cr>", {
-    silent = true,
-})
-vim.api.nvim_set_keymap(
-    "n",
-    "<C-k>",
-    ":lua require('lspsaga.action').smart_scroll_with_saga(-1)<cr>",
-    { silent = true }
-)
--- }}}
-
 -- lspkind-nvim {{{
 require("lspkind").init()
 -- }}}
@@ -70,7 +56,16 @@ null_ls.register {
     null_ls.builtins.formatting.isort,
     null_ls.builtins.formatting.nimpretty,
     null_ls.builtins.formatting.nixfmt,
-    null_ls.builtins.formatting.prettier.with { extra_args = { "--tab-width", "4" } },
+    null_ls.builtins.formatting.prettier.with {
+        extra_args = function(params)
+            return params.options
+                and params.options.tabSize
+                and {
+                    "--tab-width",
+                    params.options.tabSize,
+                }
+        end,
+    },
     null_ls.builtins.formatting.rubocop,
     null_ls.builtins.formatting.shfmt,
     null_ls.builtins.formatting.stylua,

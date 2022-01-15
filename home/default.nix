@@ -88,6 +88,7 @@ in {
 
     # shell {{{
     lazygit.enable = true;
+    nix-index.enable = true;
 
     topgrade = {
       enable = true;

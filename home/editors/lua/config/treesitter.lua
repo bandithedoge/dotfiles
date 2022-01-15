@@ -1,12 +1,14 @@
+-- nvim-treesitter {{{
 require("nvim-treesitter.configs").setup {
     highlight = { enable = true },
     indent = { enable = true },
-    autopairs = { enable = true },
     rainbow = { enable = true, extended_mode = true },
     playground = { enable = true },
+    autotag = { enable = true },
+    context_commentstring = { enable = true },
 }
+-- }}}
 
-require("nvim-autopairs").setup {
-    enable_check_bracket_line = false,
-    check_ts = true,
-}
+-- spellsitter.nvim {{{
+require("spellsitter").setup()
+-- }}}

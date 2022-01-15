@@ -36,7 +36,7 @@ require("lualine").setup {
             "fileformat",
             "filetype",
         },
-        lualine_z = { "location", "progress" },
+        lualine_z = { "location" },
     },
     tabline = {
         lualine_a = { "buffers" },
@@ -73,7 +73,6 @@ local tree_cb = require("nvim-tree.config").nvim_tree_callback
 
 require("nvim-tree").setup {
     hijack_cursor = true,
-    update_cwd = true,
     update_focused_file = {
         enable = false,
     },
@@ -119,6 +118,7 @@ telescope.setup {
         diagnostics = {
             theme = "ivy",
             border = false,
+            preview = false,
         },
         builtin = {
             theme = "ivy",
@@ -158,18 +158,39 @@ telescope.load_extension "dap"
 -- FTerm.nvim {{{
 local fterm = require "FTerm"
 
-fterm_lazygit = fterm:new {
-    cmd = "lazygit",
-    hl = "NormalPopover",
-    border = "solid",
-    dimensions = {
-        height = 0.9,
-        width = 0.9,
-    },
-}
-
 fterm_float = fterm:new {
     hl = "NormalPopover",
     border = "solid",
+}
+-- }}}
+
+-- mini.nvim {{{
+require("mini.trailspace").setup()
+require("mini.cursorword").setup()
+-- }}}
+
+-- fm-nvim {{{
+require("fm-nvim").setup {
+    ui = {
+        float = {
+            border = "solid",
+            float_hl = "NormalPopover",
+        },
+    },
+}
+-- }}}
+
+-- nvim-hlslens {{{
+require("hlslens").setup()
+-- }}}
+
+-- nvim-scrollbar {{{
+require("scrollbar").setup {
+    excluded_filetypes = {
+        "NvimTree",
+    },
+    handlers = {
+        search = true,
+    },
 }
 -- }}}

@@ -4,6 +4,7 @@ in {
   programs = {
     qutebrowser = { # {{{
       enable = true;
+      package = if pkgs.stdenv.isDarwin then pkgs.dummy else pkgs.qutebrowser;
       searchEngines = {
         DEFAULT = "https://searx.be/search?q={}";
         g = "https://www.google.com/search?q={}";
@@ -161,7 +162,7 @@ in {
           "svg.context-properties.content.enabled" = true;
         };
         userChrome = builtins.readFile (builtins.fetchurl
-          "https://git.sr.ht/~ranmaru/ff-vertical-tabs/blob/master/userChrome.css");
+          "https://raw.githubusercontent.com/ranmaru22/firefox-vertical-tabs/main/userChrome.css");
       };
     };
     # }}}

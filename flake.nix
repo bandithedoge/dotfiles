@@ -7,6 +7,7 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     nur.url = "github:nix-community/NUR";
+    vim-extra-plugins.url = "github:m15a/nixpkgs-vim-extra-plugins";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     nix-doom-emacs.url = "github:nix-community/nix-doom-emacs";
     nix-doom-emacs.inputs.emacs-overlay.follows = "emacs-overlay";
@@ -30,19 +31,31 @@
         };
       };
 
-      overlays = with inputs; [
-        (self: super: { dummy = super.hello; })
-        nur.overlay
-        emacs-overlay.overlay
-      ];
+      common = {
+        imports = [ ./common ];
+        nix.registry = with inputs; { nixpkgs.flake = nixpkgs; };
+      };
+
+      nixpkgsConfig = {
+        nixpkgs = {
+          overlays = with inputs; [
+            (self: super: { dummy = super.hello; })
+            emacs-overlay.overlay
+            vim-extra-plugins.overlay
+          ];
+          config.packageOverrides = pkgs: {
+            nur = import inputs.nur { inherit pkgs; };
+          };
+        };
+      };
 
     in {
       darwinConfigurations."machine" = darwin.lib.darwinSystem {
         system = "x86_64-darwin";
         modules = [
-          { nixpkgs.overlays = overlays; }
           ./common
           ./darwin
+          nixpkgsConfig
           home-manager.darwinModule
           (nixpkgs.lib.mkMerge [
             hmModule
@@ -54,9 +67,9 @@
         system = "x86_64-linux";
         extraArgs = { inherit inputs; };
         modules = [
-          { nixpkgs.overlays = overlays; }
           ./common
           ./nixos
+          nixpkgsConfig
           nixos-hardware.nixosModules.lenovo-thinkpad-t440p
           musnix.nixosModules.musnix
           home-manager.nixosModules.home-manager

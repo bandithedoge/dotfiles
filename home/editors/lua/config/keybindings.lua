@@ -1,6 +1,11 @@
 local vim = _G.vim
+local fterm_float = _G.fterm_float
+
+local MiniBufremove = require "mini.bufremove"
 local wk = require "which-key"
 local t = require "telescope.builtin"
+local fm = require "fm-nvim"
+
 vim.api.nvim_set_keymap("n", "<BS>", ":WhichKey \\\\<cr>", { silent = true })
 
 wk.setup {
@@ -43,6 +48,12 @@ wk.register {
                 end,
                 "Symbols",
             },
+            f = {
+                function()
+                    fm.Lf()
+                end,
+                "Files",
+            },
         },
         o = {
             name = "+Open",
@@ -56,8 +67,24 @@ wk.register {
             end,
             "File tree",
         },
-        g = { "<cmd>:lua fterm_lazygit:toggle()<cr>", "Git" },
-        T = { "<cmd>:lua fterm_float:toggle()<cr>", "Terminal" },
+        g = {
+            function()
+                fm.Lazygit()
+            end,
+            "Git",
+        },
+        T = {
+            function()
+                fterm_float:toggle()
+            end,
+            "Terminal",
+        },
+        e = {
+            function()
+                require("expand_expr").expand()
+            end,
+            "Expand expression",
+        },
         -- window/buffer management
         b = {
             function()
@@ -65,7 +92,18 @@ wk.register {
             end,
             "Buffers",
         },
-        w = { "<cmd>:bd<cr>", "Close buffer" },
+        w = {
+            function()
+                MiniBufremove.delete()
+            end,
+            "Close buffer",
+        },
+        ["<C-w>"] = {
+            function()
+                MiniBufremove.delete(0, true)
+            end,
+            "Close buffer (force)",
+        },
         W = { "<cmd>:close<cr>", "Close window" },
         n = { "<cmd>:new<cr>", "New window (horizontal)" },
         N = { "<cmd>:vnew<cr>", "New window (vertical)" },
@@ -78,7 +116,6 @@ wk.register {
             end,
             "Format file",
         },
-        t = { "<cmd>TroubleToggle<cr>", "Trouble" },
         a = {
             function()
                 t.lsp_code_actions()
@@ -91,9 +128,11 @@ wk.register {
             end,
             "Diagnostics",
         },
-        r = { "<cmd>Lspsaga rename<cr>", "Rename" },
-        h = { "<cmd>Lspsaga hover_doc<cr>", "Documentation" },
-        s = { "<cmd>Lspsaga signature_help<cr>", "Signature" },
-        p = { "<cmd>Lspsaga preview_definition<cr>", "Preview definition" },
+        r = {
+            function()
+                vim.lsp.buf.rename()
+            end,
+            "Rename",
+        },
     },
 }

@@ -1,7 +1,7 @@
 { pkgs, ... }@inputs:
 let rice = import ../../rice.nix;
 in {
-  # lsp/linters/formatters {{{
+  # common packages {{{
   home.packages = with pkgs; [
     # rust
     rust-analyzer
@@ -42,26 +42,31 @@ in {
   # neovim {{{
   programs.neovim = {
     enable = true;
-    plugins = with pkgs.vimPlugins; [
+    plugins = with pkgs.vimExtraPlugins // pkgs.vimPlugins; [
+      impatient-nvim
+      mini-nvim
       # treesitter
       (nvim-treesitter.withPlugins builtins.attrValues)
-      nvim-autopairs
+      nvim-ts-autotag
+      nvim-ts-context-commentstring
       nvim-ts-rainbow
       playground
+      spellsitter-nvim
       # libraries
       nui-nvim
       nvim-web-devicons
       plenary-nvim
       popup-nvim
       # utilities
-      comment-nvim
       direnv-vim
+      nvim-expand-expr
       presence-nvim
       vim-automkdir
       # ui
       FTerm-nvim
       Shade-nvim
       blueballs-neovim
+      fm-nvim
       gitsigns-nvim
       indent-blankline-nvim
       lualine-lsp-progress
@@ -69,6 +74,8 @@ in {
       neogit
       nvim-colorizer-lua
       nvim-gps
+      nvim-hlslens
+      nvim-scrollbar
       nvim-tree-lua
       telescope-dap-nvim
       telescope-fzy-native-nvim
@@ -80,7 +87,6 @@ in {
       SchemaStore-nvim
       lsp_signature-nvim
       lspkind-nvim
-      lspsaga-nvim
       null-ls-nvim
       nvim-lspconfig
       # completion
@@ -104,13 +110,15 @@ in {
       orgmode
       # language-specific
       crates-nvim
+      lua-dev-nvim
       nim-vim
+      rasi-vim
     ];
-    extraConfig = ''
+    extraConfig = with rice; ''
       set runtimepath ^=${./.}
       lua << EOF
-        vim.o.guifont = "${rice.monoFont}:h16"
-
+        require("impatient").enable_profile()
+        vim.o.guifont = "${monoFont}:h16"
         require("config")
       EOF
     '';
