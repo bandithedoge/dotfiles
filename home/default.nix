@@ -1,4 +1,4 @@
-{ pkgs, home-manager, ... }:
+{ pkgs, home-manager, config, ... }:
 
 let
 
@@ -235,7 +235,7 @@ in {
         selection_background = base05;
         selection_foreground = base00;
         url_color = base0F;
-        cursor = base05;
+        cursor = base0F;
         active_border_color = base0F;
         inactive_border_color = base01;
         active_tab_background = base0F;

@@ -1,5 +1,4 @@
 local vim = _G.vim
-local fterm_float = _G.fterm_float
 
 local MiniBufremove = require "mini.bufremove"
 local wk = require "which-key"

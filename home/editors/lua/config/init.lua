@@ -23,8 +23,6 @@ vim.defer_fn(function()
     vim.cmd [[au FileType nix,norg,CHADTree :setlocal shiftwidth=2]]
     vim.cmd [[au BufReadPre *.nfo :setlocal fileencodings=cp437,utf-8]]
 
-    vim.cmd [[colorscheme blueballs]]
-
     vim.wo.foldmethod = "marker"
     vim.wo.foldtext = [[substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g').'  ' ]]
     vim.wo.fillchars = "fold: "
@@ -37,11 +35,13 @@ vim.defer_fn(function()
     vim.api.nvim_set_keymap("n", "j", "gj", { silent = true })
     vim.api.nvim_set_keymap("n", "k", "gk", { silent = true })
 
+    require "config.colors"
     require "config.completion"
     require "config.dap"
     require "config.keybindings"
     require "config.langspec"
     require "config.lsp"
+    require "config.snippets"
     require "config.treesitter"
     require "config.ui"
     require "config.utilities"

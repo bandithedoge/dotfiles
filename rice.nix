@@ -1,80 +1,28 @@
 rec {
-  bg = "#20222c";
-  bg0 = "#181a23";
-  bg1 = "#262935";
-  bg2 = "#2c2f3d";
-
-  fg = "#d9dceb";
-  fg0 = "#e7ebff";
-  fg1 = "#cccfdf";
-  fg2 = "#c7cadc";
-
-  selection = "#7b7e8c";
-  comment = "#747dab";
-
-  accent = "#4b74ad";
-  accent0 = "#40587a";
-  accent1 = "#8eb9f5";
-
-  red = "#eb585f";
-  red0 = "#8b2f33";
-  red1 = "#f28b90";
-
-  purple = "#b96be1";
-  purple0 = "#8f41b7";
-  purple1 = "#d49af2";
-
-  pink = "#e871e1";
-  pink0 = "#9b4996";
-  pink1 = "#edabe9";
-
-  blue = "#4e5fc9";
-  blue0 = "#283275";
-  blue1 = "#96a3f2";
-
-  cyan = "#52e6da";
-  cyan0 = "#378680";
-  cyan1 = "#8ffff4";
-
-  green = "#69d26e";
-  green0 = "#357a38";
-  green1 = "#96f29b";
-
-  yellow = "#e1c85c";
-  yellow0 = "#9f8c39";
-  yellow1 = "#f7e7a1";
-
-  orange = "#d7953f";
-  orange0 = "#9c6e31";
-  orange1 = "#edc186";
-
-  base00 = bg;
-  base01 = bg1;
-  base02 = bg2;
-  base03 = comment;
-  
-  base04 = fg2;
-  base05 = fg;
-  base06 = fg0;
-  base07 = fg0;
-
-  base08 = red;
-  base09 = orange;
-  base0A = yellow;
-  base0B = green;
-  base0C = cyan;
-  base0D = blue;
-  base0E = purple;
-  base0F = accent;
-
-  base10 = bg;
-  base11 = bg0;
-  base12 = red1;
-  base13 = yellow1;
-  base14 = green1;
-  base15 = cyan1;
-  base16 = blue1;
-  base17 = purple1;
+  base00 = "#21242b";
+  base01 = "#282c34";
+  base02 = "#3f444a";
+  base03 = "#5B6268";
+  base04 = "#9ca0a4";
+  base05 = "#bbc2cf";
+  base06 = "#DFDFDF";
+  base07 = "#E6E6E6";
+  base08 = "#ff6c6b";
+  base09 = "#da8548";
+  base0A = "#ECBE7B";
+  base0B = "#98be65";
+  base0C = "#46D9FF";
+  base0D = "#51afef";
+  base0E = "#c678dd";
+  base0F = "#a9a1e1";
+  base10 = "#1c1f24";
+  base11 = "#1B2229";
+  base12 = base08;
+  base13 = base0A;
+  base14 = base0B;
+  base15 = base0C;
+  base16 = base0D;
+  base17 = base0E;
 
   monoFont = "JetBrainsMono Nerd Font";
   uiFont = "Roboto Condensed";

@@ -1,11 +1,12 @@
 local vim = _G.vim
+
 -- lualine {{{
 local gps = require "nvim-gps"
 gps.setup()
 
 require("lualine").setup {
     options = {
-        theme = "blueballs",
+        theme = "nightfox",
         component_separators = "",
         section_separators = "",
     },
@@ -61,7 +62,14 @@ require("indent_blankline").setup {
 -- }}}
 
 -- nvim-colorizer.lua {{{
-require("colorizer").setup()
+require("colorizer").setup {
+    "*",
+    DEFAULT_OPTIONS = {
+        RRGGBBAA = true,
+        css = true,
+        css_fn = true,
+    },
+}
 -- }}}
 
 -- gitsigns.nvim {{{
@@ -73,11 +81,12 @@ local tree_cb = require("nvim-tree.config").nvim_tree_callback
 
 require("nvim-tree").setup {
     hijack_cursor = true,
-    update_focused_file = {
-        enable = false,
+    update_cwd = true,
+    diagnostics = {
+        enable = true,
     },
     view = {
-        auto_resize = false,
+        auto_resize = true,
         mappings = {
             list = {
                 { key = "h", cb = tree_cb "dir_up" },
@@ -182,15 +191,4 @@ require("fm-nvim").setup {
 
 -- nvim-hlslens {{{
 require("hlslens").setup()
--- }}}
-
--- nvim-scrollbar {{{
-require("scrollbar").setup {
-    excluded_filetypes = {
-        "NvimTree",
-    },
-    handlers = {
-        search = true,
-    },
-}
 -- }}}
