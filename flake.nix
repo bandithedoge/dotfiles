@@ -11,6 +11,8 @@
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     nix-doom-emacs.url = "github:nix-community/nix-doom-emacs";
     nix-doom-emacs.inputs.emacs-overlay.follows = "emacs-overlay";
+    flake-nimble.url = "github:nix-community/flake-nimble";
+    flake-nimble.inputs.nixpkgs.follows = "nixpkgs";
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
     musnix.url = "github:musnix/musnix";
@@ -42,6 +44,7 @@
             (self: super: { dummy = super.hello; })
             emacs-overlay.overlay
             vim-extra-plugins.overlay
+            # flake-nimble.overlay
           ];
           config.packageOverrides = pkgs: {
             nur = import inputs.nur { inherit pkgs; };

@@ -31,9 +31,11 @@ in {
     # lua
     luajitPackages.luacheck
     # c
+    clang-tools
     cppcheck
     # nim
     nimlsp
+    nim
     # go
     gopls
   ];
@@ -110,7 +112,7 @@ in {
       # language-specific
       crates-nvim
       lua-dev-nvim
-      nim-vim
+      nim-nvim
       rasi-vim
     ];
     extraConfig = with rice; ''

@@ -3,17 +3,17 @@ let rice = import ../../rice.nix;
 in {
   imports = [ ./audio.nix ];
   home.packages = with pkgs; [
-    flat-remix-icon-theme
     imv
+    icon-library
     pavucontrol
     river
     swayidle
     swaylock
     wayvnc
+    wl-clipboard
     wlr-randr
     wofi
     yambar
-    wl-clipboard
   ];
 
   # river {{{
@@ -248,12 +248,18 @@ in {
       size = 12;
     };
     iconTheme = {
-      package = pkgs.flat-remix-icon-theme;
-      name = "Flat Remix";
+      package = pkgs.numix-icon-theme;
+      name = "Numix";
     };
     theme = {
-      package = pkgs.materia-theme;
+      package = pkgs.materia-theme.override {
+        
+      };
       name = "Materia-dark";
+    };
+    gtk3.extraConfig = {
+      gtk-application-prefer-dark-theme = true;
+      gtk-enable-primary-paste = false;
     };
   }; # }}}
 
@@ -263,7 +269,7 @@ in {
     package = pkgs.nur.repos.kira-bruneau.rofi-wayland;
     font = rice.uiFont + " 12";
     extraConfig = {
-      modi = "drun,run,power:${./bin/rofi/power.py}";
+      modi = "power:${./bin/rofi/power.lua},drun,run";
       drun-match-fields = "name,exec";
       drun-display-format = "{name}";
       show-icons = true;

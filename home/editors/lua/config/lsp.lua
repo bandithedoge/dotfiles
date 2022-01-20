@@ -9,6 +9,7 @@ local servers = {
     "gopls",
     "html",
     "jsonls",
+    "nimls",
     "pylsp",
     "rnix",
     "rust_analyzer",

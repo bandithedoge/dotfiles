@@ -36,11 +36,15 @@ in {
     packages = with pkgs; [
       clang
       fd
+      fennel
       gh
+      glow
       hactool
       htop
       imagemagick
       librespeed-cli
+      luajit
+      luajitPackages.moonscript
       mpc_cli
       ncdu
       neofetch
@@ -65,13 +69,8 @@ in {
 
       ni = "nix-env -i";
       nr = "nix-env -e";
-      ns = "nix-env -qas";
+      ns = "nix search nixpkgs";
       nq = "nix-env -q";
-
-      pi = "paru -S";
-      pr = "paru -Rns";
-      ps = "paru -Ss";
-      pq = "paru -Qs";
 
       bi = "brew install";
       br = "brew uninstall";
