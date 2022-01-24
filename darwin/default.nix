@@ -70,6 +70,7 @@
       "mos"
       "multimc"
       "musicbrainz-picard"
+      "netnewswire"
       "nfov"
       "obs"
       "obs-virtualcam"

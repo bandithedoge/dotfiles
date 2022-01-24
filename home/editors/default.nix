@@ -118,33 +118,9 @@ in {
     extraConfig = with rice; ''
       set runtimepath ^=${./.}
       lua << EOF
-        vim.o.guifont = "${monoFont}:h16"
+        ${def.lua}
 
-        base00 = "${base00}"
-        base01 = "${base01}"
-        base02 = "${base02}"
-        base03 = "${base03}"
-        base04 = "${base04}"
-        base05 = "${base05}"
-        base06 = "${base06}"
-        base07 = "${base07}"
-        base08 = "${base08}"
-        base09 = "${base09}"
-        base0A = "${base0A}"
-        base0B = "${base0B}"
-        base0C = "${base0C}"
-        base0D = "${base0D}"
-        base0E = "${base0E}"
-        base0F = "${base0F}"
-
-        base10 = "${base10}"
-        base11 = "${base11}"
-        base12 = "${base12}"
-        base13 = "${base13}"
-        base14 = "${base14}"
-        base15 = "${base15}"
-        base16 = "${base16}"
-        base17 = "${base17}"
+        vim.o.guifont = monoFont .. ":h16"
 
         require("config")
       EOF
@@ -154,9 +130,9 @@ in {
 
   # doom emacs {{{
   programs.doom-emacs = {
-    # enable = true;
-    emacsPackage =
-      if pkgs.stdenv.isDarwin then pkgs.emacsMacport else pkgs.emacs;
+    enable = true;
+    emacsPackage = pkgs.emacsMacport.overrideAttrs
+      (oldAttrs: { configureFlags = [ "--with-native-compilation" ]; });
     emacsPackagesOverlay = self: super:
       with pkgs.emacsPackages; {
         gitignore-mode = git-modes;
@@ -164,7 +140,9 @@ in {
       };
     doomPrivateDir = ./doom.d;
     extraConfig = ''
-      (setq doom-font (font-spec :family "${rice.monoFont}" :size 14))
+      (setq doom-font          (font-spec :family "${rice.monoFont}" :size 14)
+            doom-variable-font (font-spec :family "${rice.uiFont}" :size 14)
+            doom-big-font      (font-spec :family "${rice.uiFont}" :size 16))
     '';
   };
   # }}}
