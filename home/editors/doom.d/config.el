@@ -6,3 +6,6 @@
       doom-modeline-buffer-encoding t)
 
 (+global-word-wrap-mode +1)
+
+(set-face-font 'mode-line doom-variable-pitch-font)
+(set-face-font 'mode-line-inactive doom-variable-pitch-font)

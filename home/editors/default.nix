@@ -131,8 +131,17 @@ in {
   # doom emacs {{{
   programs.doom-emacs = {
     enable = true;
-    emacsPackage = pkgs.emacsMacport.overrideAttrs
-      (oldAttrs: { configureFlags = [ "--with-native-compilation" ]; });
+    emacsPackage = if pkgs.stdenv.isDarwin then
+      pkgs.emacsMacport.overrideAttrs
+      (oldAttrs: { configureFlags = [ "--with-native-compilation" ]; })
+    else
+      (pkgs.emacsUnstable.override {
+        nativeComp = true;
+        withSQLite3 = true;
+      }).overrideAttrs (oldAttrs: {
+        configureFlags = (pkgs.lib.remove "--with-xft" oldAttrs.configureFlags)
+          ++ [ "--with-pgtk" ];
+      });
     emacsPackagesOverlay = self: super:
       with pkgs.emacsPackages; {
         gitignore-mode = git-modes;
@@ -141,8 +150,7 @@ in {
     doomPrivateDir = ./doom.d;
     extraConfig = ''
       (setq doom-font          (font-spec :family "${rice.monoFont}" :size 14)
-            doom-variable-font (font-spec :family "${rice.uiFont}" :size 14)
-            doom-big-font      (font-spec :family "${rice.uiFont}" :size 16))
+            doom-variable-pitch-font (font-spec :family "${rice.uiFont}" :size 14))
     '';
   };
   # }}}

@@ -5,6 +5,9 @@ cmp.setup {
             require("luasnip").lsp_expand(args.body)
         end,
     },
+    completion = {
+        autocomplete = false,
+    },
     preselect = cmp.PreselectMode.None,
     mapping = {
         ["<C-Space>"] = cmp.mapping.complete(),
