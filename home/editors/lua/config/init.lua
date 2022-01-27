@@ -11,12 +11,18 @@ vim.defer_fn(function()
     vim.o.termguicolors = true
     vim.opt.number = true
     vim.opt.relativenumber = true
+    vim.opt.scrolloff = 4
     vim.opt.showmode = false
+    vim.opt.showmode = false
+    vim.opt.splitright = true
     vim.opt.timeoutlen = 0
     vim.wo.cursorline = true
 
+    vim.opt.copyindent = true
     vim.opt.expandtab = true
+    vim.opt.preserveindent = true
     vim.opt.shiftwidth = 4
+    vim.opt.smartindent = true
     vim.opt.softtabstop = 4
     vim.opt.tabstop = 4
 

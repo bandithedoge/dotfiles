@@ -36,9 +36,11 @@
       "tblock/tap"
     ];
 
-    brews = [ "libusb" "innoextract" "mpd" "ntfs-3g-mac" "svn" "trash" ];
+    brews =
+      [ "innoextract" "libusb" "mpd" "ntfs-3g-mac" "svn" "trash" "coreutils" ];
 
     casks = [
+      "android-file-transfer"
       "android-platform-tools"
       "anydesk"
       "apparency"
@@ -49,6 +51,7 @@
       "blackhole-2ch"
       "blender"
       "cantata"
+      "cutter"
       "discord-canary"
       "eloston-chromium"
       "firefox"

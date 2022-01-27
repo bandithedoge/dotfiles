@@ -7,5 +7,6 @@
 
 (+global-word-wrap-mode +1)
 
-(set-face-font 'mode-line doom-variable-pitch-font)
-(set-face-font 'mode-line-inactive doom-variable-pitch-font)
+(use-package! mixed-pitch
+  :hook (text-mode . mixed-pitch-mode)
+  :config (setq mixed-pitch-fixed-pitch-faces ()))

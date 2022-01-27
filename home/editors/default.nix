@@ -30,8 +30,8 @@ in {
     statix
     # lua
     luajitPackages.luacheck
+    sumneko-lua-language-server
     # c
-    clang-tools
     cppcheck
     # nim
     nimlsp
@@ -48,7 +48,7 @@ in {
       impatient-nvim
       mini-nvim
       # treesitter
-      (nvim-treesitter.withPlugins builtins.attrValues)
+      (nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars))
       nvim-ts-autotag
       nvim-ts-context-commentstring
       nvim-ts-rainbow
@@ -130,10 +130,12 @@ in {
 
   # doom emacs {{{
   programs.doom-emacs = {
-    enable = true;
+    enable = false;
     emacsPackage = if pkgs.stdenv.isDarwin then
-      pkgs.emacsMacport.overrideAttrs
-      (oldAttrs: { configureFlags = [ "--with-native-compilation" ]; })
+      pkgs.emacsMacport.overrideAttrs (oldAttrs: {
+        configureFlags = oldAttrs.configureFlags
+          ++ [ "--with-native-compilation" ];
+      })
     else
       (pkgs.emacsUnstable.override {
         nativeComp = true;
@@ -149,15 +151,21 @@ in {
       };
     doomPrivateDir = ./doom.d;
     extraConfig = ''
-      (setq doom-font          (font-spec :family "${rice.monoFont}" :size 14)
-            doom-variable-pitch-font (font-spec :family "${rice.uiFont}" :size 14))
+      (setq doom-font                (font-spec :family "${rice.monoFont}" :size 14)
+            ${
+              if !pkgs.stdenv.isDarwin then
+                ''
+                  doom-variable-pitch-font (font-spec :family "${rice.uiFont}" :size 14)''
+              else
+                ""
+            })
     '';
   };
   # }}}
 
   # vscode {{{
   programs.vscode = {
-    enable = true;
+    enable = false;
     package = pkgs.vscodium;
     extensions = with pkgs.vscode-extensions; [
       coenraads.bracket-pair-colorizer

@@ -7,9 +7,10 @@ let
   rebuild = pkgs.writeShellScriptBin "rebuild" ''
     #!/usr/bin/env bash
 
+    sudo rm -rf /nix/store/.links
     ${
       if pkgs.stdenv.isDarwin then "darwin-rebuild" else "sudo nixos-rebuild"
-    } switch --flake ~/dotfiles --impure -v
+    } switch --flake ~/dotfiles --impure -v --show-trace
   '';
 
   update = pkgs.writeShellScriptBin "update" ''
