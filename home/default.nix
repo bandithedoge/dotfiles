@@ -153,7 +153,10 @@ in {
         time = { disabled = false; };
       };
     };
-    bat.enable = true;
+    bat = {
+      enable = true;
+      config = { theme = "base16"; };
+    };
 
     lsd = {
       enable = true;
@@ -210,14 +213,16 @@ in {
     };
     # }}}
 
-    # terminal {{{
-    kitty = {
+    kitty = { # {{{
       enable = true;
       font = {
         name = rice.monoFont;
         size = if pkgs.stdenv.isDarwin then 16 else 12;
       };
-      keybindings = { "ctrl+enter" = "no_op"; };
+      keybindings = {
+        "ctrl+enter" = "no_op";
+        "ctrl+space" = "no_op";
+      };
       settings = with rice; {
         term = "xterm-kitty";
         cursor_shape = "beam";

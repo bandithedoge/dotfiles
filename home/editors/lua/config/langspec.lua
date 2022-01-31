@@ -3,5 +3,5 @@ require("crates").setup()
 -- }}}
 
 -- lua-dev.nvim {{{
-require("lua-dev").setup()
+require("lspconfig").sumneko_lua.setup(require("lua-dev").setup())
 -- }}}

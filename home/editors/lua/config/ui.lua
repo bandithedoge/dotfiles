@@ -1,8 +1,8 @@
-local vim = _G.vim
-
 -- lualine {{{
 local gps = require "nvim-gps"
-gps.setup()
+gps.setup {
+    separator = "",
+}
 
 require("lualine").setup {
     options = {
@@ -10,16 +10,7 @@ require("lualine").setup {
         component_separators = "",
         section_separators = "",
     },
-    extensions = {
-        "nvim-tree",
-        "chadtree",
-        {
-            sections = {
-                lualine_a = { "mode" },
-            },
-            filetypes = { "Trouble" },
-        },
-    },
+    extensions = { "nvim-tree" },
     sections = {
         lualine_a = { "mode" },
         lualine_b = { { "filename", path = 1 } },
@@ -53,9 +44,9 @@ require("lualine").setup {
 -- indent-blankline.nvim {{{
 require("indent_blankline").setup {
     show_current_context = true,
-    char_list = { "|", "¦", "┆", "┊" },
+    char = "│",
     use_treesitter = true,
-    filetype_exclude = { "help", "NvimTree", "CHADTree", "packer", "TelescopePrompt" },
+    filetype_exclude = { "help", "TelescopePrompt" },
     buftype_exclude = { "terminal" },
     show_foldtext = false,
 }
@@ -73,7 +64,11 @@ require("colorizer").setup {
 -- }}}
 
 -- gitsigns.nvim {{{
-require("gitsigns").setup()
+require("gitsigns").setup {
+    diff_opts = {
+        internal = true,
+    },
+}
 -- }}}
 
 -- nvim-tree.lua {{{
@@ -81,9 +76,14 @@ local tree_cb = require("nvim-tree.config").nvim_tree_callback
 
 require("nvim-tree").setup {
     hijack_cursor = true,
+    hijack_netrw = true,
     update_cwd = true,
+    update_focused_file = {
+        enable = true,
+    },
     diagnostics = {
         enable = true,
+        show_on_dirs = true,
     },
     view = {
         auto_resize = true,
@@ -95,10 +95,22 @@ require("nvim-tree").setup {
         },
     },
     filters = {
+        dotfiles = false,
         custom = {
             ".DS_Store",
+            ".git",
+            "node_modules",
+            "__pycache__",
         },
     },
+}
+
+vim.g.nvim_tree_indent_markers = 1
+vim.g.nvim_tree_show_icons = {
+    git = 1,
+    folders = 1,
+    files = 1,
+    folder_arrows = 0,
 }
 -- }}}
 
@@ -160,7 +172,6 @@ telescope.setup {
     },
 }
 
-telescope.load_extension "fzy_native"
 telescope.load_extension "dap"
 -- }}}
 
@@ -191,4 +202,29 @@ require("fm-nvim").setup {
 
 -- nvim-hlslens {{{
 require("hlslens").setup()
+-- }}}
+
+-- specs.nvim {{{
+local specs = require "specs"
+specs.setup {
+    popup = {
+        winhl = "PmenuSel",
+        fader = specs.exp_fader,
+    },
+}
+-- }}}
+
+-- pretty-fold.nvim {{{
+require("pretty-fold").setup {
+    fill_char = " ",
+    process_comment_signs = "delete",
+    sections = {
+        left = {
+            "content",
+        },
+        right = {
+            "number_of_folded_lines",
+        },
+    },
+}
 -- }}}

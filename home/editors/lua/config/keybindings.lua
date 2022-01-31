@@ -9,7 +9,7 @@ vim.api.nvim_set_keymap("n", "<BS>", ":WhichKey \\\\<cr>", { silent = true })
 
 wk.setup {
     ignore_missing = true,
-    icons = { separator = "ﰲ" },
+    icons = { separator = "" },
 }
 
 wk.register {

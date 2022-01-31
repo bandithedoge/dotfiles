@@ -1,45 +1,47 @@
-local vim = _G.vim
 vim.defer_fn(function()
     vim.g.mapleader = " "
+    vim.o.breakindent = true
     vim.o.clipboard = vim.o.clipboard .. "unnamedplus"
-    vim.o.completeopt = "menu,menuone,noinsert"
+    vim.o.completeopt = "menu,menuone,noinsert,noselect,preview"
     vim.o.conceallevel = 2
+    vim.o.fillchars = "fold: ,foldopen:▾,foldclose:▸,eob: "
     vim.o.hidden = true
+    vim.o.inccommand = "split"
     vim.o.linebreak = true
     vim.o.mouse = "a"
+    vim.o.number = true
+    vim.o.path = "**"
     vim.o.redrawtime = 10000
+    vim.o.relativenumber = true
+    vim.o.scrolloff = 4
+    vim.o.showmode = false
+    vim.o.showmode = false
+    vim.o.signcolumn = "auto:3"
+    vim.o.splitbelow = true
+    vim.o.splitright = true
     vim.o.termguicolors = true
-    vim.opt.number = true
-    vim.opt.relativenumber = true
-    vim.opt.scrolloff = 4
-    vim.opt.showmode = false
-    vim.opt.showmode = false
-    vim.opt.splitright = true
-    vim.opt.timeoutlen = 0
+    vim.o.timeoutlen = 0
+    vim.o.updatetime = 200
+    vim.opt.shortmess:append "atcsqS"
     vim.wo.cursorline = true
+    vim.wo.foldmethod = "marker"
 
-    vim.opt.copyindent = true
-    vim.opt.expandtab = true
-    vim.opt.preserveindent = true
-    vim.opt.shiftwidth = 4
-    vim.opt.smartindent = true
-    vim.opt.softtabstop = 4
-    vim.opt.tabstop = 4
+    vim.o.copyindent = true
+    vim.o.expandtab = true
+    vim.o.preserveindent = true
+    vim.o.shiftwidth = 4
+    vim.o.smartindent = true
+    vim.o.softtabstop = 4
+    vim.o.tabstop = 4
+
+    vim.api.nvim_set_keymap("n", "<cr>", ":noh<cr>", { silent = true })
+    vim.api.nvim_set_keymap("n", "<s-tab>", "zA", { silent = true })
+    vim.api.nvim_set_keymap("n", "<tab>", "za", { silent = true })
+    vim.api.nvim_set_keymap("n", "j", "gj", { silent = true })
+    vim.api.nvim_set_keymap("n", "k", "gk", { silent = true })
 
     vim.cmd [[au FileType nix,norg,CHADTree :setlocal shiftwidth=2]]
     vim.cmd [[au BufReadPre *.nfo :setlocal fileencodings=cp437,utf-8]]
-
-    vim.wo.foldmethod = "marker"
-    vim.wo.foldtext = [[substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g').'  ' ]]
-    vim.wo.fillchars = "fold: "
-    vim.wo.foldnestmax = 3
-    vim.wo.foldminlines = 1
-
-    vim.api.nvim_set_keymap("n", "<cr>", ":noh<cr>", { silent = true })
-    vim.api.nvim_set_keymap("n", "<tab>", "za", { silent = true })
-    vim.api.nvim_set_keymap("n", "<s-tab>", "zA", { silent = true })
-    vim.api.nvim_set_keymap("n", "j", "gj", { silent = true })
-    vim.api.nvim_set_keymap("n", "k", "gk", { silent = true })
 
     require "config.colors"
     require "config.completion"

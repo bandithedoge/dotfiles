@@ -44,7 +44,6 @@
             (self: super: { dummy = super.hello; })
             emacs-overlay.overlay
             vim-extra-plugins.overlay
-            # flake-nimble.overlay
           ];
           config.packageOverrides = pkgs: {
             nur = import inputs.nur { inherit pkgs; };

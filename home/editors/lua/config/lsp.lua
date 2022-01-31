@@ -1,4 +1,3 @@
-local vim = _G.vim
 -- nvim-lspconfig {{{
 local lsp = require "lspconfig"
 local servers = {
@@ -14,7 +13,12 @@ local servers = {
     "rnix",
     "rust_analyzer",
     "solargraph",
+    "sumneko_lua",
 }
+
+local runtime_path = vim.split(package.path, ";")
+table.insert(runtime_path, "lua/?.lua")
+table.insert(runtime_path, "lua/?/init.lua")
 
 local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
@@ -24,6 +28,18 @@ for _, server in ipairs(servers) do
         settings = {
             json = {
                 schemas = require("schemastore").json.schemas(),
+            },
+            Lua = {
+                runtime = {
+                    version = "LuaJIT",
+                    path = runtime_path,
+                },
+                diagnostics = {
+                    globals = { "vim" },
+                },
+                workspace = {
+                    library = vim.api.nvim_get_runtime_file("", true),
+                },
             },
         },
     }
@@ -41,23 +57,28 @@ require("lsp_signature").setup {
         border = "solid",
     },
     hint_prefix = "漣",
+    floating_window = false,
     floating_window_above_cur_line = true,
 }
 -- }}}
 
 -- null-ls.nvim {{{
 local null_ls = require "null-ls"
+local b = null_ls.builtins
+local f = b.formatting
+local d = b.diagnostics
+local a = b.code_actions
 
 null_ls.setup()
 
 null_ls.register {
-    null_ls.builtins.formatting.black,
-    null_ls.builtins.formatting.clang_format,
-    null_ls.builtins.formatting.fixjson,
-    null_ls.builtins.formatting.isort,
-    null_ls.builtins.formatting.nimpretty,
-    null_ls.builtins.formatting.nixfmt,
-    null_ls.builtins.formatting.prettier.with {
+    f.black,
+    f.clang_format,
+    f.fixjson,
+    f.isort,
+    f.nimpretty,
+    f.nixfmt,
+    f.prettier.with {
         extra_args = function(params)
             return params.options
                 and params.options.tabSize
@@ -67,20 +88,18 @@ null_ls.register {
                 }
         end,
     },
-    null_ls.builtins.formatting.rubocop,
-    null_ls.builtins.formatting.shfmt,
-    null_ls.builtins.formatting.stylua,
+    f.rubocop,
+    f.shfmt,
+    f.stylua,
 
-    null_ls.builtins.diagnostics.cppcheck,
-    null_ls.builtins.diagnostics.flake8,
-    null_ls.builtins.diagnostics.luacheck,
-    null_ls.builtins.diagnostics.markdownlint.with { command = "markdownlint-cli2" },
-    null_ls.builtins.diagnostics.shellcheck,
-    null_ls.builtins.diagnostics.statix,
-    null_ls.builtins.diagnostics.yamllint,
+    d.cppcheck,
+    d.flake8,
+    d.markdownlint.with { command = "markdownlint-cli2" },
+    d.shellcheck,
+    d.statix,
+    d.yamllint,
 
-    null_ls.builtins.code_actions.gitsigns,
-    null_ls.builtins.code_actions.shellcheck,
-    null_ls.builtins.code_actions.statix,
+    a.shellcheck,
+    a.statix,
 }
 -- }}}

@@ -60,14 +60,15 @@ in {
       plenary-nvim
       popup-nvim
       # utilities
+      Comment-nvim
       direnv-vim
       nvim-expand-expr
       presence-nvim
+      sort-nvim
       vim-automkdir
       # ui
-      FTerm-nvim
-      Shade-nvim
       fm-nvim
+      FTerm-nvim
       gitsigns-nvim
       indent-blankline-nvim
       lualine-lsp-progress
@@ -78,6 +79,8 @@ in {
       nvim-gps
       nvim-hlslens
       nvim-tree-lua
+      pretty-fold-nvim
+      specs-nvim
       telescope-dap-nvim
       telescope-fzy-native-nvim
       telescope-nvim
@@ -85,11 +88,11 @@ in {
       # keybindings
       which-key-nvim
       # lsp
-      SchemaStore-nvim
       lsp_signature-nvim
       lspkind-nvim
       null-ls-nvim
       nvim-lspconfig
+      SchemaStore-nvim
       # completion
       cmp-cmdline
       cmp-emoji
@@ -151,14 +154,14 @@ in {
       };
     doomPrivateDir = ./doom.d;
     extraConfig = ''
-      (setq doom-font                (font-spec :family "${rice.monoFont}" :size 14)
-            ${
-              if !pkgs.stdenv.isDarwin then
-                ''
-                  doom-variable-pitch-font (font-spec :family "${rice.uiFont}" :size 14)''
-              else
-                ""
-            })
+      (setq doom-font (font-spec :family "${rice.monoFont}" :size 14))
+      ${
+        if !pkgs.stdenv.isDarwin then
+          ''
+            (setq doom-variable-pitch-font (font-spec :family "${rice.uiFont}" :size 14))''
+        else
+          ""
+      })
     '';
   };
   # }}}

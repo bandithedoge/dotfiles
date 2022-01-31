@@ -6,7 +6,7 @@ cmp.setup {
         end,
     },
     completion = {
-        autocomplete = false,
+        completeopt = "menu,menuone,preview,noinsert,noselect",
     },
     preselect = cmp.PreselectMode.None,
     mapping = {
@@ -22,6 +22,7 @@ cmp.setup {
             with_text = true,
         },
     },
+
     sources = {
         { name = "crates" },
         { name = "emoji" },
