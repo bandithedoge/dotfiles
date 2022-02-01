@@ -3,16 +3,14 @@ let rice = import ../../rice.nix;
 in {
   imports = [ ./audio.nix ];
   home.packages = with pkgs; [
-    imv
     icon-library
+    imv
     pavucontrol
     river
     swayidle
     swaylock
-    wayvnc
     wl-clipboard
     wlr-randr
-    wofi
     yambar
   ];
 
@@ -253,7 +251,7 @@ in {
     };
     theme = {
       package = pkgs.materia-theme.override {
-        
+
       };
       name = "Materia-dark";
     };

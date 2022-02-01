@@ -15,7 +15,6 @@ vim.defer_fn(function()
     vim.o.relativenumber = true
     vim.o.scrolloff = 4
     vim.o.showmode = false
-    vim.o.showmode = false
     vim.o.signcolumn = "auto:3"
     vim.o.splitbelow = true
     vim.o.splitright = true
@@ -30,7 +29,6 @@ vim.defer_fn(function()
     vim.o.expandtab = true
     vim.o.preserveindent = true
     vim.o.shiftwidth = 4
-    vim.o.smartindent = true
     vim.o.softtabstop = 4
     vim.o.tabstop = 4
 

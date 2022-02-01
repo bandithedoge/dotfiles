@@ -16,11 +16,12 @@
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
     musnix.url = "github:musnix/musnix";
+    kmonad.url = "github:kmonad/kmonad?dir=nix";
     firefox-darwin.url = "github:bandithedoge/nixpkgs-firefox-darwin";
   };
 
-  outputs =
-    { self, darwin, nixpkgs, home-manager, nixos-hardware, musnix, ... }@inputs:
+  outputs = { self, darwin, nixpkgs, home-manager, nixos-hardware, musnix
+    , kmonad, ... }@inputs:
 
     let
       hmModule = {
@@ -75,6 +76,7 @@
           nixos-hardware.nixosModules.lenovo-thinkpad-t440p
           musnix.nixosModules.musnix
           home-manager.nixosModules.home-manager
+          kmonad.nixosModule
           (nixpkgs.lib.mkMerge [
             hmModule
             { home-manager.users.bandithedoge.imports = [ ./home/linux ]; }
