@@ -9,7 +9,7 @@ let
 in {
   imports = [ /etc/nixos/hardware-configuration.nix ];
 
-  environment.systemPackages = with pkgs; [ launchwm connman-gtk alsa-utils ];
+  environment.systemPackages = with pkgs; [ alsa-utils connman-gtk launchwm ];
 
   boot = {
     kernelPackages = pkgs.linuxPackages_xanmod;
@@ -50,12 +50,20 @@ in {
   services.tlp.enable = true;
   services.logind.lidSwitch = "hybrid-sleep";
   hardware.opengl.enable = true;
+
+  services.kmonad = {
+    enable = true;
+    configfiles = [ ./kmonad.kbd ];
+  };
   # }}}
 
   # networking {{{
   networking = { hostName = "thonkpad"; };
 
-  services.connman = { enable = true; };
+  services.connman = {
+    enable = true;
+    enableVPN = false;
+  };
   services.openssh = {
     enable = true;
     startWhenNeeded = true;
