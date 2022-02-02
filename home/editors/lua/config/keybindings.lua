@@ -1,11 +1,18 @@
-local vim = _G.vim
-
 local MiniBufremove = require "mini.bufremove"
 local wk = require "which-key"
 local t = require "telescope.builtin"
 local fm = require "fm-nvim"
+local lsp = vim.lsp.buf
 
-vim.api.nvim_set_keymap("n", "<BS>", ":WhichKey \\\\<cr>", { silent = true })
+vim.api.nvim_set_keymap("n", "<cr>", ":noh<cr>", { silent = true })
+vim.api.nvim_set_keymap("n", "<s-tab>", "zA", { silent = true })
+vim.api.nvim_set_keymap("n", "<tab>", "za", { silent = true })
+vim.api.nvim_set_keymap("n", "j", "gj", { silent = true })
+vim.api.nvim_set_keymap("n", "k", "gk", { silent = true })
+vim.api.nvim_set_keymap("n", "<BS>", ":WhichKey \\<cr>", { noremap = true, silent = true })
+
+vim.g.mapleader = " "
+vim.g.maplocalleader = "\\"
 
 wk.setup {
     ignore_missing = true,
@@ -16,7 +23,7 @@ wk.register {
     ["<leader>"] = {
         ["<space>"] = { "<cmd>Telescope commands<cr>", "Enter command" },
         f = {
-            name = "+Find",
+            name = "Find",
             t = {
                 function()
                     t.builtin()
@@ -35,27 +42,15 @@ wk.register {
                 end,
                 "Highlight groups",
             },
-            o = {
-                function()
-                    t.oldfiles()
-                end,
-                "File history",
-            },
-            s = {
-                function()
-                    t.symbols()
-                end,
-                "Symbols",
-            },
             f = {
                 function()
-                    fm.Lf()
+                    require("telescope").extensions.frecency.frecency()
                 end,
                 "Files",
             },
         },
         o = {
-            name = "+Open",
+            name = "Open",
             d = { "<cmd>:cd ~/dotfiles/<cr>", "Dotfiles" },
             s = { "<cmd>:cd ~/sql/<cr>", "School" },
             g = { "<cmd>:cd ~/git/<cr>", "Git" },
@@ -78,11 +73,11 @@ wk.register {
             end,
             "Terminal",
         },
-        e = {
+        F = {
             function()
-                require("expand_expr").expand()
+                fm.Lf()
             end,
-            "Expand expression",
+            "File explorer",
         },
         -- window/buffer management
         b = {
@@ -108,16 +103,10 @@ wk.register {
         N = { "<cmd>:vnew<cr>", "New window (vertical)" },
     },
 
-    ["\\"] = {
-        f = {
-            function()
-                vim.lsp.buf.formatting()
-            end,
-            "Format file",
-        },
+    ["<localleader>"] = {
         a = {
             function()
-                t.lsp_code_actions()
+                lsp.code_action()
             end,
             "Code actions",
         },
@@ -127,11 +116,41 @@ wk.register {
             end,
             "Diagnostics",
         },
+        D = {
+            function()
+                lsp.definition()
+            end,
+            "Definition",
+        },
+        e = {
+            function()
+                require("expand_expr").expand()
+            end,
+            "Expand expression",
+        },
+        f = {
+            function()
+                lsp.formatting()
+            end,
+            "Format file",
+        },
+        h = {
+            function()
+                lsp.hover()
+            end,
+            "Hover",
+        },
         r = {
             function()
-                vim.lsp.buf.rename()
+                lsp.rename()
             end,
             "Rename",
+        },
+        s = {
+            function()
+                lsp.document_symbol()
+            end,
+            "Symbols",
         },
     },
 }

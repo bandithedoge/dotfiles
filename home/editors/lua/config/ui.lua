@@ -1,7 +1,7 @@
 -- lualine {{{
 local gps = require "nvim-gps"
 gps.setup {
-    separator = "",
+    separator = "  ",
 }
 
 require("lualine").setup {
@@ -13,7 +13,7 @@ require("lualine").setup {
     extensions = { "nvim-tree" },
     sections = {
         lualine_a = { "mode" },
-        lualine_b = { { "filename", path = 1 } },
+        lualine_b = { { "filename", path = 0 } },
         lualine_c = {
             { "diagnostics", sources = { "nvim_diagnostic" }, update_in_insert = true },
             { gps.get_location, cond = gps.is_available },

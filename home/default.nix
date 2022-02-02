@@ -214,6 +214,7 @@ in {
 
     kitty = { # {{{
       enable = true;
+      package = if pkgs.stdenv.isDarwin then pkgs.dummy else pkgs.kitty;
       font = {
         name = rice.monoFont;
         size = if pkgs.stdenv.isDarwin then 16 else 12;

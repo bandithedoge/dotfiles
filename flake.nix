@@ -6,13 +6,15 @@
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
     nur.url = "github:nix-community/NUR";
     vim-extra-plugins.url = "github:m15a/nixpkgs-vim-extra-plugins";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
+    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
+    neovim-nightly-overlay.inputs.nixpkgs.follows = "nixpkgs";
     nix-doom-emacs.url = "github:nix-community/nix-doom-emacs";
     nix-doom-emacs.inputs.emacs-overlay.follows = "emacs-overlay";
-    flake-nimble.url = "github:nix-community/flake-nimble";
-    flake-nimble.inputs.nixpkgs.follows = "nixpkgs";
+
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
     musnix.url = "github:musnix/musnix";
@@ -45,6 +47,7 @@
             (self: super: { dummy = super.hello; })
             emacs-overlay.overlay
             vim-extra-plugins.overlay
+            neovim-nightly-overlay.overlay
           ];
           config.packageOverrides = pkgs: {
             nur = import inputs.nur { inherit pkgs; };

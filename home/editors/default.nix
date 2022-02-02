@@ -44,6 +44,7 @@ in {
   # neovim {{{
   programs.neovim = {
     enable = true;
+    package = pkgs.neovim-nightly;
     plugins = with pkgs.vimExtraPlugins // pkgs.vimPlugins; [
       impatient-nvim
       mini-nvim
