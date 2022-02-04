@@ -2,19 +2,23 @@
 
 let
   rice = import ../rice.nix;
-  launchwm = pkgs.writeShellScriptBin "launchwm" ''
-    #!/usr/bin/env bash
-    XKB_DEFAULT_OPTIONS=caps:ctrl_modifier XKB_DEFAULT_LAYOUT=pl ${rice.wm}
-  '';
-in {
+in
+{
   imports = [ /etc/nixos/hardware-configuration.nix ];
 
-  environment.systemPackages = with pkgs; [ alsa-utils connman-gtk launchwm ];
+  environment.systemPackages = with pkgs; [ alsa-utils connman-gtk ];
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_xanmod;
+    kernelPackages = pkgs.linuxPackages_latest;
     loader = { systemd-boot.enable = true; };
     supportedFilesystems = [ "ntfs" ];
+  };
+
+  security = {
+    rtkit.enable = true;
+    pam.services.swaylock.text = ''
+      auth include login
+    '';
   };
 
   services.dbus = {
@@ -76,8 +80,6 @@ in {
   # }}}
 
   # audio {{{
-  security.rtkit.enable = true;
-
   services.pipewire = {
     enable = true;
     media-session.enable = false;
@@ -101,7 +103,7 @@ in {
       default_session = {
         command = "${
             pkgs.lib.makeBinPath [ pkgs.greetd.tuigreet ]
-          }/tuigreet -tr --cmd launchwm";
+          }/tuigreet -tr --cmd ${rice.wm}";
       };
     };
   };

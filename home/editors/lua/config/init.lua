@@ -38,7 +38,7 @@ vim.defer_fn(function()
     vim.api.nvim_set_keymap("n", "j", "gj", { silent = true })
     vim.api.nvim_set_keymap("n", "k", "gk", { silent = true })
 
-    vim.cmd [[au FileType nix,norg,CHADTree :setlocal shiftwidth=2]]
+    vim.cmd [[au FileType nix,norg,CHADTree,haskell :setlocal shiftwidth=2]]
     vim.cmd [[au BufReadPre *.nfo :setlocal fileencodings=cp437,utf-8]]
 
     require "config.colors"

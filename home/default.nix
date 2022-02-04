@@ -9,7 +9,7 @@ let
 
     ${
       if pkgs.stdenv.isDarwin then "darwin-rebuild" else "sudo nixos-rebuild"
-    } switch --flake ~/dotfiles --impure -v --show-trace
+    } switch --flake ~/dotfiles --impure -v
   '';
 
   update = pkgs.writeShellScriptBin "update" ''
@@ -21,7 +21,8 @@ let
     nix-store --optimize
   '';
 
-in {
+in
+{
   imports = [ ./editors ./garbage ./web ];
 
   manual.html.enable = true;
@@ -29,7 +30,7 @@ in {
   home = {
     sessionVariables = {
       EDITOR = "nvim";
-      BROWSER = "qutebrowser";
+      BROWSER = if pkgs.stdenv.isDarwin then "firefox" else "qutebrowser";
       LF_ICONS = "${builtins.readFile ./icons}";
       TERM = "xterm-256color";
     };
@@ -212,7 +213,8 @@ in {
     };
     # }}}
 
-    kitty = { # {{{
+    kitty = {
+      # {{{
       enable = true;
       package = if pkgs.stdenv.isDarwin then pkgs.dummy else pkgs.kitty;
       font = {

@@ -1,7 +1,7 @@
 { pkgs, inputs, ... }: {
   nix = {
     package = pkgs.nixFlakes;
-    trustedBinaryCaches = [
+    binaryCaches = [
       "https://nix-community.cachix.org"
       "https://hydra.iohk.io"
       "https://cache.nixos.org"
@@ -25,6 +25,8 @@
       substitute = true
       warn-dirty = false
       pure-eval = false
+      sandbox = relaxed
+      log-lines = 50
     '';
   };
 

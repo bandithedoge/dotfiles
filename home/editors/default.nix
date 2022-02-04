@@ -9,7 +9,6 @@ in {
     # python
     black
     codespell
-    python39Packages.flake8
     python39Packages.isort
     python39Packages.python-lsp-server
     # shell
@@ -21,7 +20,6 @@ in {
     nodePackages.markdownlint-cli2
     nodePackages.prettier
     nodePackages.vscode-langservers-extracted
-    yamllint
     # ruby
     rubocop
     solargraph
@@ -38,6 +36,10 @@ in {
     nim
     # go
     gopls
+    # haskell
+    easy-hls
+    haskellPackages.cabal-fmt
+    haskellPackages.implicit-hie
   ];
   # }}}
 

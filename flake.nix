@@ -14,6 +14,8 @@
     neovim-nightly-overlay.inputs.nixpkgs.follows = "nixpkgs";
     nix-doom-emacs.url = "github:nix-community/nix-doom-emacs";
     nix-doom-emacs.inputs.emacs-overlay.follows = "emacs-overlay";
+    easy-hls-nix.url = "github:jkachmar/easy-hls-nix";
+    easy-hls-nix.inputs.nixpkgs.follows = "nixpkgs";
 
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
@@ -22,8 +24,16 @@
     firefox-darwin.url = "github:bandithedoge/nixpkgs-firefox-darwin";
   };
 
-  outputs = { self, darwin, nixpkgs, home-manager, nixos-hardware, musnix
-    , kmonad, ... }@inputs:
+  outputs =
+    { self
+    , darwin
+    , nixpkgs
+    , home-manager
+    , nixos-hardware
+    , musnix
+    , kmonad
+    , ...
+    }@inputs:
 
     let
       hmModule = {
@@ -44,10 +54,16 @@
       nixpkgsConfig = {
         nixpkgs = {
           overlays = with inputs; [
-            (self: super: { dummy = super.hello; })
+            (self: super: {
+              dummy = super.hello;
+              easy-hls = super.callPackage easy-hls-nix { };
+              wlroots = (super.wlroots.overrideAttrs (_: {
+                version = "0.15"; # https://github.com/nix-community/nixpkgs-wayland/issues/313
+              })).override { enableXWayland = false; };
+            })
             emacs-overlay.overlay
-            vim-extra-plugins.overlay
             neovim-nightly-overlay.overlay
+            vim-extra-plugins.overlay
           ];
           config.packageOverrides = pkgs: {
             nur = import inputs.nur { inherit pkgs; };
@@ -55,7 +71,8 @@
         };
       };
 
-    in {
+    in
+    {
       darwinConfigurations."machine" = darwin.lib.darwinSystem {
         system = "x86_64-darwin";
         modules = [

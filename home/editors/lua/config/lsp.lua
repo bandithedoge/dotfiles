@@ -6,6 +6,7 @@ local servers = {
     "cssls",
     "gdscript",
     "gopls",
+    "hls",
     "html",
     "jsonls",
     "nimls",
@@ -68,16 +69,19 @@ local b = null_ls.builtins
 local f = b.formatting
 local d = b.diagnostics
 local a = b.code_actions
+local h = b.hover
 
 null_ls.setup()
 
 null_ls.register {
     f.black,
-    f.clang_format,
+    f.cabal_fmt,
     f.fixjson,
     f.isort,
     f.nimpretty,
-    f.nixfmt,
+    f.rubocop,
+    f.shfmt,
+    f.stylua,
     f.prettier.with {
         extra_args = function(params)
             return params.options
@@ -88,18 +92,14 @@ null_ls.register {
                 }
         end,
     },
-    f.rubocop,
-    f.shfmt,
-    f.stylua,
 
-    d.cppcheck,
-    d.flake8,
     d.markdownlint.with { command = "markdownlint-cli2" },
     d.shellcheck,
     d.statix,
-    d.yamllint,
 
     a.shellcheck,
     a.statix,
+
+    b.dictionary,
 }
 -- }}}

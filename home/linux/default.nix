@@ -1,14 +1,16 @@
 { config, pkgs, ... }:
-let rice = import ../../rice.nix;
-in {
+let
+  rice = import ../../rice.nix;
+in
+{
   imports = [ ./audio.nix ];
   home.packages = with pkgs; [
     icon-library
     imv
     pavucontrol
-    river
-    swayidle
-    swaylock
+    (river.override { xwaylandSupport = false; })
+    swaylock-effects
+    tigervnc
     wl-clipboard
     wlr-randr
     yambar
@@ -17,7 +19,8 @@ in {
   # river {{{
   xdg.configFile."river/init" =
     let colors = color: "0x" + pkgs.lib.strings.removePrefix "#" color;
-    in {
+    in
+    {
       executable = true;
       text = with rice; ''
         #!/usr/bin/env bash
@@ -65,6 +68,7 @@ in {
         riverctl background-color ${colors base00}
         riverctl border-color-focused ${colors base0F}
         riverctl border-color-unfocused ${colors base00}
+        riverctl focus-follows-cursor normal
 
         riverctl default-layout rivertile
         exec yambar &
@@ -95,7 +99,8 @@ in {
         { string = icon "祝"; }
         { string = module "{tx-bitrate} Mb/s"; }
       ];
-    in builtins.toJSON {
+    in
+    builtins.toJSON {
       bar = {
         location = "top";
         height = 24;
@@ -106,37 +111,39 @@ in {
         left = [
           {
             "river" = {
-              content.map = let
-                tagmap = {
-                  tag = "focused";
-                  values = {
-                    true.string = {
-                      text = "{id}";
-                      deco.background.color = color base0F;
-                      foreground = color base00;
-                      font = monoFont;
-                      margin = spacing;
-                    };
-                    false.string = {
-                      text = "{id}";
-                      deco.background.color = color base02;
-                      foreground = color base03;
-                      font = monoFont;
-                      margin = spacing;
+              content.map =
+                let
+                  tagmap = {
+                    tag = "focused";
+                    values = {
+                      true.string = {
+                        text = "{id}";
+                        deco.background.color = color base0F;
+                        foreground = color base00;
+                        font = monoFont;
+                        margin = spacing;
+                      };
+                      false.string = {
+                        text = "{id}";
+                        deco.background.color = color base02;
+                        foreground = color base03;
+                        font = monoFont;
+                        margin = spacing;
+                      };
                     };
                   };
-                };
-              in {
-                tag = "occupied";
-                values.false.map = {
-                  tag = "focused";
-                  values = {
-                    inherit (tagmap.values) true;
-                    false.empty = { };
+                in
+                {
+                  tag = "occupied";
+                  values.false.map = {
+                    tag = "focused";
+                    values = {
+                      inherit (tagmap.values) true;
+                      false.empty = { };
+                    };
                   };
+                  values.true.map = tagmap;
                 };
-                values.true.map = tagmap;
-              };
             };
           }
           {
@@ -158,7 +165,7 @@ in {
                     { string = module_red "Disconnected"; }
                   ];
                   up = bitrate
-                    ++ [ { string = icon "直"; } { string = module "{ssid}"; } ];
+                    ++ [{ string = icon "直"; } { string = module "{ssid}"; }];
                 };
               };
             };
@@ -184,7 +191,7 @@ in {
               content.map = {
                 tag = "state";
                 values = {
-                  full = [ { string = icon ""; } { string = module "Full"; } ];
+                  full = [{ string = icon ""; } { string = module "Full"; }];
                   charging = [
                     { string = icon ""; }
                     { string = module "{capacity}%"; }
@@ -214,7 +221,7 @@ in {
                     { string = module "{percent}%"; }
                   ];
                   true =
-                    [ { string = icon "婢"; } { string = module_red "Muted"; } ];
+                    [{ string = icon "婢"; } { string = module_red "Muted"; }];
                 };
               };
             };
@@ -223,20 +230,47 @@ in {
             "clock" = {
               date-format = "%A %d %B";
               content =
-                [ { string = icon ""; } { string = module "{date}"; } ];
+                [{ string = icon ""; } { string = module "{date}"; }];
             };
           }
           {
             "clock" = {
               time-format = "%H:%M:%S";
               content =
-                [ { string = icon ""; } { string = module "{time}"; } ];
+                [{ string = icon ""; } { string = module "{time}"; }];
             };
           }
         ];
       };
     };
   # }}}
+
+  # swaylock
+  xdg.configFile."swaylock/config".text =
+    let
+      color = hex: pkgs.lib.strings.removePrefix "#" hex;
+    in
+    with rice;
+    ''
+      ignore-empty-password
+      show-failed-attempts
+      grace=5
+
+      fade-in=0.3
+      indicator
+      clock
+      screenshots
+      effect-blur=10x1
+
+      font=${uiFont}
+      color=${color base00}
+      inside-color=${color base02}
+      inside-clear-color=${color base0C}
+      inside-caps-lock-color=${color base0E}
+      inside-ver-color=${color base0A}
+      inside-wrong-color=${color base08}
+      key-hl-color=${color base0F}
+    '';
 
   gtk = {
     # {{{
@@ -250,9 +284,7 @@ in {
       name = "Numix";
     };
     theme = {
-      package = pkgs.materia-theme.override {
-
-      };
+      package = pkgs.materia-theme.override { };
       name = "Materia-dark";
     };
     gtk3.extraConfig = {
@@ -285,7 +317,8 @@ in {
       let
         inherit (config.lib.formats.rasi) mkLiteral;
         padding = mkLiteral "5px";
-      in {
+      in
+      {
         "*" = {
           border-color = mkLiteral base0F;
           background-color = mkLiteral base00;
@@ -341,5 +374,13 @@ in {
     enable = true;
   }; # }}}
 
-  services = { syncthing.enable = true; };
+  services.syncthing.enable = true;
+
+  services.swayidle =
+    let
+      swaylock = "${pkgs.swaylock-effects}/bin/swaylock";
+    in
+    {
+      enable = false;
+    };
 }
