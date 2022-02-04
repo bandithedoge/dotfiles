@@ -45,7 +45,6 @@ in
       imagemagick
       librespeed-cli
       luajit
-      luajitPackages.moonscript
       mpc_cli
       ncdu
       neofetch

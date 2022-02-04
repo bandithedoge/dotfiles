@@ -161,11 +161,12 @@ in
                 tag = "state";
                 values = {
                   down = [
-                    { string = icon "睊"; }
-                    { string = module_red "Disconnected"; }
+                    { empty = { }; }
                   ];
-                  up = bitrate
-                    ++ [{ string = icon "直"; } { string = module "{ssid}"; }];
+                  up = [
+                    { string = icon "直"; }
+                    { string = module "{ssid}"; }
+                  ];
                 };
               };
             };
@@ -177,10 +178,12 @@ in
                 tag = "state";
                 values = {
                   down = [
-                    { string = icon ""; }
-                    { string = module_red "Disconnected"; }
+                    { empty = { }; }
                   ];
-                  up = [{ string = icon ""; }] ++ bitrate;
+                  up = [
+                    { string = icon ""; }
+                    { string = module "{name}"; }
+                  ];
                 };
               };
             };
@@ -381,6 +384,14 @@ in
       swaylock = "${pkgs.swaylock-effects}/bin/swaylock";
     in
     {
-      enable = false;
+      enable = true;
+      timeouts = [{
+        timeout = 300;
+        command = swaylock;
+      }];
+      events = [{
+        event = "before-sleep";
+        command = swaylock;
+      }];
     };
 }
