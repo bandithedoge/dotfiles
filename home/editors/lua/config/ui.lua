@@ -30,14 +30,6 @@ require("lualine").setup {
         },
         lualine_z = { "location" },
     },
-    tabline = {
-        lualine_a = { "buffers" },
-        lualine_b = {},
-        lualine_c = {},
-        lualine_x = { "lsp_progress" },
-        lualine_y = { "branch" },
-        lualine_z = { { "tabs", mode = 1 } },
-    },
 }
 -- }}}
 
@@ -149,30 +141,30 @@ telescope.setup {
         highlights = {
             layout_strategy = "vertical",
         },
-        symbols = {
-            theme = "cursor",
-            border = false,
-        },
-        lsp_code_actions = {
-            theme = "cursor",
-            border = false,
-        },
-        lsp_definitions = {
-            theme = "cursor",
-            border = false,
-        },
-        lsp_type_definitions = {
-            theme = "cursor",
-            border = false,
-        },
-        lsp_implementations = {
-            theme = "cursor",
-            border = false,
+    },
+    extensions = {
+        lsp_handlers = {
+            code_action = {
+                telescope = require("telescope.themes").get_cursor(),
+            },
+            definition = {
+                telescope = require("telescope.themes").get_cursor(),
+            },
+            type_definition = {
+                telescope = require("telescope.themes").get_cursor(),
+            },
+            symbol = {
+                telescope = require("telescope.themes").get_cursor(),
+            },
+            implementation = {
+                telescope = require("telescope.themes").get_cursor(),
+            },
         },
     },
 }
 
 telescope.load_extension "dap"
+telescope.load_extension "frecency"
 -- }}}
 
 -- FTerm.nvim {{{
@@ -217,13 +209,111 @@ specs.setup {
 -- pretty-fold.nvim {{{
 require("pretty-fold").setup {
     fill_char = " ",
-    process_comment_signs = "delete",
+    process_comment_signs = false,
     sections = {
         left = {
             "content",
         },
         right = {
             "number_of_folded_lines",
+        },
+    },
+}
+-- }}}
+
+-- fidget.nvim {{{
+require("fidget").setup {
+    text = {
+        spinner = "dots",
+    },
+}
+-- }}}
+
+-- lsp_lines.nvim {{{
+require("lsp_lines").register_lsp_virtual_lines()
+vim.diagnostic.config {
+    virtual_text = false,
+}
+-- }}}
+
+-- cheatsheet.nvim {{{
+require("cheatsheet").setup {
+    telescope_mappings = {
+        ["<CR>"] = require("cheatsheet.telescope.actions").select_or_execute,
+    },
+}
+-- }}}
+
+-- dressing.nvim {{{
+require("dressing").setup {
+    input = {
+        border = "solid",
+    },
+    select = {
+        backend = { "telescope", "nui", "builtin" },
+        telescope = {
+            theme = "cursor",
+        },
+    },
+}
+-- }}}
+
+-- nvim-cokeline {{{
+local get_hex = require("cokeline.utils").get_hex
+require("cokeline").setup {
+    default_hl = {
+        focused = {
+            fg = get_hex("Normal", "bg"),
+            bg = get_hex("FloatBorder", "fg"),
+        },
+        unfocused = {
+            fg = get_hex("Comment", "fg"),
+            bg = get_hex("StatusLine", "bg"),
+        },
+    },
+    components = {
+        {
+            text = function(buffer)
+                return " " .. buffer.devicon.icon
+            end,
+            hl = {},
+            truncation = { priority = 1 },
+        },
+        {
+            text = function(buffer)
+                return buffer.unique_prefix
+            end,
+            hl = {
+                style = "italic",
+            },
+            truncation = {
+                priority = 3,
+                direction = "left",
+            },
+        },
+        {
+            text = function(buffer)
+                return buffer.filename .. " "
+            end,
+            hl = {
+                style = "bold",
+            },
+            truncation = {
+                priority = 2,
+                direction = "left",
+            },
+        },
+        {
+            text = function(buffer)
+                return (buffer.diagnostics.errors ~= 0 and " " .. buffer.diagnostics.errors .. " ")
+                    or (buffer.diagnostics.warnings ~= 0 and " " .. buffer.diagnostics.warnings .. " ")
+                    or ""
+            end,
+        },
+        {
+            text = function(buffer)
+                return (buffer.is_modified and " " or "")
+            end,
         },
     },
 }

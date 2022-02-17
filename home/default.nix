@@ -9,7 +9,7 @@ let
 
     ${
       if pkgs.stdenv.isDarwin then "darwin-rebuild" else "sudo nixos-rebuild"
-    } switch --flake ~/dotfiles --impure -v
+    } switch --flake ~/dotfiles --impure -v "$@"
   '';
 
   update = pkgs.writeShellScriptBin "update" ''
@@ -33,11 +33,11 @@ in
       BROWSER = if pkgs.stdenv.isDarwin then "firefox" else "qutebrowser";
       LF_ICONS = "${builtins.readFile ./icons}";
       TERM = "xterm-256color";
+      GO111MODULE = "on";
     };
     packages = with pkgs; [
       clang
       fd
-      fennel
       gh
       glow
       hactool
@@ -68,12 +68,12 @@ in
       v = "nvim";
 
       ni = "nix-env -i";
-      nr = "nix-env -e";
+      nu = "nix-env -e";
       ns = "nix search nixpkgs";
       nq = "nix-env -q";
 
       bi = "brew install";
-      br = "brew uninstall";
+      bu = "brew uninstall";
       bs = "brew search";
       bq = "brew list";
     };
@@ -149,7 +149,16 @@ in
         python.symbol = "";
         ruby.symbol = "";
         rust.symbol = "";
-        time = { disabled = false; };
+        time = {
+          disabled = false;
+          format = "[$time]($style) ";
+        };
+        status = {
+          disabled = false;
+          format = "[$common_meaning$signal_name $status]($style) ";
+        };
+        git_metrics.disabled = false;
+        directory.read_only = "";
       };
     };
     bat = {

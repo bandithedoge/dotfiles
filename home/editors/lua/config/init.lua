@@ -32,12 +32,6 @@ vim.defer_fn(function()
     vim.o.softtabstop = 4
     vim.o.tabstop = 4
 
-    vim.api.nvim_set_keymap("n", "<cr>", ":noh<cr>", { silent = true })
-    vim.api.nvim_set_keymap("n", "<s-tab>", "zA", { silent = true })
-    vim.api.nvim_set_keymap("n", "<tab>", "za", { silent = true })
-    vim.api.nvim_set_keymap("n", "j", "gj", { silent = true })
-    vim.api.nvim_set_keymap("n", "k", "gk", { silent = true })
-
     vim.cmd [[au FileType nix,norg,CHADTree,haskell :setlocal shiftwidth=2]]
     vim.cmd [[au BufReadPre *.nfo :setlocal fileencodings=cp437,utf-8]]
 
