@@ -9,12 +9,10 @@ local servers = {
     "hls",
     "html",
     "jsonls",
-    "nimls",
     "pylsp",
     "rnix",
     "rust_analyzer",
     "solargraph",
-    "sumneko_lua",
 }
 
 local runtime_path = vim.split(package.path, ";")
@@ -40,6 +38,7 @@ for _, server in ipairs(servers) do
                 },
                 workspace = {
                     library = vim.api.nvim_get_runtime_file("", true),
+                    preloadFileSize = 500,
                 },
             },
         },
@@ -69,17 +68,18 @@ local b = null_ls.builtins
 local f = b.formatting
 local d = b.diagnostics
 local a = b.code_actions
-local h = b.hover
 
 null_ls.setup()
 
 null_ls.register {
     f.black,
     f.cabal_fmt,
+    f.fish_indent,
     f.fixjson,
     f.isort,
     f.nimpretty,
     f.rubocop,
+    f.shellharden,
     f.shfmt,
     f.stylua,
     f.prettier.with {
@@ -99,7 +99,5 @@ null_ls.register {
 
     a.shellcheck,
     a.statix,
-
-    b.dictionary,
 }
 -- }}}

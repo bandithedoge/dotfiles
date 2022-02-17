@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixos-hardware.url = "github:nixos/nixos-hardware";
     darwin.url = "github:lnl7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
@@ -9,13 +9,10 @@
 
     nur.url = "github:nix-community/NUR";
     vim-extra-plugins.url = "github:m15a/nixpkgs-vim-extra-plugins";
-    emacs-overlay.url = "github:nix-community/emacs-overlay";
+    neorg.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
+    neorg.inputs.nixpkgs.follows = "nixpkgs";
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     neovim-nightly-overlay.inputs.nixpkgs.follows = "nixpkgs";
-    nix-doom-emacs.url = "github:nix-community/nix-doom-emacs";
-    nix-doom-emacs.inputs.emacs-overlay.follows = "emacs-overlay";
-    easy-hls-nix.url = "github:jkachmar/easy-hls-nix";
-    easy-hls-nix.inputs.nixpkgs.follows = "nixpkgs";
 
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
@@ -41,7 +38,7 @@
           useGlobalPkgs = true;
           useUserPackages = true;
           users.bandithedoge = {
-            imports = with inputs; [ ./home nix-doom-emacs.hmModule ];
+            imports = with inputs; [ ./home ];
           };
         };
       };
@@ -54,16 +51,10 @@
       nixpkgsConfig = {
         nixpkgs = {
           overlays = with inputs; [
-            (self: super: {
-              dummy = super.hello;
-              easy-hls = super.callPackage easy-hls-nix { };
-              wlroots = (super.wlroots.overrideAttrs (_: {
-                version = "0.15"; # https://github.com/nix-community/nixpkgs-wayland/issues/313
-              })).override { enableXWayland = false; };
-            })
-            emacs-overlay.overlay
             neovim-nightly-overlay.overlay
             vim-extra-plugins.overlay
+            neorg.overlay
+            (import ./overlay.nix)
           ];
           config.packageOverrides = pkgs: {
             nur = import inputs.nur { inherit pkgs; };

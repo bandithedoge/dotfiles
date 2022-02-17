@@ -1,96 +1,56 @@
 local MiniBufremove = require "mini.bufremove"
 local wk = require "which-key"
-local t = require "telescope.builtin"
-local fm = require "fm-nvim"
-local lsp = vim.lsp.buf
-
-vim.api.nvim_set_keymap("n", "<cr>", ":noh<cr>", { silent = true })
-vim.api.nvim_set_keymap("n", "<s-tab>", "zA", { silent = true })
-vim.api.nvim_set_keymap("n", "<tab>", "za", { silent = true })
-vim.api.nvim_set_keymap("n", "j", "gj", { silent = true })
-vim.api.nvim_set_keymap("n", "k", "gk", { silent = true })
-vim.api.nvim_set_keymap("n", "<BS>", ":WhichKey \\<cr>", { noremap = true, silent = true })
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
+
+vim.keymap.set("n", "<cr>", ":noh<cr>", { silent = true })
+vim.keymap.set("n", "<s-tab>", "zA", { silent = true })
+vim.keymap.set("n", "<tab>", "za", { silent = true })
+vim.keymap.set("n", "j", "gj", { silent = true })
+vim.keymap.set("n", "k", "gk", { silent = true })
 
 wk.setup {
     ignore_missing = true,
     icons = { separator = "" },
 }
 
+vim.keymap.set("n", "<BS>", ":WhichKey <localleader><cr>", { noremap = true, silent = true })
+
+local t = require "telescope.builtin"
+local fm = require "fm-nvim"
+local lsp = vim.lsp.buf
+
 wk.register {
     ["<leader>"] = {
         ["<space>"] = { "<cmd>Telescope commands<cr>", "Enter command" },
         f = {
             name = "Find",
-            t = {
-                function()
-                    t.builtin()
-                end,
-                "Telescope",
-            },
-            h = {
-                function()
-                    t.help_tags()
-                end,
-                "Help",
-            },
-            H = {
-                function()
-                    t.highlights()
-                end,
-                "Highlight groups",
-            },
-            f = {
-                function()
-                    require("telescope").extensions.frecency.frecency()
-                end,
-                "Files",
-            },
+            f = { require("telescope").extensions.frecency.frecency, "Files" },
+            h = { t.help_tags, "Help" },
+            H = { t.highlights, "Highlight groups" },
+            t = { t.builtin, "Telescope" },
         },
         o = {
             name = "Open",
             d = { "<cmd>:cd ~/dotfiles/<cr>", "Dotfiles" },
-            s = { "<cmd>:cd ~/sql/<cr>", "School" },
             g = { "<cmd>:cd ~/git/<cr>", "Git" },
+            s = { "<cmd>:cd ~/sql/<cr>", "School" },
         },
-        t = {
-            function()
-                require("nvim-tree").toggle()
-            end,
-            "File tree",
-        },
-        g = {
-            function()
-                fm.Lazygit()
-            end,
-            "Git",
-        },
+        b = { t.buffers, "Buffers" },
+        F = { fm.Lf, "File explorer" },
+        g = { fm.Lazygit, "Git" },
+        n = { "<cmd>:new<cr>", "New window (horizontal)" },
+        N = { "<cmd>:vnew<cr>", "New window (vertical)" },
+        t = { require("nvim-tree").toggle, "File tree" },
+        W = { "<cmd>:close<cr>", "Close window" },
+        w = { MiniBufremove.delete, "Close buffer" },
+        ["?"] = {"<cmd>:Cheatsheet<cr>", "Cheatsheet"},
         T = {
             function()
                 fterm_float:toggle()
             end,
             "Terminal",
-        },
-        F = {
-            function()
-                fm.Lf()
-            end,
-            "File explorer",
-        },
-        -- window/buffer management
-        b = {
-            function()
-                t.buffers()
-            end,
-            "Buffers",
-        },
-        w = {
-            function()
-                MiniBufremove.delete()
-            end,
-            "Close buffer",
         },
         ["<C-w>"] = {
             function()
@@ -98,59 +58,16 @@ wk.register {
             end,
             "Close buffer (force)",
         },
-        W = { "<cmd>:close<cr>", "Close window" },
-        n = { "<cmd>:new<cr>", "New window (horizontal)" },
-        N = { "<cmd>:vnew<cr>", "New window (vertical)" },
     },
 
     ["<localleader>"] = {
-        a = {
-            function()
-                lsp.code_action()
-            end,
-            "Code actions",
-        },
-        d = {
-            function()
-                t.diagnostics()
-            end,
-            "Diagnostics",
-        },
-        D = {
-            function()
-                lsp.definition()
-            end,
-            "Definition",
-        },
-        e = {
-            function()
-                require("expand_expr").expand()
-            end,
-            "Expand expression",
-        },
-        f = {
-            function()
-                lsp.formatting()
-            end,
-            "Format file",
-        },
-        h = {
-            function()
-                lsp.hover()
-            end,
-            "Hover",
-        },
-        r = {
-            function()
-                lsp.rename()
-            end,
-            "Rename",
-        },
-        s = {
-            function()
-                lsp.document_symbol()
-            end,
-            "Symbols",
-        },
+        a = { lsp.code_action, "Code actions" },
+        D = { lsp.definition, "Definition" },
+        d = { t.diagnostics, "Diagnostics" },
+        e = { require("expand_expr").expand, "Expand expression" },
+        f = { lsp.formatting, "Format file" },
+        h = { lsp.hover, "Hover" },
+        r = { lsp.rename, "Rename" },
+        s = { lsp.document_symbol, "Symbols" },
     },
 }

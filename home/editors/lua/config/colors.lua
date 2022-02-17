@@ -9,6 +9,7 @@ nf.setup {
         comments = "italic",
         strings = "italic",
         functions = "bold",
+        keywords = "bold",
     },
 
     inverse = {
@@ -104,6 +105,7 @@ nf.setup {
         FloatBorder = { bg = "${bg_popup}", fg = "${border_highlight}" },
         Folded = { fg = "${comment}", bg = "${bg_alt}" },
         LineNr = { fg = "${comment}" },
+        CursorLineNr = { fg = "${border_highlight}" },
         StatusLineNC = { fg = "${comment}" },
 
         TelescopeSelectionCaret = { fg = "${border_highlight}" },

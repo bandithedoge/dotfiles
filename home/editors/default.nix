@@ -1,6 +1,7 @@
 { pkgs, ... }@inputs:
 let rice = import ../../rice.nix;
-in {
+in
+{
   # common packages {{{
   home.packages = with pkgs; [
     # rust
@@ -14,6 +15,7 @@ in {
     # shell
     nodePackages.bash-language-server
     shellcheck
+    shellharden
     shfmt
     # web
     nodePackages.fixjson
@@ -32,14 +34,9 @@ in {
     # c
     cppcheck
     # nim
-    nimlsp
-    nim
+    nim-unwrapped
     # go
     gopls
-    # haskell
-    easy-hls
-    haskellPackages.cabal-fmt
-    haskellPackages.implicit-hie
   ];
   # }}}
 
@@ -47,7 +44,7 @@ in {
   programs.neovim = {
     enable = true;
     package = pkgs.neovim-nightly;
-    plugins = with pkgs.vimExtraPlugins // pkgs.vimPlugins; [
+    plugins = with pkgs.vimPlugins; [
       impatient-nvim
       mini-nvim
       # treesitter
@@ -65,19 +62,26 @@ in {
       # utilities
       Comment-nvim
       direnv-vim
+      editorconfig-nvim
       nvim-expand-expr
       presence-nvim
       sort-nvim
       vim-automkdir
       # ui
+      cheatsheet-nvim
+      dressing-nvim
+      fidget-nvim
       fm-nvim
       FTerm-nvim
       gitsigns-nvim
       indent-blankline-nvim
+      lsp_lines-nvim
       lualine-lsp-progress
       lualine-nvim
       neogit
+      neorg-telescope
       nightfox-nvim
+      nvim-cokeline
       nvim-colorizer-lua
       nvim-gps
       nvim-hlslens
@@ -85,6 +89,7 @@ in {
       pretty-fold-nvim
       specs-nvim
       telescope-dap-nvim
+      telescope-frecency-nvim
       telescope-fzy-native-nvim
       telescope-nvim
       telescope-symbols-nvim
@@ -107,6 +112,7 @@ in {
       cmp-treesitter
       cmp-under-comparator
       cmp_luasnip
+      friendly-snippets
       luasnip
       nvim-cmp
       # dap
@@ -131,53 +137,6 @@ in {
         require("config")
       EOF
     '';
-  };
-  # }}}
-
-  # doom emacs {{{
-  programs.doom-emacs = {
-    enable = false;
-    emacsPackage = if pkgs.stdenv.isDarwin then
-      pkgs.emacsMacport.overrideAttrs (oldAttrs: {
-        configureFlags = oldAttrs.configureFlags
-          ++ [ "--with-native-compilation" ];
-      })
-    else
-      (pkgs.emacsUnstable.override {
-        nativeComp = true;
-        withSQLite3 = true;
-      }).overrideAttrs (oldAttrs: {
-        configureFlags = (pkgs.lib.remove "--with-xft" oldAttrs.configureFlags)
-          ++ [ "--with-pgtk" ];
-      });
-    emacsPackagesOverlay = self: super:
-      with pkgs.emacsPackages; {
-        gitignore-mode = git-modes;
-        gitconfig-mode = git-modes;
-      };
-    doomPrivateDir = ./doom.d;
-    extraConfig = ''
-      (setq doom-font (font-spec :family "${rice.monoFont}" :size 14))
-      ${
-        if !pkgs.stdenv.isDarwin then
-          ''
-            (setq doom-variable-pitch-font (font-spec :family "${rice.uiFont}" :size 14))''
-        else
-          ""
-      })
-    '';
-  };
-  # }}}
-
-  # vscode {{{
-  programs.vscode = {
-    enable = false;
-    package = pkgs.vscodium;
-    extensions = with pkgs.vscode-extensions; [
-      coenraads.bracket-pair-colorizer
-      eamodio.gitlens
-      mvllow.rose-pine
-    ];
   };
   # }}}
 }
