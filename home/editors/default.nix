@@ -11,7 +11,7 @@ in
     black
     codespell
     python39Packages.isort
-    python39Packages.python-lsp-server
+    # python39Packages.python-lsp-server
     # shell
     nodePackages.bash-language-server
     shellcheck

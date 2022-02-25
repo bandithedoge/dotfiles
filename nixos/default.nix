@@ -7,6 +7,7 @@ in
   imports = [ /etc/nixos/hardware-configuration.nix ];
 
   environment.systemPackages = with pkgs; [ alsa-utils connman-gtk ];
+  environment.shells = [ pkgs.fish pkgs.bashInteractive ];
 
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
@@ -25,6 +26,11 @@ in
     enable = true;
     packages = with pkgs; [ dconf ];
   };
+
+  fonts.fonts = with pkgs; [
+    (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
+    roboto
+  ];
 
   programs.dconf.enable = true;
 

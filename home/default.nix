@@ -23,7 +23,7 @@ let
 
 in
 {
-  imports = [ ./editors ./garbage ./web ];
+  imports = [ ./editors ./garbage ];
 
   manual.html.enable = true;
 
@@ -85,7 +85,6 @@ in
       path = "...";
     };
 
-    # shell {{{
     lazygit.enable = true;
     nix-index.enable = true;
 
@@ -218,106 +217,6 @@ in
           set fish_pager_color_prefix white --bold #--underline
           set fish_pager_color_progress brwhite --background='${base02}'
         '' + builtins.readFile ./fish.fish;
-    };
-    # }}}
-
-    kitty = {
-      # {{{
-      enable = true;
-      package = if pkgs.stdenv.isDarwin then pkgs.dummy else pkgs.kitty;
-      font = {
-        name = rice.monoFont;
-        size = if pkgs.stdenv.isDarwin then 16 else 12;
-      };
-      keybindings = {
-        "ctrl+enter" = "no_op";
-        "ctrl+space" = "no_op";
-      };
-      settings = with rice; {
-        term = "xterm-kitty";
-        cursor_shape = "beam";
-        enable_audio_bell = false;
-        disable_ligatures = "cursor";
-        window_padding_width = 10;
-        adjust_column_width = -1;
-        tab_bar_style = "powerline";
-
-        macos_titlebar_color = "background";
-        macos_thicken_font = "0.25";
-
-        background = base00;
-        foreground = base05;
-        selection_background = base05;
-        selection_foreground = base00;
-        url_color = base0F;
-        cursor = base0F;
-        active_border_color = base0F;
-        inactive_border_color = base01;
-        active_tab_background = base0F;
-        active_tab_foreground = base00;
-        inactive_tab_background = base02;
-        inactive_tab_foreground = base05;
-
-        color0 = base01;
-        color1 = base08;
-        color2 = base0B;
-        color3 = base09;
-        color4 = base0D;
-        color5 = base0E;
-        color6 = base0C;
-        color7 = base06;
-
-        color8 = base02;
-        color9 = base12;
-        color10 = base14;
-        color11 = base13;
-        color12 = base16;
-        color13 = base17;
-        color14 = base15;
-        color15 = base0F;
-      };
-    };
-    # }}}
-
-    mpv = {
-      enable = true;
-      scripts = with pkgs.mpvScripts; [
-        cutter
-        thumbnail
-        sponsorblock
-        youtube-quality
-      ];
-    };
-
-    zathura = {
-      enable = true;
-      options = with rice; {
-        page-padding = 10;
-        show-hidden = true;
-        font = uiFont + " 12";
-        recolor = true;
-
-        default-bg = base00;
-        default-fg = base01;
-        statusbar-fg = base04;
-        statusbar-bg = base02;
-        inputbar-bg = base00;
-        inputbar-fg = base07;
-        notification-bg = base00;
-        notification-fg = base07;
-        notification-error-bg = base00;
-        notification-error-fg = base08;
-        notification-warning-bg = base00;
-        notification-warning-fg = base09;
-        highlight-color = base0A;
-        highlight-active-color = base0D;
-        completion-bg = base01;
-        completion-fg = base0D;
-        completion-highlight-fg = base0F;
-        completion-highlight-bg = base02;
-        recolor-lightcolor = base00;
-        recolor-darkcolor = base06;
-      };
     };
   };
 
