@@ -32,6 +32,7 @@ in
     luajitPackages.luacheck
     sumneko-lua-language-server
     # c
+    clang-tools
     cppcheck
     # nim
     nim-unwrapped

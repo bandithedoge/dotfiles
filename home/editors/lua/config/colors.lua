@@ -113,8 +113,8 @@ nf.setup {
         TelescopeNormal = { bg = "${bg_popup}" },
         TelescopeBorder = { bg = "${bg_popup}" },
 
-        IndentBlankline = { fg = "${fg_gutter}" },
-        IndentBlanklineChar = { fg = "${fg_gutter}" },
+        IndentBlankline = { fg = "${bg_alt}" },
+        IndentBlanklineChar = { fg = "${bg_alt}" },
         IndentBlanklineContextChar = { fg = "${border_highlight}" },
 
         rainbowcol1 = { fg = "${magenta_br}" },

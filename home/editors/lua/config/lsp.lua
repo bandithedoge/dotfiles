@@ -82,7 +82,6 @@ null_ls.register {
     f.shellharden,
     f.shfmt,
     f.stylua,
-    f.trim_whitespace,
     f.prettier.with {
         extra_args = function(params)
             return params.options

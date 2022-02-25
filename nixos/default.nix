@@ -2,11 +2,21 @@
 
 let
   rice = import ../rice.nix;
+  launchwm = pkgs.writeShellScriptBin "launchwm" ''
+    #!/usr/bin/env bash
+    XKB_DEFAULT_LAYOUT=pl ${rice.wm}
+  '';
 in
 {
   imports = [ /etc/nixos/hardware-configuration.nix ];
 
-  environment.systemPackages = with pkgs; [ alsa-utils connman-gtk ];
+  environment.systemPackages = with pkgs; [
+    alsa-utils
+    connman-gtk
+    xorg.setxkbmap
+    launchwm
+    greetd.tuigreet
+  ];
 
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
@@ -101,9 +111,7 @@ in
     vt = 2;
     settings = {
       default_session = {
-        command = "${
-            pkgs.lib.makeBinPath [ pkgs.greetd.tuigreet ]
-          }/tuigreet -tr --cmd ${rice.wm}";
+        command = "tuigreet -tr --cmd launchwm";
       };
     };
   };

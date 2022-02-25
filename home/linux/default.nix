@@ -8,12 +8,14 @@ in
     icon-library
     imv
     pavucontrol
-    (river.override { xwaylandSupport = false; })
+    river
     swaylock-effects
     tigervnc
     wl-clipboard
     wlr-randr
     yambar
+    nixgl.auto.nixGLDefault
+    wine
   ];
 
   # river {{{
@@ -90,7 +92,7 @@ in
       icon = text:
         module text // {
           font = rice.monoFont + ":size=12";
-          deco.background.color = color base01;
+          deco.background.color = color base02;
         };
       module_red = text: (module text) // { foreground = color base08; };
       bitrate = [
@@ -248,7 +250,7 @@ in
     };
   # }}}
 
-  # swaylock
+  # swaylock {{{
   xdg.configFile."swaylock/config".text =
     let
       color = hex: pkgs.lib.strings.removePrefix "#" hex;
@@ -274,27 +276,32 @@ in
       inside-wrong-color=${color base08}
       key-hl-color=${color base0F}
     '';
+  # }}}
 
-  gtk = {
-    # {{{
-    enable = true;
-    font = {
-      name = rice.uiFont;
-      size = 12;
-    };
-    iconTheme = {
-      package = pkgs.numix-icon-theme;
-      name = "Numix";
-    };
-    theme = {
-      package = pkgs.materia-theme.override { };
-      name = "Materia-dark";
-    };
-    gtk3.extraConfig = {
-      gtk-application-prefer-dark-theme = true;
-      gtk-enable-primary-paste = false;
-    };
-  }; # }}}
+  # gtk {{{
+  gtk = let in
+    {
+      enable = true;
+      font = {
+        name = rice.uiFont;
+        size = 12;
+      };
+      iconTheme = {
+        package = pkgs.numix-icon-theme;
+        name = "Numix";
+      };
+      theme = {
+        package = pkgs.materia-theme;
+        name = "Materia-dark";
+      };
+      gtk3.extraConfig = {
+        gtk-application-prefer-dark-theme = true;
+        gtk-enable-primary-paste = false;
+        gtk-can-change-accels = 1;
+        gtk-toolbar-style = "";
+        gtk-decoration-layout = "menu";
+      };
+    }; # }}}
 
   programs.rofi = {
     # {{{

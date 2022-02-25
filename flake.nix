@@ -18,6 +18,7 @@
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
     musnix.url = "github:musnix/musnix";
     kmonad.url = "github:kmonad/kmonad?dir=nix";
+    nixgl.url = "github:guibou/nixGL";
     firefox-darwin.url = "github:bandithedoge/nixpkgs-firefox-darwin";
   };
 
@@ -51,9 +52,10 @@
       nixpkgsConfig = {
         nixpkgs = {
           overlays = with inputs; [
-            neovim-nightly-overlay.overlay
-            vim-extra-plugins.overlay
             neorg.overlay
+            neovim-nightly-overlay.overlay
+            nixgl.overlay
+            vim-extra-plugins.overlay
             (import ./overlay.nix)
           ];
           config.packageOverrides = pkgs: {
