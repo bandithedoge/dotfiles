@@ -100,6 +100,7 @@
         } // nixpkgsConfig;
         system = "x86_64-linux";
         username = "bandithedoge";
+        homeDirectory = "/mnt/c/Users/bandithedoge";
       };
     };
 }
