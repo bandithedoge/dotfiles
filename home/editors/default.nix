@@ -132,10 +132,8 @@ in
       set runtimepath ^=${./.}
       lua << EOF
         ${def.lua}
-
         vim.o.guifont = monoFont .. ":h16"
-
-        require("config")
+        require "config"
       EOF
     '';
   };
