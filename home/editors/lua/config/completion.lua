@@ -25,6 +25,13 @@ cmp.setup {
                 fallback()
             end
         end),
+        ["<S-Tab>"] = cmp.mapping(function(fallback)
+            if luasnip.jumpable(-1) then
+                luasnip.jump(-1)
+            else
+                fallback()
+            end
+        end),
     },
     formatting = {
         format = require("lspkind").cmp_format {

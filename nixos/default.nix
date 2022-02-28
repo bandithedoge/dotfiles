@@ -36,6 +36,11 @@ in
     packages = with pkgs; [ dconf ];
   };
 
+  fonts.fonts = with pkgs; [
+    (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
+    roboto
+  ];
+
   programs.dconf.enable = true;
 
   # drives {{{

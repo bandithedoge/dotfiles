@@ -56,6 +56,7 @@
             neovim-nightly-overlay.overlay
             nixgl.overlay
             vim-extra-plugins.overlay
+            # neorg.overlay
             (import ./overlay.nix)
           ];
           config.packageOverrides = pkgs: {
@@ -95,6 +96,14 @@
             { home-manager.users.bandithedoge.imports = [ ./home/linux ]; }
           ])
         ];
+      };
+      homeConfigurations.bandithedoge = home-manager.lib.homeManagerConfiguration {
+        configuration = {
+          imports = [ ./home ];
+        } // nixpkgsConfig;
+        system = "x86_64-linux";
+        username = "bandithedoge";
+        homeDirectory = "/mnt/c/Users/bandithedoge";
       };
     };
 }
