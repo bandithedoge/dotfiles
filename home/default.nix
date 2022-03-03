@@ -2,14 +2,17 @@
 
 let
 
+  isNixOS = pkgs.lib.strings.hasInfix "nixos" (builtins.readFile /etc/os-release);
+
   rice = import ../rice.nix;
 
   rebuild = pkgs.writeShellScriptBin "rebuild" ''
     #!/usr/bin/env bash
 
-    ${
-      if pkgs.stdenv.isDarwin then "darwin-rebuild" else "sudo nixos-rebuild"
-    } switch --flake ~/dotfiles --impure -v "$@"
+    ${if !isNixOS then "home-manager --extra-experimental-features 'nix-command flakes'" else
+      if pkgs.stdenv.isDarwin then "darwin-rebuild" else "sudo nixos-rebuild"} \
+      switch --flake ~/dotfiles${if !isNixOS then "#bandithedoge" else ""} --impure -v "$@"
+    
   '';
 
   update = pkgs.writeShellScriptBin "update" ''
