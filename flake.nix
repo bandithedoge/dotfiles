@@ -38,7 +38,7 @@
         home-manager = {
           useGlobalPkgs = true;
           useUserPackages = true;
-          users.bandithedoge = import ./home {isHM = false;};
+          users.bandithedoge = import ./home;
         };
       };
 
