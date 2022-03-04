@@ -11,7 +11,7 @@ let
 
     ${if !isNixOS then "home-manager --extra-experimental-features 'nix-command flakes'" else
       if pkgs.stdenv.isDarwin then "darwin-rebuild" else "sudo nixos-rebuild"} \
-      switch --flake ~/dotfiles${if !isNixOS then "#bandithedoge" else ""} --impure -v "$@"
+      switch --flake ~/dotfiles${if !isNixOS then "#bandithedoge" else ""} --impure "$@" |& nom
     
   '';
 
@@ -52,6 +52,7 @@ in
       ncdu
       neofetch
       nix-diff
+      nix-output-monitor
       nixfmt
       nodejs
       pandoc

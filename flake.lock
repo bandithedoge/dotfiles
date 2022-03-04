@@ -657,6 +657,22 @@
         "type": "github"
       }
     },
+    "parinfer-rust": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1641825398,
+        "narHash": "sha256-Xd6QalBhVmY4T15z454PS8R18jzTkG9rkaQZfHXb2cw=",
+        "owner": "eraserhd",
+        "repo": "parinfer-rust",
+        "rev": "211f72e32cccbc728a8346f665c0a0b52c01c1e4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "eraserhd",
+        "repo": "parinfer-rust",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "darwin": "darwin",
@@ -671,6 +687,7 @@
         "nixpkgs": "nixpkgs_7",
         "nixpkgs-wayland": "nixpkgs-wayland",
         "nur": "nur",
+        "parinfer-rust": "parinfer-rust",
         "vim-extra-plugins": "vim-extra-plugins"
       }
     },

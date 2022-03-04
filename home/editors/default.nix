@@ -29,6 +29,7 @@ in
     rnix-lsp
     statix
     # lua
+    fnlfmt
     luajitPackages.luacheck
     sumneko-lua-language-server
     # c
@@ -46,6 +47,7 @@ in
     enable = true;
     package = pkgs.neovim-nightly;
     plugins = with pkgs.vimPlugins; [
+      hotpot-nvim
       impatient-nvim
       mini-nvim
       # treesitter
@@ -124,17 +126,22 @@ in
       orgmode
       # language-specific
       crates-nvim
+      fennel-vim
       lua-dev-nvim
       nim-nvim
+      parinfer-rust
       rasi-vim
     ];
     extraConfig = with rice; ''
       set runtimepath ^=${./.}
+
       lua << EOF
         ${def.lua}
         vim.o.guifont = monoFont .. ":h16"
-        require "config"
       EOF
+
+      lua require "hotpot"
+      lua require "config"
     '';
   };
   # }}}
