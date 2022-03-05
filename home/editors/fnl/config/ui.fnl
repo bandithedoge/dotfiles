@@ -1,27 +1,3 @@
-;; lualine {{{
-(let [lualine (require :lualine)
-      gps (require :nvim-gps)]
-  (gps.setup {:separator "  "})
-  (lualine.setup {:options {:theme :nightfox
-                            :component_separators ""
-                            :section_separators ""}
-                  :extensions [:nvim-tree]
-                  :sections {:lualine_a [:mode]
-                             :lualine_b [{1 :filename :path 0}]
-                             :lualine_c [{1 :diagnostics
-                                          :sources [:nvim_diagnostic]
-                                          :update_in_insert true}
-                                         {1 gps.get_location
-                                          :cond gps.is_available}]
-                             :lualine_x [:diff]
-                             :lualine_y [[(lambda []
-                                            (.. " " vim.bo.shiftwidth))]
-                                         :fileformat
-                                         :filetype]
-                             :lualine_z [:location]}}))
-
-;; }}}
-
 ;; indent-blankline.nvim {{{
 (let [indent_blankline (require :indent_blankline)]
   (indent_blankline.setup {:show_current_context true
@@ -140,39 +116,5 @@
                             :telescope {:theme :cursor}
                             ;
                             }}))
-
-;; }}}
-
-;; nvim-cokeline {{{
-(let [cokeline (require :cokeline)
-      utils (require :cokeline.utils)]
-  (cokeline.setup {:default_hl {:focused {:fg (utils.get_hex :Normal :bg)
-                                          :bg (utils.get_hex :FloatBorder :fg)}
-                                :unfocused {:fg (utils.get_hex :Comment :fg)
-                                            :bg (utils.get_hex :StatusLine :bg)}}
-                   :components [{:text (lambda [buffer]
-                                         (.. " " buffer.devicon.icon))
-                                 :hl {}
-                                 :truncation {:priority 1}}
-                                {:text (lambda [buffer]
-                                         buffer.unique_prefix)
-                                 :hl {:style :italic}
-                                 :truncation {:priority 3 :direction :left}}
-                                {:text (lambda [buffer]
-                                         (.. buffer.filename " "))}
-                                {:text (lambda [buffer]
-                                         (or (and (not= buffer.diagnostics.errors
-                                                        0)
-                                                  (.. " "
-                                                      buffer.diagnostics.errors
-                                                      " "))
-                                             (and (not= buffer.diagnostics.warnings
-                                                        0)
-                                                  (.. " "
-                                                      buffer.diagnostics.warnings
-                                                      " "))
-                                             ""))}
-                                {:text (lambda [buffer]
-                                         (or (and buffer.is_modified " ") ""))}]}))
 
 ;; }}}

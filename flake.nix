@@ -100,7 +100,7 @@
       };
       homeConfigurations.bandithedoge = home-manager.lib.homeManagerConfiguration {
         configuration = {
-          imports = [ ./home ];
+          imports = [ ./home ./home/wsl ];
         } // nixpkgsConfig;
         system = "x86_64-linux";
         username = "bandithedoge";

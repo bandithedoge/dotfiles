@@ -43,6 +43,7 @@
                 (require :config.keybindings)
                 (require :config.lsp)
                 (require :config.snippets)
+                (require :config.statusline)
                 (require :config.telescope)
                 (require :config.treesitter)
                 (require :config.ui)

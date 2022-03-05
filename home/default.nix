@@ -16,10 +16,11 @@ let
   '';
 
   update = pkgs.writeShellScriptBin "update" ''
-    sudo nix-collect-garbage
     nix flake update ~/dotfiles
-    nix flake lock ~/dotfiles
+    nix-channel --update
     rebuild
+    sudo nix-collect-garbage
+    nix flake lock ~/dotfiles
     sudo nix-env -p /nix/var/nix/profiles/system --delete-generations +3
     nix-store --optimize
   '';

@@ -73,14 +73,13 @@ in
       # ui
       cheatsheet-nvim
       dressing-nvim
+      feline-nvim
       fidget-nvim
       fm-nvim
       FTerm-nvim
       gitsigns-nvim
       indent-blankline-nvim
       lsp_lines-nvim
-      lualine-lsp-progress
-      lualine-nvim
       neogit
       neorg-telescope
       nightfox-nvim
