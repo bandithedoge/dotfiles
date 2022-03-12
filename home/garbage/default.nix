@@ -7,14 +7,14 @@ let
     config.xdg.configHome;
 in {
   # discord {{{
-  home.file.${configPath + "discordcanary/settings.json"}.text =
+  home.file.${configPath + "/discordcanary/settings.json"}.text =
     builtins.toJSON {
       enableHardwareAcceleration = false;
       SKIP_HOST_UPDATE = true;
       UPDATE_ENDPOINT = "https://updates.goosemod.com/goosemod";
       NEW_UPDATE_ENDPOINT = "https://updates.goosemod.com/goosemod";
     };
-  home.file.${configPath + "BetterDiscord/data/canary/custom.css"}.text =
+  home.file.${configPath + "/BetterDiscord/data/canary/custom.css"}.text =
     with rice;
     ''
       @import url(https://mr-miner1.github.io/Better-Badges/src/badges.css);

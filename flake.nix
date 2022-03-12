@@ -13,6 +13,8 @@
     neorg.inputs.nixpkgs.follows = "nixpkgs";
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     neovim-nightly-overlay.inputs.nixpkgs.follows = "nixpkgs";
+    parinfer-rust.url = "github:eraserhd/parinfer-rust";
+    parinfer-rust.flake = false;
 
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
@@ -55,6 +57,7 @@
             nixgl.overlay
             vim-extra-plugins.overlay
             # neorg.overlay
+            (import (parinfer-rust + "/overlay.nix"))
             (import ./overlay.nix)
           ];
           config.packageOverrides = pkgs: {
@@ -97,7 +100,7 @@
       };
       homeConfigurations.bandithedoge = home-manager.lib.homeManagerConfiguration {
         configuration = {
-          imports = [ ./home ];
+          imports = [ ./home ./home/wsl ];
         } // nixpkgsConfig;
         system = "x86_64-linux";
         username = "bandithedoge";

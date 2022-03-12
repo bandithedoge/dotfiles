@@ -11,15 +11,16 @@ let
 
     ${if !isNixOS then "home-manager --extra-experimental-features 'nix-command flakes'" else
       if pkgs.stdenv.isDarwin then "darwin-rebuild" else "sudo nixos-rebuild"} \
-      switch --flake ~/dotfiles${if !isNixOS then "#bandithedoge" else ""} --impure -v "$@"
+      switch --flake ~/dotfiles${if !isNixOS then "#bandithedoge" else ""} --impure "$@" |& nom
     
   '';
 
   update = pkgs.writeShellScriptBin "update" ''
-    sudo nix-collect-garbage
     nix flake update ~/dotfiles
-    nix flake lock ~/dotfiles
+    nix-channel --update
     rebuild
+    sudo nix-collect-garbage
+    nix flake lock ~/dotfiles
     sudo nix-env -p /nix/var/nix/profiles/system --delete-generations +3
     nix-store --optimize
   '';
@@ -52,6 +53,7 @@ in
       ncdu
       neofetch
       nix-diff
+      nix-output-monitor
       nixfmt
       nodejs
       pandoc
@@ -62,6 +64,7 @@ in
       tree
       unar
       update
+      xplr
     ];
     shellAliases = {
       s = "sudo";

@@ -29,15 +29,19 @@ in
     rnix-lsp
     statix
     # lua
+    fnlfmt
     luajitPackages.luacheck
     sumneko-lua-language-server
     # c
     clang-tools
     cppcheck
     # nim
-    nim-unwrapped
+    nim
+    nimlsp
     # go
     gopls
+    # php
+    phpPackages.psalm
   ];
   # }}}
 
@@ -46,6 +50,7 @@ in
     enable = true;
     package = pkgs.neovim-nightly;
     plugins = with pkgs.vimPlugins; [
+      hotpot-nvim
       impatient-nvim
       mini-nvim
       # treesitter
@@ -71,14 +76,13 @@ in
       # ui
       cheatsheet-nvim
       dressing-nvim
+      feline-nvim
       fidget-nvim
       fm-nvim
       FTerm-nvim
       gitsigns-nvim
       indent-blankline-nvim
       lsp_lines-nvim
-      lualine-lsp-progress
-      lualine-nvim
       neogit
       neorg-telescope
       nightfox-nvim
@@ -124,17 +128,22 @@ in
       orgmode
       # language-specific
       crates-nvim
+      fennel-vim
       lua-dev-nvim
       nim-nvim
+      parinfer-rust
       rasi-vim
     ];
     extraConfig = with rice; ''
       set runtimepath ^=${./.}
+
       lua << EOF
         ${def.lua}
         vim.o.guifont = monoFont .. ":h16"
-        require "config"
       EOF
+
+      lua require "hotpot"
+      lua require "config"
     '';
   };
   # }}}
