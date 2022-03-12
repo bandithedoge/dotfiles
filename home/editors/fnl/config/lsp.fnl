@@ -10,6 +10,8 @@
                :hls
                :html
                :jsonls
+               :nimls
+               :psalm
                :pylsp
                :rnix
                :rust_analyzer

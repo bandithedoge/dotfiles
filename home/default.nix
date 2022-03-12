@@ -64,6 +64,7 @@ in
       tree
       unar
       update
+      xplr
     ];
     shellAliases = {
       s = "sudo";

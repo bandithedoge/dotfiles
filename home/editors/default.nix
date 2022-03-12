@@ -36,9 +36,12 @@ in
     clang-tools
     cppcheck
     # nim
-    nim-unwrapped
+    nim
+    nimlsp
     # go
     gopls
+    # php
+    phpPackages.psalm
   ];
   # }}}
 

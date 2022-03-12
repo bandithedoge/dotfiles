@@ -8,4 +8,10 @@ final: prev: {
   vimPlugins = prev.vimExtraPlugins // prev.vimPlugins // {
     inherit (prev) parinfer-rust;
   };
+
+  nim-unwrapped = prev.nim-unwrapped.overrideAttrs (_: {
+    postInstall = ''
+      ln -sf $out/nim/lib $out/lib
+    '';
+  });
 }
