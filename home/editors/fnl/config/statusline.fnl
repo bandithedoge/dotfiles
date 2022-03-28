@@ -80,12 +80,11 @@
                  :force_inactive {:filetypes [:^NvimTree$ :^help$]
                                   :buftypes [:^terminal$]}}))
 
-(let [cokeline (require :cokeline)
-      utils (require :cokeline.utils)]
-  (cokeline.setup {:default_hl {:focused {:fg (utils.get_hex :Normal :bg)
-                                          :bg (utils.get_hex :FloatBorder :fg)}
-                                :unfocused {:fg (utils.get_hex :Comment :fg)
-                                            :bg (utils.get_hex :StatusLine :bg)}}
+(let [cokeline (require :cokeline)]
+  (cokeline.setup {:default_hl {:fg (lambda [buffer]
+                                      (or (and buffer.is_focused base00) base03))
+                                :bg (lambda [buffer]
+                                      (or (and buffer.is_focused base0F) base02))}
                    :components [{:text (lambda [buffer]
                                          (.. " " buffer.devicon.icon))
                                  :hl {}
@@ -109,4 +108,11 @@
                                                       " "))
                                              ""))}
                                 {:text (lambda [buffer]
-                                         (or (and buffer.is_modified " ") ""))}]}))
+                                         (or (and buffer.is_modified " ") ""))}]
+                   :sidebar {:filetype :NvimTree
+                             :components [{:text (lambda [_]
+                                                   (.. " "
+                                                       (vim.fn.pathshorten (vim.fn.getcwd))))
+                                           :fg base0F
+                                           :bg base10
+                                           :style :bold}]}}))

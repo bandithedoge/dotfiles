@@ -52,11 +52,10 @@
       nixpkgsConfig = {
         nixpkgs = {
           overlays = with inputs; [
-            neorg.overlay
             neovim-nightly-overlay.overlay
             nixgl.overlay
             vim-extra-plugins.overlay
-            # neorg.overlay
+            neorg.overlay
             (import (parinfer-rust + "/overlay.nix"))
             (import ./overlay.nix)
           ];

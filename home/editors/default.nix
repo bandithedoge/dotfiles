@@ -10,8 +10,9 @@ in
     # python
     black
     codespell
-    python39Packages.isort
-    # python39Packages.python-lsp-server
+    python310Packages.isort
+    python310Packages.python-lsp-server
+    (python310.withPackages (p: with p; [ debugpy ]))
     # shell
     nodePackages.bash-language-server
     shellcheck
@@ -69,6 +70,7 @@ in
       Comment-nvim
       direnv-vim
       editorconfig-nvim
+      nvim-autopairs
       nvim-expand-expr
       presence-nvim
       sort-nvim
@@ -131,8 +133,8 @@ in
       fennel-vim
       lua-dev-nvim
       nim-nvim
-      parinfer-rust
       rasi-vim
+      vim-parinfer
     ];
     extraConfig = with rice; ''
       set runtimepath ^=${./.}

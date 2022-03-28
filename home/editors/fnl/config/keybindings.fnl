@@ -18,7 +18,9 @@
       nvim-tree (require :nvim-tree)
       mini-br (require :mini.bufremove)
       lsp vim.lsp.buf
-      expand_expr (require :expand_expr)]
+      expand_expr (require :expand_expr)
+      dapui (require :dapui)
+      dap (require :dap)]
   (wk.setup {:ignore_missing true :icons {:separator ""}})
   (wk.register {:<leader> {:<space> [t.commands "Enter command"]
                            :f {:name :Find
@@ -47,9 +49,17 @@
                                      true)
                                    "Close buffer (force)"]}
                 :<localleader> {:a [lsp.code_action "Code actions"]
-                                :D [lsp.definition :Definition]
-                                :d [t.diagnostics :Diagnostics]
+                                :j [lsp.definition "Jump to definition"]
+                                :D [t.diagnostics :Diagnostics]
                                 :e [expand_expr.expand "Expand expression"]
                                 :f [lsp.formatting "Format file"]
                                 :r [lsp.rename :Rename]
-                                :s [lsp.document_symbol :Symbols]}}))
+                                :s [lsp.document_symbol :Symbols]
+                                :d {:name :Debug
+                                    :d [dapui.toggle :Debug]
+                                    :e [dapui.eval "Evaluate expression"]
+                                    :b [dap.toggle_breakpoint
+                                        "Toggle breakpoint"]
+                                    :c [dap.continue :Continue]
+                                    :o [dap.step_over "Step over"]
+                                    :i [dap.step_into "Step into"]}}}))

@@ -54,8 +54,10 @@ in
       neofetch
       nix-diff
       nix-output-monitor
+      nix-prefetch
       nixfmt
       nodejs
+      nur.repos.misterio.comma
       pandoc
       rclone
       rebuild

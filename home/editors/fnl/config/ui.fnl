@@ -32,6 +32,7 @@
                     :update_focused_file {:enable true}
                     :diagnostics {:enable true :show_on_dirs true}
                     :view {:auto_resize true
+                           :hide_root_folder true
                            :mappings {:list [{:key :h :cb (cb :dir_up)}
                                              {:key :l :cb (cb :cd)}]}}
                     :filters {:dotfiles false
@@ -42,6 +43,7 @@
 
 (set vim.g.nvim_tree_indent_markers 1)
 (set vim.g.nvim_tree_show_icons {:git 1 :folders 1 :files 1 :folder_arrows 0})
+(set vim.g.nvim_tree_add_trailing 1)
 
 ;; }}}
 
