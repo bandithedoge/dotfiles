@@ -13,9 +13,9 @@ in
   environment.systemPackages = with pkgs; [
     alsa-utils
     connman-gtk
-    xorg.setxkbmap
-    launchwm
     greetd.tuigreet
+    launchwm
+    xorg.setxkbmap
   ];
 
   boot = {
@@ -29,6 +29,7 @@ in
     pam.services.swaylock.text = ''
       auth include login
     '';
+    pki.certificateFiles = [ /etc/ssl/certs/certyfikat.crt ];
   };
 
   services.dbus = {
@@ -69,6 +70,7 @@ in
   services.tlp.enable = true;
   services.logind.lidSwitch = "hybrid-sleep";
   hardware.opengl.enable = true;
+  hardware.opengl.driSupport32Bit = true;
 
   services.kmonad = {
     enable = true;
@@ -83,9 +85,13 @@ in
     enable = true;
     enableVPN = false;
   };
+
   services.openssh = {
     enable = true;
-    startWhenNeeded = true;
+  };
+
+  programs.ssh = {
+    startAgent = true;
   };
 
   networking.wireless = {
@@ -111,6 +117,15 @@ in
   musnix.enable = true;
   # }}}
 
+  # x {{{
+  services.xserver = {
+    enable = true;
+    displayManager.sx = {
+      enable = true;
+    };
+  };
+  # }}}
+
   services.greetd = {
     enable = true;
     vt = 2;
@@ -131,4 +146,6 @@ in
 
   programs.ccache.enable = true;
   programs.steam.enable = true;
+
+  virtualisation.docker.enable = true;
 }

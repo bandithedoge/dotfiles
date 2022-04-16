@@ -1,3 +1,5 @@
+(module config.completion)
+
 (let [cmp (require :cmp)
       luasnip (require :luasnip)
       lspkind (require :lspkind)

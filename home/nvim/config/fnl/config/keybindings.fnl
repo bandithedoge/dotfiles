@@ -1,3 +1,5 @@
+(module config.keybindings)
+
 (set vim.g.mapleader " ")
 (set vim.g.maplocalleader "\\")
 

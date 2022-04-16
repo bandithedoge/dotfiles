@@ -1,3 +1,5 @@
+(module config.lsp)
+
 (let [lsp (require :lspconfig)
       lua-dev (require :lua-dev)
       cmp_nvim_lsp (require :cmp_nvim_lsp)
@@ -63,6 +65,3 @@
 
 (let [lspkind (require :lspkind)]
   (lspkind.init))
-
-(let [crates (require :crates)]
-  (crates.setup))

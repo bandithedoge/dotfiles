@@ -27,9 +27,15 @@ let
 
 in
 {
-  imports = [ ./editors ./garbage ];
+  imports = [ ./nvim ./garbage ];
 
   manual.html.enable = true;
+
+  xdg = {
+    enable = true;
+    # configHome = "${config.home.homeDirectory}/.config";
+    configFile."rice.json".text = builtins.toJSON rice;
+  };
 
   home = {
     sessionVariables = {
@@ -40,33 +46,34 @@ in
       GO111MODULE = "on";
     };
     packages = with pkgs; [
-      clang
-      fd
-      gh
-      glow
-      hactool
-      htop
-      imagemagick
-      librespeed-cli
-      luajit
-      mpc_cli
-      ncdu
-      neofetch
-      nix-diff
-      nix-output-monitor
-      nix-prefetch
-      nixfmt
-      nodejs
-      nur.repos.misterio.comma
-      pandoc
-      rclone
-      rebuild
-      ruby_3_0
-      stylua
-      tree
-      unar
-      update
-      xplr
+    clang
+    fd
+    gh
+    glow
+    hactool
+    htop
+    imagemagick
+    librespeed-cli
+    luajit
+    mpc_cli
+    ncdu
+    neofetch
+    nix-diff
+    nix-output-monitor
+    nix-prefetch
+    nixfmt
+    nodejs
+    # nur.repos.misterio.comma
+    pandoc
+    radare2
+    rclone
+    rebuild
+    ruby_3_0
+    stylua
+    tree
+    unar
+    update
+    xplr
     ];
     shellAliases = {
       s = "sudo";

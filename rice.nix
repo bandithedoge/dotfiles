@@ -61,6 +61,8 @@ rec {
 
       monoFont = "${monoFont}"
       uiFont = "${uiFont}"
+
+      terminal = "${terminal}"
     '';
   };
 }

@@ -1,3 +1,5 @@
+(module config.snippets)
+
 (local luasnip (require :luasnip))
 
 (fn snip [name dscr]
@@ -5,8 +7,6 @@
   (let [s luasnip.snippet
         t luasnip.text_node]
     (s {:trig name : name : dscr} (t name))))
-
-(set luasnip.snippets.all {})
 
 (each [name dscr (pairs {:base00 ["Default Background" "Example: #282c34"]
                          :base01 ["Lighter Background (Used for status bars, line number and folding marks)"
@@ -46,4 +46,4 @@
                          :base15 ["Bright Cyan" "Example: #4cd1e0"]
                          :base16 ["Bright Blue" "Example: #4dc4ff"]
                          :base17 ["Bright Magenta" "Example: #de73ff"]})]
-  (tset luasnip.snippets.all name (snip name dscr)))
+  (luasnip.add_snippets :all [(snip name dscr)]))

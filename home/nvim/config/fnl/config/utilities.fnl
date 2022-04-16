@@ -1,3 +1,5 @@
+(module config.utilities)
+
 ;; mini.nvim {{{
 (let [pairs (require :mini.pairs)
       surround (require :mini.surround)

@@ -11,6 +11,6 @@
     non
     pt2-clone
     soundtracker
-    ardour
+    # ardour
   ];
 }

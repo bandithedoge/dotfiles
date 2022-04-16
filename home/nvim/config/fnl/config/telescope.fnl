@@ -1,3 +1,5 @@
+(module config.telescope)
+
 (let [telescope (require :telescope)
       actions (require :telescope.actions)
       themes (require :telescope.themes)]

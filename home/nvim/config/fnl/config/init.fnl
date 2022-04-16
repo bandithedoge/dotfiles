@@ -1,3 +1,5 @@
+(module config.init {require {nvim aniseed.nvim}})
+
 (require :config.colors)
 
 (set vim.g.mapleader " ")
@@ -33,11 +35,9 @@
 (set vim.o.softtabstop 4)
 (set vim.o.tabstop 4)
 
-(vim.cmd "au FileType nix,norg,haskell :setlocal shiftwidth=2")
 (vim.cmd "au BufReadPre *.nfo :setlocal fileencodings=cp437,utf-8")
 
 (vim.defer_fn (lambda []
-                (require :config.colors)
                 (require :config.completion)
                 (require :config.dap)
                 (require :config.keybindings)

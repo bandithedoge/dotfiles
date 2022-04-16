@@ -1,3 +1,5 @@
+(module config.dap)
+
 (let [dapui (require :dapui)
       dap (require :dap)]
   (set dap.listeners.after.event_initialized.dapui_config dapui.open)

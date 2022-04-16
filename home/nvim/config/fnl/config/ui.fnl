@@ -1,3 +1,5 @@
+(module config.ui)
+
 ;; indent-blankline.nvim {{{
 (let [indent_blankline (require :indent_blankline)]
   (indent_blankline.setup {:show_current_context true
@@ -5,7 +7,8 @@
                            :use_treesitter true
                            :filetype_exclude [:help :TelescopePrompt]
                            :buftype_exclude [:terminal]
-                           :show_foldtext false}))
+                           :show_foldtext false
+                           :indent_level 30}))
 
 ;; }}}
 
@@ -112,11 +115,8 @@
 ;; }}}
 
 ;; dressing.nvim {{{
-(let [dressing (require :dressing)]
+(let [dressing (require :dressing)
+      themes (require :telescope.themes)]
   (dressing.setup {:input {:border :solid}
                    :select {:backend [:telescope :nui :builtin]
-                            :telescope {:theme :cursor}
-                            ;
-                            }}))
-
-;; }}}
+                            :telescope (themes.get_cursor)}}))

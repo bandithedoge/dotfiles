@@ -1,4 +1,4 @@
-{ pkgs, ... }@inputs:
+{ pkgs, config, ... }@inputs:
 let rice = import ../../rice.nix;
 in
 {
@@ -43,6 +43,9 @@ in
     gopls
     # php
     phpPackages.psalm
+    # haskell
+    haskellPackages.cabal-fmt
+    haskell-language-server
   ];
   # }}}
 
@@ -51,7 +54,7 @@ in
     enable = true;
     package = pkgs.neovim-nightly;
     plugins = with pkgs.vimPlugins; [
-      hotpot-nvim
+      aniseed
       impatient-nvim
       mini-nvim
       # treesitter
@@ -77,20 +80,19 @@ in
       vim-automkdir
       # ui
       cheatsheet-nvim
+      colorbuddy-nvim
       dressing-nvim
-      feline-nvim
       fidget-nvim
       fm-nvim
       FTerm-nvim
       gitsigns-nvim
       indent-blankline-nvim
       lsp_lines-nvim
+      lualine-nvim
       neogit
       neorg-telescope
       nightfox-nvim
-      nvim-cokeline
       nvim-colorizer-lua
-      nvim-gps
       nvim-hlslens
       nvim-tree-lua
       pretty-fold-nvim
@@ -130,22 +132,29 @@ in
       orgmode
       # language-specific
       crates-nvim
-      fennel-vim
       lua-dev-nvim
       nim-nvim
       rasi-vim
       vim-parinfer
     ];
     extraConfig = with rice; ''
-      set runtimepath ^=${./.}
-
       lua << EOF
         ${def.lua}
-        vim.o.guifont = monoFont .. ":h16"
-      EOF
 
-      lua require "hotpot"
-      lua require "config"
+        vim.o.guifont = monoFont .. ":h16"
+
+        vim.g["aniseed#env"] = {
+          module = "config.init",
+          compile = true
+        }
+      EOF
+    '';
+  };
+  xdg.configFile."nvim" = {
+    source = ./config;
+    recursive = true;
+    onChange = ''
+      rm -rf ${config.xdg.configHome}/nvim/lua/config
     '';
   };
   # }}}
