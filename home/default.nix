@@ -9,8 +9,8 @@ let
   rebuild = pkgs.writeShellScriptBin "rebuild" ''
     #!/usr/bin/env bash
 
-    ${if !isNixOS then "home-manager --extra-experimental-features 'nix-command flakes'" else
-      if pkgs.stdenv.isDarwin then "darwin-rebuild" else "sudo nixos-rebuild"} \
+    ${if !isNixOS then "unbuffer home-manager --extra-experimental-features 'nix-command flakes'" else
+      if pkgs.stdenv.isDarwin then "unbuffer darwin-rebuild" else "sudo unbuffer nixos-rebuild"} \
       switch --flake ~/dotfiles${if !isNixOS then "#bandithedoge" else ""} --impure "$@" |& nom
     
   '';
@@ -34,7 +34,6 @@ in
   xdg = {
     enable = true;
     # configHome = "${config.home.homeDirectory}/.config";
-    configFile."rice.json".text = builtins.toJSON rice;
   };
 
   home = {
@@ -46,34 +45,34 @@ in
       GO111MODULE = "on";
     };
     packages = with pkgs; [
-    clang
-    fd
-    gh
-    glow
-    hactool
-    htop
-    imagemagick
-    librespeed-cli
-    luajit
-    mpc_cli
-    ncdu
-    neofetch
-    nix-diff
-    nix-output-monitor
-    nix-prefetch
-    nixfmt
-    nodejs
-    # nur.repos.misterio.comma
-    pandoc
-    radare2
-    rclone
-    rebuild
-    ruby_3_0
-    stylua
-    tree
-    unar
-    update
-    xplr
+      clang
+      expect
+      fd
+      gh
+      glow
+      hactool
+      htop
+      imagemagick
+      librespeed-cli
+      luajit
+      mpc_cli
+      ncdu
+      neofetch
+      nix-diff
+      nix-output-monitor
+      nix-prefetch
+      nixfmt
+      nodejs
+      pandoc
+      radare2
+      rclone
+      rebuild
+      ruby_3_0
+      stylua
+      tree
+      unar
+      update
+      xplr
     ];
     shellAliases = {
       s = "sudo";

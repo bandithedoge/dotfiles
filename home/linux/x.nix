@@ -3,6 +3,9 @@ let
   rice = import ../../rice.nix;
 in
 {
+  home.packages = with pkgs; [
+  ];
+
   xsession = {
     enable = true;
     windowManager.awesome = {

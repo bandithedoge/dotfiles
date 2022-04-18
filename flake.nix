@@ -8,6 +8,8 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     nur.url = "github:nix-community/NUR";
+    nur-bandithedoge.url = "github:bandithedoge/nur-packages";
+    nur-bandithedoge.flake = false;
     vim-extra-plugins.url = "github:m15a/nixpkgs-vim-extra-plugins";
     neorg.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
     neorg.inputs.nixpkgs.follows = "nixpkgs";
@@ -57,6 +59,7 @@
             vim-extra-plugins.overlay
             neorg.overlay
             (import (parinfer-rust + "/overlay.nix"))
+            (import (nur-bandithedoge + "/overlay.nix"))
             (import ./overlay.nix)
           ];
           config.packageOverrides = pkgs: {

@@ -3,16 +3,18 @@
     package = pkgs.nixFlakes;
     settings = {
       substituters = [
-        "https://nix-community.cachix.org"
         "https://cache.nixos.org"
+        "https://nix-community.cachix.org"
         "https://nixpkgs-wayland.cachix.org"
         "https://kira-bruneau.cachix.org"
+        "https://bandithedoge.cachix.org"
       ];
       trusted-public-keys = [
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
         "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
         "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
         "kira-bruneau.cachix.org-1:FJSccwNPRNHPBHN+qxAme2Svp537q7dDuHkqLnyOTaQ="
+        "bandithedoge.cachix.org-1:ZtcHw1anyEa4t6H8m3o/ctYFrwYFPAwoENSvofamE6g="
       ];
       trusted-users = [ "root" "@wheel" "bandithedoge" ];
     };

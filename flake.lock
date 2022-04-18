@@ -656,6 +656,22 @@
         "type": "github"
       }
     },
+    "nur-bandithedoge": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1650115168,
+        "narHash": "sha256-NHYbRsr6cHrddR0PH7mdsUzlSBhprL5M6eOGWTNicOk=",
+        "owner": "bandithedoge",
+        "repo": "nur-packages",
+        "rev": "40818d33ffafcd428c4298b647c8bde29cf86abf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "bandithedoge",
+        "repo": "nur-packages",
+        "type": "github"
+      }
+    },
     "parinfer-rust": {
       "flake": false,
       "locked": {
@@ -686,6 +702,7 @@
         "nixpkgs": "nixpkgs_7",
         "nixpkgs-wayland": "nixpkgs-wayland",
         "nur": "nur",
+        "nur-bandithedoge": "nur-bandithedoge",
         "parinfer-rust": "parinfer-rust",
         "vim-extra-plugins": "vim-extra-plugins"
       }
