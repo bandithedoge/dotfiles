@@ -17,6 +17,8 @@
     neovim-nightly-overlay.inputs.nixpkgs.follows = "nixpkgs";
     parinfer-rust.url = "github:eraserhd/parinfer-rust";
     parinfer-rust.flake = false;
+    zigf.url = "github:roarkanize/zig-overlay";
+    zigf.inputs.nixpkgs.follows = "nixpkgs";
 
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
@@ -61,6 +63,9 @@
             (import (parinfer-rust + "/overlay.nix"))
             (import (nur-bandithedoge + "/overlay.nix"))
             (import ./overlay.nix)
+            (final: prev: {
+              inherit zigf;
+            })
           ];
           config.packageOverrides = pkgs: {
             nur = import inputs.nur { inherit pkgs; };

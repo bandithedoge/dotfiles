@@ -40,12 +40,16 @@ in
     nim
     nimlsp
     # go
+    go
     gopls
     # php
     phpPackages.psalm
     # haskell
     haskellPackages.cabal-fmt
     haskell-language-server
+    # zig
+    zig
+    zls
   ];
   # }}}
 
@@ -71,6 +75,7 @@ in
       popup-nvim
       # utilities
       Comment-nvim
+      conjure
       direnv-vim
       editorconfig-nvim
       nvim-autopairs
