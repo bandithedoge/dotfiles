@@ -1,17 +1,19 @@
 final: prev: {
-  dummy = prev.hello;
+  # wlroots = prev.wlroots.overrideAttrs (oldAttrs: {
+  #   buildInputs = oldAttrs.buildInputs ++ [ prev.vulkan-headers ];
+  # });
 
-  vimPlugins = prev.vimExtraPlugins // prev.vimPlugins // {
-    inherit (prev) parinfer-rust;
-  };
-
-  luaPackages = prev.luaPackages // {
-    fennel = prev.luaPackages.buildLuaPackage {
-      inherit (prev.fennel) pname version src buildInputs makeFlags;
-      installPhase = ''
-        mkdir -p $out
-        cp fennel.lua $out/
-      '';
+  luaPackages =
+    prev.luaPackages
+    // {
+      fennel = prev.luaPackages.buildLuaPackage {
+        inherit (prev.fennel) pname version src buildInputs makeFlags;
+        installPhase = ''
+          mkdir -p $out
+          cp fennel.lua $out/
+        '';
+      };
     };
-  };
+
+  vimPlugins = prev.vimPlugins // prev.bandithedoge.vimPlugins;
 }

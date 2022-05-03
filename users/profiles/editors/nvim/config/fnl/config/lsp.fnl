@@ -34,7 +34,8 @@
       d b.diagnostics
       a b.code_actions]
   (null-ls.setup)
-  (null-ls.register [f.black
+  (null-ls.register [f.alejandra
+                     f.black
                      f.cabal_fmt
                      f.fish_indent
                      f.fixjson

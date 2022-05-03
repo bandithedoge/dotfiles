@@ -99,14 +99,6 @@
 
 ;; }}}
 
-;; lsp_lines.nvim {{{
-(let [lsp_lines (require :lsp_lines)]
-  (lsp_lines.register_lsp_virtual_lines))
-
-(vim.diagnostic.config {:virtual_text false})
-
-;; }}}
-
 ;; cheatsheet.nvim {{{
 (let [cheatsheet (require :cheatsheet)
       actions (require :cheatsheet.telescope.actions)]

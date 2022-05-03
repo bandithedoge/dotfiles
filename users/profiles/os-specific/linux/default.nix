@@ -1,13 +1,10 @@
-{ config, pkgs, ... }:
-let
-  rice = import ../../rice.nix;
-in
 {
-  imports = [
-    ./audio.nix
-    ./wayland.nix
-    ./x.nix
-  ];
+  config,
+  pkgs,
+  ...
+}: let
+  rice = import ../../../../rice.nix;
+in {
   home.packages = with pkgs; [
     cutter
     icon-library
@@ -41,86 +38,9 @@ in
     };
   }; # }}}
 
-  programs.rofi = {
-    # {{{
-    enable = true;
-    package = pkgs.nur.repos.kira-bruneau.rofi-wayland;
-    font = rice.uiFont + " 12";
-    extraConfig = {
-      modi = "power:${./bin/rofi/power.lua},drun,run";
-      drun-match-fields = "name,exec";
-      drun-display-format = "{name}";
-      show-icons = true;
-      scroll-method = 1;
-      kb-row-up = "Control+k";
-      kb-row-down = "Control+j";
-      kb-mode-next = "Control+l";
-      kb-mode-previous = "Control+h";
-      kb-mode-complete = "";
-      kb-remove-to-eol = "";
-      kb-accept-entry = "Return";
-      kb-remove-char-back = "BackSpace";
-    };
-    theme = with rice;
-      let
-        inherit (config.lib.formats.rasi) mkLiteral;
-        padding = mkLiteral "5px";
-      in
-      {
-        "*" = {
-          border-color = mkLiteral base0F;
-          background-color = mkLiteral base00;
-          text-color = mkLiteral base05;
-        };
-
-        mainbox.children =
-          map mkLiteral [ "inputbar" "message" "mode-switcher" "listview" ];
-
-        window = {
-          border = mkLiteral "2px";
-          anchor = mkLiteral "north";
-        };
-
-        entry = { inherit padding; };
-
-        prompt = {
-          inherit padding;
-          background-color = mkLiteral base0F;
-          text-color = mkLiteral base00;
-        };
-
-        listview.scrollbar = true;
-
-        scrollbar.handle-color = mkLiteral base0F;
-
-        element = {
-          background-color = mkLiteral "transparent";
-          padding = mkLiteral "2px 5px";
-        };
-        element-icon = {
-          background-color = mkLiteral "inherit";
-          padding = mkLiteral "0 5px";
-        };
-        "element.selected.normal".background-color = mkLiteral base02;
-        element-text = {
-          background-color = mkLiteral "inherit";
-          highlight = mkLiteral "bold ${base0F}";
-        };
-
-        "element.urgent".text-color = mkLiteral base08;
-        "element.active".text-color = mkLiteral base0B;
-        "element.selected.urgent".background-color = mkLiteral base08;
-        "element.selected.active".background-color = mkLiteral base0B;
-
-        button.text-color = mkLiteral base03;
-        "button.selected".text-color = mkLiteral base05;
-      };
-  }; # }}}
-
   programs.qutebrowser = {
     # {{{
     enable = true;
-    package = if pkgs.stdenv.isDarwin then pkgs.dummy else pkgs.qutebrowser;
     searchEngines = {
       DEFAULT = "https://searx.be/search?q={}";
       g = "https://www.google.com/search?q={}";
@@ -233,8 +153,7 @@ in
   programs.firefox = {
     # {{{
     enable = false;
-    package =
-      if pkgs.stdenv.isDarwin then pkgs.dummy else pkgs.firefox-unwrapped;
+    package = pkgs.firefox-unwrapped;
     extensions = with pkgs.nur.repos.rycee.firefox-addons; [
       auto-tab-discard
       betterttv
@@ -285,10 +204,9 @@ in
   programs.kitty = {
     # {{{
     enable = true;
-    package = if pkgs.stdenv.isDarwin then pkgs.dummy else pkgs.kitty;
     font = {
       name = rice.monoFont;
-      size = if pkgs.stdenv.isDarwin then 16 else 12;
+      size = 12;
     };
     keybindings = {
       "ctrl+enter" = "no_op";

@@ -1,18 +1,29 @@
-{ pkgs, home-manager, config, ... }:
-
-let
-
+{
+  pkgs,
+  home-manager,
+  config,
+  ...
+}: let
   isNixOS = pkgs.lib.strings.hasInfix "nixos" (builtins.readFile /etc/os-release);
 
-  rice = import ../rice.nix;
+  rice = import ../../../rice.nix;
 
   rebuild = pkgs.writeShellScriptBin "rebuild" ''
     #!/usr/bin/env bash
 
-    ${if !isNixOS then "unbuffer home-manager --extra-experimental-features 'nix-command flakes'" else
-      if pkgs.stdenv.isDarwin then "unbuffer darwin-rebuild" else "sudo unbuffer nixos-rebuild"} \
-      switch --flake ~/dotfiles${if !isNixOS then "#bandithedoge" else ""} --impure "$@" |& nom
-    
+    ${
+      if !isNixOS
+      then "unbuffer home-manager --extra-experimental-features 'nix-command flakes'"
+      else if pkgs.stdenv.isDarwin
+      then "unbuffer darwin-rebuild"
+      else "sudo unbuffer nixos-rebuild"
+    } \
+      switch --flake ~/dotfiles${
+      if !isNixOS
+      then "#bandithedoge"
+      else ""
+    } --impure "$@" |& nom
+
   '';
 
   update = pkgs.writeShellScriptBin "update" ''
@@ -24,11 +35,7 @@ let
     sudo nix-env -p /nix/var/nix/profiles/system --delete-generations +3
     nix-store --optimize
   '';
-
-in
-{
-  imports = [ ./nvim ./garbage ];
-
+in {
   manual.html.enable = true;
 
   xdg = {
@@ -39,7 +46,10 @@ in
   home = {
     sessionVariables = {
       EDITOR = "nvim";
-      BROWSER = if pkgs.stdenv.isDarwin then "firefox" else "qutebrowser";
+      BROWSER =
+        if pkgs.stdenv.isDarwin
+        then "firefox"
+        else "qutebrowser";
       LF_ICONS = "${builtins.readFile ./icons}";
       TERM = "xterm-256color";
       GO111MODULE = "on";
@@ -118,7 +128,7 @@ in
           "system"
           "vim"
         ];
-        commands = { "Nix" = "${rebuild}"; };
+        commands = {"Nix" = "${rebuild}";};
       };
     };
 
@@ -176,7 +186,7 @@ in
     };
     bat = {
       enable = true;
-      config = { theme = "base16"; };
+      config = {theme = "base16";};
     };
 
     lsd = {
@@ -230,8 +240,8 @@ in
           set fish_pager_color_description yellow --dim
           set fish_pager_color_prefix white --bold #--underline
           set fish_pager_color_progress brwhite --background='${base02}'
-        '' + builtins.readFile ./fish.fish;
+        ''
+        + builtins.readFile ./fish.fish;
     };
   };
-
 }

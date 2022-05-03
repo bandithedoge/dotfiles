@@ -1,7 +1,10 @@
-{ pkgs, config, ... }@inputs:
-let rice = import ../../rice.nix;
-in
 {
+  pkgs,
+  config,
+  ...
+}: let
+  rice = import ../../../rice.nix;
+in {
   # common packages {{{
   home.packages = with pkgs; [
     # rust
@@ -12,7 +15,7 @@ in
     codespell
     python310Packages.isort
     python310Packages.python-lsp-server
-    (python310.withPackages (p: with p; [ debugpy ]))
+    (python310.withPackages (p: with p; [debugpy]))
     # shell
     nodePackages.bash-language-server
     shellcheck
@@ -27,6 +30,7 @@ in
     rubocop
     solargraph
     # nix
+    alejandra
     rnix-lsp
     statix
     # lua
@@ -73,28 +77,26 @@ in
       Comment-nvim
       direnv-vim
       editorconfig-nvim
+      mkdir-nvim
       nvim-autopairs
       nvim-expand-expr
       presence-nvim
       sort-nvim
-      vim-automkdir
       # ui
       cheatsheet-nvim
-      colorbuddy-nvim
       dressing-nvim
       fidget-nvim
       fm-nvim
       FTerm-nvim
       gitsigns-nvim
       indent-blankline-nvim
-      lsp_lines-nvim
       lualine-nvim
-      neogit
       neorg-telescope
       nightfox-nvim
       nvim-colorizer-lua
       nvim-hlslens
       nvim-tree-lua
+      sqlite-lua
       pretty-fold-nvim
       specs-nvim
       telescope-dap-nvim
@@ -112,17 +114,15 @@ in
       SchemaStore-nvim
       # completion
       cmp-cmdline
-      cmp-emoji
       cmp-latex-symbols
       cmp-nvim-lsp
       cmp-nvim-lsp-document-symbol
       cmp-nvim-lua
       cmp-path
-      cmp-treesitter
       cmp-under-comparator
       cmp_luasnip
       friendly-snippets
-      luasnip
+      LuaSnip
       nvim-cmp
       # dap
       nvim-dap
@@ -151,7 +151,7 @@ in
     '';
   };
   xdg.configFile."nvim" = {
-    source = ./config;
+    source = ./nvim/config;
     recursive = true;
     onChange = ''
       rm -rf ${config.xdg.configHome}/nvim/lua/config
