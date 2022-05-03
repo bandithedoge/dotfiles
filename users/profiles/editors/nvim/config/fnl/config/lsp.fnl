@@ -17,7 +17,8 @@
                :pylsp
                :rnix
                :rust_analyzer
-               :solargraph]]
+               :solargraph
+               :zls]]
   (lsp.sumneko_lua.setup (lua-dev.setup {:runtime_path true}))
   (each [_ server (ipairs servers)]
     (let [s (. lsp server)]
