@@ -33,8 +33,7 @@
                     :hijack_netrw true
                     :update_cwd true
                     :diagnostics {:enable true :show_on_dirs true}
-                    :view {:auto_resize true
-                           :mappings {:list [{:key :h :cb (cb :dir_up)}
+                    :view {:mappings {:list [{:key :h :cb (cb :dir_up)}
                                              {:key :l :cb (cb :cd)}]}}
                     :renderer {:indent_markers {:enable true}}
                     :filters {:dotfiles false :custom [:.DS_Store]}}))

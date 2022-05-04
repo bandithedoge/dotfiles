@@ -1,21 +1,4 @@
 {
-  nixConfig = {
-    extra-substituters = [
-      "https://cache.nixos.org"
-      "https://nix-community.cachix.org"
-      "https://nixpkgs-wayland.cachix.org"
-      "https://kira-bruneau.cachix.org"
-      "https://bandithedoge.cachix.org"
-    ];
-    extra-trusted-public-keys = [
-      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-      "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
-      "kira-bruneau.cachix.org-1:FJSccwNPRNHPBHN+qxAme2Svp537q7dDuHkqLnyOTaQ="
-      "bandithedoge.cachix.org-1:ZtcHw1anyEa4t6H8m3o/ctYFrwYFPAwoENSvofamE6g="
-    ];
-    extra-experimental-features = "nix-command flakes";
-  };
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixlib.url = "github:nix-community/nixpkgs.lib";
@@ -54,36 +37,37 @@
     firefox-darwin.url = "github:bandithedoge/nixpkgs-firefox-darwin";
   };
 
-  outputs = {
-    self,
-    digga,
-    darwin,
-    nixpkgs,
-    home-manager,
-    nixos-hardware,
-    musnix,
-    kmonad,
-    ...
-  } @ inputs:
+  outputs =
+    { self
+    , digga
+    , darwin
+    , nixpkgs
+    , home-manager
+    , nixos-hardware
+    , musnix
+    , kmonad
+    , ...
+    }@inputs:
     digga.lib.mkFlake {
+
       inherit self inputs;
 
       sharedOverlays = with inputs; [
         nur.overlay
-        neovim-nightly-overlay.overlay
+        # neovim-nightly-overlay.overlay
         nixgl.overlay
         neorg.overlay
         # nixpkgs-wayland.overlay
         (import (parinfer-rust + "/overlay.nix"))
         (final: prev: {
-          bandithedoge = import nur-bandithedoge {pkgs = prev;};
+          bandithedoge = import nur-bandithedoge { pkgs = prev; };
         })
         (import ./overlay.nix)
       ];
 
       channelsConfig.allowUnfree = true;
       channels = {
-        nixpkgs = {};
+        nixpkgs = { };
       };
 
       nixos = {
@@ -98,28 +82,26 @@
           ];
         };
 
-        imports = [(digga.lib.importHosts ./hosts)];
+        imports = [ (digga.lib.importHosts ./hosts) ];
 
         importables = rec {
-          profiles =
-            digga.lib.rakeLeaves ./profiles
-            // {
-              users = digga.lib.rakeLeaves ./users;
-            };
+          profiles = digga.lib.rakeLeaves ./profiles // {
+            users = digga.lib.rakeLeaves ./users;
+          };
           suites = with profiles; {
-            base = [core users.bandithedoge];
-            gui = [gui];
-            audio = [audio];
+            base = [ core users.bandithedoge ];
+            gui = [ gui ];
+            audio = [ audio ];
           };
         };
 
         hosts = {
-          thonkpad = {};
+          thonkpad = { };
         };
       };
 
       home = {
-        modules = [];
+        modules = [ ];
 
         importables = rec {
           profiles = digga.lib.rakeLeaves ./users/profiles;
@@ -128,7 +110,7 @@
               core
               editors
             ];
-            linux = [os-specific.linux];
+            linux = [ os-specific.linux ];
             gui = [
               wayland
               x
@@ -140,7 +122,7 @@
         };
 
         users = {
-          bandithedoge = {suites, ...}: {
+          bandithedoge = { suites, ... }: {
             imports = with suites;
               base
               ++ gui
@@ -151,6 +133,7 @@
       };
 
       homeConfigurations = digga.lib.mkHomeConfigurations self.nixosConfigurations;
+
     };
   #
   # let

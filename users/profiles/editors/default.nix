@@ -1,12 +1,10 @@
+{ pkgs, config, ... }:
+let rice = import ../../../rice.nix;
+in
 {
-  pkgs,
-  config,
-  ...
-}: let
-  rice = import ../../../rice.nix;
-in {
   # common packages {{{
   home.packages = with pkgs; [
+    editorconfig-checker
     # rust
     rust-analyzer
     rustfmt
@@ -15,22 +13,24 @@ in {
     codespell
     python310Packages.isort
     python310Packages.python-lsp-server
-    (python310.withPackages (p: with p; [debugpy]))
+    (python310.withPackages (p: with p; [ debugpy ]))
     # shell
     nodePackages.bash-language-server
     shellcheck
     shellharden
     shfmt
     # web
+    nodePackages.eslint_d
     nodePackages.fixjson
     nodePackages.markdownlint-cli2
-    nodePackages.prettier
+    nodePackages.prettier_d_slim
     nodePackages.vscode-langservers-extracted
     # ruby
     rubocop
     solargraph
     # nix
     alejandra
+    deadnix
     rnix-lsp
     statix
     # lua
@@ -44,23 +44,19 @@ in {
     nim
     nimlsp
     # go
-    go
     gopls
     # php
     phpPackages.psalm
     # haskell
     haskellPackages.cabal-fmt
     haskell-language-server
-    # zig
-    zig
-    zls
   ];
   # }}}
 
   # neovim {{{
   programs.neovim = {
     enable = true;
-    package = pkgs.neovim-nightly;
+    package = pkgs.neovim-unwrapped;
     plugins = with pkgs.vimPlugins; [
       aniseed
       impatient-nvim
@@ -79,7 +75,6 @@ in {
       popup-nvim
       # utilities
       Comment-nvim
-      conjure
       direnv-vim
       editorconfig-nvim
       mkdir-nvim

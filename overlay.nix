@@ -1,6 +1,6 @@
 final: prev: {
   # wlroots = prev.wlroots.overrideAttrs (oldAttrs: {
-  #   buildInputs = oldAttrs.buildInputs ++ [ prev.vulkan-headers ];
+  #   version = "0.15";
   # });
 
   luaPackages =

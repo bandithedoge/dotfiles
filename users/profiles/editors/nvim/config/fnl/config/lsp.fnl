@@ -35,9 +35,11 @@
       d b.diagnostics
       a b.code_actions]
   (null-ls.setup)
-  (null-ls.register [f.alejandra
+  (null-ls.register [
+                     f.alejandra
                      f.black
                      f.cabal_fmt
+                     f.eslint_d
                      f.fish_indent
                      f.fixjson
                      f.fnlfmt
@@ -47,14 +49,19 @@
                      f.shellharden
                      f.shfmt
                      f.stylua
-                     (f.prettier.with {:extra_args (lambda [params]
-                                                     (and params.options
-                                                          params.options.tabSize
-                                                          [:--tab-width
-                                                           params.options.tabSize]))})
-                     (d.markdownlint.with {:command :markdownlint-cli2})
+                     (f.prettier_d_slim.with {:extra_args (lambda [params]
+                                                            (and params.options
+                                                                 params.options.tabSize
+                                                                 [:--tab-width
+                                                                  params.options.tabSize]))})
+                     d.deadnix
+                     d.editorconfig_checker
+                     d.eslint_d
+                     d.fish
                      d.shellcheck
                      d.statix
+                     (d.markdownlint.with {:command :markdownlint-cli2})
+                     a.eslint_d
                      a.shellcheck
                      a.statix]))
 
