@@ -58,16 +58,20 @@
                                        :sel0 _G.base02
                                        :sel1 _G.base0F}}
                  :specs {:nightfox {}}
-                 :groups {:FloatBorder {:bg :bg2}
-                          :TelescopeBorder {:link :FloatBorder}
-                          :TelescopeTitle {:fg :sel1}
-                          :TelescopeNormal {:bg :bg2}
-                          :MatchParen {:fg :sel1
-                                       :bg :bg0
-                                       :style "bold,underline"}
-                          :Folded {:bg :bg2}
-                          :NvimTreeIndentMarker {:link :IndentBlanklineChar}
-                          :CursorLineNr {:fg :sel1 :style :bold}}})
+                 :groups {:all {:FloatBorder {:bg :bg2}
+                                :NormalFloat {:bg :bg2 :fg :fg1}
+                                :WhichKeyFloat {:link :FloatBorder}
+                                :LspFloatWinNormal {:link :FloatBorder}
+                                :TelescopeBorder {:link :FloatBorder}
+                                :TelescopeTitle {:fg :sel1}
+                                :TelescopeNormal {:bg :bg2}
+                                :MatchParen {:fg :sel1
+                                             :bg :bg0
+                                             :style "bold,underline"}
+                                :Folded {:bg :bg2}
+                                :NvimTreeIndentMarker {:link :IndentBlanklineChar}
+                                :CursorLineNr {:fg :sel1 :style :bold}
+                                :PmenuSel {:fg :bg1 :bg :sel1}}}})
 
 (nightfox.compile)
 (vim.cmd "colorscheme nightfox")

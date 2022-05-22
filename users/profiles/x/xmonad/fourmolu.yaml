@@ -1,0 +1,4 @@
+indent-wheres: true
+indentation: 2
+record-brace-space: true
+respectful: true

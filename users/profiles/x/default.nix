@@ -4,27 +4,42 @@
   ...
 }: let
   rice = import ../../../rice.nix;
+  my-xmonad = pkgs.callPackage ./xmonad {};
 in {
   home.packages = with pkgs; [
+    my-xmonad
   ];
 
   xsession = {
     enable = true;
+    windowManager.command = "${my-xmonad}/bin/my-xmonad";
     windowManager.awesome = {
-      enable = true;
+      enable = false;
       luaModules = with pkgs.luaPackages; [
         fennel
         vicious
       ];
     };
+    windowManager.xmonad = {
+      enable = false;
+      config = ./xmonad/xmonad.hs;
+      enableContribAndExtras = true;
+      extraPackages = hpkgs: with hpkgs; [
+        xmobar
+      ];
+    };
   };
+
+  services.taffybar.enable = false;
+
+  fonts.fontconfig.enable = true;
 
   xdg.configFile."sx/sxrc" = {
     executable = true;
     text = ''
       #!/usr/bin/env bash
 
-      ${config.xsession.windowManager.command}
+      exec ${config.xsession.windowManager.command}
     '';
   };
 

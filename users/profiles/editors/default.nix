@@ -20,17 +20,16 @@ in
     shellharden
     shfmt
     # web
-    nodePackages.eslint_d
+    nodePackages.eslint
     nodePackages.fixjson
     nodePackages.markdownlint-cli2
-    nodePackages.prettier_d_slim
+    nodePackages.prettier
     nodePackages.vscode-langservers-extracted
     # ruby
     rubocop
     solargraph
     # nix
     alejandra
-    deadnix
     rnix-lsp
     statix
     # lua
@@ -48,8 +47,12 @@ in
     # php
     phpPackages.psalm
     # haskell
-    haskellPackages.cabal-fmt
+    cabal2nix
+    ghc
     haskell-language-server
+    haskellPackages.cabal-fmt
+    haskellPackages.cabal-install
+    haskellPackages.stack
   ];
   # }}}
 
@@ -129,7 +132,6 @@ in
       nvim-dap-ui
       # writing
       neorg
-      orgmode
       # language-specific
       crates-nvim
       lua-dev-nvim

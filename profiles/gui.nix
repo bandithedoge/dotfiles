@@ -21,6 +21,7 @@ in {
     displayManager.sx = {
       enable = true;
     };
+    libinput.enable = true;
   };
 
   services.greetd = {
@@ -36,5 +37,6 @@ in {
   fonts.fonts = with pkgs; [
     (nerdfonts.override {fonts = ["JetBrainsMono"];})
     roboto
+    material-design-icons
   ];
 }

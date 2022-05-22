@@ -13,10 +13,10 @@
 
     ${
       if !isNixOS
-      then "unbuffer home-manager --extra-experimental-features 'nix-command flakes'"
+      then "home-manager --extra-experimental-features 'nix-command flakes'"
       else if pkgs.stdenv.isDarwin
-      then "unbuffer darwin-rebuild"
-      else "sudo unbuffer nixos-rebuild"
+      then "darwin-rebuild"
+      else "sudo nixos-rebuild"
     } \
       switch --flake ~/dotfiles${
       if !isNixOS
@@ -41,6 +41,7 @@ in {
   xdg = {
     enable = true;
     # configHome = "${config.home.homeDirectory}/.config";
+    configFile."rice.json".text = builtins.toJSON rice;
   };
 
   home = {
@@ -56,6 +57,7 @@ in {
     };
     packages = with pkgs; [
       clang
+      comma
       expect
       fd
       gh
@@ -63,6 +65,7 @@ in {
       hactool
       htop
       imagemagick
+      killall
       librespeed-cli
       luajit
       mpc_cli

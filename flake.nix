@@ -40,34 +40,44 @@
   outputs =
     { self
     , digga
-    , darwin
     , nixpkgs
     , home-manager
-    , nixos-hardware
     , musnix
     , kmonad
+    , nur
+    , nixgl
+    , neorg
+    , parinfer-rust
+    , nur-bandithedoge
     , ...
-    }@inputs:
-    digga.lib.mkFlake {
-
-      inherit self inputs;
-
-      sharedOverlays = with inputs; [
+    } @ inputs:
+    let
+      overlays = [
         nur.overlay
         # neovim-nightly-overlay.overlay
         nixgl.overlay
         neorg.overlay
         # nixpkgs-wayland.overlay
         (import (parinfer-rust + "/overlay.nix"))
-        (final: prev: {
+        (_: prev: {
           bandithedoge = import nur-bandithedoge { pkgs = prev; };
         })
         (import ./overlay.nix)
       ];
+    in
+    digga.lib.mkFlake {
+      inherit self inputs;
 
-      channelsConfig.allowUnfree = true;
+      channelsConfig = {
+        allowUnfree = true;
+        allowBroken = true;
+      };
+
       channels = {
-        nixpkgs = { };
+        nixpkgs = {
+          input = nixpkgs;
+          inherit overlays;
+        };
       };
 
       nixos = {
@@ -85,9 +95,11 @@
         imports = [ (digga.lib.importHosts ./hosts) ];
 
         importables = rec {
-          profiles = digga.lib.rakeLeaves ./profiles // {
-            users = digga.lib.rakeLeaves ./users;
-          };
+          profiles =
+            digga.lib.rakeLeaves ./profiles
+            // {
+              users = digga.lib.rakeLeaves ./users;
+            };
           suites = with profiles; {
             base = [ core users.bandithedoge ];
             gui = [ gui ];
@@ -133,79 +145,5 @@
       };
 
       homeConfigurations = digga.lib.mkHomeConfigurations self.nixosConfigurations;
-
     };
-  #
-  # let
-  #   hmModule = {
-  #     home-manager = {
-  #       useGlobalPkgs = true;
-  #       useUserPackages = true;
-  #       users.bandithedoge = import ./home;
-  #     };
-  #   };
-  #
-  #   common = {
-  #     imports = [ ./common ];
-  #     nix.registry = with inputs; { nixpkgs.flake = nixpkgs; };
-  #   };
-  #
-  #   nixpkgsConfig = {
-  #     nixpkgs = {
-  #       overlays = with inputs; [
-  #         neovim-nightly-overlay.overlay
-  #         nixgl.overlay
-  #         vim-extra-plugins.overlay
-  #         neorg.overlay
-  #         (import (parinfer-rust + "/overlay.nix"))
-  #         (import (nur-bandithedoge + "/overlay.nix"))
-  #         (import ./overlay.nix)
-  #       ];
-  #       config.packageOverrides = pkgs: {
-  #         nur = import inputs.nur { inherit pkgs; };
-  #       };
-  #     };
-  #   };
-  #
-  # in
-  # {
-  #   darwinConfigurations."machine" = darwin.lib.darwinSystem {
-  #     system = "x86_64-darwin";
-  #     modules = [
-  #       ./common
-  #       ./darwin
-  #       nixpkgsConfig
-  #       home-manager.darwinModule
-  #       (nixpkgs.lib.mkMerge [
-  #         hmModule
-  #         { home-manager.users.bandithedoge.imports = [ ./home/darwin ]; }
-  #       ])
-  #     ];
-  #   };
-  #   nixosConfigurations.thonkpad = nixpkgs.lib.nixosSystem {
-  #     system = "x86_64-linux";
-  #     extraArgs = { inherit inputs; };
-  #     modules = [
-  #       ./common
-  #       ./nixos
-  #       nixpkgsConfig
-  #       nixos-hardware.nixosModules.lenovo-thinkpad-t440p
-  #       musnix.nixosModules.musnix
-  #       home-manager.nixosModules.home-manager
-  #       kmonad.nixosModule
-  #       (nixpkgs.lib.mkMerge [
-  #         hmModule
-  #         { home-manager.users.bandithedoge.imports = [ ./home/linux ]; }
-  #       ])
-  #     ];
-  #   };
-  #   homeConfigurations.bandithedoge = home-manager.lib.homeManagerConfiguration {
-  #     configuration = {
-  #       imports = [ ./home ./home/wsl ];
-  #     } // nixpkgsConfig;
-  #     system = "x86_64-linux";
-  #     username = "bandithedoge";
-  #     homeDirectory = "/mnt/c/Users/bandithedoge";
-  #   };
-  # };
 }

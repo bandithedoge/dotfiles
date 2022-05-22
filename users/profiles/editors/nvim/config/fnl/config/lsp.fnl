@@ -27,7 +27,9 @@
                            :Lua {:diagnostics {:globals [:vim]}
                                  :workspace {:library (vim.api.nvim_get_runtime_file ""
                                                                                      true)
-                                             :preloadFileSize 500}}}}))))
+                                             :preloadFileSize 500}}
+                           :haskell {:hlintOn true
+                                     :formattingProvider :fourmolu}}}))))
 
 (let [null-ls (require :null-ls)
       b null-ls.builtins
@@ -35,11 +37,10 @@
       d b.diagnostics
       a b.code_actions]
   (null-ls.setup)
-  (null-ls.register [
-                     f.alejandra
+  (null-ls.register [f.alejandra
                      f.black
                      f.cabal_fmt
-                     f.eslint_d
+                     f.eslint
                      f.fish_indent
                      f.fixjson
                      f.fnlfmt
@@ -49,19 +50,17 @@
                      f.shellharden
                      f.shfmt
                      f.stylua
-                     (f.prettier_d_slim.with {:extra_args (lambda [params]
-                                                            (and params.options
-                                                                 params.options.tabSize
-                                                                 [:--tab-width
-                                                                  params.options.tabSize]))})
-                     d.deadnix
-                     d.editorconfig_checker
-                     d.eslint_d
+                     (f.prettier.with {:extra_args (lambda [params]
+                                                     (and params.options
+                                                          params.options.tabSize
+                                                          [:--tab-width
+                                                           params.options.tabSize]))})
+                     d.eslint
                      d.fish
                      d.shellcheck
                      d.statix
                      (d.markdownlint.with {:command :markdownlint-cli2})
-                     a.eslint_d
+                     a.eslint
                      a.shellcheck
                      a.statix]))
 

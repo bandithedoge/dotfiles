@@ -1,5 +1,5 @@
-final: prev: {
-  # wlroots = prev.wlroots.overrideAttrs (oldAttrs: {
+_: prev: {
+  # wlroots = prev.wlroots.overrideAttrs (_: {
   #   version = "0.15";
   # });
 

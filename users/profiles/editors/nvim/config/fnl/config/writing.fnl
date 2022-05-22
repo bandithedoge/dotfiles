@@ -26,6 +26,3 @@
                                                                         :level_6 {:icon "     ✣"
                                                                                   :highlight :rainbowcol6}}
                                                               :markup {:icon " "}}}}}}))
-
-(let [orgmode (require :orgmode)]
-  (orgmode.setup {:org_hide_leading_stars true :org_indent_mode :indent}))

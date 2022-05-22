@@ -36,6 +36,7 @@
   services.logind.lidSwitch = "hybrid-sleep";
   hardware.opengl.enable = true;
   hardware.opengl.driSupport32Bit = true;
+  hardware.trackpoint.enable = true;
 
   services.kmonad = {
     enable = true;

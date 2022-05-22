@@ -1,8 +1,11 @@
+(require :awful.autofocus)
+
+(local assets (require :beautiful.theme_assets))
 (local awful (require :awful))
+(local beautiful (require :beautiful))
 (local gears (require :gears))
 (local naughty (require :naughty))
 (local wibox (require :wibox))
-(local beautiful (require :beautiful))
 
 (local keys (require :keys))
 
@@ -12,7 +15,7 @@
 (require :layout)
 (require :keys)
 
-(beautiful.init (require :theme))
+(beautiful.init (assets.recolor_layout (require :theme) _G.base05))
 (root.keys keys.globalkeys)
 
 ;; error handling {{{

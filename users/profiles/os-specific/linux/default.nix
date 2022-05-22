@@ -7,6 +7,7 @@
 in {
   home.packages = with pkgs; [
     cutter
+    ghidra
     icon-library
     imv
     pavucontrol

@@ -1,4 +1,6 @@
 ﻿*~
 .DS_Store
-result
 .direnv
+.stack-work/
+dist-newstyle/
+result
