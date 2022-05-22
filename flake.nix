@@ -37,34 +37,33 @@
     firefox-darwin.url = "github:bandithedoge/nixpkgs-firefox-darwin";
   };
 
-  outputs =
-    { self
-    , digga
-    , nixpkgs
-    , home-manager
-    , musnix
-    , kmonad
-    , nur
-    , nixgl
-    , neorg
-    , parinfer-rust
-    , nur-bandithedoge
-    , ...
-    } @ inputs:
-    let
-      overlays = [
-        nur.overlay
-        # neovim-nightly-overlay.overlay
-        nixgl.overlay
-        neorg.overlay
-        # nixpkgs-wayland.overlay
-        (import (parinfer-rust + "/overlay.nix"))
-        (_: prev: {
-          bandithedoge = import nur-bandithedoge { pkgs = prev; };
-        })
-        (import ./overlay.nix)
-      ];
-    in
+  outputs = {
+    self,
+    digga,
+    nixpkgs,
+    home-manager,
+    musnix,
+    kmonad,
+    nur,
+    nixgl,
+    neorg,
+    parinfer-rust,
+    nur-bandithedoge,
+    ...
+  } @ inputs: let
+    overlays = [
+      nur.overlay
+      # neovim-nightly-overlay.overlay
+      nixgl.overlay
+      neorg.overlay
+      # nixpkgs-wayland.overlay
+      (import (parinfer-rust + "/overlay.nix"))
+      (_: prev: {
+        bandithedoge = import nur-bandithedoge {pkgs = prev;};
+      })
+      (import ./overlay.nix)
+    ];
+  in
     digga.lib.mkFlake {
       inherit self inputs;
 
@@ -92,7 +91,7 @@
           ];
         };
 
-        imports = [ (digga.lib.importHosts ./hosts) ];
+        imports = [(digga.lib.importHosts ./hosts)];
 
         importables = rec {
           profiles =
@@ -101,19 +100,19 @@
               users = digga.lib.rakeLeaves ./users;
             };
           suites = with profiles; {
-            base = [ core users.bandithedoge ];
-            gui = [ gui ];
-            audio = [ audio ];
+            base = [core users.bandithedoge];
+            gui = [gui];
+            audio = [audio];
           };
         };
 
         hosts = {
-          thonkpad = { };
+          thonkpad = {};
         };
       };
 
       home = {
-        modules = [ ];
+        modules = [];
 
         importables = rec {
           profiles = digga.lib.rakeLeaves ./users/profiles;
@@ -122,7 +121,7 @@
               core
               editors
             ];
-            linux = [ os-specific.linux ];
+            linux = [os-specific.linux];
             gui = [
               wayland
               x
@@ -134,7 +133,7 @@
         };
 
         users = {
-          bandithedoge = { suites, ... }: {
+          bandithedoge = {suites, ...}: {
             imports = with suites;
               base
               ++ gui
@@ -144,6 +143,15 @@
         };
       };
 
-      homeConfigurations = digga.lib.mkHomeConfigurations self.nixosConfigurations;
+      # just wsl things
+      homeConfigurations."bandithedoge" = home-manager.lib.homeManagerConfiguration {
+        system = "x86_64-linux";
+        username = "bandithedoge";
+        homeDirectory = "/home/bandithedoge";
+        configuration = {
+          imports = [./users/profiles/core ./users/profiles/editors];
+          nixpkgs = {inherit overlays;};
+        };
+      };
     };
 }
