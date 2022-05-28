@@ -71,6 +71,7 @@ in {
       mpc_cli
       ncdu
       neofetch
+      niv
       nix-diff
       nix-output-monitor
       nix-prefetch

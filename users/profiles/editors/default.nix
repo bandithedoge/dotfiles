@@ -53,6 +53,9 @@ in
     haskellPackages.cabal-fmt
     haskellPackages.cabal-install
     haskellPackages.stack
+    # zig
+    zls
+    zig
   ];
   # }}}
 
