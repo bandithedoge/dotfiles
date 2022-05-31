@@ -89,6 +89,7 @@
             home-manager.nixosModules.home-manager
             musnix.nixosModules.musnix
             kmonad.nixosModule
+            ./nix.nix
           ];
         };
 
@@ -150,7 +151,11 @@
         username = "bandithedoge";
         homeDirectory = "/home/bandithedoge";
         configuration = {
-          imports = [./users/profiles/core ./users/profiles/editors];
+          imports = [
+            ./users/profiles/core
+            ./users/profiles/editors
+            ./nix.nix
+          ];
           nixpkgs = {inherit overlays;};
         };
       };
