@@ -901,11 +901,11 @@
     "nur-bandithedoge": {
       "flake": false,
       "locked": {
-        "lastModified": 1652354371,
-        "narHash": "sha256-Wu+n5w+WUkUvMPYxchTrTDEBtCHRfMfv+MCzpogc13E=",
+        "lastModified": 1653889098,
+        "narHash": "sha256-LB4XuyWMhmDGkqExIyWLB08XoDsqEMxTnj9Ze56+fLU=",
         "owner": "bandithedoge",
         "repo": "nur-packages",
-        "rev": "88af8aae7cd1447d2414105404786af48bab7490",
+        "rev": "13a995d71d2526159ff7ee91c1ba6570d03a3600",
         "type": "github"
       },
       "original": {

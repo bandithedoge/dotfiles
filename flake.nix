@@ -1,6 +1,7 @@
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+
     nixlib.url = "github:nix-community/nixpkgs.lib";
     nixos-hardware.url = "github:nixos/nixos-hardware";
     darwin.url = "github:lnl7/nix-darwin/master";
@@ -57,7 +58,7 @@
       nixgl.overlay
       neorg.overlay
       # nixpkgs-wayland.overlay
-      (import (parinfer-rust + "/overlay.nix"))
+      # (import (parinfer-rust + "/overlay.nix"))
       (_: prev: {
         bandithedoge = import nur-bandithedoge {pkgs = prev;};
       })

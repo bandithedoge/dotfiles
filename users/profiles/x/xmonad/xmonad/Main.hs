@@ -1,6 +1,13 @@
 module Main where
 
+import Data.Tree
+import Data.Word
+import Text.Read (read)
+
 import XMonad
+import qualified XMonad.StackSet as W
+
+import XMonad.Actions.TreeSelect
 
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
@@ -14,8 +21,11 @@ import XMonad.Layout.ResizableTile
 import XMonad.Layout.Spacing (spacingWithEdge)
 import XMonad.Layout.Tabbed
 
+import XMonad.Prompt
+import XMonad.Prompt.Shell
+
 import XMonad.Util.Cursor
-import XMonad.Util.EZConfig (additionalKeysP)
+import XMonad.Util.EZConfig (additionalKeysP, mkKeymap)
 
 import Rice
 
@@ -30,14 +40,32 @@ myLayout = avoidStruts (tall ||| Full)
 -- }}}
 
 -- keybindings {{{
-myKeys :: [(String, X ())]
-myKeys =
-  [ ("M-<Return>", spawn "kitty")
-  , ("M-C-r", spawn "my-xmonad --restart")
+myKeys :: Rice -> [(String, X ())]
+myKeys rice =
+  [ ("M-C-r", spawn "my-xmonad --restart")
   , ("M-C-q", io exitSuccess)
+  , ("M-<Return>", spawn "kitty")
   , ("M-w", kill)
+  , -- layout manipulation
+    ("M-j", windows W.focusDown)
+  , ("M-k", windows W.focusUp)
+  , ("M-S-j", windows W.swapDown)
+  , ("M-S-k", windows W.swapUp)
+  , ("M-h", sendMessage Shrink)
+  , ("M-l", sendMessage Expand)
+  , ("M-S-h", sendMessage $ IncMasterN 1)
+  , ("M-s-l", sendMessage $ IncMasterN (-1))
   , ("M-<Tab>", sendMessage NextLayout)
+  , ("M-t", withFocused $ windows . W.sink)
   ]
+    -- switch to workspace
+    ++ [ ("M-" ++ show x, windows $ W.greedyView (show x))
+       | x <- [1 .. 9]
+       ]
+    -- move to workspace
+    ++ [ ("M-S-" ++ show x, windows $ W.shift (show x))
+       | x <- [1 .. 9]
+       ]
 
 -- }}}
 
@@ -66,12 +94,10 @@ myXmobarPP rice =
 main :: IO ()
 main = do
   rice <- getRice
-  -- mySB <- statusBarPipe "my-xmobar" $ pure (myXmobarPP rice)
   xmonad
     . ewmhFullscreen
     . ewmh
     . docks
-    -- . withEasySB mySB defToggleStrutsKey
     . withEasySB (statusBarProp "my-xmobar" (pure $ myXmobarPP rice)) defToggleStrutsKey
     $ def
       { modMask = mod4Mask
@@ -80,5 +106,5 @@ main = do
       , borderWidth = 2
       , normalBorderColor = base00 rice
       , focusedBorderColor = base0F rice
+      , keys = (`mkKeymap` myKeys rice)
       }
-      `additionalKeysP` myKeys

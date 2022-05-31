@@ -15,6 +15,7 @@ rec {
   base0D = "#67aec9";
   base0E = "#cc7fbc";
   base0F = "#be93be";
+
   base10 = "#1A1D20";
   base11 = "#131517";
   base12 = base08;
@@ -63,6 +64,8 @@ rec {
       uiFont = "${uiFont}"
 
       terminal = "${terminal}"
+      wm = "${wm}"
+      menu = "${menu}"
     '';
   };
 }
