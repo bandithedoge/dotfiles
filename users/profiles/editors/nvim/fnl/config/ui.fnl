@@ -123,3 +123,9 @@
   (trouble.setup {:auto_preview false}))
 
 ;; }}}
+
+;; glow-hover.nvim {{{
+(let [glow-hover (require :glow-hover)]
+  (glow-hover.setup {:border :none}))
+
+;; }}}

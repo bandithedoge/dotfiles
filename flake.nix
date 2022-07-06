@@ -78,6 +78,7 @@
 
       channels = {
         nixpkgs = {
+          inherit overlays;
           input = nixpkgs;
         };
       };
@@ -148,18 +149,24 @@
       };
 
       # just wsl things
-      homeConfigurations."bandithedoge" = home-manager.lib.homeManagerConfiguration {
+      homeConfigurations."bandithedoge" = let
         system = "x86_64-linux";
-        username = "bandithedoge";
-        homeDirectory = "/home/bandithedoge";
-        configuration = {
-          imports = [
+      in
+        home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages.${system};
+          modules = [
+            {
+              home = {
+                homeDirectory = "/home/bandithedoge";
+                username = "bandithedoge";
+                stateVersion = "21.11";
+              };
+              nixpkgs = {inherit overlays;};
+            }
             ./users/profiles/core
             ./users/profiles/editors
             ./nix.nix
           ];
-          nixpkgs = {inherit overlays;};
         };
-      };
     };
 }

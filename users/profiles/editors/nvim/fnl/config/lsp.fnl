@@ -1,39 +1,47 @@
+(require-macros :hibiscus.vim)
+
 (let [lsp (require :lspconfig)
       lua-dev (require :lua-dev)
       cmp_nvim_lsp (require :cmp_nvim_lsp)
       schemastore (require :schemastore)
       closing_labels (require :lsp_extensions.dart.closing_labels)
       yaml (require :yaml-companion)
-      servers [:bashls
-               :clangd
-               :cssls
-               :gdscript
-               :gopls
-               :hls
-               :html
-               :jsonls
-               :nimls
-               :psalm
-               :pylsp
-               :rnix
-               :rust_analyzer
-               :solargraph
-               :zls]]
-  (each [_ server (ipairs servers)]
+      defaults {:capabilities (vim.tbl_deep_extend :force
+                                                   (cmp_nvim_lsp.update_capabilities (vim.lsp.protocol.make_client_capabilities))
+                                                   {:textDocument {:completion {:completionItem {:snippetSupport true}}}})
+                :single_file_support true}
+      servers {:bashls {}
+               :clangd {}
+               :cssls {}
+               :eslint {:filetypes [:coffee
+                                    :javascript
+                                    :javascript.jsx
+                                    :javascriptreact
+                                    :pug
+                                    :typescript
+                                    :typescript.tsx
+                                    :typescriptreact
+                                    :vue]
+                        :packageManager :pnpm}
+               :gdscript {}
+               :gopls {}
+               :hls {:haskell {:hlintOn true} :formattingProvider :fourmolu}
+               :html {}
+               :jsonls {:settings {:json {:schemas (schemastore.json.schemas)
+                                          :validate {:enable true}}}}
+               :nimls {}
+               :psalm {}
+               :pylsp {}
+               :rnix {}
+               :rust_analyzer {}
+               :solargraph {}
+               :sumneko_lua (lua-dev.setup {:runtime_path true})
+               :tsserver {}
+               :yamlls (yaml.setup)
+               :zls {}}]
+  (each [server config (pairs servers)]
     (let [s (. lsp server)]
-      (s.setup {:capabilities (cmp_nvim_lsp.update_capabilities (vim.lsp.protocol.make_client_capabilities))
-                :settings {:json {:schemas (schemastore.json.schemas)}
-                           :Lua {:diagnostics {:globals [:vim]}
-                                 :workspace {:library (vim.api.nvim_get_runtime_file ""
-                                                                                     true)
-                                             :preloadFileSize 500}}
-                           :haskell {:hlintOn true
-                                     :formattingProvider :fourmolu}}
-                :init_options {:closingLabels true}
-                :callbacks {:dart/TextDocument/publishClosingLabels (closing_labels.get_callback {:highlight :Special
-                                                                                                  :prefix " >> "})}})))
-  (lsp.sumneko_lua.setup (lua-dev.setup {:runtime_path true}))
-  (lsp.yamlls.setup (yaml.setup)))
+      (s.setup (vim.tbl_deep_extend :force defaults config)))))
 
 (let [null-ls (require :null-ls)
       b null-ls.builtins
@@ -44,7 +52,6 @@
   (null-ls.register [f.alejandra
                      f.black
                      f.cabal_fmt
-                     f.eslint
                      f.fish_indent
                      f.fixjson
                      f.fnlfmt
@@ -58,13 +65,13 @@
                                                      (and params.options
                                                           params.options.tabSize
                                                           [:--tab-width
-                                                           params.options.tabSize]))})
-                     d.eslint
+                                                           params.options.tabSize]))
+                                       :extra_filetypes [:toml :coffee :pug]})
                      d.fish
                      d.shellcheck
                      d.statix
+                     d.stylelint
                      (d.markdownlint.with {:command :markdownlint-cli2})
-                     a.eslint
                      a.shellcheck
                      a.statix]))
 
@@ -85,5 +92,4 @@
 
 (let [lsp-lines (require :lsp_lines)]
   (lsp-lines.register_lsp_virtual_lines)
-  (vim.diagnostic.config {:virtual_text false
-                          :virtual_lines true}))
+  (vim.diagnostic.config {:virtual_text false :virtual_lines true}))

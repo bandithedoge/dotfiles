@@ -31,9 +31,14 @@ in {
     nodePackages.eslint
     nodePackages.fixjson
     nodePackages.markdownlint-cli2
+    nodePackages.pnpm
     nodePackages.prettier
+    nodePackages.prettier-plugin-toml
     nodePackages.stylelint
     nodePackages.vscode-langservers-extracted
+    nodePackages.typescript
+    nodePackages.typescript-language-server
+    yarn
 
     # ruby
     rubocop
@@ -45,6 +50,7 @@ in {
     statix
 
     # lua
+    fennel
     fnlfmt
     luajitPackages.luacheck
     sumneko-lua-language-server
@@ -124,6 +130,7 @@ in {
       foldsigns-nvim
       FTerm-nvim
       gitsigns-nvim
+      glow-hover-nvim
       heirline-nvim
       indent-blankline-nvim
       lsp_lines-nvim
@@ -172,11 +179,12 @@ in {
       # language-specific
       crates-nvim
       lua-dev-nvim
-      nim-nvim
+      nim-vim
       nvim-luaref
       parinfer-rust
       rasi-vim
       yaml-companion-nvim
+      vim-coffee-script
 
       # colors
       nightfox-nvim

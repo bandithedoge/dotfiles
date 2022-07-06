@@ -8,33 +8,7 @@
 
   rice = import ../../../rice.nix;
 
-  rebuild = pkgs.writeShellScriptBin "rebuild" ''
-    #!/usr/bin/env bash
-
-    ${
-      if !isNixOS
-      then "home-manager --extra-experimental-features 'nix-command flakes'"
-      else if pkgs.stdenv.isDarwin
-      then "darwin-rebuild"
-      else "sudo nixos-rebuild"
-    } \
-      switch --flake ~/dotfiles${
-      if !isNixOS
-      then "#bandithedoge"
-      else ""
-    } --impure "$@" |& nom
-
-  '';
-
-  update = pkgs.writeShellScriptBin "update" ''
-    nix flake update ~/dotfiles
-    nix-channel --update
-    rebuild
-    sudo nix-collect-garbage
-    nix flake lock ~/dotfiles
-    sudo nix-env -p /nix/var/nix/profiles/system --delete-generations +3
-    nix-store --optimize
-  '';
+  oi = pkgs.callPackage ./oi {};
 in {
   manual.html.enable = true;
 
@@ -65,6 +39,7 @@ in {
       hactool
       htop
       imagemagick
+      jq
       killall
       librespeed-cli
       luajit
@@ -73,19 +48,17 @@ in {
       neofetch
       niv
       nix-diff
-      nix-output-monitor
       nix-prefetch
       nixfmt
       nodejs
+      oi
       pandoc
       radare2
       rclone
-      rebuild
       ruby_3_0
       stylua
       tree
       unar
-      update
       xplr
     ];
     shellAliases = {
@@ -132,7 +105,7 @@ in {
           "system"
           "vim"
         ];
-        commands = {"Nix" = "${rebuild}";};
+        commands = {"Nix" = "oi update && oi rebuild";};
       };
     };
 
