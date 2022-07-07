@@ -39,22 +39,23 @@ when isMainModule:
     # detectOs(NixOS) doesn't detect NixOS properly
     isNixOS = readFile("/etc/os-release").contains("NAME=NixOS")
     isDarwin = detectOs MacOSX
+    username = getEnv("USER")
 
   if args["rebuild"]:
     let cmd =
       if isDarwin:
-        "darwin-rebuild"
+        &"darwin-rebuild --flake {path}"
       elif isNixOS:
-        "sudo nixos-rebuild"
+        &"sudo nixos-rebuild --flake {path}"
       else:
-        "home-manager"
+        &"home-manager --extra-experimental-features 'nix-command flakes' --flake {path}#{username}"
 
     exec(
       # we need to use bash since sh doesn't support the "|&" syntax
       # "&>" doesn't work on Alpine for some reason
       "bash -c \"" &
       cmd &
-      &" switch --flake {path} --impure " &
+      " switch --impure " &
       (if showTrace: "--show-trace " else: "") &
       "|& nom" &
       "\""
