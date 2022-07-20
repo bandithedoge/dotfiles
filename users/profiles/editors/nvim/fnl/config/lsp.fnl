@@ -1,47 +1,46 @@
 (require-macros :hibiscus.vim)
+(require-macros :hibiscus.core)
 
 (let [lsp (require :lspconfig)
       lua-dev (require :lua-dev)
       cmp_nvim_lsp (require :cmp_nvim_lsp)
       schemastore (require :schemastore)
-      closing_labels (require :lsp_extensions.dart.closing_labels)
       yaml (require :yaml-companion)
-      defaults {:capabilities (vim.tbl_deep_extend :force
-                                                   (cmp_nvim_lsp.update_capabilities (vim.lsp.protocol.make_client_capabilities))
-                                                   {:textDocument {:completion {:completionItem {:snippetSupport true}}}})
-                :single_file_support true}
-      servers {:bashls {}
-               :clangd {}
-               :cssls {}
-               :eslint {:filetypes [:coffee
-                                    :javascript
-                                    :javascript.jsx
-                                    :javascriptreact
-                                    :pug
-                                    :typescript
-                                    :typescript.tsx
-                                    :typescriptreact
-                                    :vue]
-                        :packageManager :pnpm}
-               :gdscript {}
-               :gopls {}
-               :hls {:haskell {:hlintOn true} :formattingProvider :fourmolu}
-               :html {}
-               :jsonls {:settings {:json {:schemas (schemastore.json.schemas)
-                                          :validate {:enable true}}}}
-               :nimls {}
-               :psalm {}
-               :pylsp {}
-               :rnix {}
-               :rust_analyzer {}
-               :solargraph {}
-               :sumneko_lua (lua-dev.setup {:runtime_path true})
-               :tsserver {}
-               :yamlls (yaml.setup)
-               :zls {}}]
-  (each [server config (pairs servers)]
-    (let [s (. lsp server)]
-      (s.setup (vim.tbl_deep_extend :force defaults config)))))
+      defaults {:capabilities (merge (cmp_nvim_lsp.update_capabilities (vim.lsp.protocol.make_client_capabilities))
+                                     {:textDocument {:completion {:completionItem {:snippetSupport true}}}})
+                :single_file_support true}]
+  (lsp.bashls.setup defaults)
+  (lsp.clangd.setup defaults)
+  (lsp.cssls.setup defaults)
+  (lsp.eslint.setup (merge defaults
+                           {:filetypes [:coffee
+                                        :javascript
+                                        :javascript.jsx
+                                        :javascriptreact
+                                        :pug
+                                        :typescript
+                                        :typescript.tsx
+                                        :typescriptreact
+                                        :vue]
+                            :settings {:packageManager :pnpm}}))
+  (lsp.gdscript.setup defaults)
+  (lsp.gopls.setup defaults)
+  (lsp.hls.setup (merge defaults
+                        {:settings {:haskell {:formattingProvider :fourmolu}}}))
+  (lsp.html.setup defaults)
+  (lsp.jsonls.setup (merge defaults
+                           {:settings {:json {:schemas (schemastore.json.schemas)
+                                              :validate {:enable true}}}}))
+  (lsp.nimls.setup defaults)
+  (lsp.psalm.setup defaults)
+  (lsp.pylsp.setup defaults)
+  (lsp.rnix.setup defaults)
+  (lsp.rust_analyzer.setup defaults)
+  (lsp.solargraph.setup defaults)
+  (lsp.sumneko_lua.setup (lua-dev.setup {:runtime_path true}))
+  (lsp.tsserver.setup defaults)
+  (lsp.yamlls.setup (yaml.setup))
+  (lsp.zls.setup defaults))
 
 (let [null-ls (require :null-ls)
       b null-ls.builtins

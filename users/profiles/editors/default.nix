@@ -141,7 +141,6 @@ in {
       nvim-hlslens
       nvim-tree-lua
       pretty-fold-nvim
-      satellite-nvim
       todo-comments-nvim
       trouble-nvim
 

@@ -19,11 +19,6 @@
 
 ;; }}}
 
-;; vim-parinfer {{{
-(set vim.g.vim_parinfer_mode :indent)
-
-;; }}}
-
 ;; nvim-autopairs {{{
 (let [autopairs (require :nvim-autopairs)
       cmp (require :cmp)

@@ -47,10 +47,8 @@
 ;; }}}
 
 ;; mini.nvim {{{
-(let [trailspace (require :mini.trailspace)
-      cursorword (require :mini.cursorword)]
-  (trailspace.setup)
-  (cursorword.setup))
+(let [trailspace (require :mini.trailspace)]
+  (trailspace.setup))
 
 ;; }}}
 
@@ -106,12 +104,6 @@
 
 ;; }}}
 
-;; satellite.nvim {{{
-(let [satellite (require :satellite)]
-  (satellite.setup {:width 1 :current_only true}))
-
-;; }}}
-
 ;; todo-comments.nvim {{{
 (let [todo-comments (require :todo-comments)]
   (todo-comments.setup {}))
@@ -121,11 +113,5 @@
 ;; trouble.nvim {{{
 (let [trouble (require :trouble)]
   (trouble.setup {:auto_preview false}))
-
-;; }}}
-
-;; glow-hover.nvim {{{
-(let [glow-hover (require :glow-hover)]
-  (glow-hover.setup {:border :none}))
 
 ;; }}}
