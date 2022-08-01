@@ -90,5 +90,5 @@
                                          :ParameterHint]}))
 
 (let [lsp-lines (require :lsp_lines)]
-  (lsp-lines.register_lsp_virtual_lines)
+  (lsp-lines.setup)
   (vim.diagnostic.config {:virtual_text false :virtual_lines true}))

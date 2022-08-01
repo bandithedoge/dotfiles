@@ -23,7 +23,6 @@
               :formatting {:format (lspkind.cmp_format {:with_text true})}
               :sources [{:name :crates}
                         {:name :emoji}
-                        {:name :latex_symbols}
                         {:name :luasnip}
                         {:name :neorg}
                         {:name :nvim_lsp}

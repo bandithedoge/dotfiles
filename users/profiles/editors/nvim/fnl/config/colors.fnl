@@ -57,10 +57,12 @@
                                        :sel0 _G.base02
                                        :sel1 _G.base0F}}
                  :specs {:nightfox {}}
-                 :groups {:all {:FloatBorder {:bg :bg2}
+                 :groups {:all {:FloatBorder {:bg :bg2 :fg :bg2}
                                 :NormalFloat {:bg :bg2 :fg :fg1}
                                 :Search {:bg :sel1 :fg :bg1}
                                 :Cursor {:bg :sel1 :fg :bg1}
+                                :VertSplit {:bg _G.base10 :fg _G.base02}
+                                :Hlargs {:fg _G.base0F}
                                 :WhichKeyFloat {:link :FloatBorder}
                                 :LspFloatWinNormal {:link :FloatBorder}
                                 :TelescopeBorder {:link :FloatBorder}
@@ -73,8 +75,7 @@
                                              :bg :bg0
                                              :style "bold,underline"}
                                 :Folded {:bg :bg2}
-                                :NvimTreeIndentMarker {:link :IndentBlanklineChar}
-                                :NvimTreeCursorLine {:bg :bg2}
+                                :NeoTreeCursorLine {:bg :bg2}
                                 :CursorLineNr {:fg :sel1 :style :bold}
                                 :CursorLine {:bg :bg0}
                                 :PmenuSel {:fg :bg1 :bg :sel1}

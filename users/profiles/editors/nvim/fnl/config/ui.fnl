@@ -1,9 +1,11 @@
+(require-macros :hibiscus.vim)
+
 ;; indent-blankline.nvim {{{
 (let [indent_blankline (require :indent_blankline)]
   (indent_blankline.setup {:show_current_context true
                            :char "│"
                            :use_treesitter true
-                           :filetype_exclude [:help :TelescopePrompt]
+                           :filetype_exclude [:help :TelescopePrompt :neo-tree]
                            :buftype_exclude [:terminal]
                            :show_foldtext false
                            :indent_level 30}))
@@ -20,30 +22,6 @@
 ;; gitsigns.nvim {{{
 (let [gitsigns (require :gitsigns)]
   (gitsigns.setup {:diff_opts {:internal true}}))
-
-;; }}}
-
-;; nvim-tree.lua {{{
-(let [nvim-tree (require :nvim-tree)
-      config (require :nvim-tree.config)
-      cb config.nvim_tree_callback]
-  (nvim-tree.setup {:hijack_cursor true
-                    :hijack_netrw true
-                    :update_cwd true
-                    :reload_on_bufenter true
-                    :sync_root_with_cwd true
-                    :update_focused_file {:enable true}
-                    :diagnostics {:enable true :show_on_dirs true}
-                    :view {:mappings {:list [{:key :h :cb (cb :dir_up)}
-                                             {:key :l :cb (cb :cd)}]}
-                           :width 30
-                           :signcolumn :yes}
-                    :renderer {:indent_markers {:enable true}
-                               :icons {:git_placement :signcolumn
-                                       :show {:folder_arrow false}}
-                               :add_trailing true
-                               :full_name true}
-                    :filters {:dotfiles false :custom [:.DS_Store]}}))
 
 ;; }}}
 
@@ -89,7 +67,15 @@
       themes (require :telescope.themes)]
   (dressing.setup {:input {:border :solid :winblend 0}
                    :select {:backend [:telescope :nui :builtin]
-                            :telescope (themes.get_cursor)}}))
+                            :telescope (themes.get_cursor {:border true
+                                                           :borderchars [" "
+                                                                         " "
+                                                                         " "
+                                                                         " "
+                                                                         " "
+                                                                         " "
+                                                                         " "
+                                                                         " "]})}}))
 
 ;; }}}
 
@@ -122,3 +108,61 @@
   (trouble.setup {:auto_preview false}))
 
 ;; }}}
+
+;; hlargs.nvim {{{
+(let [hlargs (require :hlargs)]
+  (hlargs.setup))
+
+;; }}}
+
+;; hover.nvim {{{
+(let [hover (require :hover)]
+  (hover.setup {:init #(do
+                         (require :hover.providers.lsp)
+                         (require :hover.providers.gh)
+                         (require :hover.providers.man))
+                :preview_opts {:border :solid}})
+  (map! [n] :K hover.hover)
+  (map! [n] :gK hover.hover_select))
+
+;; }}}
+
+;; neo-tree.nvim {{{
+(let [neo-tree (require :neo-tree)]
+  (neo-tree.setup {:sources [:buffers :filesystem]
+                   :popup_border_style :solid
+                   :use_default_mappings false
+                   :default_component_configs {:container {:enable_character_fade false}
+                                               :name {:trailing_slash true
+                                                      :use_git_status_colors false}
+                                               :symbols {:added ""
+                                                         :deleted ""
+                                                         :modified ""
+                                                         :renamed ""
+                                                         :untracked ""
+                                                         :ignored ""
+                                                         :unstaged "ﱡ"
+                                                         :staged ""
+                                                         :conflict ""}}
+                   :window {:width 30
+                            :mappings {:<2-LeftMouse> :open
+                                       :<cr> :open
+                                       :s :open_split
+                                       :v :open_vsplit
+                                       :R :refresh
+                                       :a {1 :add
+                                           :config {:show_path :relative}}
+                                       :d :delete
+                                       :r :rename
+                                       :y :copy_to_clipboard
+                                       :x :cut_to_clipboard
+                                       :p :paste_from_clipboard
+                                       :q :close_window
+                                       :? :show_help}}
+                   :filesystem {:window {:mappings {:H :toggle_hidden
+                                                    :/ :fuzzy_finder
+                                                    :h :navigate_up
+                                                    :l :set_root}}
+                                :filtered_items {:hide_dotfiles false
+                                                 :hide_gitignored false}}
+                   :buffers {:window {:mappings {:d :buffer_delete}}}}))

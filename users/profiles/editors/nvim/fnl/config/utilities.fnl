@@ -32,5 +32,21 @@
 ;; neogen {{{
 (let [neogen (require :neogen)]
   (neogen.setup {:snippet_engine :luasnip}))
-  
+
 ;;}}}
+
+;; icon-picker.nvim {{{
+(let [icon-picker (require :icon-picker)]
+  (icon-picker.setup {}))
+
+;; }}}
+
+;; inc-rename.nvim {{{
+(let [inc-rename (require :inc_rename)]
+  (inc-rename.setup))
+
+;; }}}
+
+;; remember.nvim {{{
+(require :remember)
+;; }}}

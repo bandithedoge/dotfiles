@@ -15,11 +15,11 @@ in {
 
     # python
     poetry
-    python310Packages.black
-    python310Packages.isort
-    python310Packages.pyls-isort
-    python310Packages.python-lsp-black
-    python310Packages.python-lsp-server
+    # python310Packages.black
+    # python310Packages.isort
+    # python310Packages.pyls-isort
+    # python310Packages.python-lsp-black
+    # python310Packages.python-lsp-server
 
     # shell
     nodePackages.bash-language-server
@@ -117,8 +117,8 @@ in {
       nvim-autopairs
       nvim-expand-expr
       presence-nvim
-      remember-nvim
       sort-nvim
+      remember-nvim
 
       # ui
       bufferline-nvim
@@ -131,22 +131,24 @@ in {
       FTerm-nvim
       gitsigns-nvim
       glow-hover-nvim
-      heirline-nvim
+      hlargs-nvim
+      hover-nvim
       indent-blankline-nvim
       lsp_lines-nvim
       lualine-nvim
+      neo-tree-nvim
       neorg-telescope
       numbers-nvim
       nvim-colorizer-lua
       nvim-hlslens
-      nvim-tree-lua
       pretty-fold-nvim
       todo-comments-nvim
       trouble-nvim
 
       # keybindings
       fold-cycle-nvim
-      move-nvim
+      icon-picker-nvim
+      inc-rename-nvim
       which-key-nvim
 
       # lsp
@@ -159,7 +161,6 @@ in {
 
       # completion
       cmp-cmdline
-      cmp-latex-symbols
       cmp-nvim-lsp
       cmp-nvim-lsp-document-symbol
       cmp-nvim-lua
@@ -180,21 +181,21 @@ in {
       lua-dev-nvim
       nim-vim
       nvim-luaref
-      parinfer-rust
+      nvim-parinfer
+      package-info-nvim
       rasi-vim
-      yaml-companion-nvim
       vim-coffee-script
+      yaml-companion-nvim
+      yuck-vim
 
       # colors
       nightfox-nvim
 
       # telescope
-      cheatsheet-nvim
       telescope-dap-nvim
       telescope-frecency-nvim
-      telescope-fzy-native-nvim
       telescope-nvim
-      telescope-symbols-nvim
+      telescope-zf-native-nvim
 
       # snippets
       friendly-snippets
@@ -208,7 +209,7 @@ in {
 
         vim.o.guifont = monoFont .. ":h16"
 
-        require "impatient"
+        require("impatient").enable_profile()
 
         require("tangerine").setup {
           target = vim.fn.stdpath [[cache]] .. "/tangerine",

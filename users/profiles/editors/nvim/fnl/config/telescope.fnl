@@ -14,15 +14,8 @@
                               :builtin {:theme :ivy
                                         :border false
                                         :preview false}
-                              :highlights {:layout_strategy :vertical}}
-                    :extensions {:lsp_handlers {:code_action {:telescope (themes.get_cursor)}
-                                                :definition {:telescope (themes.get_cursor)}
-                                                :type_definition {:telescope (themes.get_cursor)}
-                                                :symbol {:telescope (themes.get_cursor)}
-                                                :implementation {:telescope (themes.get_cursor)}}}})
+                              :highlights {:layout_strategy :vertical}}})
   (telescope.load_extension :dap)
-  (telescope.load_extension :frecency))
-
-(let [cheatsheet (require :cheatsheet)
-      actions (require :cheatsheet.telescope.actions)]
-  (cheatsheet.setup {:telescope_mappings {:<CR> actions.select_or_execute}}))
+  (telescope.load_extension :frecency)
+  (telescope.load_extension :zf-native)
+  (telescope.load_extension :yaml_schema))

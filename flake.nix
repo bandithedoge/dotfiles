@@ -51,7 +51,7 @@
   } @ inputs: let
     overlays = with inputs; [
       nur.overlay
-      # neovim-nightly-overlay.overlay
+      neovim-nightly-overlay.overlay
       nixgl.overlay
       neorg.overlay
       nixmox.overlay

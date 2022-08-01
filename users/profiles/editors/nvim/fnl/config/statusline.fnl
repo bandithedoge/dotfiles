@@ -41,7 +41,7 @@
                             :component_separators ""
                             :section_separators ""
                             :globalstatus true}
-                  :extensions [:nvim-tree]
+                  :extensions [:nvim-tree :neo-tree]
                   :sections {:lualine_a [:mode]
                              :lualine_b [{1 :filename :path 0}]
                              :lualine_c [{1 :diagnostics

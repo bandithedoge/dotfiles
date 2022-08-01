@@ -8,16 +8,6 @@
   (map! [n] :<tab> #(fold-cycle.open))
   (map! [n] :<s-tab> #(fold-cycle.close)))
 
-(let [move (require :move)]
-  (map! [n] :<C-j> #(move.MoveLine 1))
-  (map! [n] :<C-k> #(move.MoveLine -1))
-  (map! [n] :<C-l> #(move.MoveHChar 1))
-  (map! [n] :<C-h> #(move.MoveHChar -1))
-  (map! [v] :<C-j> ":MoveBlock(1)<cr>")
-  (map! [v] :<C-k> ":MoveBlock(-1)<cr>")
-  (map! [v] :<C-l> ":MoveHBlock(1)<cr>")
-  (map! [v] :<C-h> ":MoveHBlock(-1)<cr>"))
-
 (map! [n] :<cr> ":noh<cr>")
 (map! [n] :<bs> ":WhichKey <localleader><cr>")
 
@@ -27,14 +17,15 @@
       t (require :telescope.builtin)
       telescope (require :telescope)
       fm (require :fm-nvim)
-      nvim-tree (require :nvim-tree)
       mini-br (require :mini.bufremove)
       lsp vim.lsp.buf
       expand_expr (require :expand_expr)
       dapui (require :dapui)
       dap (require :dap)
       neogen (require :neogen)
-      trouble (require :trouble)]
+      trouble (require :trouble)
+      icon-picker (require :icon-picker)
+      inc-rename (require :inc_rename)]
   (wk.setup {:ignore_missing true :icons {:separator ""}})
   (wk.register {:<leader> {:<space> [t.commands "Enter command"]
                            :f {:name :Find
@@ -47,16 +38,14 @@
                                :d ["<cmd>:cd ~/dotfiles<cr>" :Dotfiles]
                                :g ["<cmd>:cd ~/git<cr>" :Git]
                                :s ["<cmd>:cd ~/sql<cr>" :School]}
-                           :b ["<cmd>:BufferLinePick<cr>" :Buffers]
-                           :B ["<cmd>:BufferLinePickClose<cr>"
-                               "Close buffer (pick)"]
+                           :b ["<cmd>:Neotree float buffers<cr>" :Buffers]
                            :F [fm.Lf "File explorer"]
                            :g [fm.Lazygit :Git]
-                           :t [nvim-tree.toggle "File tree"]
+                           :t ["<cmd>:Neotree toggle<cr>" "File tree"]
                            :W ["<cmd>:close<cr>" "Close window"]
                            :w [mini-br.delete "Close buffer"]
-                           :? ["<cmd>:Cheatsheet<cr>" :Cheatsheet]
                            :T [#(_G.fterm_float:toggle) :Terminal]
+                           :i ["<cmd>:PickEverything<cr>" "Insert symbol"]
                            :<C-w> [#(mini-br.delete 0 true)
                                    "Close buffer (force)"]}
                 :<localleader> {:a [lsp.code_action "Code actions"]
@@ -65,8 +54,9 @@
                                 :j [lsp.definition "Jump to definition"]
                                 :D [t.diagnostics :Diagnostics]
                                 :e [expand_expr.expand "Expand expression"]
-                                :f [lsp.formatting "Format file"]
-                                :r [lsp.rename :Rename]
+                                :f [#(lsp.format {:async true}) "Format file"]
+                                :r [#(inc-rename.rename {:default (vim.fn.expand :<cword>)})
+                                    :Rename]
                                 :s [lsp.document_symbol :Symbols]
                                 :d {:name :Debug
                                     :d [dapui.toggle :Debug]
