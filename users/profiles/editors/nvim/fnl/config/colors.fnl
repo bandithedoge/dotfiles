@@ -76,6 +76,7 @@
                                              :style "bold,underline"}
                                 :Folded {:bg :bg2}
                                 :NeoTreeCursorLine {:bg :bg2}
+                                :NeoTreeModified {:fg _G.base08}
                                 :CursorLineNr {:fg :sel1 :style :bold}
                                 :CursorLine {:bg :bg0}
                                 :PmenuSel {:fg :bg1 :bg :sel1}

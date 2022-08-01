@@ -135,15 +135,17 @@
                    :default_component_configs {:container {:enable_character_fade false}
                                                :name {:trailing_slash true
                                                       :use_git_status_colors false}
-                                               :symbols {:added ""
-                                                         :deleted ""
-                                                         :modified ""
-                                                         :renamed ""
-                                                         :untracked ""
-                                                         :ignored ""
-                                                         :unstaged "ﱡ"
-                                                         :staged ""
-                                                         :conflict ""}}
+                                               :git_status {:symbols {:added ""
+                                                                      :deleted ""
+                                                                      :modified ""
+                                                                      :renamed ""
+                                                                      :untracked ""
+                                                                      :ignored ""
+                                                                      :unstaged "ﱡ"
+                                                                      :staged ""
+                                                                      :conflict ""}
+                                                            :align :left}
+                                               :modified {:symbol "ﱣ"}}
                    :window {:width 30
                             :mappings {:<2-LeftMouse> :open
                                        :<cr> :open

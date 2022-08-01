@@ -98,6 +98,7 @@ in {
       nvim-ts-context-commentstring
       nvim-ts-rainbow
       nvim-yati
+
       playground
       spellsitter-nvim
 
