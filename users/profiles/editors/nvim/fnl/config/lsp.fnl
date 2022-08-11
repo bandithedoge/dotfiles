@@ -38,6 +38,7 @@
   (lsp.rust_analyzer.setup defaults)
   (lsp.solargraph.setup defaults)
   (lsp.sumneko_lua.setup (lua-dev.setup {:runtime_path true}))
+  (lsp.tailwindcss.setup defaults)
   (lsp.tsserver.setup defaults)
   (lsp.yamlls.setup (yaml.setup))
   (lsp.zls.setup defaults))

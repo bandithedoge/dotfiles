@@ -110,12 +110,9 @@ in {
       };
     };
 
-    nnn = {
+    broot = {
       enable = true;
-      package = pkgs.nnn.override {withNerdIcons = true;};
-      plugins = {
-        src = pkgs.nnn.src + "/plugins";
-      };
+      modal = true;
     };
 
     lf = rec {

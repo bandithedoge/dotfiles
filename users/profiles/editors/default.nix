@@ -15,11 +15,11 @@ in {
 
     # python
     poetry
-    # python310Packages.black
-    # python310Packages.isort
-    # python310Packages.pyls-isort
-    # python310Packages.python-lsp-black
-    # python310Packages.python-lsp-server
+    python310Packages.black
+    python310Packages.isort
+    python310Packages.pyls-isort
+    python310Packages.python-lsp-black
+    python310Packages.python-lsp-server
 
     # shell
     nodePackages.bash-language-server
@@ -28,6 +28,7 @@ in {
     shfmt
 
     # web
+    bandithedoge.nodePackages.tailwindcss-language-server
     nodePackages.eslint
     nodePackages.fixjson
     nodePackages.markdownlint-cli2
@@ -35,9 +36,9 @@ in {
     nodePackages.prettier
     nodePackages.prettier-plugin-toml
     nodePackages.stylelint
-    nodePackages.vscode-langservers-extracted
     nodePackages.typescript
     nodePackages.typescript-language-server
+    nodePackages.vscode-langservers-extracted
     yarn
 
     # ruby
