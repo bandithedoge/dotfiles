@@ -48,4 +48,17 @@
 ;; colortils.nvim {{{
 (let [colortils (require :colortils)]
   (colortils.setup {:border :solid}))
+
+;; }}}
+
+;; detect-language.nvim {{{
+(let [detect-language (require :detect-language)]
+  (detect-language.setup {}))
+
+;; }}}
+
+;; stabilize.nvim {{{
+(let [stabilize (require :stabilize)]
+  (stabilize.setup {}))
+
 ;; }}}

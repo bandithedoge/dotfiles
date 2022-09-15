@@ -28,6 +28,7 @@ in {
     shfmt
 
     # web
+    bandithedoge.nodePackages.emmet-ls
     bandithedoge.nodePackages.tailwindcss-language-server
     nodePackages.eslint
     nodePackages.fixjson
@@ -99,7 +100,6 @@ in {
       nvim-ts-context-commentstring
       nvim-ts-rainbow
       nvim-yati
-
       playground
       spellsitter-nvim
 
@@ -113,6 +113,7 @@ in {
       # utilities
       colortils-nvim
       Comment-nvim
+      detect-language-nvim
       direnv-vim
       editorconfig-nvim
       mkdir-nvim
@@ -122,32 +123,35 @@ in {
       presence-nvim
       remember-nvim
       sort-nvim
+      stabilize-nvim
 
       # ui
+      FTerm-nvim
       bufferline-nvim
       cinnamon-nvim
       dressing-nvim
       flare-nvim
       fm-nvim
       foldsigns-nvim
-      FTerm-nvim
       gitsigns-nvim
       glow-hover-nvim
+      heirline-nvim
       hlargs-nvim
       hover-nvim
       indent-blankline-nvim
       lsp_lines-nvim
       lualine-nvim
       neo-tree-nvim
+      neodim
       neorg-telescope
+      notifier-nvim
       numbers-nvim
       nvim-colorizer-lua
       nvim-hlslens
+      nvim-notify
       pretty-fold-nvim
       todo-comments-nvim
       trouble-nvim
-      notifier-nvim
-      nvim-notify
 
       # keybindings
       fold-cycle-nvim

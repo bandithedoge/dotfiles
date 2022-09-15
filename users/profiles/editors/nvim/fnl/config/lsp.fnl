@@ -13,6 +13,7 @@
   (lsp.bashls.setup defaults)
   (lsp.clangd.setup defaults)
   (lsp.cssls.setup defaults)
+  (lsp.emmet_ls.setup defaults)
   (lsp.eslint.setup (merge defaults
                            {:filetypes [:coffee
                                         :javascript

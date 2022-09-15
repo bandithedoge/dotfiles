@@ -253,3 +253,9 @@
           (vim.notify method.message (. severity params.type)))))
 
 ;; }}}
+
+;; neodim {{{
+(let [neodim (require :neodim)]
+  (neodim.setup {:blend_color _G.base00}))
+
+;; }}}
