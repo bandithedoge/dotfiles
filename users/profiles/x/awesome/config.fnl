@@ -18,6 +18,9 @@
 
 (root.keys keys.globalkeys)
 
+(awful.spawn.easy_async :hostname #(set _G.hostname $1))
+(set naughty.config.presets.critical {:bg _G.base08 :fg _G.base00 :timeout 0})
+
 ;; error handling {{{
 (fn error [text]
   (naughty.notify {:preset naughty.config.presets.critical :title :FUCK : text}))

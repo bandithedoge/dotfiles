@@ -9,14 +9,14 @@
 (local M
        {:globalkeys (join (key [mod :Control] :r awesome.restart)
                           (key [mod :Control] :q awesome.quit)
-                          (key [mod] :Return #(awful.spawn _G.terminal))
-                          (key [mod] :space #(awful.spawn _G.menu))
                           (key [mod] :j #(awful.client.focus.byidx 1))
                           (key [mod] :k #(awful.client.focus.byidx -1))
                           (key [mod :Shift] :j #(awful.client.swap.byidx 1))
                           (key [mod :Shift] :k #(awful.client.swap.byidx -1))
-                          (key [mod] :h #(awful.tag.incmwfact -0.02))
-                          (key [mod] :l #(awful.tag.incmwfact 0.02))
+                          (key [mod] :h #(awful.screen.focus_relative -1))
+                          (key [mod] :l #(awful.screen.focus_relative 1))
+                          (key [mod :Control] :h #(awful.tag.incmwfact -0.02))
+                          (key [mod :Control] :l #(awful.tag.incmwfact 0.02))
                           (key [mod :Shift] :h
                                #(awful.tag.incnmaster 1 nil true))
                           (key [mod :Shift] :l

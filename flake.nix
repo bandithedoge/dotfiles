@@ -29,6 +29,7 @@
     nur.url = "github:nix-community/NUR";
     parinfer-rust.url = "github:eraserhd/parinfer-rust";
     parinfer-rust.flake = false;
+    mozilla.url = "github:mozilla/nixpkgs-mozilla";
 
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
@@ -53,6 +54,7 @@
       neorg.overlay
       nixmox.overlay
       nixpkgs-wayland.overlay
+      mozilla.overlays.firefox
       (import (parinfer-rust + "/overlay.nix"))
       (_: prev: {
         bandithedoge = import nur-bandithedoge {pkgs = prev;};
@@ -112,6 +114,14 @@
               nixos-hardware.nixosModules.common-pc-laptop-ssd
             ];
           };
+          machine = {
+            modules = with nixos-hardware.nixosModules; [
+              common-pc
+              common-pc-ssd
+              common-cpu-intel-cpu-only
+              common-gpu-amd
+            ];
+          };
         };
       };
 
@@ -126,13 +136,8 @@
               editors
             ];
             linux = [os-specific.linux];
-            gui = [
-              # wayland
-              x
-            ];
-            audio = [
-              audio
-            ];
+            gui = [x];
+            audio = [audio];
           };
         };
 

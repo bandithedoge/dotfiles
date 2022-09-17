@@ -18,25 +18,21 @@ in {
   nixpkgs.config = {allowBroken = true;};
 
   home = {
+    # {{{
     stateVersion = "21.11";
     sessionVariables = {
       EDITOR = "nvim";
-      BROWSER =
-        if pkgs.stdenv.isDarwin
-        then "firefox"
-        else "qutebrowser";
+      BROWSER = "qutebrowser";
       LF_ICONS = "${builtins.readFile ./icons}";
       TERM = "xterm-256color";
       GO111MODULE = "on";
     };
     packages = with pkgs; [
-      clang
+      # {{{
       comma
-      expect
-      ripgrep
       fd
       gh
-      glow
+      git
       hactool
       htop
       imagemagick
@@ -44,24 +40,18 @@ in {
       killall
       librespeed-cli
       luajit
-      mpc_cli
       ncdu
       neofetch
       niv
-      nix-diff
       nix-prefetch
-      nixfmt
-      nodejs
       oi
       pandoc
-      radare2
       rclone
-      ruby_3_0
-      stylua
+      ripgrep
       tree
       unar
-      xplr
     ];
+    # }}}
     shellAliases = {
       s = "sudo";
       c = "clear";
@@ -80,6 +70,7 @@ in {
       bq = "brew list";
     };
   };
+  # }}}
 
   programs = {
     home-manager = {
@@ -87,108 +78,8 @@ in {
       path = "...";
     };
 
-    lazygit.enable = true;
-    nix-index.enable = true;
-
-    topgrade = {
-      enable = true;
-      settings = {
-        assume_yes = true;
-        set_title = true;
-        cleanup = true;
-        brew.greedy_cask = true;
-        disable = [
-          "brew_cask"
-          "brew_formula"
-          "git_repos"
-          "gnome_shell_extensions"
-          "nix"
-          "system"
-          "vim"
-        ];
-        commands = {"Nix" = "oi update && oi rebuild";};
-      };
-    };
-
-    lf = rec {
-      enable = true;
-      settings = {
-        ignorecase = true;
-        icons = true;
-        hidden = true;
-        wrapscroll = true;
-      };
-      previewer.source = pkgs.writeShellScript "pv.sh" ''
-        #!/usr/bin/env bash
-
-        case "$1" in
-          *.tar* | *.zip | *.7z | *.rar | *.iso | *.jar)
-            ${pkgs.unar}/bin/lsar "$1" | tail -n +2 | tree -C --fromfile . ;;
-          *) ${pkgs.pistol}/bin/pistol "$1" ;;
-        esac
-      '';
-      keybindings = {
-        f = ''
-          $lf -remote "send $id select '$(fd . -H -d1 -c always | sk --ansi || true)'"
-        '';
-        F = ''
-          $lf -remote "send $id select '$(fd . -H -c always | sk --ansi || true)'"
-        '';
-        x = "cut";
-        d = "delete";
-        gG = "$lazygit -p $PWD";
-      };
-    };
-
-    starship = {
-      enable = true;
-      settings = {
-        golang.symbol = "";
-        lua.symbol = "";
-        nim.symbol = "";
-        nix_shell.symbol = "";
-        python.symbol = "";
-        ruby.symbol = "";
-        rust.symbol = "";
-        time = {
-          disabled = false;
-          format = "[$time]($style) ";
-        };
-        status = {
-          disabled = false;
-          format = "[$common_meaning$signal_name $status]($style) ";
-        };
-        git_metrics.disabled = false;
-        directory.read_only = "";
-      };
-    };
-    bat = {
-      enable = true;
-      config = {theme = "base16";};
-    };
-
-    lsd = {
-      enable = true;
-      enableAliases = true;
-    };
-
-    skim = {
-      enable = true;
-      enableFishIntegration = true;
-      defaultOptions = with rice; [
-        "--prompt='❯ '"
-        "--color=bg+:${base02},bg:${base00},spinner:${base0F},hl:${base0F},fg:${base04},header:${base0F},info:${base0A},pointer:${base0F},marker:${base0C},fg+:${base06},prompt:${base0F},hl+:${base0D}"
-        "--tabstop=4"
-        "--bind=ctrl-d:half-page-down,ctrl-u:half-page-up"
-      ];
-    };
-
-    direnv = {
-      enable = true;
-      nix-direnv.enable = true;
-    };
-
     fish = {
+      # {{{
       enable = true;
       interactiveShellInit = with rice;
         ''
@@ -220,6 +111,89 @@ in {
           set fish_pager_color_progress brwhite --background='${base02}'
         ''
         + builtins.readFile ./fish.fish;
+    };
+    # }}}
+
+    lf = rec {
+      # {{{
+      enable = true;
+      settings = {
+        ignorecase = true;
+        icons = true;
+        hidden = true;
+        wrapscroll = true;
+      };
+      previewer.source = pkgs.writeShellScript "pv.sh" ''
+        #!/usr/bin/env bash
+
+        case "$1" in
+          *.tar* | *.zip | *.7z | *.rar | *.iso | *.jar)
+            ${pkgs.unar}/bin/lsar "$1" | tail -n +2 | tree -C --fromfile . ;;
+          *) ${pkgs.pistol}/bin/pistol "$1" ;;
+        esac
+      '';
+      keybindings = {
+        f = ''
+          $lf -remote "send $id select '$(fd . -H -d1 -c always | sk --ansi || true)'"
+        '';
+        F = ''
+          $lf -remote "send $id select '$(fd . -H -c always | sk --ansi || true)'"
+        '';
+        x = "cut";
+        d = "delete";
+        gG = "$lazygit -p $PWD";
+      };
+    };
+    # }}}
+
+    starship = {
+      # {{{
+      enable = true;
+      settings = {
+        golang.symbol = "";
+        lua.symbol = "";
+        nim.symbol = "";
+        nix_shell.symbol = "";
+        python.symbol = "";
+        ruby.symbol = "";
+        rust.symbol = "";
+        time = {
+          disabled = false;
+          format = "[$time]($style) ";
+        };
+        status = {
+          disabled = false;
+          format = "[$common_meaning$signal_name $status]($style) ";
+        };
+        git_metrics.disabled = false;
+        directory.read_only = "";
+      };
+    };
+    # }}}
+
+    bat.enable = true;
+    lazygit.enable = true;
+    nix-index.enable = true;
+
+    lsd = {
+      enable = true;
+      enableAliases = true;
+    };
+
+    skim = {
+      enable = true;
+      enableFishIntegration = true;
+      defaultOptions = with rice; [
+        "--prompt='❯ '"
+        "--color=bg+:${base02},bg:${base00},spinner:${base0F},hl:${base0F},fg:${base04},header:${base0F},info:${base0A},pointer:${base0F},marker:${base0C},fg+:${base06},prompt:${base0F},hl+:${base0D}"
+        "--tabstop=4"
+        "--bind=ctrl-d:half-page-down,ctrl-u:half-page-up"
+      ];
+    };
+
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
     };
   };
 }

@@ -165,6 +165,9 @@
 
       $monoFont: "${monoFont}";
       $uiFont: "${uiFont}";
+
+      $wallpaper: "${wallpaper}";
+      $wallpaperBlurred: "${wallpaperBlurred}";
     '';
   };
 }

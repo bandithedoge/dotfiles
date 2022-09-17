@@ -6,10 +6,9 @@
   rice = import ../rice.nix {inherit pkgs;};
 in {
   environment.systemPackages = with pkgs; [
-    connman-gtk
-    i3lock-color
     xorg.setxkbmap
     betterlockscreen
+    arandr
   ];
 
   services.xserver = {
@@ -43,6 +42,7 @@ in {
       }
     ];
     layout = "pl";
+    libinput.mouse.accelProfile = "flat";
   };
 
   programs.xss-lock = {
@@ -58,4 +58,6 @@ in {
     (nerdfonts.override {fonts = ["JetBrainsMono"];})
     roboto
   ];
+
+  security.polkit.enable = true;
 }

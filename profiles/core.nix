@@ -3,6 +3,7 @@
 
   environment.systemPackages = with pkgs; [
     alsa-utils
+    ntfs3g
   ];
 
   security = {
@@ -10,7 +11,6 @@
     pam.services.swaylock.text = ''
       auth include login
     '';
-    pki.certificateFiles = [/etc/ssl/certs/certyfikat.crt];
   };
 
   services.dbus = {
@@ -22,11 +22,6 @@
 
   services.devmon.enable = true;
   programs.udevil.enable = true;
-
-  services.connman = {
-    enable = true;
-    enableVPN = false;
-  };
 
   services.openssh = {
     enable = true;
@@ -43,4 +38,6 @@
   users.mutableUsers = true;
 
   programs.adb.enable = true;
+
+  services.upower.enable = true;
 }

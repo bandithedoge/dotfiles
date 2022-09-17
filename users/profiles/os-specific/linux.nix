@@ -9,10 +9,12 @@ in {
     packages = with pkgs; [
       cutter
       dfeet
-      discord
+      discord-canary
       ghidra
+      gparted
       icon-library
       imv
+      keepassxc
       oomoxFull
       pavucontrol
       pcmanfm
@@ -338,6 +340,61 @@ in {
     };
   };
   # }}}
+
+  programs.chromium = {
+    # {{{
+    enable = true;
+    package = pkgs.vivaldi;
+    extensions =
+      builtins.map
+      (id: {inherit id;})
+      (
+        builtins.attrValues {
+          "Augmented Steam" = "dnhpnfgdlenaccegplpojghhmaamnnfp";
+          "Base64 encode/decode selected text" = "gkdcpimagggbnjdkjhbnilfeiidhdhcl";
+          "BetterViewer" = "llcpfkbjgkpmapiidpnohffjmmnhpmpb";
+          "Canvas Blocker for Google Chrome" = "einlodpanajlpficpkejcoajkadbddjn";
+          "CSGOFloat Market Checker" = "jjicbefpemnphinccgikpdaagjebbnhg";
+          "Don't F*** With Paste" = "nkgllhigpcljnhoakjkgaieabnkmgdkb";
+          "Enhanced GitHub" = "anlikcnbgdeidpacdbdljnabclhahhmd";
+          "Enhancer for YouTube" = "ponfpcnoihfmfllpaingbgckeeldkhle";
+          "Gitako - GitHub file tree" = "giljefjcheohhamkjphiebfjnlphnokk";
+          "GitHub Code Folding" = "lefcpjbffalgdcdgidjdnmabfenecjdf";
+          "GitHub Isometric Contributions" = "mjoedlfflcchnleknnceiplgaeoegien";
+          "GitHub Repository Size" = "apnjnioapinblneaedefcnopcjepgkci";
+          "Imagus" = "immpkjjlgappgfkkfieppnmlhakdmaab";
+          "Lovely forks" = "ialbpcipalajnakfondkflpkagbkdoib";
+          "Material Icons for GitHub" = "bggfcpfjbdkhfhfmkjpbhnkhnpjjeomc";
+          "npmhub" = "kbbbjimdjbjclaebffknlabpogocablj";
+          "OctoLinker" = "jlmafbaeoofdegohdhinkhilhclaklkp";
+          "Privacy Badger" = "pkehgijcmpdhfbdbbnkijodmdjhbjlgp";
+          "Privacy Pass" = "ajhmfdgkijocedmfjonnpjfojldioehi";
+          "PronounDB" = "nblkbiljcjfemkfjnhoobnojjgjdmknf";
+          "Reddit Enhancement Suite" = "kbmfpngjjgdllneeigpgjifpgocmfgmb";
+          "Refined GitHub" = "hlepfoohegkhhmjieoechaddaejaokhf";
+          "Ruffle" = "donbcfbmhbcapadipfkeojnmajbakjdc";
+          "ScrollAnywhere" = "jehmdpemhgfgjblpkilmeoafmkhbckhi";
+          "Sourcegraph" = "dgjhfomjieaadpoljlnidmbgkdffpack";
+          "SponsorBlock for YouTube" = "mnjggcdmjocbbbhaepdhchncahnbgone";
+          "SteamDB" = "kdbmhfkmnlmbkgbabkdealhhbfhlmmon";
+          "Stylus" = "clngdbkpkpeebahjckkjfobafhncgmne";
+          "Vimium C" = "hfjbmagddngcpeloejdejnfgbamkjaeg";
+          "Violentmonkey" = "jinjaccalgkegednnccohejagnlnfdag";
+        }
+      );
+  };
+  # }}}
+
+  xdg.configFile."vivaldi/css/vivaldi.css".source = let
+    input = pkgs.writeText "vivaldi.scss" ''
+      ${rice.def.scss}
+
+      ${builtins.readFile ./vivaldi.scss}
+    '';
+  in
+    pkgs.runCommand "vivaldi.css" {} ''
+      ${pkgs.sass}/bin/sass ${input} $out
+    '';
 
   services.syncthing.enable = true;
 }

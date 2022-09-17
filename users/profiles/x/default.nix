@@ -5,7 +5,7 @@
 }: let
   rice = import ../../../rice.nix {inherit pkgs;};
 in {
-  home.packages = with pkgs; [];
+  home.packages = with pkgs; [xorg.xev];
 
   xsession = {
     enable = true;
@@ -15,6 +15,15 @@ in {
       luaModules = with pkgs.luaPackages; [
         vicious
       ];
+    };
+  };
+
+  services.sxhkd = {
+    enable = true;
+    keybindings = {
+      "super + Return" = rice.terminal;
+      "super + space" = rice.menu;
+      "super + b" = "$BROWSER";
     };
   };
 

@@ -27,4 +27,9 @@
     distrho
     geonkick
   ];
+
+  services.easyeffects = {
+    enable = true;
+    preset = "main";
+  };
 }

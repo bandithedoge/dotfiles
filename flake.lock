@@ -476,6 +476,21 @@
         "type": "github"
       }
     },
+    "mozilla": {
+      "locked": {
+        "lastModified": 1657214286,
+        "narHash": "sha256-rO/4oymKXU09wG2bcTt4uthPCp1XsBZjxuCJo3yVXNs=",
+        "owner": "mozilla",
+        "repo": "nixpkgs-mozilla",
+        "rev": "0508a66e28a5792fdfb126bbf4dec1029c2509e0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mozilla",
+        "repo": "nixpkgs-mozilla",
+        "type": "github"
+      }
+    },
     "musnix": {
       "inputs": {
         "nixpkgs": "nixpkgs_2"
@@ -952,6 +967,7 @@
         "digga": "digga",
         "home-manager": "home-manager",
         "kmonad": "kmonad",
+        "mozilla": "mozilla",
         "musnix": "musnix",
         "neorg": "neorg",
         "neovim-nightly-overlay": "neovim-nightly-overlay",
