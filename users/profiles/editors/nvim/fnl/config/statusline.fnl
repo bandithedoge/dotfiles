@@ -110,9 +110,7 @@
                                     :hl {:bg _G.base02}}
                                    [file-icon
                                     (merge {:hl #(when vim.bo.modified
-                                                   {:fg _G.base08
-                                                    :bold true
-                                                    :force true})}
+                                                   {:bold true :force true})}
                                            [{:provider #(do
                                                           (var filename
                                                                (vim.fn.fnamemodify $1.filename

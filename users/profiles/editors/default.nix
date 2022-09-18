@@ -126,12 +126,13 @@ in {
       stabilize-nvim
 
       # ui
-      FTerm-nvim
       cinnamon-nvim
       dressing-nvim
+      fidget-nvim
       flare-nvim
       fm-nvim
       foldsigns-nvim
+      FTerm-nvim
       gitsigns-nvim
       glow-hover-nvim
       heirline-nvim
@@ -142,7 +143,6 @@ in {
       neo-tree-nvim
       neodim
       neorg-telescope
-      notifier-nvim
       numbers-nvim
       nvim-colorizer-lua
       nvim-hlslens

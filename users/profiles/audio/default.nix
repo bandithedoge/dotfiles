@@ -14,10 +14,12 @@
     goattracker
     helvum
     milkytracker
+    playerctl
     pt2-clone
     qpwgraph
     reaper
     soundtracker
+    strawberry
 
     # plugins
     aether-lv2

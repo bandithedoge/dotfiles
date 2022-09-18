@@ -52,6 +52,7 @@
   services.thermald.enable = true;
   services.tlp.enable = true;
   services.logind.lidSwitch = "suspend";
+
   hardware = {
     opengl = {
       enable = true;

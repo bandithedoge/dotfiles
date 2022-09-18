@@ -72,7 +72,9 @@
                                                                                       "%")
                                                                                   "")))))]
     (update-widget)
-    (awful.spawn.with_line_callback "alsactl monitor" {:stdout update-widget}))
+    (awful.spawn.with_line_callback (if (= _G.hostname :thonkpad)
+                                        "alsactl monitor" "amixer events")
+                                    {:stdout update-widget}))
   (s.myvolumebox:connect_signal "button::press"
                                 #(match $4
                                    1 (awful.spawn "amixer set Master toggle")

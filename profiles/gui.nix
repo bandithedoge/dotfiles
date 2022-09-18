@@ -42,7 +42,6 @@ in {
       }
     ];
     layout = "pl";
-    libinput.mouse.accelProfile = "flat";
   };
 
   programs.xss-lock = {
@@ -58,6 +57,14 @@ in {
     (nerdfonts.override {fonts = ["JetBrainsMono"];})
     roboto
   ];
+
+  fonts.fontconfig = {
+    enable = true;
+    defaultFonts = {
+      monospace = [rice.monoFont];
+      sansSerif = [rice.uiFont];
+    };
+  };
 
   security.polkit.enable = true;
 }

@@ -344,7 +344,7 @@ in {
   programs.chromium = {
     # {{{
     enable = true;
-    package = pkgs.vivaldi;
+    package = pkgs.vivaldi.override {proprietaryCodecs = true;};
     extensions =
       builtins.map
       (id: {inherit id;})
@@ -385,6 +385,18 @@ in {
   };
   # }}}
 
+  programs.firefox = {
+    enable = true;
+    package = pkgs.firefox-beta-bin.override {
+      cfg.enableTridactylNative = true;
+    };
+    profiles = {
+      default = {
+        settings = {};
+      };
+    };
+  };
+
   xdg.configFile."vivaldi/css/vivaldi.css".source = let
     input = pkgs.writeText "vivaldi.scss" ''
       ${rice.def.scss}
@@ -395,6 +407,16 @@ in {
     pkgs.runCommand "vivaldi.css" {} ''
       ${pkgs.sass}/bin/sass ${input} $out
     '';
+
+  xdg.configFile."discordcanary/settings.json".text = builtins.toJSON {
+    enableHardwareAcceleration = false;
+    OPEN_ON_STARTUP = false;
+    openasar = {
+      js = "fetch('https://raw.githubusercontent.com/Cumcord/builds/main/build.js').then(r=>r.text()).then(eval)";
+      quickstart = false;
+      setup = true;
+    };
+  };
 
   services.syncthing.enable = true;
 }

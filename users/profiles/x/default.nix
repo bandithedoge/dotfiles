@@ -24,6 +24,11 @@ in {
       "super + Return" = rice.terminal;
       "super + space" = rice.menu;
       "super + b" = "$BROWSER";
+      "super + Escape" = "pkill -USR1 -x sxhkd";
+      "Print" = "flameshot gui";
+      "XF86AudioMute" = "amixer set Master toggle";
+      "XF86AudioRaiseVolume" = "amixer set Master 5%+";
+      "XF86AudioLowerVolume" = "amixer set Master 5%-";
     };
   };
 
@@ -238,4 +243,17 @@ in {
     };
   };
   # }}}
+
+  services.flameshot = {
+    enable = true;
+    settings = {
+      General = {
+        uiColor = rice.base0F;
+        disabledTrayIcon = true;
+        showSidePanelButton = false;
+        showDesktopNotification = false;
+        autoCloseIdleDaemon = true;
+      };
+    };
+  };
 }

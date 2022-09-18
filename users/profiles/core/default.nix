@@ -22,13 +22,13 @@ in {
     stateVersion = "21.11";
     sessionVariables = {
       EDITOR = "nvim";
-      BROWSER = "qutebrowser";
       LF_ICONS = "${builtins.readFile ./icons}";
       TERM = "xterm-256color";
       GO111MODULE = "on";
     };
     packages = with pkgs; [
       # {{{
+      broot
       comma
       fd
       gh
@@ -82,6 +82,21 @@ in {
     fish = {
       # {{{
       enable = true;
+      functions = {
+        "br" = {
+          body = ''
+            set f (mktemp)
+            broot --outcmd $f $argv
+            if test $status -ne 0
+              rm -f "$f"
+              return "$code"
+            end
+            set d (cat "$f")
+            rm -f "$f"
+            eval "$d"
+          '';
+        };
+      };
       interactiveShellInit = with rice;
         ''
           set fish_color_autosuggestion '${base03}'
@@ -196,5 +211,10 @@ in {
       enable = true;
       nix-direnv.enable = true;
     };
+  };
+
+  xdg.configFile."broot/conf.toml".source = (pkgs.formats.toml {}).generate "broot-config" {
+    modal = true;
+    default_flags = "gh";
   };
 }

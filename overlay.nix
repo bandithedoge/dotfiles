@@ -12,4 +12,6 @@ _: prev: {
     };
 
   vimPlugins = prev.vimPlugins // prev.bandithedoge.vimPlugins;
+
+  discord-canary = prev.discord-canary.override {withOpenASAR = true;};
 }

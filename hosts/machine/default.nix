@@ -41,6 +41,10 @@
   networking.useDHCP = true;
 
   hardware.cpu.intel.updateMicrocode = config.hardware.enableRedistributableFirmware;
+
+  services.xserver.libinput.mouse.accelProfile = "flat";
+
+  hardware.opengl.enable = true;
   # }}}
 
   # drives {{{
@@ -52,6 +56,18 @@
     "/boot" = {
       device = "/dev/disk/by-uuid/90CD-E31C";
       fsType = "vfat";
+    };
+    "/mnt/data" = {
+      device = "/dev/disk/by-label/data";
+      fsType = "btrfs";
+    };
+    "/mnt/soft" = {
+      device = "/dev/disk/by-label/soft";
+      fsType = "btrfs";
+    };
+    "/mnt/buttplug" = {
+      device = "/dev/disk/by-label/buttplug";
+      fsType = "btrfs";
     };
   };
 

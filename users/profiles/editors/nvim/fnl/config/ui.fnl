@@ -171,91 +171,14 @@
                                                    (bufremove.delete node.extra.bufnr
                                                                      true))}}}))
 
-;; nvim-notify {{{
-(let [notify (require :notify)
-      spinner-frames ["⣾" "⣽" "⣻" "⢿" "⡿" "⣟" "⣯" "⣷"]]
-  (notify.setup {:fps 60})
-  (set vim.notify notify)
-  ;; copied and compiled to fennel using antifennel
-  ;; https://github.com/rcarriga/nvim-notify/wiki/Usage-Recipes#progress-updates
-  (local client-notifs {})
-
-  (fn get-notif-data [client-id token]
-    (when (not (. client-notifs client-id))
-      (tset client-notifs client-id {}))
-    (when (not (. (. client-notifs client-id) token))
-      (tset (. client-notifs client-id) token {}))
-    (. (. client-notifs client-id) token))
-
-  (local spinner-frames ["⣾" "⣽" "⣻" "⢿" "⡿" "⣟" "⣯" "⣷"])
-
-  (fn update-spinner [client-id token]
-    (let [notif-data (get-notif-data client-id token)]
-      (when notif-data.spinner
-        (local new-spinner (% (+ notif-data.spinner 1) (length spinner-frames)))
-        (set notif-data.spinner new-spinner)
-        (set notif-data.notification
-             (vim.notify nil nil
-                         {:replace notif-data.notification
-                          :hide_from_history true
-                          :icon (. spinner-frames new-spinner)}))
-        (vim.defer_fn (fn []
-                        (update-spinner client-id token))
-                      100))))
-
-  (fn format-title [title client-name]
-    (.. client-name (or (and (> (length title) 0) (.. ": " title)) "")))
-
-  (fn format-message [message percentage]
-    (.. (or (and percentage (.. percentage "%\t")) "") (or message "")))
-
-  ;; https://github.com/rcarriga/nvim-notify/wiki/Usage-Recipes#lsp-status-updates
-  (tset vim.lsp.handlers :$/progress
-        (fn [_ result ctx]
-          (let [client-id ctx.client_id
-                val result.value]
-            (when (not val.kind)
-              (lua "return "))
-            (local notif-data (get-notif-data client-id result.token))
-            (if (= val.kind :begin)
-                (let [message (format-message val.message val.percentage)]
-                  (set notif-data.notification
-                       (vim.notify message :info
-                                   {:timeout false
-                                    :title (format-title val.title
-                                                         (. (vim.lsp.get_client_by_id client-id)
-                                                            :name))
-                                    :hide_from_history false
-                                    :icon (. spinner-frames 1)}))
-                  (set notif-data.spinner 1)
-                  (update-spinner client-id result.token))
-                (and (= val.kind :report) notif-data)
-                (set notif-data.notification
-                     (vim.notify (format-message val.message val.percentage)
-                                 :info
-                                 {:replace notif-data.notification
-                                  :hide_from_history false}))
-                (and (= val.kind :end) notif-data)
-                (do
-                  (set notif-data.notification
-                       (vim.notify (or (and val.message
-                                            (format-message val.message))
-                                       :Complete)
-                                   :info
-                                   {:timeout 3000
-                                    :replace notif-data.notification
-                                    :icon ""}))
-                  (set notif-data.spinner nil))))))
-  ;; https://github.com/rcarriga/nvim-notify/wiki/Usage-Recipes#lsp-messages
-  (local severity [:error :warn :info :info])
-  (tset vim.lsp.handlers :window/showMessage
-        (fn [err method params client-id]
-          (vim.notify method.message (. severity params.type)))))
-
-;; }}}
-
 ;; neodim {{{
 (let [neodim (require :neodim)]
   (neodim.setup {:blend_color _G.base00}))
+
+;; }}}
+
+;; fidget.nvim {{{
+(let [fidget (require :fidget)]
+  (fidget.setup {:text {:spinner :dots}}))
 
 ;; }}}
