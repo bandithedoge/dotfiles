@@ -50,8 +50,12 @@ in {
     # {{{
     enable = true;
     platformTheme = "gnome";
-    style = rice.gtk.theme;
-  }; # }}}
+    style = {
+      name = "adwaita-dark";
+      package = pkgs.adwaita-qt;
+    };
+  };
+  # }}}
 
   programs.qutebrowser = {
     # {{{
@@ -385,11 +389,135 @@ in {
   };
   # }}}
 
+  programs.alacritty = {
+    # {{{
+    enable = true;
+    settings = {
+      window = {
+        decorations = "none";
+        padding = {
+          x = 10;
+          y = 10;
+        };
+        dynamic_padding = true;
+      };
+      font = {
+        normal.family = rice.monoFont;
+        size = 10.5;
+      };
+      colors = with rice; {
+        primary = {
+          background = base00;
+          foreground = base05;
+        };
+        cursor = {
+          text = base00;
+          cursor = base0F;
+        };
+        vi_mode_cursor = {
+          text = base00;
+          cursor = base05;
+        };
+        search = {
+          matches = {
+            foreground = base00;
+            background = base0A;
+          };
+          focused_match = {
+            foreground = base00;
+            background = base0F;
+          };
+        };
+        hints = {
+          start = {
+            foreground = base0F;
+            background = base02;
+          };
+          end = {
+            foreground = base03;
+            background = base02;
+          };
+        };
+        line_indicator = {
+          background = base10;
+        };
+        footer_bar = {
+          foreground = base0F;
+          background = base10;
+        };
+        selection = {
+          text = base00;
+          background = base05;
+        };
+        normal = {
+          black = base01;
+          red = base08;
+          green = base0B;
+          yellow = base0A;
+          blue = base0D;
+          magenta = base0E;
+          cyan = base0C;
+          white = base06;
+        };
+        bright = {
+          black = base02;
+          red = base12;
+          green = base14;
+          yellow = base13;
+          blue = base16;
+          magenta = base17;
+          cyan = base15;
+          white = base0F;
+        };
+      };
+      cursor = {
+        style = {
+          shape = "Beam";
+          blinking = "Always";
+        };
+        vi_mode_style = "Block";
+        thickness = 0.25;
+      };
+    };
+  };
+  # }}}
+
   programs.firefox = {
     enable = true;
     package = pkgs.firefox-beta-bin.override {
       cfg.enableTridactylNative = true;
     };
+    extensions = with pkgs.bandithedoge.firefoxAddons; [
+      augmented-steam
+      base64-decoder
+      betterviewer
+      canvasblocker
+      csgofloat
+      dont-fuck-with-paste
+      enhanced-github
+      enhancer-for-youtube
+      gitako
+      github-code-folding
+      github-isometric-contributions
+      github-repo-size
+      imagus
+      lovely-forks
+      material-icons-for-github
+      npm-hub
+      octolinker
+      privacy-badger17
+      privacy-pass
+      pronoundb
+      reddit-enhancement-suite
+      refined-github
+      ruffle_rs
+      sourcegraph-for-firefox
+      sponsorblock
+      steam-database
+      stylus
+      tridactyl-vim
+      violentmonkey
+    ];
     profiles = {
       default = {
         settings = {};
@@ -412,7 +540,34 @@ in {
     enableHardwareAcceleration = false;
     OPEN_ON_STARTUP = false;
     openasar = {
-      js = "fetch('https://raw.githubusercontent.com/Cumcord/builds/main/build.js').then(r=>r.text()).then(eval)";
+      js = let
+        plugins =
+          builtins.concatStringsSep "\n"
+          (builtins.map (url: "cumcord.plugins.importPlugin('${url}');") [
+            "https://cumcordplugins.github.io/Condom/cumcord.xirreal.dev/vcTimer"
+            "https://cumcordplugins.github.io/Condom/yellowsink.github.io/c7-cc-plugs/MessageLinkPreview"
+            "https://cumcordplugins.github.io/Condom/yellowsink.github.io/c7-cc-plugs/PlatformIcons"
+            "https://cumcordplugins.github.io/Condom/yellowsink.github.io/c7-cc-plugs/ChannelTypingIndicator"
+            "https://cumcordplugins.github.io/Condom/e-boi.github.io/cumcord-plugins/betterfriendslist/dist"
+            "https://cumcordplugins.github.io/Condom/yellowsink.github.io/cc-plugins/svg-embeds"
+            "https://cumcordplugins.github.io/Condom/20kdc.gitlab.io/kdc-cord-plugins/gcat"
+            "https://cumcordplugins.github.io/Condom/yellowsink.github.io/cc-plugins/cumstain"
+            "https://cumcordplugins.github.io/Condom/swishs-client-mod-plugins.github.io/cumcord-plugins/plugins/permission-viewer"
+            "https://cumcordplugins.github.io/Condom/skullyplugs.github.io/cc-plugins/extended-timestamps"
+            "https://cumcordplugins.github.io/Condom/e-boi.github.io/cumcord-plugins/showconnections/dist"
+            "https://cumcordplugins.github.io/Condom/yellowsink.github.io/cc-plugins/codeblocks-plus"
+            "https://cumcordplugins.github.io/Condom/yellowsink.github.io/cc-plugins/who-reacted"
+            "https://cumcordplugins.github.io/Condom/e-boi.github.io/cumcord-plugins/github-in-discord/dist"
+          ]);
+      in ''
+        async function loadPlugins() {
+          await cumcord.cum();
+
+          ${plugins}
+        }
+
+        fetch('https://raw.githubusercontent.com/Cumcord/builds/main/build.js').then(r=>r.text()).then(eval).then(loadPlugins);
+      '';
       quickstart = false;
       setup = true;
     };

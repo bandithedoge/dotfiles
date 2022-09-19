@@ -44,7 +44,7 @@ in {
       (class: [
         "95:class_g = '${class}' && focused"
         "85:class_g = '${class}' && !focused"
-      ]) ["kitty"];
+      ]) ["kitty" "Alacritty"];
   };
 
   xdg.configFile."awesome/rc.lua" = {
@@ -188,7 +188,7 @@ in {
 
   programs.kitty = {
     # {{{
-    enable = true;
+    enable = false;
     font = {
       name = rice.monoFont;
       # size = 11.5;

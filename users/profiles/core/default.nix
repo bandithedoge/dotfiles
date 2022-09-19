@@ -8,6 +8,8 @@
 
   oi = pkgs.callPackage ./oi {};
 in {
+  inherit (import ../../../nix.nix {inherit pkgs;}) nix;
+
   manual.html.enable = true;
 
   xdg = {
