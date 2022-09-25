@@ -17,12 +17,14 @@
                           (key [mod] :l #(awful.screen.focus_relative 1))
                           (key [mod :Control] :h #(awful.tag.incmwfact -0.02))
                           (key [mod :Control] :l #(awful.tag.incmwfact 0.02))
-                          (key [mod :Shift] :h
+                          (key [mod :Control] :k
                                #(awful.tag.incnmaster 1 nil true))
-                          (key [mod :Shift] :l
+                          (key [mod :Control] :j
                                #(awful.tag.incnmaster -1 nil true))
                           (key [mod] :Tab #(awful.layout.inc 1)))
         :clientkeys (join (key [mod] :w #($1:kill))
+                          (key [mod :Shift] :l #($1:move_to_screen 1))
+                          (key [mod :Shift] :h #($1:move_to_screen -1))
                           (key [mod] :f
                                #(do
                                   (set $1.fullscreen (not $1.fullscreen))

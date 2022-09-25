@@ -105,6 +105,7 @@
             base = [core users.bandithedoge];
             gui = [gui];
             audio = [audio];
+            gaming = [gaming];
           };
         };
 
@@ -139,6 +140,7 @@
             linux = [os-specific.linux];
             gui = [x];
             audio = [audio];
+            gaming = [gaming];
           };
         };
 
@@ -148,7 +150,8 @@
               base
               ++ gui
               ++ audio
-              ++ linux;
+              ++ linux
+              ++ gaming;
           };
         };
       };

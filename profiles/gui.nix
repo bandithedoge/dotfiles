@@ -67,4 +67,13 @@ in {
   };
 
   security.polkit.enable = true;
+
+  programs.steam.enable = true;
+
+  services.flatpak.enable = true;
+
+  xdg.portal = {
+    enable = true;
+    extraPortals = with pkgs; [xdg-desktop-portal-gtk];
+  };
 }

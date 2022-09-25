@@ -14,6 +14,7 @@ in {
       icon-library
       imv
       keepassxc
+      krita
       oomoxFull
       pavucontrol
       pcmanfm
@@ -344,64 +345,24 @@ in {
   };
   # }}}
 
-  programs.chromium = {
-    # {{{
-    enable = true;
-    package = pkgs.vivaldi.override {proprietaryCodecs = true;};
-    extensions =
-      builtins.map
-      (id: {inherit id;})
-      (
-        builtins.attrValues {
-          "Augmented Steam" = "dnhpnfgdlenaccegplpojghhmaamnnfp";
-          "Base64 encode/decode selected text" = "gkdcpimagggbnjdkjhbnilfeiidhdhcl";
-          "BetterViewer" = "llcpfkbjgkpmapiidpnohffjmmnhpmpb";
-          "Canvas Blocker for Google Chrome" = "einlodpanajlpficpkejcoajkadbddjn";
-          "CSGOFloat Market Checker" = "jjicbefpemnphinccgikpdaagjebbnhg";
-          "Don't F*** With Paste" = "nkgllhigpcljnhoakjkgaieabnkmgdkb";
-          "Enhanced GitHub" = "anlikcnbgdeidpacdbdljnabclhahhmd";
-          "Enhancer for YouTube" = "ponfpcnoihfmfllpaingbgckeeldkhle";
-          "Gitako - GitHub file tree" = "giljefjcheohhamkjphiebfjnlphnokk";
-          "GitHub Code Folding" = "lefcpjbffalgdcdgidjdnmabfenecjdf";
-          "GitHub Isometric Contributions" = "mjoedlfflcchnleknnceiplgaeoegien";
-          "GitHub Repository Size" = "apnjnioapinblneaedefcnopcjepgkci";
-          "Imagus" = "immpkjjlgappgfkkfieppnmlhakdmaab";
-          "Lovely forks" = "ialbpcipalajnakfondkflpkagbkdoib";
-          "Material Icons for GitHub" = "bggfcpfjbdkhfhfmkjpbhnkhnpjjeomc";
-          "npmhub" = "kbbbjimdjbjclaebffknlabpogocablj";
-          "OctoLinker" = "jlmafbaeoofdegohdhinkhilhclaklkp";
-          "Privacy Badger" = "pkehgijcmpdhfbdbbnkijodmdjhbjlgp";
-          "Privacy Pass" = "ajhmfdgkijocedmfjonnpjfojldioehi";
-          "PronounDB" = "nblkbiljcjfemkfjnhoobnojjgjdmknf";
-          "Reddit Enhancement Suite" = "kbmfpngjjgdllneeigpgjifpgocmfgmb";
-          "Refined GitHub" = "hlepfoohegkhhmjieoechaddaejaokhf";
-          "Ruffle" = "donbcfbmhbcapadipfkeojnmajbakjdc";
-          "ScrollAnywhere" = "jehmdpemhgfgjblpkilmeoafmkhbckhi";
-          "Sourcegraph" = "dgjhfomjieaadpoljlnidmbgkdffpack";
-          "SponsorBlock for YouTube" = "mnjggcdmjocbbbhaepdhchncahnbgone";
-          "SteamDB" = "kdbmhfkmnlmbkgbabkdealhhbfhlmmon";
-          "Stylus" = "clngdbkpkpeebahjckkjfobafhncgmne";
-          "Vimium C" = "hfjbmagddngcpeloejdejnfgbamkjaeg";
-          "Violentmonkey" = "jinjaccalgkegednnccohejagnlnfdag";
-        }
-      );
-  };
-  # }}}
-
   programs.firefox = {
+    # {{{
     enable = true;
     package = pkgs.firefox-beta-bin.override {
       cfg.enableTridactylNative = true;
     };
     extensions = with pkgs.bandithedoge.firefoxAddons; [
       augmented-steam
+      auto-tab-discard
       base64-decoder
       betterviewer
       canvasblocker
       csgofloat
       dont-fuck-with-paste
+      downthemall
       enhanced-github
       enhancer-for-youtube
+      gesturefy
       gitako
       github-code-folding
       github-isometric-contributions
@@ -411,38 +372,41 @@ in {
       material-icons-for-github
       npm-hub
       octolinker
-      privacy-badger17
+      privacy-badger
       privacy-pass
       pronoundb
       reddit-enhancement-suite
       refined-github
-      ruffle_rs
-      sourcegraph-for-firefox
+      ruffle
+      sourcegraph
       sponsorblock
       steam-database
       stylus
-      tridactyl-vim
+      tabcenter-reborn
+      tridactyl
+      ublock-origin
       violentmonkey
     ];
     profiles = {
       default = {
-        settings = {};
+        settings = {
+          "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+          "layers.acceleration.force-enabled" = true;
+          "gfx.webrender.all" = true;
+          "svg.context-properties.content.enabled" = true;
+          "ui.context_menus.after_mouseup" = true;
+        };
+        userChrome = ''
+          #titlebar, #sidebar-header {
+            display: none;
+          }
+        '';
       };
     };
-  };
-
-  xdg.configFile."vivaldi/css/vivaldi.css".source = let
-    input = pkgs.writeText "vivaldi.scss" ''
-      ${rice.def.scss}
-
-      ${builtins.readFile ./vivaldi.scss}
-    '';
-  in
-    pkgs.runCommand "vivaldi.css" {} ''
-      ${pkgs.sass}/bin/sass ${input} $out
-    '';
+  }; # }}}
 
   xdg.configFile."discordcanary/settings.json".text = builtins.toJSON {
+    # {{{
     enableHardwareAcceleration = false;
     OPEN_ON_STARTUP = false;
     openasar = {
@@ -465,19 +429,32 @@ in {
             "https://cumcordplugins.github.io/Condom/yellowsink.github.io/cc-plugins/who-reacted"
             "https://cumcordplugins.github.io/Condom/e-boi.github.io/cumcord-plugins/github-in-discord/dist"
           ]);
+        css = let
+          input = pkgs.writeText "discord.scss" ''
+            ${rice.def.scss}
+
+            ${builtins.readFile ./discord.scss}
+          '';
+        in
+          pkgs.runCommand "discord.css" {} ''
+            ${pkgs.sassc}/bin/sassc ${input} > $out
+          '';
       in ''
         async function loadPlugins() {
           await cumcord.cum();
-
           ${plugins}
         }
 
-        fetch('https://raw.githubusercontent.com/Cumcord/builds/main/build.js').then(r=>r.text()).then(eval).then(loadPlugins);
+        fetch('https://raw.githubusercontent.com/Cumcord/builds/main/build.js')
+          .then(r => r.text())
+          .then(eval)
+          .then(loadPlugins)
+          .then(() => {cumcord.patcher.injectCSS(`${builtins.readFile css}`)});
       '';
       quickstart = false;
       setup = true;
     };
-  };
+  }; # }}}
 
   services.syncthing.enable = true;
 }

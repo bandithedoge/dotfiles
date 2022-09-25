@@ -156,7 +156,8 @@
                                                            (. icons
                                                               battery.status)))
                            (s.mybatterytext:set_markup (.. percentage "%")))]
-      (update-widget (p:connect_signal update-widget :PropertiesChanged))))
+      (update-widget)
+      (p:connect_signal update-widget :PropertiesChanged)))
   ;; }}}
   (set s.mywibox (awful.wibar {:position :top
                                :screen s

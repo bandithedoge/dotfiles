@@ -7,7 +7,8 @@
   imports = with suites;
     base
     ++ gui
-    ++ audio;
+    ++ audio
+    ++ gaming;
 
   # displays {{{
   services.xserver = {
@@ -26,6 +27,7 @@
 
   # hardware {{{
   boot = {
+    kernelPackages = pkgs.linuxKernel.packages.linux_xanmod_latest;
     initrd = {
       availableKernelModules = ["xhci_pci" "ehci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod"];
       kernelModules = [];
@@ -75,7 +77,7 @@
   # }}}
 
   environment.variables = {
-    BROWSER = "vivaldi";
+    BROWSER = "firefox";
   };
 
   system.stateVersion = "22.05";
