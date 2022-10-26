@@ -13,16 +13,19 @@
       support32Bit = true;
     };
 
-    config = {
+    config = let
+      rate = 48000;
+      samples = 512;
+    in {
       pipewire = {
         # {{{
         "context.properties" = {
           "link.max-buffers" = 16;
           "log.level" = 2;
-          "default.clock.rate" = 48000;
-          "default.clock.quantum" = 128;
-          "default.clock.min-quantum" = 128;
-          "default.clock.max-quantum" = 128;
+          "default.clock.rate" = rate;
+          "default.clock.quantum" = samples;
+          "default.clock.min-quantum" = samples;
+          "default.clock.max-quantum" = samples;
           "core.daemon" = true;
           "core.name" = "pipewire-0";
         };
@@ -80,17 +83,17 @@
           {
             name = "libpipewire-module-protocol-pulse";
             args = {
-              "pulse.min.req" = "128/48000";
-              "pulse.default.req" = "128/48000";
-              "pulse.max.req" = "128/48000";
-              "pulse.min.quantum" = "128/48000";
-              "pulse.max.quantum" = "128/48000";
+              "pulse.min.req" = "${builtins.toString samples}/${builtins.toString rate}";
+              "pulse.default.req" = "${builtins.toString samples}/${builtins.toString rate}";
+              "pulse.max.req" = "${builtins.toString samples}/${builtins.toString rate}";
+              "pulse.min.quantum" = "${builtins.toString samples}/${builtins.toString rate}";
+              "pulse.max.quantum" = "${builtins.toString samples}/${builtins.toString rate}";
               "server.address" = ["unix:native"];
             };
           }
         ];
         "stream.properties" = {
-          "node.latency" = "32/48000";
+          "node.latency" = "${builtins.toString samples}/${builtins.toString rate}";
           "resample.quality" = 1;
         };
       }; # }}}

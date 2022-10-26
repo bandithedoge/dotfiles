@@ -5,13 +5,14 @@
 }: {
   home.packages = with pkgs; [
     ardour
+    bandithedoge.cardinal
     bandithedoge.zrythm
     bespokesynth
     breeze-icons
     cadence
-    cardinal
     carla
     ft2-clone
+    furnace
     goattracker
     helvum
     milkytracker
@@ -20,8 +21,10 @@
     qpwgraph
     reaper
     soundtracker
+    sox
     strawberry
-    furnace
+    yabridge
+    yabridgectl
 
     # plugins
     ChowKick
@@ -29,12 +32,10 @@
     aether-lv2
     artyFX
     autotalent
-    bandithedoge.lv2vst
     bchoppr
     boops
     bristol
     caps
-    cardinal
     delayarchitect
     distrho
     dragonfly-reverb

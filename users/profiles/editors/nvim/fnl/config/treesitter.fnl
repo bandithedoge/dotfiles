@@ -4,8 +4,7 @@
              :rainbow {:enable true :extended_mode true}
              :playground {:enable true}
              :autotag {:enable true :filetypes [:html :xml]}
-             :context_commentstring {:enable true}
-             :yati {:enable true}}))
+             :context_commentstring {:enable true}}))
 
 (let [spellsitter (require :spellsitter)]
   (spellsitter.setup))

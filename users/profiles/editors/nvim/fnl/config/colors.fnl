@@ -62,6 +62,7 @@
                                 :Search {:bg :sel1 :fg :bg1}
                                 :Cursor {:bg :sel1 :fg :bg1}
                                 :VertSplit {:bg _G.base10 :fg _G.base02}
+                                :StatusLine {:bg _G.base01 :fg _G.base05}
                                 :Hlargs {:fg _G.base0F}
                                 :WhichKeyFloat {:link :FloatBorder}
                                 :LspFloatWinNormal {:link :FloatBorder}
@@ -111,7 +112,25 @@
                                                 :fg :sel1
                                                 :style :bold}
                                 :NotifierIcon {:link :NotifierTitle}
-                                :NotifierContent {:bg :bg3}}}})
+                                :NotifierContent {:bg :bg3}
+                                :TabLineFill {:bg _G.base01 :fg _G.base03}
+                                :TabLineSel {:bg _G.base01 :fg _G.base05}
+                                :BufferCurrent {:bg _G.base0F
+                                                :fg _G.base00
+                                                :style :bold}
+                                :BufferCurrentIndex {:link :BufferCurrent}
+                                :BufferCurrentSign {:link :BufferCurrent}
+                                :BufferCurrentMod {:link :BufferCurrent}
+                                :BufferVisible {:bg _G.base02 :fg _G.base05}
+                                :BufferVisibleIndex {:link :BufferVisible}
+                                :BufferVisibleSign {:link :BufferVisible}
+                                :BufferVisibleMod {:link :BufferVisible}
+                                :BufferInactive {:bg _G.base02 :fg _G.base03}
+                                :BufferInactiveIndex {:link :BufferInactive}
+                                :BufferInactiveSign {:link :BufferInactive}
+                                :BufferInactiveMod {:link :BufferInactive}
+                                :NoiceLspProgressTitle {:bg _G.base02
+                                                        :fg _G.base03}}}})
 
 (nightfox.compile)
 (vim.cmd "colorscheme nightfox")

@@ -6,7 +6,7 @@ static float chscale = 1.0;
 // boxdraw
 const int boxdraw = 1;
 const int boxdraw_bold = 1;
-const int boxdraw_braille = 1;
+const int boxdraw_braille = 0;
 
 static char ascii_printable[] = " !\"#$%&'()*+,-./0123456789:;<=>?"
                                 "@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_"

@@ -2,12 +2,12 @@
 (require-macros :hibiscus.core)
 
 (let [lsp (require :lspconfig)
-      lua-dev (require :lua-dev)
+      lua-dev (require :neodev)
       cmp_nvim_lsp (require :cmp_nvim_lsp)
       schemastore (require :schemastore)
       yaml (require :yaml-companion)
       document-color (require :document-color)
-      defaults {:capabilities (merge (cmp_nvim_lsp.update_capabilities (vim.lsp.protocol.make_client_capabilities))
+      defaults {:capabilities (merge (cmp_nvim_lsp.default_capabilities)
                                      {:textDocument {:completion {:completionItem {:snippetSupport true}}}})
                 :single_file_support true}]
   (lsp.bashls.setup defaults)
@@ -43,12 +43,11 @@
                                                                 :line_length 120}
                                                         :flake8 {:enabled true
                                                                  :maxLineLength 120}
+                                                        :pycodestyle {:maxLineLength 120}
                                                         :jedi_completion {:fuzzy true
                                                                           :eager true}
-                                                        :pydocstyle {:enabled true
-                                                                     :convention :pep257}
-                                                        :pylint {:enabled true}
-                                                        :yapf {:enabled false}}}}}))
+                                                        :yapf {:enabled false}
+                                                        :pyflakes {:enabled false}}}}}))
   (lsp.rnix.setup defaults)
   (lsp.rust_analyzer.setup defaults)
   (lsp.solargraph.setup defaults)

@@ -41,18 +41,22 @@ when isMainModule:
     isDarwin = detectOs MacOSX
     username = getEnv("USER")
 
+  if getEnv("GITHUB_TOKEN", "") != "":
+    putEnv("NIX_CONFIG", "access-tokens = github.com=$GITHUB_TOKEN")
+
   if args["rebuild"]:
     let cmd =
       if isDarwin:
         &"darwin-rebuild --flake {path}"
       elif isNixOS:
-        &"sudo nixos-rebuild --flake {path}"
+        &"nixos-rebuild --flake {path}"
       else:
         &"home-manager --extra-experimental-features 'nix-command flakes' --flake {path}#{username}"
 
     exec(
       # we need to use bash since sh doesn't support the "|&" syntax
       # "&>" doesn't work on Alpine for some reason
+      (if isNixOS: "sudo " else: "") &
       "bash -c \"" &
       cmd &
       " switch --impure " &

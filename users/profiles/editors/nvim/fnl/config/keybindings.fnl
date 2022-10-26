@@ -14,7 +14,7 @@
 (map! [n] :K vim.lsp.buf.hover)
 
 (let [wk (require :which-key)]
-  (wk.setup {:ignore_missing true :icons {:separator ""}})
+  (wk.setup {:ignore_missing true :icons {:separator ""} :show_help false})
   (wk.register (let [t (require :telescope.builtin)
                      telescope (require :telescope)
                      fm (require :fm-nvim)

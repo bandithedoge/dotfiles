@@ -8,7 +8,8 @@
     base
     ++ gui
     ++ audio
-    ++ gaming;
+    ++ gaming
+    ++ virt;
 
   # displays {{{
   services.xserver = {
@@ -28,6 +29,7 @@
   # hardware {{{
   boot = {
     kernelPackages = pkgs.linuxKernel.packages.linux_xanmod_latest;
+    kernelParams = ["threadirqs"];
     initrd = {
       availableKernelModules = ["xhci_pci" "ehci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod"];
       kernelModules = [];
@@ -42,11 +44,20 @@
 
   networking.useDHCP = true;
 
-  hardware.cpu.intel.updateMicrocode = config.hardware.enableRedistributableFirmware;
+  programs.openvpn3.enable = true;
+
+  hardware.cpu.intel.updateMicrocode = true;
 
   services.xserver.libinput.mouse.accelProfile = "flat";
 
   hardware.opengl.enable = true;
+
+  services.printing = {
+    enable = true;
+    drivers = with pkgs; [gutenprint];
+  };
+
+  powerManagement.cpuFreqGovernor = "performance";
   # }}}
 
   # drives {{{
@@ -78,6 +89,7 @@
 
   environment.variables = {
     BROWSER = "firefox";
+    WINEFSYNC = "1";
   };
 
   system.stateVersion = "22.05";

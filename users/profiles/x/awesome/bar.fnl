@@ -72,8 +72,7 @@
                                                                                       "%")
                                                                                   "")))))]
     (update-widget)
-    (awful.spawn.with_line_callback (if (= _G.hostname :thonkpad)
-                                        "alsactl monitor" "amixer events")
+    (awful.spawn.with_line_callback "alsactl monitor"
                                     {:stdout update-widget}))
   (s.myvolumebox:connect_signal "button::press"
                                 #(match $4
@@ -196,7 +195,7 @@
                                                             "$1°C" 1
                                                             [:coretemp])])
                                  s.mybatterybox
-                                 s.myvolumebox
+                                 (if (= _G.hostname :thonkpad) s.myvolumebox)
                                  (widget [(icon "")
                                           (vicious.register (wibox.widget.textbox)
                                                             vicious.widgets.date

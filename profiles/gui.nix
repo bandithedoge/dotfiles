@@ -6,9 +6,11 @@
   rice = import ../rice.nix {inherit pkgs;};
 in {
   environment.systemPackages = with pkgs; [
-    xorg.setxkbmap
-    betterlockscreen
     arandr
+    betterlockscreen
+    wine-tkg
+    winetricks
+    xorg.setxkbmap
   ];
 
   services.xserver = {

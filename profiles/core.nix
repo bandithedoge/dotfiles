@@ -11,6 +11,7 @@
     pam.services.swaylock.text = ''
       auth include login
     '';
+    polkit.enable = true;
   };
 
   services.dbus = {
@@ -37,7 +38,7 @@
 
   users.mutableUsers = true;
 
-  programs.adb.enable = true;
+  # programs.adb.enable = true;
 
   services.upower.enable = true;
 }

@@ -7,8 +7,12 @@
 in {
   home = {
     packages = with pkgs; [
+      blender
+      bottles
       dfeet
       discord-canary
+      ferdium
+      flowblade
       ghidra
       gparted
       icon-library
@@ -20,7 +24,7 @@ in {
       pcmanfm
       teams
       tigervnc
-      wine
+      transmission-gtk
     ];
     pointerCursor = {
       inherit (rice.gtk.cursorTheme) package name size;
@@ -410,49 +414,25 @@ in {
     enableHardwareAcceleration = false;
     OPEN_ON_STARTUP = false;
     openasar = {
-      js = let
-        plugins =
-          builtins.concatStringsSep "\n"
-          (builtins.map (url: "cumcord.plugins.importPlugin('${url}');") [
-            "https://cumcordplugins.github.io/Condom/cumcord.xirreal.dev/vcTimer"
-            "https://cumcordplugins.github.io/Condom/yellowsink.github.io/c7-cc-plugs/MessageLinkPreview"
-            "https://cumcordplugins.github.io/Condom/yellowsink.github.io/c7-cc-plugs/PlatformIcons"
-            "https://cumcordplugins.github.io/Condom/yellowsink.github.io/c7-cc-plugs/ChannelTypingIndicator"
-            "https://cumcordplugins.github.io/Condom/e-boi.github.io/cumcord-plugins/betterfriendslist/dist"
-            "https://cumcordplugins.github.io/Condom/yellowsink.github.io/cc-plugins/svg-embeds"
-            "https://cumcordplugins.github.io/Condom/20kdc.gitlab.io/kdc-cord-plugins/gcat"
-            "https://cumcordplugins.github.io/Condom/yellowsink.github.io/cc-plugins/cumstain"
-            "https://cumcordplugins.github.io/Condom/swishs-client-mod-plugins.github.io/cumcord-plugins/plugins/permission-viewer"
-            "https://cumcordplugins.github.io/Condom/skullyplugs.github.io/cc-plugins/extended-timestamps"
-            "https://cumcordplugins.github.io/Condom/e-boi.github.io/cumcord-plugins/showconnections/dist"
-            "https://cumcordplugins.github.io/Condom/yellowsink.github.io/cc-plugins/codeblocks-plus"
-            "https://cumcordplugins.github.io/Condom/yellowsink.github.io/cc-plugins/who-reacted"
-            "https://cumcordplugins.github.io/Condom/e-boi.github.io/cumcord-plugins/github-in-discord/dist"
-          ]);
-        css = let
-          input = pkgs.writeText "discord.scss" ''
-            ${rice.def.scss}
-
-            ${builtins.readFile ./discord.scss}
-          '';
-        in
-          pkgs.runCommand "discord.css" {} ''
-            ${pkgs.sassc}/bin/sassc ${input} > $out
-          '';
-      in ''
-        async function loadPlugins() {
-          await cumcord.cum();
-          ${plugins}
-        }
-
-        fetch('https://raw.githubusercontent.com/Cumcord/builds/main/build.js')
-          .then(r => r.text())
-          .then(eval)
-          .then(loadPlugins)
-          .then(() => {cumcord.patcher.injectCSS(`${builtins.readFile css}`)});
-      '';
-      quickstart = false;
+      quickstart = true;
       setup = true;
+      js = let
+        input = pkgs.writeText "discord.scss" ''
+          ${rice.def.scss}
+
+          ${builtins.readFile ./discord.scss}
+        '';
+        css = pkgs.runCommand "discord.css" {} ''
+          ${pkgs.sassc}/bin/sassc ${input} > $out
+        '';
+      in ''
+        const css = `
+          ${builtins.readFile css}
+        `;
+        const style = document.createElement("style");
+        style.textContent = css;
+        document.head.appendChild(style);
+      '';
     };
   }; # }}}
 

@@ -30,6 +30,8 @@
     parinfer-rust.flake = false;
     mozilla.url = "github:mozilla/nixpkgs-mozilla";
     colors.url = "github:Misterio77/nix-colors";
+    nix-gaming.url = "github:fufexan/nix-gaming";
+    prismlauncher.url = "github:PrismLauncher/PrismLauncher";
 
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
@@ -46,6 +48,7 @@
     musnix,
     kmonad,
     nixos-hardware,
+    nix-doom-emacs,
     ...
   } @ inputs: let
     overlays = with inputs; [
@@ -55,6 +58,8 @@
       nixmox.overlay
       nixpkgs-wayland.overlay
       mozilla.overlays.firefox
+      nix-gaming.overlays.default
+      prismlauncher.overlay
       (import (parinfer-rust + "/overlay.nix"))
       (_: prev: {
         bandithedoge = import nur-bandithedoge {pkgs = prev;};
@@ -106,6 +111,7 @@
             gui = [gui];
             audio = [audio];
             gaming = [gaming];
+            virt = [virt];
           };
         };
 

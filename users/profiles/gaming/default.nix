@@ -5,8 +5,9 @@
 }: {
   home.packages = with pkgs; [
     (lutris.override {extraLibraries = pkgs: with pkgs; [mangohud];})
+    bandithedoge.raze
     gzdoom
-    polymc
+    prismlauncher-qt6
   ];
 
   programs.mangohud = {

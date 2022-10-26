@@ -5,16 +5,16 @@
   ...
 }: let
   rice = import ../../../rice.nix {inherit pkgs;};
-
   oi = pkgs.callPackage ./oi {};
 in {
+  imports = [./xdg.nix];
+
   inherit (import ../../../nix.nix {inherit pkgs;}) nix;
 
-  manual.html.enable = true;
+  manual.manpages.enable = false;
 
   xdg = {
     enable = true;
-    configFile."rice.json".text = builtins.toJSON rice;
   };
 
   nixpkgs.config = {allowBroken = true;};
@@ -25,19 +25,22 @@ in {
     sessionVariables = {
       EDITOR = "nvim";
       LF_ICONS = "${builtins.readFile ./icons}";
-      TERM = "xterm-256color";
-      GO111MODULE = "on";
     };
     packages = with pkgs; [
       # {{{
+      age
+      aria
       broot
       comma
       fd
+      ffmpeg
+      file
       gh
       git
       hactool
       htop
       imagemagick
+      innoextract
       jq
       killall
       librespeed-cli
@@ -48,11 +51,14 @@ in {
       niv
       nix-prefetch
       oi
+      ouch
       pandoc
       rclone
       ripgrep
       tree
-      unar
+      xdg-ninja
+      xdragon
+      yt-dlp
     ];
     # }}}
     shellAliases = {
@@ -85,7 +91,7 @@ in {
       # {{{
       enable = true;
       functions = {
-        "br" = {
+        br = {
           body = ''
             set f (mktemp)
             broot --outcmd $f $argv
@@ -99,68 +105,43 @@ in {
           '';
         };
       };
-      interactiveShellInit = with rice;
-        ''
-          set fish_color_autosuggestion '${base03}'
-          set fish_color_cancel -r
-          set fish_color_command green #white
-          set fish_color_comment '${base03}'
-          set fish_color_cwd green
-          set fish_color_cwd_root red
-          set fish_color_end brblack #blue
-          set fish_color_error red --bold
-          set fish_color_escape yellow #green
-          set fish_color_history_current --bold
-          set fish_color_host normal
-          set fish_color_match --background=brblue
-          set fish_color_normal normal
-          set fish_color_operator blue #green
-          set fish_color_param '${base04}'
-          set fish_color_quote yellow #brblack
-          set fish_color_redirection cyan
-          set fish_color_search_match bryellow --background='${base02}'
-          set fish_color_selection white --bold --background='${base02}'
-          set fish_color_status red
-          set fish_color_user brgreen
-          set fish_color_valid_path --underline
-          set fish_pager_color_completion normal
-          set fish_pager_color_description yellow --dim
-          set fish_pager_color_prefix white --bold #--underline
-          set fish_pager_color_progress brwhite --background='${base02}'
-        ''
-        + builtins.readFile ./fish.fish;
-    };
-    # }}}
+      interactiveShellInit = with rice; ''
+        set fish_color_autosuggestion '${base03}'
+        set fish_color_cancel -r
+        set fish_color_command green #white
+        set fish_color_comment '${base03}'
+        set fish_color_cwd green
+        set fish_color_cwd_root red
+        set fish_color_end brblack #blue
+        set fish_color_error red --bold
+        set fish_color_escape yellow #green
+        set fish_color_history_current --bold
+        set fish_color_host normal
+        set fish_color_match --background=brblue
+        set fish_color_normal normal
+        set fish_color_operator blue #green
+        set fish_color_param '${base04}'
+        set fish_color_quote yellow #brblack
+        set fish_color_redirection cyan
+        set fish_color_search_match bryellow --background='${base02}'
+        set fish_color_selection white --bold --background='${base02}'
+        set fish_color_status red
+        set fish_color_user brgreen
+        set fish_color_valid_path --underline
+        set fish_pager_color_completion normal
+        set fish_pager_color_description yellow --dim
+        set fish_pager_color_prefix white --bold #--underline
+        set fish_pager_color_progress brwhite --background='${base02}'
 
-    lf = rec {
-      # {{{
-      enable = true;
-      settings = {
-        ignorecase = true;
-        icons = true;
-        hidden = true;
-        wrapscroll = true;
-      };
-      previewer.source = pkgs.writeShellScript "pv.sh" ''
-        #!/usr/bin/env bash
+        set fish_cursor_default block
+        set fish_cursor_insert line
+        set fish_cursor_replace_one underscore
+        set fish_cursor_visual block
 
-        case "$1" in
-          *.tar* | *.zip | *.7z | *.rar | *.iso | *.jar)
-            ${pkgs.unar}/bin/lsar "$1" | tail -n +2 | tree -C --fromfile . ;;
-          *) ${pkgs.pistol}/bin/pistol "$1" ;;
-        esac
+        fish_vi_key_bindings
+
+        set fish_greeting
       '';
-      keybindings = {
-        f = ''
-          $lf -remote "send $id select '$(fd . -H -d1 -c always | sk --ansi || true)'"
-        '';
-        F = ''
-          $lf -remote "send $id select '$(fd . -H -c always | sk --ansi || true)'"
-        '';
-        x = "cut";
-        d = "delete";
-        gG = "$lazygit -p $PWD";
-      };
     };
     # }}}
 
@@ -289,25 +270,33 @@ in {
       {
         invocation = "edit";
         key = "e";
-        apply_to = "file";
-        external = "$EDITOR {file}";
+        execution = "$EDITOR {file}";
+        leave_broot = false;
+      }
+      {
+        invocation = "dragon";
+        external = "dragon {file}";
         leave_broot = false;
       }
       {
         key = "q";
-        internal = ":quit";
+        execution = ":quit";
       }
       {
         key = "p";
-        internal = ":toggle_preview";
+        execution = ":toggle_preview";
       }
       {
         key = "ctrl-h";
-        internal = ":panel_left";
+        execution = ":panel_left";
       }
       {
         key = "ctrl-l";
-        internal = ":panel_right";
+        execution = ":panel_right";
+      }
+      {
+        key = ".";
+        execution = ":toggle_hidden";
       }
     ];
   }; # }}}

@@ -14,7 +14,7 @@ in {
     rustfmt
 
     # python
-    poetry
+    python310Packages.poetry
     python310Packages.black
     python310Packages.isort
     python310Packages.pyls-isort
@@ -97,7 +97,8 @@ in {
   programs.neovim = {
     enable = true;
     package = pkgs.neovim-unwrapped;
-    plugins = with pkgs.vimPlugins; [
+    plugins = with pkgs.vimPlugins;
+    with pkgs.bandithedoge.vimPlugins; [
       hibiscus-nvim
       impatient-nvim
       mini-nvim
@@ -108,7 +109,6 @@ in {
       nvim-ts-autotag
       nvim-ts-context-commentstring
       nvim-ts-rainbow
-      nvim-yati
       playground
       spellsitter-nvim
 
@@ -135,6 +135,7 @@ in {
       stabilize-nvim
 
       # ui
+      barbar-nvim
       cinnamon-nvim
       dressing-nvim
       fidget-nvim
@@ -142,11 +143,12 @@ in {
       fm-nvim
       foldsigns-nvim
       FTerm-nvim
+      galaxyline-nvim
       gitsigns-nvim
       glow-hover-nvim
       heirline-nvim
-      hlargs-nvim
       hover-nvim
+      incline-nvim
       indent-blankline-nvim
       lsp_lines-nvim
       neo-tree-nvim
