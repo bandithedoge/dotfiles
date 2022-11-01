@@ -28,11 +28,7 @@
       auto-optimise-store = true
       min-free = ${toString (512 * 1024 * 1024)}
       warn-dirty = false
-      sandbox = relaxed
       log-lines = 50
     '';
-  };
-  nixpkgs.config = {
-    allowBroken = true;
   };
 }

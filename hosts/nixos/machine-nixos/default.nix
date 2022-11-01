@@ -6,10 +6,7 @@
 }: {
   imports = with suites;
     base
-    ++ gui
-    ++ audio
-    ++ gaming
-    ++ virt;
+    ++ os-specific;
 
   # displays {{{
   services.xserver = {

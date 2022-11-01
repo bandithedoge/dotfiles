@@ -48,13 +48,12 @@
     musnix,
     kmonad,
     nixos-hardware,
-    nix-doom-emacs,
     ...
   } @ inputs: let
     overlays = with inputs; [
       nur.overlay
       neovim-nightly-overlay.overlay
-      neorg.overlay
+      # neorg.overlay
       nixmox.overlay
       nixpkgs-wayland.overlay
       mozilla.overlays.firefox
@@ -98,7 +97,7 @@
           ];
         };
 
-        imports = [(digga.lib.importHosts ./hosts)];
+        imports = [(digga.lib.importHosts ./hosts/nixos)];
 
         importables = rec {
           profiles =
@@ -107,7 +106,7 @@
               users = digga.lib.rakeLeaves ./users;
             };
           suites = with profiles; {
-            base = [core users.bandithedoge];
+            base = [core.nixos users.bandithedoge];
             gui = [gui];
             audio = [audio];
             gaming = [gaming];
@@ -122,7 +121,7 @@
               nixos-hardware.nixosModules.common-pc-laptop-ssd
             ];
           };
-          machine = {
+          machine-nixos = {
             modules = with nixos-hardware.nixosModules; [
               common-pc
               common-pc-ssd
@@ -130,6 +129,35 @@
               common-gpu-amd
             ];
           };
+        };
+      };
+
+      darwin = {
+        hostDefaults = {
+          system = "x86_64-darwin";
+          channelName = "nixpkgs";
+          modules = [
+            digga.darwinModules.nixConfig
+            home-manager.darwinModules.home-manager
+            ./nix.nix
+          ];
+        };
+
+        imports = [(digga.lib.importHosts ./hosts/darwin)];
+
+        importables = rec {
+          profiles =
+            digga.lib.rakeLeaves ./profiles
+            // {
+              users = digga.lib.rakeLeaves ./users;
+            };
+          suites = with profiles; rec {
+            base = [core.darwin users.bandithedoge];
+          };
+        };
+
+        hosts = {
+          # machine-darwin = {};
         };
       };
 
@@ -143,21 +171,15 @@
               core
               editors
             ];
-            linux = [os-specific.linux];
-            gui = [x];
-            audio = [audio];
-            gaming = [gaming];
+            gui = [gui];
+            os-specific = [os-specific];
           };
         };
 
         users = {
           bandithedoge = {suites, ...}: {
             imports = with suites;
-              base
-              ++ gui
-              ++ audio
-              ++ linux
-              ++ gaming;
+              base ++ os-specific ++ gui;
           };
         };
       };

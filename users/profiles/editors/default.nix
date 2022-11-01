@@ -62,7 +62,6 @@ in {
     cppcheck
 
     # nim
-    nim
     nimlsp
 
     # go
@@ -153,7 +152,6 @@ in {
       lsp_lines-nvim
       neo-tree-nvim
       neodim
-      neorg-telescope
       numbers-nvim
       nvim-colorizer-lua
       nvim-hlslens
@@ -215,6 +213,7 @@ in {
       telescope-frecency-nvim
       telescope-nvim
       telescope-zf-native-nvim
+      # neorg-telescope
 
       # snippets
       friendly-snippets
@@ -245,7 +244,7 @@ in {
     recursive = true;
     onChange = ''
       rm -rf ${config.xdg.cacheHome}/nvim/tangerine
-      nvim -E -c ":FnlCompile" -c q
+      ${config.programs.neovim.finalPackage}/bin/nvim -E -c ":FnlCompile" -c q
     '';
   };
   # }}}

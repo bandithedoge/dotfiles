@@ -14,7 +14,7 @@ in {
   manual.manpages.enable = false;
 
   xdg = {
-    enable = true;
+    # enable = true;
   };
 
   nixpkgs.config = {allowBroken = true;};
@@ -40,7 +40,6 @@ in {
       hactool
       htop
       imagemagick
-      innoextract
       jq
       killall
       librespeed-cli
@@ -53,7 +52,6 @@ in {
       oi
       ouch
       pandoc
-      rclone
       ripgrep
       tree
       xdg-ninja

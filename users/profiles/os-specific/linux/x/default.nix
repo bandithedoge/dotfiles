@@ -3,7 +3,7 @@
   config,
   ...
 }: let
-  rice = import ../../../rice.nix {inherit pkgs;};
+  rice = import ../../../../../rice.nix {inherit pkgs;};
   rofi-stuff = pkgs.callPackage ./rofi {};
   my-st = pkgs.bandithedoge.st-flexipatch.overrideAttrs (oldAttrs: {
     prePatch = let

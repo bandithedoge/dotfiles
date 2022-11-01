@@ -37,8 +37,8 @@ when isMainModule:
     path = args["--path"]
     showTrace = args["--show-trace"]
     # detectOs(NixOS) doesn't detect NixOS properly
-    isNixOS = readFile("/etc/os-release").contains("NAME=NixOS")
     isDarwin = detectOs MacOSX
+    isNixOS = if isDarwin: false else: readFile("/etc/os-release").contains("NAME=NixOS")
     username = getEnv("USER")
 
   if getEnv("GITHUB_TOKEN", "") != "":

@@ -1,5 +1,5 @@
 {pkgs, ...}: {
-  imports = [../nix.nix];
+  imports = [../../nix.nix];
 
   environment.systemPackages = with pkgs; [
     alsa-utils

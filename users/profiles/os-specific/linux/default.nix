@@ -3,8 +3,10 @@
   pkgs,
   ...
 }: let
-  rice = import ../../../rice.nix {inherit pkgs;};
+  rice = import ../../../../rice.nix {inherit pkgs;};
 in {
+  imports = [./audio.nix ./gaming.nix ./x/default.nix];
+
   home = {
     packages = with pkgs; [
       blender
@@ -19,9 +21,11 @@ in {
       imv
       keepassxc
       krita
+      nim
       oomoxFull
       pavucontrol
       pcmanfm
+      rclone
       teams
       tigervnc
       transmission-gtk
@@ -406,33 +410,6 @@ in {
           }
         '';
       };
-    };
-  }; # }}}
-
-  xdg.configFile."discordcanary/settings.json".text = builtins.toJSON {
-    # {{{
-    enableHardwareAcceleration = false;
-    OPEN_ON_STARTUP = false;
-    openasar = {
-      quickstart = true;
-      setup = true;
-      js = let
-        input = pkgs.writeText "discord.scss" ''
-          ${rice.def.scss}
-
-          ${builtins.readFile ./discord.scss}
-        '';
-        css = pkgs.runCommand "discord.css" {} ''
-          ${pkgs.sassc}/bin/sassc ${input} > $out
-        '';
-      in ''
-        const css = `
-          ${builtins.readFile css}
-        `;
-        const style = document.createElement("style");
-        style.textContent = css;
-        document.head.appendChild(style);
-      '';
     };
   }; # }}}
 
