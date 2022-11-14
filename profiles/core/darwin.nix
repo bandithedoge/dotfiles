@@ -19,6 +19,7 @@
       "homebrew/cask-versions"
     ];
     brews = [
+      "innoextract"
       "nim"
       "python"
       "python-tk"
@@ -40,6 +41,7 @@
       "discord-canary"
       "firefox-beta"
       "font-jetbrains-mono-nerd-font"
+      "gzdoom"
       "iina"
       "jdownloader"
       "keepassxc"
@@ -51,25 +53,40 @@
       "mos"
       "musaicfm"
       "netnewswire"
+      "nordvpn"
       "obs"
+      "openemu"
+      "porting-kit"
+      "prismlauncher"
       "qbittorrent"
+      "raze"
+      "retroarch-metal"
       "sloth"
       "stats"
+      "steam"
       "strawberry"
       "suspicious-package"
       "syncthing"
       "telegram"
+      "temurin"
       "the-unarchiver"
       "tunnelblick"
       "utm"
+      "vcv-rack"
     ];
+    masApps = {
+      "Keynote" = 409183694;
+      "Numbers" = 409203825;
+      "Pages" = 409201541;
+      "RetroClip" = 1332064978;
+    };
   };
 
   system = {
     defaults = {
       LaunchServices.LSQuarantine = false;
       NSGlobalDomain = {
-        AppleShowAllFiles = true;
+        AppleShowAllFiles = false;
         AppleInterfaceStyle = "Dark";
         AppleShowAllExtensions = true;
         AppleShowScrollBars = "Automatic";
@@ -98,7 +115,7 @@
         wvous-br-corner = 4;
       };
       finder = {
-        AppleShowAllFiles = true;
+        AppleShowAllFiles = false;
         ShowStatusBar = true;
         ShowPathbar = true;
         FXPreferredViewStyle = "Nlsv";

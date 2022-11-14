@@ -21,7 +21,6 @@
     qpwgraph
     reaper
     soundtracker
-    sox
     strawberry
     vcv-rack
     yabridge

@@ -48,6 +48,7 @@ in {
       ouch
       pandoc
       ripgrep
+      sox
       tree
       xdg-ninja
       xdragon
