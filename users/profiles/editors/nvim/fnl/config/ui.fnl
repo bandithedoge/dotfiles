@@ -1,5 +1,4 @@
 (require-macros :hibiscus.vim)
-
 ;; indent-blankline.nvim {{{
 
 (let [indent_blankline (require :indent_blankline)]
@@ -181,13 +180,25 @@
                                                                      true))}}}))
 
 ;; neodim {{{
+
 (let [neodim (require :neodim)]
   (neodim.setup {:blend_color _G.base00}))
 
 ;; }}}
 
 ;; fidget.nvim {{{
+
 (let [fidget (require :fidget)]
   (fidget.setup {:text {:spinner :dots}}))
+
+;; }}}
+
+;; noice.nvim {{{
+
+(let [noice (require :noice)]
+  (noice.setup {:lsp {:override {:vim.lsp.util.convert_input_to_markdown_lines true
+                                 :vim.lsp.util.stylize_markdown true
+                                 :cmp.entry.get_documentation true}}
+                :presets {:bottom_search true}}))
 
 ;; }}}

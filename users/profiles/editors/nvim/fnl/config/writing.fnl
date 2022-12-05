@@ -4,6 +4,7 @@
                        :core.norg.dirman {:config {:workspaces {:school "~/sql"}
                                                    :autochdir true}}
                        :core.norg.esupports.metagen {:config {:type :auto
+                                                              :tab "  "
                                                               :template [[:title
                                                                           #(vim.fn.expand "%:p:t:r")]
                                                                          [:created
@@ -21,4 +22,5 @@
                                                                                   :highlight :rainbowcol5}
                                                                         :level_6 {:icon "     ✣"
                                                                                   :highlight :rainbowcol6}}
-                                                              :markup {:icon " "}}}}}}))
+                                                              :markup {:icon " "}}}}
+                       :core.export {}}}))

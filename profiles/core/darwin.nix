@@ -17,9 +17,15 @@
       "homebrew/cask"
       "homebrew/cask-fonts"
       "homebrew/cask-versions"
+      "homebrew/services"
     ];
     brews = [
+      {
+        name = "mpd";
+        restart_service = "changed";
+      }
       "innoextract"
+      "nicotine-plus"
       "nim"
       "python"
       "python-tk"
@@ -33,14 +39,20 @@
       "quicklookapk"
       "syntax-highlight"
 
+      "android-file-transfer"
+      "android-platform-tools"
       "anydesk"
       "apparency"
       "appcleaner"
       "balenaetcher"
       "blackhole-2ch"
+      "blender"
+      "blender-benchmark"
+      "cantata"
       "discord-canary"
       "firefox-beta"
       "font-jetbrains-mono-nerd-font"
+      "genymotion"
       "gzdoom"
       "iina"
       "jdownloader"
@@ -50,29 +62,27 @@
       "lulu"
       "macfuse"
       "messenger"
+      "microsoft-teams"
       "mos"
       "musaicfm"
       "netnewswire"
       "nordvpn"
       "obs"
-      "openemu"
+      "origin"
       "porting-kit"
+      "ppsspp"
       "prismlauncher"
       "qbittorrent"
       "raze"
-      "retroarch-metal"
       "sloth"
       "stats"
       "steam"
-      "strawberry"
       "suspicious-package"
       "syncthing"
       "telegram"
       "temurin"
-      "the-unarchiver"
-      "tunnelblick"
-      "utm"
       "vcv-rack"
+      "xemu"
     ];
     masApps = {
       "Keynote" = 409183694;
@@ -124,5 +134,23 @@
       };
       loginwindow.GuestEnabled = false;
     };
+  };
+
+  launchd.user.agents.mpd-discord-rpc = {
+    serviceConfig = {
+      ProgramArguments = ["${pkgs.mpd-discord-rpc}/bin/mpd-discord-rpc"];
+      KeepAlive = true;
+      RunAtLoad = true;
+      ThrottleInterval = 30;
+    };
+  };
+
+  services.skhd = {
+    enable = true;
+    skhdConfig = ''
+      play : ${pkgs.mpc-cli}/bin/mpc toggle
+      previous : ${pkgs.mpc-cli}/bin/mpc prev
+      next : ${pkgs.mpc-cli}/bin/mpc next
+    '';
   };
 }
