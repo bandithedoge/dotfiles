@@ -1,0 +1,9 @@
+disable = ["powershell"]
+cleanup = true
+
+[commands]
+"Scoop cleanup" = "scoop cache rm *; scoop cleanup *"
+
+[windows]
+enable_winget = true
+self_rename = true

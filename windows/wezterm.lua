@@ -1,6 +1,7 @@
 local wezterm = require "wezterm"
 
 return {
+    default_prog = {"powershell"},
     color_scheme = "Gruvbox Dark",
     font = wezterm.font "JetBrainsMono NF",
     font_size = 13,

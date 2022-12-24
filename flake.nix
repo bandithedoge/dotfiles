@@ -215,7 +215,6 @@
             }
             ./users/profiles/core
             ./users/profiles/editors
-            ./nix.nix
           ];
         };
     };

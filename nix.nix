@@ -1,5 +1,6 @@
 {pkgs, ...}: {
   nix = {
+    package = pkgs.nix;
     settings = {
       substituters = [
         "https://bandithedoge.cachix.org"
