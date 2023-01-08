@@ -102,7 +102,9 @@
   # neovim {{{
   programs.neovim = {
     enable = true;
-    package = pkgs.neovim-unwrapped;
+    package = pkgs.neovim.overrideAttrs (oldAttrs: {
+      patches = [];
+    });
     plugins = with pkgs.bandithedoge.vimPlugins; [
       hibiscus-nvim
       impatient-nvim

@@ -67,7 +67,7 @@
 
 (let [dressing (require :dressing)
       themes (require :telescope.themes)]
-  (dressing.setup {:input {:border :solid :winblend 0}
+  (dressing.setup {:input {:border :solid :win_options {:winblend 0}}
                    :select {:backend [:telescope :nui :builtin]
                             :telescope (themes.get_cursor {:border true
                                                            :borderchars [" "

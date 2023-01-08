@@ -4,10 +4,14 @@
 
     nixlib.url = "github:nix-community/nixpkgs.lib";
     nixos-hardware.url = "github:nixos/nixos-hardware";
-    darwin.url = "github:lnl7/nix-darwin/master";
-    darwin.inputs.nixpkgs.follows = "nixpkgs";
-    home-manager.url = "github:nix-community/home-manager";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    darwin = {
+      url = "github:lnl7/nix-darwin/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     digga = {
       url = "github:divnix/digga";
@@ -19,21 +23,24 @@
       };
     };
 
-    neorg.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
-    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
-    neovim-nightly-overlay.inputs.nixpkgs.follows = "nixpkgs";
-    nur-bandithedoge.url = "github:bandithedoge/nur-packages";
-    nur-bandithedoge.flake = false;
-    nur.url = "github:nix-community/NUR";
-    parinfer-rust.url = "github:eraserhd/parinfer-rust";
-    parinfer-rust.flake = false;
+    nur-bandithedoge = {
+      flake = false;
+      url = "github:bandithedoge/nur-packages";
+    };
+    parinfer-rust = {
+      flake = false;
+      url = "github:eraserhd/parinfer-rust";
+    };
     mozilla.url = "github:mozilla/nixpkgs-mozilla";
-    colors.url = "github:Misterio77/nix-colors";
+    neorg.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
+    neovim.url = "github:neovim/neovim?dir=contrib";
     nix-gaming.url = "github:fufexan/nix-gaming";
-    prismlauncher.url = "github:PrismLauncher/PrismLauncher";
-
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
-    nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
+    nur.url = "github:nix-community/NUR";
+    prismlauncher.url = "github:PrismLauncher/PrismLauncher";
+    nil.url = "github:oxalica/nil";
+
+    colors.url = "github:Misterio77/nix-colors";
     musnix.url = "github:musnix/musnix";
     kmonad.url = "github:kmonad/kmonad?dir=nix";
     nixmox.url = "github:Sorixelle/nixmox";
@@ -51,12 +58,13 @@
   } @ inputs: let
     overlays = with inputs; [
       nur.overlay
-      neovim-nightly-overlay.overlay
+      neovim.overlay
       nixmox.overlay
       nixpkgs-wayland.overlay
       mozilla.overlays.firefox
       nix-gaming.overlays.default
       prismlauncher.overlay
+      nil.overlays.default
       (import (parinfer-rust + "/overlay.nix"))
       (_: prev: {
         bandithedoge = import nur-bandithedoge {pkgs = prev;};

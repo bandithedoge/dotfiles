@@ -48,6 +48,7 @@ in {
       oi
       ouch
       pandoc
+      rclone
       ripgrep
       sox
       tree
