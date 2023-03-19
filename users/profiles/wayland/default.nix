@@ -68,7 +68,7 @@ in {
       riverctl focus-follows-cursor normal
 
       riverctl default-layout rivertile
-      exec yambar &
+      yambar &
       exec rivertile -view-padding 5 -outer-padding 5 -main-ratio 0.5
     '';
   };
@@ -81,13 +81,13 @@ in {
     module = text: {
       inherit text;
       margin = spacing;
-      deco.background.color = color base02;
+      # deco.background.color = color base02;
     };
     icon = text:
       module text
       // {
         font = rice.monoFont + ":size=12";
-        deco.background.color = color base02;
+        # deco.background.color = color base02;
       };
     module_red = text: (module text) // {foreground = color base08;};
     bitrate = [
@@ -153,6 +153,7 @@ in {
             "network" = {
               name = "wlp3s0";
               content.map = {
+                on-click = "connman-gtk";
                 tag = "state";
                 values = {
                   down = [
@@ -170,6 +171,7 @@ in {
             "network" = {
               name = "enp0s25";
               content.map = {
+                on-click = "connman-gtk";
                 tag = "state";
                 values = {
                   down = [
@@ -211,7 +213,7 @@ in {
               card = "default";
               mixer = "Master";
               content.map = {
-                on-click = "${pkgs.pavucontrol}/bin/pavucontrol";
+                on-click = "pavucontrol";
                 tag = "muted";
                 values = {
                   false = [

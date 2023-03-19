@@ -32,6 +32,7 @@ in {
     nodePackages.fixjson
     nodePackages.markdownlint-cli2
     nodePackages.prettier
+    nodePackages.stylelint
     nodePackages.vscode-langservers-extracted
 
     # ruby
@@ -217,6 +218,7 @@ in {
     recursive = true;
     onChange = ''
       rm -rf ${config.xdg.cacheHome}/nvim/tangerine
+      nvim -E -c ":FnlCompile" -c q
     '';
   };
   # }}}

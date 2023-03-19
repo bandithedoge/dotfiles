@@ -4,6 +4,10 @@
   ...
 }: {
   home.packages = with pkgs; [
+    ardour
+    breeze-icons
+    cardinal
+    vcv-rack
     cadence
     carla
     ft2-clone
@@ -12,7 +16,6 @@
     pt2-clone
     qpwgraph
     soundtracker
-    volctl
-    mate.mate-media
+    zrythm
   ];
 }

@@ -41,7 +41,6 @@
 
   services.kmonad = {
     enable = true;
-    package = pkgs.bandithedoge.kmonad;
     keyboards.internal = {
       name = "laptop-internal";
       device = "/dev/input/by-path/platform-i8042-serio-0-event-kbd";

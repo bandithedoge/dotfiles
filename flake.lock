@@ -938,11 +938,11 @@
     "nur-bandithedoge": {
       "flake": false,
       "locked": {
-        "lastModified": 1654925233,
-        "narHash": "sha256-TL0KkFue1ltkiRjy8Yg556fDTZ5dooaHDqZHuPhXBQw=",
+        "lastModified": 1655271234,
+        "narHash": "sha256-2+q/D3lp/sKrMNy0p5QCs8YeepA4e3u/r9KPDZRJqYc=",
         "owner": "bandithedoge",
         "repo": "nur-packages",
-        "rev": "91cc637ea3600aa329ee563df055b230b234e438",
+        "rev": "4b70adeba17d0d46d59446c13ed2cff1b9365cba",
         "type": "github"
       },
       "original": {

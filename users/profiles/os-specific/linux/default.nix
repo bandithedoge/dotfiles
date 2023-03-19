@@ -5,16 +5,23 @@
 }: let
   rice = import ../../../../rice.nix;
 in {
-  home.packages = with pkgs; [
-    cutter
-    ghidra
-    icon-library
-    imv
-    pavucontrol
-    tigervnc
-    wine
-    discord
-  ];
+  home = {
+    packages = with pkgs; [
+      cutter
+      discord
+      ghidra
+      icon-library
+      imv
+      libappindicator
+      libappindicator-gtk3
+      pavucontrol
+      tigervnc
+      wine
+    ];
+    sessionVariables = {
+      XDG_CURRENT_DESKTOP = "Unity";
+    };
+  };
 
   # gtk {{{
   gtk = {
@@ -222,6 +229,7 @@ in {
       window_padding_width = 10;
       adjust_column_width = -1;
       tab_bar_style = "powerline";
+      confirm_os_window_close = 0;
 
       macos_titlebar_color = "background";
       macos_thicken_font = "0.25";
