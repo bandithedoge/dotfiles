@@ -110,11 +110,6 @@ in {
       };
     };
 
-    broot = {
-      enable = true;
-      modal = true;
-    };
-
     lf = rec {
       enable = true;
       settings = {

@@ -5,17 +5,26 @@
 }: {
   home.packages = with pkgs; [
     ardour
-    breeze-icons
-    cardinal
-    # vcv-rack
+    bandithedoge.zrythm
+    bespokesynth
     cadence
+    cardinal
     carla
     ft2-clone
+    goattracker
     helvum
     milkytracker
     pt2-clone
     qpwgraph
+    reaper
     soundtracker
-    zrythm
+
+    # plugins
+    aether-lv2
+    autotalent
+    calf
+    cardinal
+    distrho
+    geonkick
   ];
 }

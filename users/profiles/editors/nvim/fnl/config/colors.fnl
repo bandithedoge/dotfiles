@@ -106,7 +106,12 @@
                                 :NotifyDEBUGBorder {:link :NotifyBorder}
                                 :FidgetTitle {:fg :sel1 :bg :bg3}
                                 :FidgetTask {:fg :fg1 :bg :bg3}
-                                :TroubleNormal {:bg :bg0}}}})
+                                :TroubleNormal {:bg :bg0}
+                                :NotifierTitle {:bg :bg3
+                                                :fg :sel1
+                                                :style :bold}
+                                :NotifierIcon {:link :NotifierTitle}
+                                :NotifierContent {:bg :bg3}}}})
 
 (nightfox.compile)
 (vim.cmd "colorscheme nightfox")

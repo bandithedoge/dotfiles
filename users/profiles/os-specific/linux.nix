@@ -7,7 +7,6 @@
 in {
   home = {
     packages = with pkgs; [
-      bandithedoge.luakit
       cutter
       dfeet
       discord
@@ -16,6 +15,8 @@ in {
       imv
       oomoxFull
       pavucontrol
+      pcmanfm
+      teams
       tigervnc
       wine
     ];

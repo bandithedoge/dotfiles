@@ -46,14 +46,18 @@
                            :T [#(_G.fterm_float:toggle) :Terminal]
                            :i ["<cmd>:PickEverything<cr>" "Insert symbol"]
                            :<C-w> [#(mini-br.delete 0 true)
-                                   "Close buffer (force)"]}
+                                   "Close buffer (force)"]
+                           :c {:name :Colors
+                               :c ["<cmd>:Colortils picker<cr>" "Color picker"]
+                               :l ["<cmd>:Colortils lighten<cr>" :Lighten]
+                               :d ["<cmd>:Colortils darken<cr>" :Darken]}}
                 :<localleader> {:a [lsp.code_action "Code actions"]
                                 :g [neogen.generate "Generate annotation"]
                                 :t [trouble.toggle :Trouble]
                                 :j [lsp.definition "Jump to definition"]
                                 :D [t.diagnostics :Diagnostics]
                                 :e [expand_expr.expand "Expand expression"]
-                                :f [lsp.formatting "Format file"]
+                                :f [lsp.format "Format file"]
                                 :r [lsp.rename :Rename]
                                 :s [lsp.document_symbol :Symbols]
                                 :d {:name :Debug

@@ -52,17 +52,27 @@
                                (button {} 4 #(awful.layout.inc 1))
                                (button {} 5 #(awful.layout.inc -1))))
   ;; volume {{{
-  (set s.myvolumebox
-       (widget [(vicious.cache vicious.widgets.volume)
-                (vicious.register (icon nil) vicious.widgets.volume
-                                  #(if (= (. $2 2) "🔈")
-                                       (.. "<span foreground='" _G.base08
-                                           "'>ﱝ</span>")
-                                       "墳")
-                                  1 :Master)
-                (vicious.register (wibox.widget.textbox) vicious.widgets.volume
-                                  #(if (= (. $2 2) "🔈") "" (.. (. $2 1) "%"))
-                                  1 :Master)]))
+  (set s.myvolumeicon (icon ""))
+  (set s.myvolumetext (wibox.widget.textbox))
+  (set s.myvolumebox (widget [s.myvolumeicon s.myvolumetext]))
+  (let [update-widget (fn []
+                        (awful.spawn.easy_async "amixer get Master"
+                                                #(let [(volume state) (string.match $1
+                                                                                    "%[([%d]+)%%%].*%[([%l]*)%]")]
+                                                   (s.myvolumeicon:set_markup (if (= state
+                                                                                     :on)
+                                                                                  "墳"
+                                                                                  (.. "<span foreground='"
+                                                                                      _G.base08
+                                                                                      "'>"
+                                                                                      "婢</span>")))
+                                                   (s.myvolumetext:set_markup (if (= state
+                                                                                     :on)
+                                                                                  (.. volume
+                                                                                      "%")
+                                                                                  "")))))]
+    (update-widget)
+    (awful.spawn.with_line_callback "alsactl monitor" {:stdout update-widget}))
   (s.myvolumebox:connect_signal "button::press"
                                 #(match $4
                                    1 (awful.spawn "amixer set Master toggle")

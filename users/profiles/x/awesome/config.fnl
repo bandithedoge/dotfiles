@@ -47,6 +47,7 @@
                     :border_color beautiful.border_normal
                     :keys keys.clientkeys
                     :buttons keys.clientbuttons
+                    :maximized false
                     :placement (+ awful.placement.no_overlap
                                   awful.placement.no_offscreen
                                   awful.placement.centered)}}])

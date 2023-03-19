@@ -49,7 +49,7 @@
   } @ inputs: let
     overlays = with inputs; [
       nur.overlay
-      # neovim-nightly-overlay.overlay
+      neovim-nightly-overlay.overlay
       neorg.overlay
       nixmox.overlay
       nixpkgs-wayland.overlay
@@ -86,7 +86,7 @@
             home-manager.nixosModules.home-manager
             musnix.nixosModules.musnix
             kmonad.nixosModules.default
-            ./nix.nix
+            # ./nix.nix
           ];
         };
 

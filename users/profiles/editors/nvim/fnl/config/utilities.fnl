@@ -44,3 +44,8 @@
 ;; remember.nvim {{{
 (require :remember)
 ;; }}}
+
+;; colortils.nvim {{{
+(let [colortils (require :colortils)]
+  (colortils.setup {:border :solid}))
+;; }}}

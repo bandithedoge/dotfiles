@@ -14,7 +14,7 @@
 (set vim.o.path "**")
 (set vim.o.redrawtime 10000)
 (set vim.o.relativenumber true)
-(set vim.o.scrolloff 4)
+(set vim.o.scrolloff 2)
 (set vim.o.showmode false)
 (set vim.o.signcolumn "auto:3")
 (set vim.o.splitbelow true)

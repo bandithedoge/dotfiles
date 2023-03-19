@@ -1,4 +1,6 @@
 {pkgs, ...}: {
+  imports = [../nix.nix];
+
   environment.systemPackages = with pkgs; [
     alsa-utils
   ];
@@ -39,4 +41,6 @@
   programs.ccache.enable = true;
 
   users.mutableUsers = true;
+
+  programs.adb.enable = true;
 }

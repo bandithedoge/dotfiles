@@ -27,7 +27,8 @@
                                #(do
                                   (set $1.fullscreen (not $1.fullscreen))
                                   ($1:raise)))
-                          (key [mod] :t awful.client.floating.toggle))
+                          (key [mod] :t #(set $1.floating (not $1.floating)))
+                          (key [mod] :m #(set $1.maximized (not $1.maximized))))
         :clientbuttons (join (button [] 1
                                      #($1:emit_signal "request::activate"
                                                       :mouse_click {:raise true}))

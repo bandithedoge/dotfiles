@@ -111,6 +111,7 @@ in {
       sqlite-lua
 
       # utilities
+      colortils-nvim
       Comment-nvim
       direnv-vim
       editorconfig-nvim
@@ -119,14 +120,13 @@ in {
       nvim-autopairs
       nvim-expand-expr
       presence-nvim
-      sort-nvim
       remember-nvim
+      sort-nvim
 
       # ui
       bufferline-nvim
       cinnamon-nvim
       dressing-nvim
-      fidget-nvim
       flare-nvim
       fm-nvim
       foldsigns-nvim
@@ -146,6 +146,8 @@ in {
       pretty-fold-nvim
       todo-comments-nvim
       trouble-nvim
+      notifier-nvim
+      nvim-notify
 
       # keybindings
       fold-cycle-nvim
@@ -153,12 +155,13 @@ in {
       which-key-nvim
 
       # lsp
-      SchemaStore-nvim
+      document-color-nvim
       lsp_extensions-nvim
       lsp_signature-nvim
       lspkind-nvim
       null-ls-nvim
       nvim-lspconfig
+      SchemaStore-nvim
 
       # completion
       cmp-cmdline

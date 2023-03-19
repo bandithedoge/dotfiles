@@ -12,14 +12,8 @@
                         :<C-k> (cmp.mapping.select_prev_item {:behavior cmp.SelectBehavior.Select})
                         :<C-h> (cmp.mapping.scroll_docs -4)
                         :<C-l> (cmp.mapping.scroll_docs 4)
-                        :<Tab> (cmp.mapping (lambda [fallback]
-                                              (if (luasnip.expand_or_jumpable)
-                                                  (luasnip.expand_or_jump)
-                                                  (fallback))))
-                        :<S-Tab> (lambda [fallback]
-                                   (if (luasnip.jumpable -1)
-                                       (luasnip.jump -1)
-                                       (fallback)))}
+                        :<M-Tab> (cmp.mapping #(luasnip.expand_or_jump))
+                        :<M-S-Tab> #(luasnip.jump -1)}
               :formatting {:format (lspkind.cmp_format {:with_text true})}
               :sources [{:name :crates}
                         {:name :emoji}

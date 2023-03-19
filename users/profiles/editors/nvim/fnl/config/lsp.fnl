@@ -6,6 +6,7 @@
       cmp_nvim_lsp (require :cmp_nvim_lsp)
       schemastore (require :schemastore)
       yaml (require :yaml-companion)
+      document-color (require :document-color)
       defaults {:capabilities (merge (cmp_nvim_lsp.update_capabilities (vim.lsp.protocol.make_client_capabilities))
                                      {:textDocument {:completion {:completionItem {:snippetSupport true}}}})
                 :single_file_support true}]
@@ -50,7 +51,9 @@
   (lsp.solargraph.setup defaults)
   (lsp.sumneko_lua.setup (lua-dev.setup {:runtime_path true}))
   (lsp.tailwindcss.setup defaults)
-  (lsp.tsserver.setup defaults)
+  (lsp.tsserver.setup (merge defaults
+                             {:capabilities {:textDocument {:colorProvider {:dynamicRegistration true}}}
+                              :on_attach document-color.buf_attach}))
   (lsp.yamlls.setup (yaml.setup))
   (lsp.zls.setup defaults))
 
