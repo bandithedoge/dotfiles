@@ -133,9 +133,13 @@
                                     "Charging\n" ""
                                     "Discharging\n" ""}]
                          (s.mybatteryicon:set_markup (if (<= percentage 15)
-                                                         (.. "<span foreground='"
-                                                             _G.base08
-                                                             "'></span>")
+                                                         (if (not= battery.status
+                                                                   "Charging\n")
+                                                             (.. "<span foreground='"
+                                                                 _G.base08
+                                                                 "'></span>")
+                                                             (. icons
+                                                                battery.status))
                                                          (. icons
                                                             battery.status)))
                          (s.mybatterytext:set_markup (.. percentage "%")))]

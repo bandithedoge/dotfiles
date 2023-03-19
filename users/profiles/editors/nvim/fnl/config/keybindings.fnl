@@ -24,8 +24,7 @@
       dap (require :dap)
       neogen (require :neogen)
       trouble (require :trouble)
-      icon-picker (require :icon-picker)
-      inc-rename (require :inc_rename)]
+      icon-picker (require :icon-picker)]
   (wk.setup {:ignore_missing true :icons {:separator ""}})
   (wk.register {:<leader> {:<space> [t.commands "Enter command"]
                            :f {:name :Find
@@ -54,9 +53,8 @@
                                 :j [lsp.definition "Jump to definition"]
                                 :D [t.diagnostics :Diagnostics]
                                 :e [expand_expr.expand "Expand expression"]
-                                :f [#(lsp.format {:async true}) "Format file"]
-                                :r [#(inc-rename.rename {:default (vim.fn.expand :<cword>)})
-                                    :Rename]
+                                :f [lsp.formatting "Format file"]
+                                :r [lsp.rename :Rename]
                                 :s [lsp.document_symbol :Symbols]
                                 :d {:name :Debug
                                     :d [dapui.toggle :Debug]

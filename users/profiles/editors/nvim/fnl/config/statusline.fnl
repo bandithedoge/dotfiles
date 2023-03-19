@@ -57,4 +57,4 @@
   (bufferline.setup {:options {:diagnostics :nvim_lsp
                                :separator_style :thick
                                :show_close_icon false
-                               :indicator_icon ""}}))
+                               :indicator {:style :none}}}))

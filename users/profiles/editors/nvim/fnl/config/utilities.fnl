@@ -41,12 +41,6 @@
 
 ;; }}}
 
-;; inc-rename.nvim {{{
-(let [inc-rename (require :inc_rename)]
-  (inc-rename.setup))
-
-;; }}}
-
 ;; remember.nvim {{{
 (require :remember)
 ;; }}}

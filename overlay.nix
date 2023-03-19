@@ -13,7 +13,17 @@ _: prev: {
 
   vimPlugins = prev.vimPlugins // prev.bandithedoge.vimPlugins;
 
-  haskellPackages = prev.haskellPackages // {
-    inherit (prev.bandithedoge) taffybar;
-  };
+  haskellPackages =
+    prev.haskellPackages
+    // {
+      inherit (prev.bandithedoge) taffybar;
+    };
+
+  nim-unwrapped = prev.nim-unwrapped.overrideAttrs (oldAttrs: {
+    installPhase =
+      oldAttrs.installPhase
+      + ''
+        ln -sf $out/nim/lib $out/lib
+      '';
+  });
 }

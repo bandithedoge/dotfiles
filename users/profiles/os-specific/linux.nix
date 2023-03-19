@@ -171,18 +171,18 @@ in {
           };
           messages = {
             error = {
-              bg = base00;
-              fg = base05;
+              bg = base08;
+              fg = base00;
               border = base08;
             };
             info = {
-              bg = base00;
-              fg = base05;
+              bg = base0D;
+              fg = base00;
               border = base0D;
             };
             warning = {
-              bg = base00;
-              fg = base05;
+              bg = base09;
+              fg = base00;
               border = base09;
             };
           };

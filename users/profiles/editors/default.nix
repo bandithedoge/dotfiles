@@ -150,7 +150,6 @@ in {
       # keybindings
       fold-cycle-nvim
       icon-picker-nvim
-      inc-rename-nvim
       which-key-nvim
 
       # lsp
@@ -181,7 +180,7 @@ in {
       # language-specific
       crates-nvim
       lua-dev-nvim
-      nim-vim
+      nim-nvim
       nvim-luaref
       nvim-parinfer
       package-info-nvim

@@ -33,6 +33,7 @@ in {
       clang
       comma
       expect
+      ripgrep
       fd
       gh
       glow
