@@ -97,7 +97,7 @@
     };
   };
 
-  def = {
+  def = rec {
     lua = ''
       base00 = "${base00}"
       base01 = "${base01}"
@@ -135,6 +135,7 @@
       wallpaper = "${wallpaper}"
       wallpaperBlurred = "${wallpaperBlurred}"
     '';
+    python = lua;
     scss = ''
       $base00: ${base00};
       $base01: ${base01};

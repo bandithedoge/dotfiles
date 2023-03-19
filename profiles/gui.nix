@@ -42,7 +42,6 @@ in {
         '';
       }
     ];
-    libinput.enable = true;
     layout = "pl";
   };
 

@@ -146,12 +146,6 @@
                                                                                1)
                                                                             :On)
                                                                          ""
-                                                                         (<= (. $2
-                                                                                2)
-                                                                             15)
-                                                                         (.. "<span foreground='"
-                                                                             _G.base08
-                                                                             "'></span>")
                                                                          "")
                                                                     5 :AC)
                                                   (vicious.register (wibox.widget.textbox)

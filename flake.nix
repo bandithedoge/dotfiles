@@ -35,7 +35,6 @@
     musnix.url = "github:musnix/musnix";
     kmonad.url = "github:kmonad/kmonad?dir=nix";
     nixgl.url = "github:guibou/nixGL";
-    firefox-darwin.url = "github:bandithedoge/nixpkgs-firefox-darwin";
     nixmox.url = "github:Sorixelle/nixmox";
   };
 

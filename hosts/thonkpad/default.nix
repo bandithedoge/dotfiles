@@ -86,4 +86,9 @@
   };
 
   swapDevices = [{device = "/dev/disk/by-uuid/7eaade78-9c5e-4c25-8de4-20cf7ced3e72";}];
+
+  services.xserver.libinput = {
+    enable = true;
+    touchpad.tapping = false;
+  };
 }

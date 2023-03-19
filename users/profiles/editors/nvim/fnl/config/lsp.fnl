@@ -33,7 +33,18 @@
                                               :validate {:enable true}}}}))
   (lsp.nimls.setup defaults)
   (lsp.psalm.setup defaults)
-  (lsp.pylsp.setup defaults)
+  (lsp.pylsp.setup (merge defaults
+                          {:settings {:pylsp {:plugins {:autopep8 {:enabled false}
+                                                        :black {:enabled true
+                                                                :line_length 120}
+                                                        :flake8 {:enabled true
+                                                                 :maxLineLength 120}
+                                                        :jedi_completion {:fuzzy true
+                                                                          :eager true}
+                                                        :pydocstyle {:enabled true
+                                                                     :convention :pep257}
+                                                        :pylint {:enabled true}
+                                                        :yapf {:enabled false}}}}}))
   (lsp.rnix.setup defaults)
   (lsp.rust_analyzer.setup defaults)
   (lsp.solargraph.setup defaults)
