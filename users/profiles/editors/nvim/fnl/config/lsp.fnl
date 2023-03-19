@@ -4,6 +4,9 @@
 (let [neodev (require :neodev)]
   (neodev.setup {}))
 
+(let [flutter-tools (require :flutter-tools)]
+  (flutter-tools.setup {:ui {:border [" " " " " " " " " " " " " " " "]}}))
+
 (let [lsp (require :lspconfig)
       cmp_nvim_lsp (require :cmp_nvim_lsp)
       schemastore (require :schemastore)
@@ -15,6 +18,7 @@
   (lsp.bashls.setup defaults)
   (lsp.clangd.setup defaults)
   (lsp.cssls.setup defaults)
+  (lsp.dartls.setup defaults)
   (lsp.dhall_lsp_server.setup defaults)
   (lsp.emmet_ls.setup defaults)
   (lsp.eslint.setup (merge defaults

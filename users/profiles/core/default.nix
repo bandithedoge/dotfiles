@@ -17,6 +17,7 @@ in {
   home = {
     # {{{
     stateVersion = "21.11";
+    sessionPath = ["$HOME/.pub-cache/bin"];
     sessionVariables = {
       EDITOR = "nvim";
       LF_ICONS = "${builtins.readFile ./icons}";
@@ -50,6 +51,7 @@ in {
       ripgrep
       sox
       tree
+      unzip
       xdg-ninja
       xdragon
       yt-dlp

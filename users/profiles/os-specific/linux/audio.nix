@@ -5,8 +5,8 @@
 }: {
   home.packages = with pkgs; [
     ardour
-    bandithedoge.cardinal
-    bandithedoge.zrythm
+    # bandithedoge.cardinal
+    # bandithedoge.zrythm
     bespokesynth
     breeze-icons
     cadence

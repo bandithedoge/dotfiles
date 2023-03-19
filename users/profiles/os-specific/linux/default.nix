@@ -7,6 +7,7 @@
 
   home = {
     packages = with pkgs; [
+      anydesk
       blender
       bottles
       dfeet

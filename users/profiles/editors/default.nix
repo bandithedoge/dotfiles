@@ -57,8 +57,12 @@
     sumneko-lua-language-server
 
     # c
+    clang
     clang-tools
+    cmake
     cppcheck
+    ninja
+    pkg-config
 
     # nim
     nimlsp
@@ -88,6 +92,10 @@
     # dhall
     dhall
     dhall-lsp-server
+
+    # dart
+    flutter
+    dart
   ];
   # }}}
 
@@ -95,8 +103,7 @@
   programs.neovim = {
     enable = true;
     package = pkgs.neovim-unwrapped;
-    plugins = with pkgs.vimPlugins;
-    with pkgs.bandithedoge.vimPlugins; [
+    plugins = with pkgs.bandithedoge.vimPlugins; [
       hibiscus-nvim
       impatient-nvim
       mini-nvim
@@ -194,12 +201,12 @@
       # language-specific
       crates-nvim
       dhall-vim
+      flutter-tools-nvim
       lua-dev-nvim
       nim-nvim
       nvim-luaref
       nvim-parinfer
       package-info-nvim
-      purescript-vim
       rasi-vim
       vim-coffee-script
       yaml-companion-nvim
@@ -213,7 +220,6 @@
       telescope-frecency-nvim
       telescope-nvim
       telescope-zf-native-nvim
-      # neorg-telescope
 
       # snippets
       friendly-snippets
