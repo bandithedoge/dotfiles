@@ -47,9 +47,9 @@
   });
 in {
   home.packages = with pkgs; [
-    my-xmonad
-    my-st
-    haskellPackages.status-notifier-item
+    # my-xmonad
+    # my-st
+    # haskellPackages.status-notifier-item
   ];
 
   xsession = {

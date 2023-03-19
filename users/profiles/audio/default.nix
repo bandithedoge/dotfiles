@@ -7,7 +7,7 @@
     ardour
     breeze-icons
     cardinal
-    vcv-rack
+    # vcv-rack
     cadence
     carla
     ft2-clone

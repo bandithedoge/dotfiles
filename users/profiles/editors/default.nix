@@ -93,7 +93,7 @@ in {
       tangerine-nvim
 
       # treesitter
-      (nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars))
+      (nvim-treesitter.withPlugins builtins.attrValues)
       nvim-ts-autotag
       nvim-ts-context-commentstring
       nvim-ts-rainbow

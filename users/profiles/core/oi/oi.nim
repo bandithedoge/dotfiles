@@ -36,7 +36,8 @@ when isMainModule:
     inputs = args["<input>"]
     path = args["--path"]
     showTrace = args["--show-trace"]
-    isNixOS = detectOs NixOS
+    # detectOs(NixOS) doesn't detect NixOS properly
+    isNixOS = readFile("/etc/os-release").contains("NAME=NixOS")
     isDarwin = detectOs MacOSX
 
   if args["rebuild"]:
