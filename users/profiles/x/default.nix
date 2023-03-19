@@ -76,11 +76,6 @@ in {
     text = ''
       #!/usr/bin/env bash
 
-      dbus-launch --auto-syntax
-
-      status-notifier-watcher &
-      picom &
-
       exec ${config.xsession.windowManager.command}
     '';
   };

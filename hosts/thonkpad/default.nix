@@ -31,7 +31,18 @@
     powertop.enable = true;
   };
 
-  services.acpid.enable = true;
+  services.acpid = {
+    enable = true;
+    handlers.lid = {
+      event = "button/lid.*";
+      action = ''
+        case "$1" in
+          close) awesome-client "vicious.suspend()";;
+          open) awesome-client "vicious.activate()";;
+        esac
+      '';
+    };
+  };
 
   services.upower.enable = true;
   services.thermald.enable = true;

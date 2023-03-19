@@ -45,15 +45,10 @@
     home-manager,
     musnix,
     kmonad,
-    nur,
-    nixgl,
-    neorg,
-    parinfer-rust,
-    nur-bandithedoge,
-    neovim-nightly-overlay,
+    nixos-hardware,
     ...
   } @ inputs: let
-    overlays = [
+    overlays = with inputs; [
       nur.overlay
       # neovim-nightly-overlay.overlay
       nixgl.overlay
@@ -112,7 +107,12 @@
         };
 
         hosts = {
-          thonkpad = {};
+          thonkpad = {
+            modules = [
+              nixos-hardware.nixosModules.lenovo-thinkpad-t440p
+              nixos-hardware.nixosModules.common-pc-laptop-ssd
+            ];
+          };
         };
       };
 

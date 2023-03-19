@@ -18,20 +18,35 @@ in {
 
   services.xserver = {
     enable = true;
-    displayManager.sx = {
-      enable = true;
+    displayManager = {
+      lightdm = {
+        enable = true;
+        greeters.gtk = {
+          enable = true;
+          clock-format = "%A %d %B %T";
+          indicators = ["~host" "~spacer" "~spacer" "~clock" "~power"];
+        };
+      };
+      sx = {
+        enable = true;
+      };
+      defaultSession = "none+sx";
     };
+    windowManager.session = [
+      {
+        name = "sx";
+        start = ''
+          ${pkgs.sx}/bin/sx
+        '';
+      }
+    ];
     libinput.enable = true;
     layout = "pl";
   };
 
-  services.greetd = {
+  programs.xss-lock = {
     enable = true;
-    settings = {
-      default_session = {
-        command = "tuigreet -tr --cmd sx";
-      };
-    };
+    lockerCommand = "${pkgs.i3lock-fancy-rapid}/bin/i3lock-fancy-rapid";
   };
 
   fonts.fonts = with pkgs; [

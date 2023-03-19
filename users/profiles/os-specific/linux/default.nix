@@ -161,7 +161,7 @@ in {
 
   programs.firefox = {
     # {{{
-    enable = true;
+    enable = false;
     package = pkgs.firefox-unwrapped;
     extensions = with pkgs.nur.repos.rycee.firefox-addons; [
       auto-tab-discard
