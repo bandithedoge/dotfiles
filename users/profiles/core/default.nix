@@ -18,6 +18,8 @@ in {
     configFile."rice.json".text = builtins.toJSON rice;
   };
 
+  nixpkgs.config = {allowBroken = true;};
+
   home = {
     stateVersion = "21.11";
     sessionVariables = {

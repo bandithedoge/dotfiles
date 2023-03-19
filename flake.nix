@@ -128,8 +128,8 @@
             ];
             linux = [os-specific.linux];
             gui = [
-              wayland
-              # x
+              # wayland
+              x
             ];
             audio = [
               audio

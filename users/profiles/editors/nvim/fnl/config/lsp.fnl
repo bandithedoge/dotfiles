@@ -59,6 +59,7 @@
                      f.rubocop
                      f.shellharden
                      f.shfmt
+                     f.stylelint
                      f.stylua
                      (f.prettier.with {:extra_args (lambda [params]
                                                      (and params.options
@@ -69,7 +70,6 @@
                      d.fish
                      d.shellcheck
                      d.statix
-                     d.stylelint
                      (d.markdownlint.with {:command :markdownlint-cli2})
                      a.shellcheck
                      a.statix]))

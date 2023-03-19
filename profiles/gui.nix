@@ -27,10 +27,9 @@ in {
 
   services.greetd = {
     enable = true;
-    vt = 2;
     settings = {
       default_session = {
-        command = "tuigreet -tr --cmd launchwm";
+        command = "tuigreet -tr --cmd sx";
       };
     };
   };

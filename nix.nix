@@ -31,4 +31,7 @@
       log-lines = 50
     '';
   };
+  nixpkgs.config = {
+    allowBroken = true;
+  };
 }
