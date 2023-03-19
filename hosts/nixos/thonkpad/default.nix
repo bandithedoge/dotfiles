@@ -79,14 +79,6 @@
       device = "/dev/disk/by-uuid/C106-5693";
       fsType = "vfat";
     };
-    "/mnt/data" = {
-      device = "/dev/disk/by-label/shit";
-      fsType = "ntfs";
-      options = [
-        "rw"
-        "uid=${builtins.toString config.users.users."bandithedoge".uid}"
-      ];
-    };
   };
 
   swapDevices = [{device = "/dev/disk/by-uuid/7eaade78-9c5e-4c25-8de4-20cf7ced3e72";}];

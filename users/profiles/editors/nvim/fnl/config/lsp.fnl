@@ -1,8 +1,10 @@
 (require-macros :hibiscus.vim)
 (require-macros :hibiscus.core)
 
+(let [neodev (require :neodev)]
+  (neodev.setup {}))
+
 (let [lsp (require :lspconfig)
-      lua-dev (require :neodev)
       cmp_nvim_lsp (require :cmp_nvim_lsp)
       schemastore (require :schemastore)
       yaml (require :yaml-companion)
@@ -34,8 +36,7 @@
   (lsp.jsonls.setup (merge defaults
                            {:settings {:json {:schemas (schemastore.json.schemas)
                                               :validate {:enable true}}}}))
-  (lsp.nil_ls.setup (merge defaults
-                           {:autostart true}))
+  (lsp.nil_ls.setup (merge defaults {:autostart true}))
   (lsp.nimls.setup defaults)
   (lsp.psalm.setup defaults)
   (lsp.purescriptls.setup defaults)
@@ -54,7 +55,7 @@
                                                         :yapf {:enabled false}}}}}))
   (lsp.rust_analyzer.setup defaults)
   (lsp.solargraph.setup defaults)
-  (lsp.sumneko_lua.setup (lua-dev.setup {:runtime_path true}))
+  (lsp.sumneko_lua.setup defaults)
   (lsp.tailwindcss.setup defaults)
   (lsp.tsserver.setup (merge defaults
                              {:capabilities {:textDocument {:colorProvider {:dynamicRegistration true}}}

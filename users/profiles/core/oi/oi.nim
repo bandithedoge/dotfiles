@@ -57,7 +57,7 @@ when isMainModule:
       # we need to use bash since sh doesn't support the "|&" syntax
       # "&>" doesn't work on Alpine for some reason
       (if isNixOS: "sudo " else: "") &
-      &"bash -c \"{cmd} switch --impure" &
+      &"bash -c \"{cmd} switch --impure " &
       (if showTrace: "--show-trace " else: "") &
       "|& nom\""
     )

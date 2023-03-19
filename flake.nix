@@ -20,7 +20,6 @@
     };
 
     neorg.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
-    neorg.inputs.nixpkgs.follows = "nixpkgs";
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     neovim-nightly-overlay.inputs.nixpkgs.follows = "nixpkgs";
     nur-bandithedoge.url = "github:bandithedoge/nur-packages";
@@ -53,7 +52,6 @@
     overlays = with inputs; [
       nur.overlay
       neovim-nightly-overlay.overlay
-      # neorg.overlay
       nixmox.overlay
       nixpkgs-wayland.overlay
       mozilla.overlays.firefox
@@ -64,6 +62,7 @@
         bandithedoge = import nur-bandithedoge {pkgs = prev;};
         colors = colors.lib-core;
       })
+      neorg.overlays.default
       (import ./overlay.nix)
     ];
 

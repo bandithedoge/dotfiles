@@ -1,0 +1,47 @@
+// https://gnome.pages.gitlab.gnome.org/libadwaita/doc/main/named-colors.html
+
+@use "sass:color";
+
+$colors: (
+    accent_color: $base0F,
+    accent_bg_color: $base0F,
+    accent_fg_color: $base00,
+
+    destructive_color: $base08,
+    destructive_bg_color: $base08,
+    destructive_fg_color: $base00,
+
+    success_color: $base0B,
+    success_bg_color: $base0B,
+    success_fg_color: $base00,
+
+    warning_color: $base0A,
+    warning_bg_color: $base0A,
+    warning_fg_color: $base00,
+
+    error_color: $base08,
+
+    window_bg_color: $base00,
+    window_fg_color: $base05,
+
+    view_bg_color: $base01,
+    view_fg_color: $base05,
+
+    headerbar_bg_color: $base02,
+    headerbar_fg_color: $base04,
+    headerbar_border_color: $base02,
+    headerbar_backdrop_color: $base01,
+
+    card_bg_color: $base01,
+    card_fg_color: $base05,
+
+    dialog_bg_color: $base02,
+    dialog_fg_color: $base05,
+
+    popover_bg_color: $base02,
+    popover_fg_color: $base05,
+);
+
+@each $name, $color in $colors {
+    @define-color #{$name} #{$color};
+}

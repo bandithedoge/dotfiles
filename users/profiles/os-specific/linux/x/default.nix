@@ -132,14 +132,12 @@ in {
     Install.WantedBy = ["graphical-session.target"];
 
     Service = {
-      Type = "simple";
       ExecStart = "${pkgs.betterlockscreen}/bin/betterlockscreen -u ${pkgs.rice.wallpaperBlurred}";
     };
   };
 
   xdg.configFile."betterlockscreenrc".text = let
     color = c: (pkgs.lib.removePrefix "#" c) + "ff";
-    blank = "00000000";
   in
     with pkgs.rice; ''
       fx_list=()

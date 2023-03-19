@@ -81,7 +81,6 @@ in {
     enableHardwareAcceleration = false;
     OPEN_ON_STARTUP = false;
     openasar = {
-      quickstart = true;
       setup = true;
       js = ''
         const css = `

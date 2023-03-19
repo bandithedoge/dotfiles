@@ -72,8 +72,7 @@
                                                                                       "%")
                                                                                   "")))))]
     (update-widget)
-    (awful.spawn.with_line_callback "alsactl monitor"
-                                    {:stdout update-widget}))
+    (awful.spawn.with_line_callback "alsactl monitor" {:stdout update-widget}))
   (s.myvolumebox:connect_signal "button::press"
                                 #(match $4
                                    1 (awful.spawn "amixer set Master toggle")
@@ -96,8 +95,7 @@
                           ($1:match "SSID: ([^\\n]*)"))
           update-widget #(awful.spawn.easy_async "iw dev wlp3s0 link"
                                                  #(let [info (parse-info $1)]
-                                                    (s.mywifiicon:set_markup (if (= info
-                                                                                    nil)
+                                                    (s.mywifiicon:set_markup (if (not info)
                                                                                  (.. "<span foreground='"
                                                                                      _G.base08
                                                                                      "'>睊</span>")

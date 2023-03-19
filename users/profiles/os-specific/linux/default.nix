@@ -33,8 +33,8 @@
     };
   };
 
+  # gtk {{{
   gtk = {
-    # {{{
     enable = true;
     font = {
       name = pkgs.rice.uiFont;
@@ -48,7 +48,15 @@
       gtk-toolbar-style = "";
       gtk-decoration-layout = "menu";
     };
-  }; # }}}
+  };
+
+  xdg.configFile = let
+    css = pkgs.rice.compileSCSS ./gtk.scss;
+  in {
+    "gtk-4.0/gtk.css".source = css;
+    "gtk-3.0/gtk.css".source = css;
+  };
+  # }}}
 
   qt = {
     # {{{

@@ -53,6 +53,7 @@
     fennel
     fnlfmt
     luajitPackages.luacheck
+    stylua
     sumneko-lua-language-server
 
     # c
@@ -102,7 +103,7 @@
       tangerine-nvim
 
       # treesitter
-      (nvim-treesitter.withPlugins (_: (builtins.filter pkgs.lib.isDerivation (builtins.attrValues pkgs.tree-sitter-grammars))))
+      pkgs.vimPlugins.nvim-treesitter.withAllGrammars
       nvim-ts-autotag
       nvim-ts-context-commentstring
       nvim-ts-rainbow
@@ -187,7 +188,7 @@
       nvim-dap-ui
 
       # writing
-      neorg
+      pkgs.vimPlugins.neorg
 
       # language-specific
       crates-nvim
