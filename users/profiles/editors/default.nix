@@ -158,11 +158,9 @@
       lualine-nvim
       neo-tree-nvim
       neodim
-      noice-nvim
       numbers-nvim
       nvim-colorizer-lua
       nvim-hlslens
-      nvim-notify
       pretty-fold-nvim
       todo-comments-nvim
       trouble-nvim

@@ -9,7 +9,6 @@
     packages = with pkgs; [
       anydesk
       blender
-      bottles
       dfeet
       discord-canary
       ferdium
