@@ -2,134 +2,60 @@
 
 (set vim.o.laststatus 3)
 
-(let [galaxyline (require :galaxyline)
-      buffer (require :galaxyline.provider_buffer)
-      condition (require :galaxyline.condition)
-      fileinfo (require :galaxyline.provider_fileinfo)]
-  (set galaxyline.short_line_list [:neo-tree :Trouble])
-  (set galaxyline.section.left
-       [{:ViMode {:provider #(let [mode (vim.fn.mode)]
-                               (vim.api.nvim_command (.. "hi GalaxyViMode guibg="
-                                                         (. {:n _G.base0F
-                                                             :i _G.base0B
-                                                             :v _G.base0A
-                                                             :V _G.base0A
-                                                             "\022" _G.base0A
-                                                             :c _G.base0E
-                                                             :s _G.base0D
-                                                             :S _G.base0D
-                                                             "\019" _G.base0D
-                                                             :R _G.base08
-                                                             :r _G.base08
-                                                             :! _G.base0C
-                                                             :t _G.base0C}
-                                                            mode)))
-                               (.. ;; seems like it always ignores the first space
-                                   "  "
-                                   (. (let [n :NORMAL
-                                            v :VISUAL
-                                            s :SELECT
-                                            i :INSERT
-                                            r :REPLACE
-                                            c :COMMAND
-                                            q "?"
-                                            t :TERMINAL]
-                                        {: n
-                                         :no n
-                                         :nov n
-                                         :noV n
-                                         "no\022" n
-                                         :niI n
-                                         :niR n
-                                         :niV n
-                                         :nt n
-                                         : v
-                                         :vs v
-                                         :V v
-                                         :Vs v
-                                         "\022" v
-                                         "\022s" v
-                                         : s
-                                         :S s
-                                         "\019" s
-                                         : i
-                                         :ic i
-                                         :ix i
-                                         :R r
-                                         :Rc r
-                                         :Rx r
-                                         :Rv r
-                                         :Rvc r
-                                         :Rvx r
-                                         : c
-                                         :cv c
-                                         :r q
-                                         :rm q
-                                         :r? q
-                                         :! t
-                                         : t})
-                                      mode)
-                                   " "))
-                  :highlight [_G.base00 _G.base0F :bold]
-                  :separator " "
-                  :separator_highlight [_G.base00 _G.base02]}}
-        {:FileIcon {:provider :FileIcon
-                    :highlight [fileinfo.get_file_icon_color _G.base02]
-                    :condition condition.buffer_not_empty}}
-        {:FileName {:provider #(fileinfo.get_current_file_name "" "")
-                    :highlight [_G.base05 _G.base02]
-                    :separator " "
-                    :separator_highlight [_G.base00 _G.base01]
-                    :condition condition.buffer_not_empty}}
-        {:DiagnosticError {:provider :DiagnosticError
-                           :icon " "
-                           :highlight [_G.base08 _G.base01]}}
-        {:DiagnosticWarn {:provider :DiagnosticWarn
-                          :icon " "
-                          :highlight [_G.base0A _G.base01]}}
-        {:DiagnosticHint {:provider :DiagnosticHint
-                          :icon " "
-                          :highlight [_G.base0B _G.base01]}}
-        {:DiagnosticInfo {:provider :DiagnosticInfo
-                          :icon " "
-                          :highlight [_G.base0D _G.base01]}}
-        {:Lsp {:provider #(let [servers []]
-                            (vim.lsp.for_each_buffer_client 0
-                                                            #(table.insert servers
-                                                                           $1.name))
-                            (table.concat servers " "))
-               :highlight [_G.base03 _G.base01]
-               :condition condition.check_active_lsp}}])
-  (set galaxyline.section.right
-       [{:DiffAdd {:provider :DiffAdd
-                   :icon " "
-                   :highlight [_G.base0B _G.base01]}}
-        {:DiffModified {:provider :DiffModified
-                        :icon " "
-                        :highlight [_G.base0A _G.base01]}}
-        {:DiffRemove {:provider :DiffRemove
-                      :icon " "
-                      :highlight [_G.base08 _G.base01]}}
-        {:GitBranch {:provider :GitBranch
-                     :icon "שׂ "
-                     :highlight [_G.base05 _G.base01]
-                     :separator " "
-                     :separator_highlight [_G.base00 _G.base01]}}
-        {:FileEncoding {:provider #(match vim.bo.fileformat
-                                     :dos "  "
-                                     :unix "  "
-                                     :mac "  ")
-                        :highlight [_G.base05 _G.base02]
-                        :separator " "
-                        :separator_highlight [_G.base00 _G.base01]
-                        :condition condition.buffer_not_empty}}
-        {:FileTypeName {:provider #(.. (string.lower (buffer.get_buffer_filetype))
-                                       " ")
-                        :highlight [_G.base05 _G.base02]
-                        :condition condition.buffer_not_empty}}])
-  (set galaxyline.section.short_line_left
-       [{:FileName {:provider #(fileinfo.get_current_file_name "" "")
-                    :highlight [_G.base00 _G.base0F]}}]))
+(let [lualine (require :lualine)]
+  (lualine.setup {:options {:theme (let [defaults {:a {:normal {:bg _G.base0F
+                                                                :fg _G.base00
+                                                                :gui :bold}
+                                                       :insert {:bg _G.base0B
+                                                                :fg _G.base00
+                                                                :gui :bold}
+                                                       :visual {:bg _G.base0A
+                                                                :fg _G.base00
+                                                                :gui :bold}
+                                                       :replace {:bg _G.base08
+                                                                 :fg _G.base00
+                                                                 :gui :bold}
+                                                       :command {:bg _G.base0E
+                                                                 :fg _G.base00
+                                                                 :gui :bold}}
+                                                   :b {:bg _G.base02
+                                                       :fg _G.base04}
+                                                   :c {:bg _G.base01
+                                                       :fg _G.base04}
+                                                   :inactive {:bg _G.base00
+                                                              :fg _G.base03}}]
+                                     {:normal {:a defaults.a.normal
+                                               :b defaults.b
+                                               :c defaults.c}
+                                      :insert {:a defaults.a.insert
+                                               :b defaults.b
+                                               :c defaults.c}
+                                      :visual {:a defaults.a.visual
+                                               :b defaults.b
+                                               :c defaults.c}
+                                      :replace {:a defaults.a.replace
+                                                :b defaults.b
+                                                :c defaults.c}
+                                      :command {:a defaults.a.command
+                                                :b defaults.b
+                                                :c defaults.c}
+                                      :inactive {:a defaults.inactive
+                                                 :b defaults.inactive
+                                                 :c defaults.inactive}})
+                            :component_separators ""
+                            :section_separators ""
+                            :globalstatus true}
+                  :extensions [:nvim-tree :neo-tree]
+                  :sections {:lualine_a [:mode]
+                             :lualine_b [{1 :filename :path 0}]
+                             :lualine_c [{1 :diagnostics
+                                          :sources [:nvim_diagnostic]
+                                          :update_in_insert true}]
+                             :lualine_x [:diff :branch]
+                             :lualine_y [[#(.. " " vim.bo.shiftwidth)]
+                                         :fileformat
+                                         :filetype]
+                             :lualine_z [:location]}}))
 
 (let [bufferline (require :bufferline)]
   (bufferline.setup {:animation false

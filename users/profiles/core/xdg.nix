@@ -3,51 +3,59 @@
   home-manager,
   config,
   ...
-}: {
+}: let
+  cache = config.xdg.cacheHome;
+  conf = config.xdg.configHome;
+  data = config.xdg.dataHome;
+  state = config.xdg.stateHome;
+in {
+  xdg = {
+    enable = true;
+    configFile = {
+      # npm
+      "npm/npmrc".text = ''
+        prefix=${data}/npm
+        cache=${cache}/npm
+        tmp=$\{XDG_RUNTIME_DIR}/npm
+        init-module=${conf}/npm/config/npm-init.js
+      '';
+    };
+  };
+
   home = {
     sessionVariables = {
       # android
-      ANDROID_HOME = "$XDG_DATA_HOME/android";
+      ANDROID_HOME = "${data}/android";
 
       # bash
-      HISTFILE = "$XDG_STATE_HOME/bash/history";
+      HISTFILE = "${state}/bash/history";
 
       # cabal
-      CABAL_CONFIG = "$XDG_CONFIG_HOME/cabal/config";
-      CABAL_DIR = "$XDG_DATA_HOME/cabal";
+      CABAL_CONFIG = "${conf}/cabal/config";
+      CABAL_DIR = "${data}/cabal";
 
       # go
-      GOPATH = "$XDG_DATA_HOME/go";
+      GOPATH = "${data}/go";
 
       # x
-      XCOMPOSECACHE = "$XDG_CACHE_HOME/X11/xcompose";
+      XCOMPOSECACHE = "${cache}/X11/xcompose";
 
       # java
-      _JAVA_OPTIONS = "-Djava.util.prefs.userRoot=$XDG_CONFIG_HOME/java";
+      _JAVA_OPTIONS = "-Djava.util.prefs.userRoot=${conf}/java";
 
       # stack
-      STACK_ROOT = "$XDG_DATA_HOME/stack";
+      STACK_ROOT = "${data}/stack";
 
       # npm
-      NPM_CONFIG_USERCONFIG = "$XDG_CONFIG_HOME/npm/npmrc";
+      NPM_CONFIG_USERCONFIG = "${conf}/npm/npmrc";
     };
 
     shellAliases = {
       # wget
-      wget = "wget --hsts-file=\"$XDG_DATA_HOME/wget-hsts\"";
+      wget = "wget --hsts-file=\"${data}/wget-hsts\"";
 
       # yarn
-      yarn = "yarn --use-yarnrc $XDG_CONFIG_HOME/yarn/config";
+      yarn = "yarn --use-yarnrc ${conf}/yarn/config";
     };
-  };
-
-  xdg.configFile = {
-    # npm
-    "npm/npmrc".text = ''
-      prefix=$\{XDG_DATA_HOME}/npm
-      cache=$\{XDG_CACHE_HOME}/npm
-      tmp=$\{XDG_RUNTIME_DIR}/npm
-      init-module=$\{XDG_CONFIG_HOME}/npm/config/npm-init.js
-    '';
   };
 }

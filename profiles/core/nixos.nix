@@ -38,7 +38,7 @@
 
   users.mutableUsers = true;
 
-  # programs.adb.enable = true;
+  programs.adb.enable = true;
 
   services.upower.enable = true;
 }

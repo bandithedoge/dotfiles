@@ -2,16 +2,12 @@
   config,
   pkgs,
   ...
-}: let
-  rice = import ../../../rice.nix {inherit pkgs;};
-in {
-  home.packages = with pkgs; [];
-
+}: {
   programs.kitty = {
     enable = true;
     package = pkgs.dummy;
     font = {
-      name = rice.monoFont;
+      name = pkgs.rice.monoFont;
       size =
         if pkgs.stdenv.isDarwin
         then 16
@@ -21,7 +17,7 @@ in {
       "ctrl+enter" = "no_op";
       "ctrl+space" = "no_op";
     };
-    settings = with rice; {
+    settings = with pkgs.rice; {
       term = "xterm-kitty";
       cursor_shape = "beam";
       enable_audio_bell = false;

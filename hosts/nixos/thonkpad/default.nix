@@ -12,6 +12,7 @@
   environment = {
     systemPackages = with pkgs; [
       connman-gtk
+      wine-staging
     ];
     variables = {
       BROWSER = "qutebrowser";

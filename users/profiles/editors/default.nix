@@ -2,9 +2,7 @@
   pkgs,
   config,
   ...
-}: let
-  rice = import ../../../rice.nix {inherit pkgs;};
-in {
+}: {
   # common packages {{{
   home.packages = with pkgs; [
     editorconfig-checker
@@ -48,7 +46,7 @@ in {
 
     # nix
     alejandra
-    rnix-lsp
+    nil
     statix
 
     # lua
@@ -142,7 +140,6 @@ in {
       fm-nvim
       foldsigns-nvim
       FTerm-nvim
-      galaxyline-nvim
       gitsigns-nvim
       glow-hover-nvim
       heirline-nvim
@@ -150,6 +147,7 @@ in {
       incline-nvim
       indent-blankline-nvim
       lsp_lines-nvim
+      lualine-nvim
       neo-tree-nvim
       neodim
       numbers-nvim
@@ -219,7 +217,7 @@ in {
       friendly-snippets
       LuaSnip
     ];
-    extraConfig = with rice; ''
+    extraConfig = with pkgs.rice; ''
       set runtimepath^=${./nvim}
 
       lua << EOF

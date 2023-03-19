@@ -3,8 +3,6 @@
   config,
   ...
 }: let
-  rice = import ../../../rice.nix {inherit pkgs;};
-
   configPath =
     if pkgs.stdenv.isDarwin
     then "Library/Application Support"
@@ -85,18 +83,9 @@ in {
     openasar = {
       quickstart = true;
       setup = true;
-      js = let
-        input = pkgs.writeText "discord.scss" ''
-          ${rice.def.scss}
-
-          ${builtins.readFile ./discord.scss}
-        '';
-        css = pkgs.runCommand "discord.css" {} ''
-          ${pkgs.sassc}/bin/sassc ${input} > $out
-        '';
-      in ''
+      js = ''
         const css = `
-          ${builtins.readFile css}
+          ${builtins.readFile (pkgs.rice.compileSCSS ./discord.scss)}
         `;
         const style = document.createElement("style");
         style.textContent = css;

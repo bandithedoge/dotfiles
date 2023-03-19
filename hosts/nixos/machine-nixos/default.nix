@@ -8,6 +8,10 @@
     base
     ++ os-specific;
 
+  environment.systemPackages = with pkgs; [
+    wine-tkg
+  ];
+
   # displays {{{
   services.xserver = {
     xrandrHeads = [
@@ -90,8 +94,4 @@
   };
 
   system.stateVersion = "22.05";
-
-  home-manager.users."bandithedoge" = {
-    programs.alacritty.settings.font.size = 10.5;
-  };
 }

@@ -10,13 +10,12 @@
       name = "bandithedoge";
       shell = pkgs.fish;
       uid = 1000;
-      isHidden = false;
     }
     // (
       if !pkgs.stdenv.isDarwin
       then {
-        isNormalUser = true;
         extraGroups = ["wheel" "networkmanager" "audio" "adbusers" "plugdev" "vboxusers"];
+        isNormalUser = true;
       }
       else {
         home = "/Users/bandithedoge";

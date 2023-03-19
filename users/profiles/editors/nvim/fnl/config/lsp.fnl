@@ -34,6 +34,8 @@
   (lsp.jsonls.setup (merge defaults
                            {:settings {:json {:schemas (schemastore.json.schemas)
                                               :validate {:enable true}}}}))
+  (lsp.nil_ls.setup (merge defaults
+                           {:autostart true}))
   (lsp.nimls.setup defaults)
   (lsp.psalm.setup defaults)
   (lsp.purescriptls.setup defaults)
@@ -46,9 +48,10 @@
                                                         :pycodestyle {:maxLineLength 120}
                                                         :jedi_completion {:fuzzy true
                                                                           :eager true}
-                                                        :yapf {:enabled false}
-                                                        :pyflakes {:enabled false}}}}}))
-  (lsp.rnix.setup defaults)
+                                                        :pydocstyle {:enabled true
+                                                                     :convention :pep257}
+                                                        :pylint {:enabled true}
+                                                        :yapf {:enabled false}}}}}))
   (lsp.rust_analyzer.setup defaults)
   (lsp.solargraph.setup defaults)
   (lsp.sumneko_lua.setup (lua-dev.setup {:runtime_path true}))

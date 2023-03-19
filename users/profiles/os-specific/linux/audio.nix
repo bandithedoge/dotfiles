@@ -23,6 +23,7 @@
     soundtracker
     sox
     strawberry
+    vcv-rack
     yabridge
     yabridgectl
 

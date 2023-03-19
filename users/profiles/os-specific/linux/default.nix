@@ -2,10 +2,8 @@
   config,
   pkgs,
   ...
-}: let
-  rice = import ../../../../rice.nix {inherit pkgs;};
-in {
-  imports = [./audio.nix ./gaming.nix ./x/default.nix];
+}: {
+  imports = [./audio.nix ./x/default.nix];
 
   home = {
     packages = with pkgs; [
@@ -18,7 +16,6 @@ in {
       ghidra
       gparted
       icon-library
-      imv
       keepassxc
       krita
       nim
@@ -26,12 +23,11 @@ in {
       pavucontrol
       pcmanfm
       rclone
-      teams
       tigervnc
       transmission-gtk
     ];
     pointerCursor = {
-      inherit (rice.gtk.cursorTheme) package name size;
+      inherit (pkgs.rice.gtk.cursorTheme) package name size;
       x11.enable = true;
       gtk.enable = true;
     };
@@ -41,10 +37,10 @@ in {
     # {{{
     enable = true;
     font = {
-      name = rice.uiFont;
+      name = pkgs.rice.uiFont;
       size = 12;
     };
-    inherit (rice.gtk) theme iconTheme;
+    inherit (pkgs.rice.gtk) theme iconTheme;
     gtk3.extraConfig = {
       gtk-application-prefer-dark-theme = true;
       gtk-enable-primary-paste = false;
@@ -84,9 +80,9 @@ in {
       };
       downloads.position = "bottom";
       fonts = {
-        default_family = rice.uiFont;
+        default_family = pkgs.rice.uiFont;
         default_size = "14px";
-        hints = rice.monoFont;
+        hints = pkgs.rice.monoFont;
       };
       hints.leave_on_load = true;
       new_instance_open_target = "tab-bg";
@@ -116,7 +112,7 @@ in {
       colors = let
         blank = "#00000000";
       in
-        with rice; {
+        with pkgs.rice; {
           # {{{
           completion = {
             fg = base05;
@@ -323,7 +319,7 @@ in {
   programs.zathura = {
     # {{{
     enable = true;
-    options = with rice; {
+    options = with pkgs.rice; {
       page-padding = 10;
       show-hidden = true;
       font = uiFont + " 12";
@@ -352,66 +348,6 @@ in {
     };
   };
   # }}}
-
-  programs.firefox = {
-    # {{{
-    enable = true;
-    package = pkgs.firefox-beta-bin.override {
-      cfg.enableTridactylNative = true;
-    };
-    extensions = with pkgs.bandithedoge.firefoxAddons; [
-      augmented-steam
-      auto-tab-discard
-      base64-decoder
-      betterviewer
-      canvasblocker
-      csgofloat
-      dont-fuck-with-paste
-      downthemall
-      enhanced-github
-      enhancer-for-youtube
-      gesturefy
-      gitako
-      github-code-folding
-      github-isometric-contributions
-      github-repo-size
-      imagus
-      lovely-forks
-      material-icons-for-github
-      npm-hub
-      octolinker
-      privacy-badger
-      privacy-pass
-      pronoundb
-      reddit-enhancement-suite
-      refined-github
-      ruffle
-      sourcegraph
-      sponsorblock
-      steam-database
-      stylus
-      tabcenter-reborn
-      tridactyl
-      ublock-origin
-      violentmonkey
-    ];
-    profiles = {
-      default = {
-        settings = {
-          "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
-          "layers.acceleration.force-enabled" = true;
-          "gfx.webrender.all" = true;
-          "svg.context-properties.content.enabled" = true;
-          "ui.context_menus.after_mouseup" = true;
-        };
-        userChrome = ''
-          #titlebar, #sidebar-header {
-            display: none;
-          }
-        '';
-      };
-    };
-  }; # }}}
 
   services.syncthing.enable = true;
 }

@@ -3,11 +3,10 @@
   config,
   ...
 }: let
-  rice = import ../../../../../rice.nix {inherit pkgs;};
   rofi-stuff = pkgs.callPackage ./rofi {};
   my-st = pkgs.bandithedoge.st-flexipatch.overrideAttrs (oldAttrs: {
     prePatch = let
-      configFile = with rice;
+      configFile = with pkgs.rice;
         pkgs.writeText "patches.def.h" ''
           static char *font = "${monoFont}:size=11.5:antialias=true:autohint=true";
 
@@ -52,6 +51,7 @@ in {
         fennel
         lua-dbus_proxy
         vicious
+        fennel
       ];
     };
   };
@@ -59,15 +59,15 @@ in {
   services.sxhkd = {
     enable = true;
     keybindings = {
-      "super + Return" = rice.terminal;
-      "super + space" = rice.menu;
+      "super + Return" = pkgs.rice.terminal;
+      "super + space" = pkgs.rice.menu;
       "super + b" = "$BROWSER";
       "super + p" = "strawberry";
       "super + shift + p" = "${rofi-stuff}/bin/keepass";
       "super + d" = "discordcanary";
       "super + Escape" = "pkill -USR1 -x sxhkd";
       "Print" = builtins.toString (pkgs.writeShellScript "screenshot" ''
-        sel=$(${pkgs.hacksaw}/bin/hacksaw -f "-i %i -g %g" -c "${rice.base0F}" -g 2 -s 2)
+        sel=$(${pkgs.hacksaw}/bin/hacksaw -f "-i %i -g %g" -c "${pkgs.rice.base0F}" -g 2 -s 2)
         ${pkgs.shotgun}/bin/shotgun $sel - | ${pkgs.swappy}/bin/swappy -f -
       '');
 
@@ -107,7 +107,7 @@ in {
       fennel.path = fennel.path .. ";${./awesome}/?.fnl"
       table.insert(package.loaders or package.searchers, fennel.searcher)
 
-      ${rice.def.lua}
+      ${pkgs.rice.def.lua}
 
       require "config"
     '';
@@ -133,7 +133,7 @@ in {
 
     Service = {
       Type = "simple";
-      ExecStart = "${pkgs.betterlockscreen}/bin/betterlockscreen -u ${rice.wallpaperBlurred}";
+      ExecStart = "${pkgs.betterlockscreen}/bin/betterlockscreen -u ${pkgs.rice.wallpaperBlurred}";
     };
   };
 
@@ -141,7 +141,7 @@ in {
     color = c: (pkgs.lib.removePrefix "#" c) + "ff";
     blank = "00000000";
   in
-    with rice; ''
+    with pkgs.rice; ''
       fx_list=()
       quiet=true
 
@@ -193,7 +193,7 @@ in {
     # {{{
     enable = true;
     package = pkgs.rofi-wayland;
-    font = "${rice.uiFont} 12";
+    font = "${pkgs.rice.uiFont} 12";
     plugins = with pkgs; [rofi-calc];
     extraConfig = {
       modi = "power:${rofi-stuff}/bin/power,drun,run,calc";
@@ -217,7 +217,7 @@ in {
       kb-remove-char-back = "BackSpace";
       kb-screenshot = "Control+Shift+s";
     };
-    theme = with rice; let
+    theme = with pkgs.rice; let
       inherit (config.lib.formats.rasi) mkLiteral;
       padding = mkLiteral "5px";
     in {
@@ -307,7 +307,7 @@ in {
     enable = true;
     settings = {
       General = {
-        uiColor = rice.base0F;
+        uiColor = pkgs.rice.base0F;
         disabledTrayIcon = true;
         showSidePanelButton = false;
         showDesktopNotification = false;

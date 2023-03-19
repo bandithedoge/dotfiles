@@ -66,6 +66,18 @@
       })
       (import ./overlay.nix)
     ];
+
+    userProfiles = digga.lib.rakeLeaves ./users/profiles;
+    userSuites = with userProfiles; {
+      base = [
+        core
+        editors
+      ];
+      gui = [gui];
+      gaming = [gaming];
+      darwin = [os-specific.darwin];
+      linux = [os-specific.linux];
+    };
   in
     digga.lib.mkFlake {
       inherit self inputs;
@@ -93,7 +105,11 @@
             home-manager.nixosModules.home-manager
             musnix.nixosModules.musnix
             kmonad.nixosModules.default
-            # ./nix.nix
+            {
+              home-manager.users.bandithedoge = {
+                imports = with userSuites; linux;
+              };
+            }
           ];
         };
 
@@ -127,6 +143,11 @@
               common-pc-ssd
               common-cpu-intel-cpu-only
               common-gpu-amd
+              {
+                home-manager.users.bandithedoge = {
+                  imports = with userSuites; gaming;
+                };
+              }
             ];
           };
         };
@@ -140,6 +161,11 @@
             digga.darwinModules.nixConfig
             home-manager.darwinModules.home-manager
             ./nix.nix
+            {
+              home-manager.users.bandithedoge = {
+                imports = with userSuites; darwin;
+              };
+            }
           ];
         };
 
@@ -151,35 +177,24 @@
             // {
               users = digga.lib.rakeLeaves ./users;
             };
-          suites = with profiles; rec {
+          suites = with profiles; {
             base = [core.darwin users.bandithedoge];
           };
-        };
-
-        hosts = {
-          # machine-darwin = {};
         };
       };
 
       home = {
         modules = [];
 
-        importables = rec {
-          profiles = digga.lib.rakeLeaves ./users/profiles;
-          suites = with profiles; {
-            base = [
-              core
-              editors
-            ];
-            gui = [gui];
-            os-specific = [os-specific];
-          };
+        importables = {
+          profiles = userProfiles;
+          suites = userSuites;
         };
 
         users = {
           bandithedoge = {suites, ...}: {
             imports = with suites;
-              base ++ os-specific ++ gui;
+              base ++ gui;
           };
         };
       };

@@ -4,7 +4,6 @@
   config,
   ...
 }: let
-  rice = import ../../../rice.nix {inherit pkgs;};
   oi = pkgs.callPackage ./oi {};
 in {
   imports = [./xdg.nix];
@@ -12,10 +11,6 @@ in {
   inherit (import ../../../nix.nix {inherit pkgs;}) nix;
 
   manual.manpages.enable = false;
-
-  xdg = {
-    # enable = true;
-  };
 
   nixpkgs.config = {allowBroken = true;};
 
@@ -103,7 +98,7 @@ in {
           '';
         };
       };
-      interactiveShellInit = with rice; ''
+      interactiveShellInit = with pkgs.rice; ''
         set fish_color_autosuggestion '${base03}'
         set fish_color_cancel -r
         set fish_color_command green #white
@@ -180,7 +175,7 @@ in {
     skim = {
       enable = true;
       enableFishIntegration = true;
-      defaultOptions = with rice; [
+      defaultOptions = with pkgs.rice; [
         "--prompt='❯ '"
         "--color=bg+:${base02},bg:${base00},spinner:${base0F},hl:${base0F},fg:${base04},header:${base0F},info:${base0A},pointer:${base0F},marker:${base0C},fg+:${base06},prompt:${base0F},hl+:${base0D}"
         "--tabstop=4"
@@ -201,7 +196,7 @@ in {
     skin = let
       color = c: "rgb(${pkgs.colors.conversions.hexToRGBString ", " (pkgs.lib.removePrefix "#" c)})";
     in
-      with rice; {
+      with pkgs.rice; {
         # {{{
         default = "${color base05} ${color base00}";
         tree = "${color base03} none";

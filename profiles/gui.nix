@@ -2,13 +2,10 @@
   config,
   pkgs,
   ...
-}: let
-  rice = import ../rice.nix {inherit pkgs;};
-in {
+}: {
   environment.systemPackages = with pkgs; [
     arandr
     betterlockscreen
-    wine-tkg
     winetricks
     xorg.setxkbmap
   ];
@@ -18,16 +15,16 @@ in {
     displayManager = {
       lightdm = {
         enable = true;
-        background = rice.wallpaperBlurred;
+        background = pkgs.rice.wallpaperBlurred;
         extraSeatDefaults = ''
           greeter-show-manual-login=false
-          font-name="${rice.uiFont}"
+          font-name="${pkgs.rice.uiFont}"
         '';
         greeters.gtk = {
           enable = true;
           clock-format = "%A %d %B %T";
           indicators = ["~host" "~spacer" "~spacer" "~clock" "~power"];
-          inherit (rice.gtk) theme iconTheme cursorTheme;
+          inherit (pkgs.rice.gtk) theme iconTheme cursorTheme;
         };
       };
       sx = {
@@ -48,7 +45,7 @@ in {
 
   programs.xss-lock = {
     enable = true;
-    lockerCommand = with rice; ''
+    lockerCommand = ''
       ${pkgs.betterlockscreen}/bin/betterlockscreen -l
     '';
   };
@@ -63,8 +60,8 @@ in {
   fonts.fontconfig = {
     enable = true;
     defaultFonts = {
-      monospace = [rice.monoFont];
-      sansSerif = [rice.uiFont];
+      monospace = [pkgs.rice.monoFont];
+      sansSerif = [pkgs.rice.uiFont];
     };
   };
 

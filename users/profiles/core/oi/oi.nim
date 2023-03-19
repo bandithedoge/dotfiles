@@ -79,16 +79,8 @@ when isMainModule:
   if args["cleanup"]:
     exec(
       if isNixOS:
-        "sudo nix-env --delete-generations +3"
-      elif isDarwin:
-        ""
+        "sudo nix-collect-garbage -d"
       else:
-        ""
-    )
-    exec(
-      if isNixOS:
-        "sudo nix-collect-garbage"
-      else:
-        "nix-collect-garbage"
+        "nix-store --gc"
     )
     exec("sudo nix-store --optimise")

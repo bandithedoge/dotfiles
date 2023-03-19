@@ -1,6 +1,5 @@
 {pkgs, ...}: {
   nix = {
-    package = pkgs.nixVersions.stable;
     settings = {
       substituters = [
         "https://bandithedoge.cachix.org"
@@ -26,7 +25,6 @@
       extra-experimental-features = nix-command flakes
       allow-dirty = true
       auto-optimise-store = true
-      min-free = ${toString (512 * 1024 * 1024)}
       warn-dirty = false
       log-lines = 50
     '';
