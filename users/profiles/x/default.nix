@@ -6,9 +6,6 @@
   rice = import ../../../rice.nix {inherit pkgs;};
 in {
   home.packages = with pkgs; [
-    (callPackage ./st {})
-    (callPackage ./dmenu {})
-    j4-dmenu-desktop
     eww
   ];
 
@@ -30,10 +27,12 @@ in {
     fade = true;
     fadeDelta = 5;
     shadow = true;
-    opacityRules = builtins.concatMap (class: [
-      "95:class_g = '${class}' && focused"
-      "85:class_g = '${class}' && !focused"
-    ]) ["st-256color"];
+    opacityRules =
+      builtins.concatMap
+      (class: [
+        "95:class_g = '${class}' && focused"
+        "85:class_g = '${class}' && !focused"
+      ]) ["kitty"];
   };
 
   xdg.configFile."sx/sxrc" = {
@@ -180,4 +179,62 @@ in {
       "button.selected".text-color = mkLiteral base05;
     };
   }; # }}}
+
+  programs.kitty = {
+    # {{{
+    enable = true;
+    font = {
+      name = rice.monoFont;
+      size = 12;
+    };
+    keybindings = {
+      "ctrl+enter" = "no_op";
+      "ctrl+space" = "no_op";
+    };
+    settings = with rice; {
+      term = "xterm-kitty";
+      cursor_shape = "beam";
+      enable_audio_bell = false;
+      disable_ligatures = "cursor";
+      window_padding_width = 10;
+      adjust_column_width = -1;
+      tab_bar_style = "powerline";
+      confirm_os_window_close = 0;
+
+      macos_titlebar_color = "background";
+      macos_thicken_font = "0.25";
+
+      background = base00;
+      foreground = base05;
+      selection_background = base05;
+      selection_foreground = base00;
+      url_color = base0F;
+      cursor = base0F;
+      active_border_color = base0F;
+      inactive_border_color = base01;
+      active_tab_background = base0F;
+      active_tab_foreground = base00;
+      inactive_tab_background = base02;
+      inactive_tab_foreground = base05;
+
+      color0 = base01;
+      color1 = base08;
+      color2 = base0B;
+      color3 = base09;
+      color4 = base0D;
+      color5 = base0E;
+      color6 = base0C;
+      color7 = base06;
+
+      color8 = base02;
+      color9 = base12;
+      color10 = base14;
+      color11 = base13;
+      color12 = base16;
+      color13 = base17;
+      color14 = base15;
+      color15 = base0F;
+    };
+  };
+  # }}}
 }

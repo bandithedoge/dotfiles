@@ -28,7 +28,7 @@
   monoFont = "JetBrainsMono Nerd Font";
   uiFont = "Roboto Condensed";
 
-  terminal = "st";
+  terminal = "kitty";
   wm = "river";
   menu = "rofi -show drun";
 
