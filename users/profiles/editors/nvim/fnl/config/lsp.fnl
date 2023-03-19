@@ -82,3 +82,8 @@
   (lsp_extensions.inlay_hints {:enabled [:TypeHint
                                          :ChainingHint
                                          :ParameterHint]}))
+
+(let [lsp-lines (require :lsp_lines)]
+  (lsp-lines.register_lsp_virtual_lines)
+  (vim.diagnostic.config {:virtual_text false
+                          :virtual_lines true}))

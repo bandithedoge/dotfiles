@@ -1,0 +1,21 @@
+.taffy-box {
+  background-color: @base00;
+}
+
+.layout-label {
+  font-size: 16pt;
+}
+
+.active .workspace-label {
+  background-color: @base0F;
+  color: @base00;
+}
+
+.workspace-label {
+  padding: 0 5px;
+}
+
+.window-icon {
+  -gtk-icon-transform: scale(.6);
+  margin: -4px;
+}

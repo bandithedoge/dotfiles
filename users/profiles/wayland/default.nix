@@ -11,6 +11,7 @@ in {
     wl-clipboard
     wlr-randr
     yambar
+    bandithedoge.kiwmi
   ];
 
   # river {{{
@@ -294,7 +295,7 @@ in {
   programs.rofi = {
     # {{{
     enable = true;
-    package = pkgs.nur.repos.kira-bruneau.rofi-wayland;
+    package = pkgs.rofi-wayland;
     font = rice.uiFont + " 12";
     extraConfig = {
       modi = "power:${./bin/rofi/power.lua},drun,run";

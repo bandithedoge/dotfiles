@@ -1,0 +1,26 @@
+{
+    "nixpkgs": {
+        "branch": "release-21.05",
+        "description": "Nix Packages collection",
+        "homepage": "",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "1a7c2f41c3bf6d7fd443e2453e7b840cdc413375",
+        "sha256": "1yf5zs99rvhfwzpjy3wg7mag0sc3nm8499mlsfqhx2jn532pxcma",
+        "type": "tarball",
+        "url": "https://github.com/NixOS/nixpkgs/archive/1a7c2f41c3bf6d7fd443e2453e7b840cdc413375.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "nur-packages": {
+        "branch": "master",
+        "description": null,
+        "homepage": null,
+        "owner": "bandithedoge",
+        "repo": "nur-packages",
+        "rev": "28cc4d57aa71ca29944a258cd8de7d8e619b3770",
+        "sha256": "14h93kspzm21cjda6mzql9vya175mad72j0vffzzrm08df66zkyp",
+        "type": "tarball",
+        "url": "https://github.com/bandithedoge/nur-packages/archive/28cc4d57aa71ca29944a258cd8de7d8e619b3770.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    }
+}

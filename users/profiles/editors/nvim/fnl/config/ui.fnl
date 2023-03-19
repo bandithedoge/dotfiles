@@ -94,14 +94,6 @@
 
 ;; }}}
 
-;; e-kaput.nvim {{{
-(let [e-kaput (require :e-kaput)]
-  (e-kaput.setup {:borders false :transparency 0}))
-
-(vim.diagnostic.config {:virtual_text false})
-
-;; }}}
-
 ;; flare.nvim {{{
 (let [flare (require :flare)]
   (flare.setup {:hl_group :PmenuSel}))
@@ -111,14 +103,6 @@
 ;; foldsigns.nvim {{{
 (let [foldsigns (require :foldsigns)]
   (foldsigns.setup))
-
-;; }}}
-
-;; nvim-notify {{{
-(let [notify (require :notify)
-      spinner-frames ["⣾" "⣽" "⣻" "⢿" "⡿" "⣟" "⣯" "⣷"]]
-  (notify.setup {:fps 60})
-  (set vim.notify notify))
 
 ;; }}}
 
@@ -137,4 +121,5 @@
 ;; trouble.nvim {{{
 (let [trouble (require :trouble)]
   (trouble.setup {:auto_preview false}))
+
 ;; }}}

@@ -6,6 +6,7 @@
   environment.systemPackages = with pkgs; [
     calf
     distrho
+    cardinal
   ];
 
   services.pipewire = {

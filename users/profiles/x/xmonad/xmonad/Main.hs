@@ -9,11 +9,9 @@ import qualified XMonad.StackSet as W
 
 import XMonad.Actions.TreeSelect
 
-import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
-import XMonad.Hooks.StatusBar
-import XMonad.Hooks.StatusBar.PP
+import XMonad.Hooks.TaffybarPagerHints
 
 import XMonad.Layout.Dwindle
 import XMonad.Layout.Renamed
@@ -27,7 +25,11 @@ import XMonad.Prompt.Shell
 import XMonad.Util.Cursor
 import XMonad.Util.EZConfig (additionalKeysP, mkKeymap)
 
+import XMonad.Util.EntryHelper (withHelper)
+import XMonad.Util.EntryHelper.Util (sendRestart)
+
 import Rice
+import XMonad.Util.SpawnOnce (spawnOnce)
 
 -- layouts {{{
 myLayout = avoidStruts (tall ||| Full)
@@ -42,7 +44,7 @@ myLayout = avoidStruts (tall ||| Full)
 -- keybindings {{{
 myKeys :: Rice -> [(String, X ())]
 myKeys rice =
-  [ ("M-C-r", spawn "my-xmonad --restart")
+  [ ("M-C-r", restart "my-xmonad" True)
   , ("M-C-q", io exitSuccess)
   , ("M-<Return>", spawn "kitty")
   , ("M-w", kill)
@@ -69,42 +71,32 @@ myKeys rice =
 
 -- }}}
 
--- bar pretty-printer {{{
-myXmobarPP :: Rice -> PP
-myXmobarPP rice =
-  def
-    { ppSep = xmobarFont 1 " "
-    , ppWsSep = ""
-    , ppTitleSanitize = xmobarStrip
-    , ppCurrent = tag base0F base00
-    , ppHidden = tag base02 base03
-    , ppUrgent = tag base02 base08
-    , ppOrder = \(ws : l : t : ex) -> [l, ws, t]
-    , ppLayout = xmobarFont 2 . xmobarColor (base03 rice) ""
-    }
-  where
-    tag bg fg =
-      xmobarFont 1
-        . xmobarColor (fg rice) (bg rice)
-        . xmobarBorder "VBoth" (bg rice) 5
-        . pad
+-- startup hook {{{
+myStartupHook :: X ()
+myStartupHook = do
+  setDefaultCursor xC_left_ptr
+  spawn "killall my-taffybar"
+  spawn "my-taffybar"
 
 -- }}}
 
-main :: IO ()
-main = do
+oldMain :: IO ()
+oldMain = do
   rice <- getRice
   xmonad
     . ewmhFullscreen
     . ewmh
     . docks
-    . withEasySB (statusBarProp "my-xmobar" (pure $ myXmobarPP rice)) defToggleStrutsKey
+    . pagerHints
     $ def
       { modMask = mod4Mask
       , layoutHook = myLayout
-      , startupHook = setDefaultCursor xC_left_ptr
+      , startupHook = myStartupHook
       , borderWidth = 2
       , normalBorderColor = base00 rice
       , focusedBorderColor = base0F rice
       , keys = (`mkKeymap` myKeys rice)
       }
+
+main :: IO ()
+main = withHelper oldMain

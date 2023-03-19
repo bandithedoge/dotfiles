@@ -22,6 +22,7 @@ in {
       enable = true;
     };
     libinput.enable = true;
+    layout = "pl";
   };
 
   services.greetd = {

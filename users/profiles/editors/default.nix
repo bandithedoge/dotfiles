@@ -14,11 +14,12 @@ in {
     rustfmt
 
     # python
-    black
-    codespell
+    poetry
+    python310Packages.black
     python310Packages.isort
+    python310Packages.pyls-isort
+    python310Packages.python-lsp-black
     python310Packages.python-lsp-server
-    (python310.withPackages (p: with p; [debugpy]))
 
     # shell
     nodePackages.bash-language-server
@@ -116,7 +117,6 @@ in {
       bufferline-nvim
       cinnamon-nvim
       dressing-nvim
-      e-kaput-nvim
       fidget-nvim
       flare-nvim
       fm-nvim
@@ -125,12 +125,12 @@ in {
       gitsigns-nvim
       heirline-nvim
       indent-blankline-nvim
+      lsp_lines-nvim
       lualine-nvim
       neorg-telescope
       numbers-nvim
       nvim-colorizer-lua
       nvim-hlslens
-      nvim-notify
       nvim-tree-lua
       pretty-fold-nvim
       satellite-nvim

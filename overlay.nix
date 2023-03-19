@@ -1,8 +1,4 @@
 _: prev: {
-  # wlroots = prev.wlroots.overrideAttrs (_: {
-  #   version = "0.15";
-  # });
-
   luaPackages =
     prev.luaPackages
     // {
@@ -16,4 +12,8 @@ _: prev: {
     };
 
   vimPlugins = prev.vimPlugins // prev.bandithedoge.vimPlugins;
+
+  haskellPackages = prev.haskellPackages // {
+    inherit (prev.bandithedoge) taffybar;
+  };
 }

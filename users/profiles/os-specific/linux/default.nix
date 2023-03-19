@@ -13,6 +13,7 @@ in {
     pavucontrol
     tigervnc
     wine
+    discord
   ];
 
   # gtk {{{

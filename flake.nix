@@ -50,6 +50,7 @@
     neorg,
     parinfer-rust,
     nur-bandithedoge,
+    neovim-nightly-overlay,
     ...
   } @ inputs: let
     overlays = [
@@ -68,6 +69,8 @@
     digga.lib.mkFlake {
       inherit self inputs;
 
+      sharedOverlays = overlays;
+
       channelsConfig = {
         allowUnfree = true;
         allowBroken = true;
@@ -76,7 +79,6 @@
       channels = {
         nixpkgs = {
           input = nixpkgs;
-          inherit overlays;
         };
       };
 
@@ -88,7 +90,7 @@
             digga.nixosModules.nixConfig
             home-manager.nixosModules.home-manager
             musnix.nixosModules.musnix
-            kmonad.nixosModule
+            kmonad.nixosModules.default
             ./nix.nix
           ];
         };

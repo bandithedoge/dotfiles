@@ -31,6 +31,7 @@
     powertop.enable = true;
   };
 
+  services.upower.enable = true;
   services.thermald.enable = true;
   services.tlp.enable = true;
   services.logind.lidSwitch = "hybrid-sleep";
@@ -40,7 +41,16 @@
 
   services.kmonad = {
     enable = true;
-    configfiles = [./kmonad.kbd];
+    package = pkgs.bandithedoge.kmonad;
+    keyboards.internal = {
+      name = "laptop-internal";
+      device = "/dev/input/by-path/platform-i8042-serio-0-event-kbd";
+      defcfg = {
+        enable = true;
+        fallthrough = true;
+      };
+      config = builtins.readFile ./kmonad.kbd;
+    };
   };
 
   networking.wireless = {
