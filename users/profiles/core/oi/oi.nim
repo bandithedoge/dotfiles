@@ -87,3 +87,4 @@ when isMainModule:
       else:
         "nix-collect-garbage"
     )
+    exec("sudo nix-store --optimise")

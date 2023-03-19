@@ -25,11 +25,11 @@
     neovim-nightly-overlay.inputs.nixpkgs.follows = "nixpkgs";
     nur-bandithedoge.url = "github:bandithedoge/nur-packages";
     nur-bandithedoge.flake = false;
-    nur-bandithedoge.inputs.nixpkgs.follows = "nixpkgs";
     nur.url = "github:nix-community/NUR";
     parinfer-rust.url = "github:eraserhd/parinfer-rust";
     parinfer-rust.flake = false;
     mozilla.url = "github:mozilla/nixpkgs-mozilla";
+    colors.url = "github:Misterio77/nix-colors";
 
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
@@ -58,6 +58,7 @@
       (import (parinfer-rust + "/overlay.nix"))
       (_: prev: {
         bandithedoge = import nur-bandithedoge {pkgs = prev;};
+        colors = colors.lib-core;
       })
       (import ./overlay.nix)
     ];

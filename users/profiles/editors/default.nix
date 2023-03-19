@@ -81,6 +81,15 @@ in {
 
     # yaml
     nodePackages.yaml-language-server
+
+    # purescript
+    nodePackages.purescript-language-server
+    purescript
+    spago
+
+    # dhall
+    dhall
+    dhall-lsp-server
   ];
   # }}}
 
@@ -184,11 +193,13 @@ in {
 
       # language-specific
       crates-nvim
+      dhall-vim
       lua-dev-nvim
       nim-nvim
       nvim-luaref
       nvim-parinfer
       package-info-nvim
+      purescript-vim
       rasi-vim
       vim-coffee-script
       yaml-companion-nvim

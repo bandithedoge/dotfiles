@@ -120,4 +120,8 @@
   # what the fuck is this
   security.pki.certificateFiles = [/etc/ssl/certs/certyfikat.crt];
   # }}}
+
+  home-manager.users."bandithedoge" = {
+    programs.alacritty.settings.font.size = 10;
+  };
 }

@@ -1,17 +1,51 @@
+{ pkgs
+, config
+, ...
+}:
+let
+  rice = import ../../../rice.nix { inherit pkgs; };
+  my-st = pkgs.bandithedoge.st-flexipatch.overrideAttrs (oldAttrs: {
+    prePatch =
+      let
+        configFile = with rice;
+          pkgs.writeText "patches.def.h" ''
+            static char *font = "${monoFont}:size=11.5:antialias=true:autohint=true";
+
+            static const char *colorname[] = {
+              /* 8 normal colors */
+              "${base01}", "${base08}", "${base0B}", "${base0A}", "${base0D}", "${base0E}", "${base0C}",
+              "${base05}",
+
+              /* 8 bright colors */
+              "${base03}", "${base12}", "${base14}", "${base13}", "${base16}", "${base17}", "${base15}", "${base0F}",
+
+              [255] = 0,
+
+              "${base0F}", /* 256 -> cursor */
+              "${base00}", /* 257 -> rev cursor*/
+              "${base00}", /* 258 -> bg */
+              "${base05}", /* 259 -> fg */
+            };
+
+            ${builtins.readFile ./st/config.h}
+          '';
+      in
+      ''
+        cp ${./st/patches.h} patches.def.h
+        cp ${./st/config.mk} config.mk
+        cp ${configFile} config.def.h
+      '';
+    buildInputs = oldAttrs.buildInputs ++ (with pkgs; [ harfbuzz ]);
+  });
+in
 {
-  pkgs,
-  config,
-  ...
-}: let
-  rice = import ../../../rice.nix {inherit pkgs;};
-in {
-  home.packages = with pkgs; [xorg.xev];
+  home.packages = with pkgs; [ xorg.xev my-st ];
 
   xsession = {
     enable = true;
     windowManager.awesome = {
       enable = true;
-      package = pkgs.awesome.override {lua = pkgs.luajit;};
+      package = pkgs.awesome.override { lua = pkgs.luajit; };
       luaModules = with pkgs.luaPackages; [
         vicious
       ];
@@ -41,28 +75,30 @@ in {
     shadow = true;
     opacityRules =
       builtins.concatMap
-      (class: [
-        "95:class_g = '${class}' && focused"
-        "85:class_g = '${class}' && !focused"
-      ]) ["kitty" "Alacritty"];
+        (class: [
+          "95:class_g = '${class}' && focused"
+          "85:class_g = '${class}' && !focused"
+        ]) [ "st-256color" ];
   };
 
   xdg.configFile."awesome/rc.lua" = {
-    text = let
-      inherit (pkgs.luaPackages) fennel;
-      dbus_proxy = pkgs.bandithedoge.luaPackages.lua-dbus_proxy.src;
-    in ''
-      package.path = package.path .. ";${fennel}/?.lua;${dbus_proxy}/src/?/init.lua;${dbus_proxy}/src/?.lua;"
+    text =
+      let
+        inherit (pkgs.luaPackages) fennel;
+        dbus_proxy = pkgs.bandithedoge.luaPackages.lua-dbus_proxy.src;
+      in
+      ''
+        package.path = package.path .. ";${fennel}/?.lua;${dbus_proxy}/src/?/init.lua;${dbus_proxy}/src/?.lua;"
 
-      local fennel = require("fennel")
-      debug.traceback = fennel.traceback
-      fennel.path = fennel.path .. ";${./awesome}/?.fnl"
-      table.insert(package.loaders or package.searchers, fennel.searcher)
+        local fennel = require("fennel")
+        debug.traceback = fennel.traceback
+        fennel.path = fennel.path .. ";${./awesome}/?.fnl"
+        table.insert(package.loaders or package.searchers, fennel.searcher)
 
-      ${rice.def.lua}
+        ${rice.def.lua}
 
-      require "config"
-    '';
+        require "config"
+      '';
     onChange = ''
       awesome-client "awesome.restart()"
     '';
@@ -72,11 +108,11 @@ in {
   systemd.user.services.betterlockscreen = {
     Unit = {
       Description = "Update betterlockscreen background";
-      After = ["graphical-session-pre.target"];
-      PartOf = ["graphical-session.target"];
+      After = [ "graphical-session-pre.target" ];
+      PartOf = [ "graphical-session.target" ];
     };
 
-    Install.WantedBy = ["graphical-session.target"];
+    Install.WantedBy = [ "graphical-session.target" ];
 
     Service = {
       Type = "oneshot";
@@ -84,10 +120,11 @@ in {
     };
   };
 
-  xdg.configFile."betterlockscreenrc".text = let
-    color = c: (pkgs.lib.removePrefix "#" c) + "ff";
-    blank = "00000000";
-  in
+  xdg.configFile."betterlockscreenrc".text =
+    let
+      color = c: (pkgs.lib.removePrefix "#" c) + "ff";
+      blank = "00000000";
+    in
     with rice; ''
       fx_list=()
       quiet=true
@@ -136,7 +173,8 @@ in {
     theme = with rice; let
       inherit (config.lib.formats.rasi) mkLiteral;
       padding = mkLiteral "5px";
-    in {
+    in
+    {
       "*" = {
         border-color = mkLiteral base0F;
         background-color = mkLiteral base00;
@@ -144,13 +182,13 @@ in {
       };
 
       mainbox.children =
-        map mkLiteral ["inputbar" "message" "mode-switcher" "listview"];
+        map mkLiteral [ "inputbar" "message" "mode-switcher" "listview" ];
 
       window = {
         border = mkLiteral "2px";
       };
 
-      entry = {inherit padding;};
+      entry = { inherit padding; };
 
       prompt = {
         inherit padding;
@@ -185,64 +223,6 @@ in {
       "button.selected".text-color = mkLiteral base05;
     };
   }; # }}}
-
-  programs.kitty = {
-    # {{{
-    enable = false;
-    font = {
-      name = rice.monoFont;
-      # size = 11.5;
-    };
-    keybindings = {
-      "ctrl+enter" = "no_op";
-      "ctrl+space" = "no_op";
-    };
-    settings = with rice; {
-      term = "xterm-kitty";
-      cursor_shape = "beam";
-      enable_audio_bell = false;
-      disable_ligatures = "cursor";
-      window_padding_width = 10;
-      tab_bar_style = "powerline";
-      confirm_os_window_close = 0;
-      font_size = "11.5";
-
-      macos_titlebar_color = "background";
-      macos_thicken_font = "0.25";
-
-      background = base00;
-      foreground = base05;
-      selection_background = base05;
-      selection_foreground = base00;
-      url_color = base0F;
-      cursor = base0F;
-      active_border_color = base0F;
-      inactive_border_color = base01;
-      active_tab_background = base0F;
-      active_tab_foreground = base00;
-      inactive_tab_background = base02;
-      inactive_tab_foreground = base05;
-
-      color0 = base01;
-      color1 = base08;
-      color2 = base0B;
-      color3 = base09;
-      color4 = base0D;
-      color5 = base0E;
-      color6 = base0C;
-      color7 = base06;
-
-      color8 = base02;
-      color9 = base12;
-      color10 = base14;
-      color11 = base13;
-      color12 = base16;
-      color13 = base17;
-      color14 = base15;
-      color15 = base0F;
-    };
-  };
-  # }}}
 
   services.flameshot = {
     enable = true;

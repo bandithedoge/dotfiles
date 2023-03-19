@@ -79,4 +79,8 @@
   };
 
   system.stateVersion = "22.05";
+
+  home-manager.users."bandithedoge" = {
+    programs.alacritty.settings.font.size = 10.5;
+  };
 }

@@ -7,7 +7,6 @@
 in {
   home = {
     packages = with pkgs; [
-      cutter
       dfeet
       discord-canary
       ghidra
@@ -386,99 +385,6 @@ in {
           "Violentmonkey" = "jinjaccalgkegednnccohejagnlnfdag";
         }
       );
-  };
-  # }}}
-
-  programs.alacritty = {
-    # {{{
-    enable = true;
-    settings = {
-      window = {
-        decorations = "none";
-        padding = {
-          x = 10;
-          y = 10;
-        };
-        dynamic_padding = true;
-      };
-      font = {
-        normal.family = rice.monoFont;
-        size = 10.5;
-      };
-      colors = with rice; {
-        primary = {
-          background = base00;
-          foreground = base05;
-        };
-        cursor = {
-          text = base00;
-          cursor = base0F;
-        };
-        vi_mode_cursor = {
-          text = base00;
-          cursor = base05;
-        };
-        search = {
-          matches = {
-            foreground = base00;
-            background = base0A;
-          };
-          focused_match = {
-            foreground = base00;
-            background = base0F;
-          };
-        };
-        hints = {
-          start = {
-            foreground = base0F;
-            background = base02;
-          };
-          end = {
-            foreground = base03;
-            background = base02;
-          };
-        };
-        line_indicator = {
-          background = base10;
-        };
-        footer_bar = {
-          foreground = base0F;
-          background = base10;
-        };
-        selection = {
-          text = base00;
-          background = base05;
-        };
-        normal = {
-          black = base01;
-          red = base08;
-          green = base0B;
-          yellow = base0A;
-          blue = base0D;
-          magenta = base0E;
-          cyan = base0C;
-          white = base06;
-        };
-        bright = {
-          black = base02;
-          red = base12;
-          green = base14;
-          yellow = base13;
-          blue = base16;
-          magenta = base17;
-          cyan = base15;
-          white = base0F;
-        };
-      };
-      cursor = {
-        style = {
-          shape = "Beam";
-          blinking = "Always";
-        };
-        vi_mode_style = "Block";
-        thickness = 0.25;
-      };
-    };
   };
   # }}}
 

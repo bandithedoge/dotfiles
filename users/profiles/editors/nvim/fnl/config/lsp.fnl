@@ -13,6 +13,7 @@
   (lsp.bashls.setup defaults)
   (lsp.clangd.setup defaults)
   (lsp.cssls.setup defaults)
+  (lsp.dhall_lsp_server.setup defaults)
   (lsp.emmet_ls.setup defaults)
   (lsp.eslint.setup (merge defaults
                            {:filetypes [:coffee
@@ -35,6 +36,7 @@
                                               :validate {:enable true}}}}))
   (lsp.nimls.setup defaults)
   (lsp.psalm.setup defaults)
+  (lsp.purescriptls.setup defaults)
   (lsp.pylsp.setup (merge defaults
                           {:settings {:pylsp {:plugins {:autopep8 {:enabled false}
                                                         :black {:enabled true

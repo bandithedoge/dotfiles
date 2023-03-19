@@ -5,7 +5,7 @@
 }: {
   home.packages = with pkgs; [
     ardour
-    bandithedoge.zrythm
+    # bandithedoge.zrythm
     bespokesynth
     cadence
     cardinal

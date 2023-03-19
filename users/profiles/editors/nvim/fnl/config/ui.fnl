@@ -14,8 +14,8 @@
 
 ;; nvim-colorizer.lua {{{
 (let [colorizer (require :colorizer)]
-  (colorizer.setup {1 "*"
-                    :DEFAULT_OPTIONS {:RRGGBBAA true :css true :css_fn true}}))
+  (colorizer.setup {:filetypes ["*"]
+                    :user_default_options {:css true}}))
 
 ;; }}}
 
