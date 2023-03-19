@@ -5,8 +5,6 @@
 }: {
   services.pipewire = {
     enable = true;
-    media-session.enable = false;
-    wireplumber.enable = true;
 
     pulse.enable = true;
     jack.enable = true;

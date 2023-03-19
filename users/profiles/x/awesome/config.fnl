@@ -13,12 +13,14 @@
 
 (beautiful.init (assets.recolor_layout (require :theme) _G.base05))
 
+(with-open [f (io.open :/etc/hostname :r)]
+  (set _G.hostname (f:read)))
+
 (require :layout)
 (require :keys)
 
 (root.keys keys.globalkeys)
 
-(awful.spawn.easy_async :hostname #(set _G.hostname $1))
 (set naughty.config.presets.critical {:bg _G.base08 :fg _G.base00 :timeout 0})
 
 ;; error handling {{{

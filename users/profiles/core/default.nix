@@ -42,6 +42,7 @@ in {
       luajit
       ncdu
       neofetch
+      nethack
       niv
       nix-prefetch
       oi

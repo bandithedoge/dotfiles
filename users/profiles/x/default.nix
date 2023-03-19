@@ -186,7 +186,7 @@ in {
     enable = true;
     font = {
       name = rice.monoFont;
-      size = 12;
+      # size = 11.5;
     };
     keybindings = {
       "ctrl+enter" = "no_op";
@@ -198,9 +198,9 @@ in {
       enable_audio_bell = false;
       disable_ligatures = "cursor";
       window_padding_width = 10;
-      adjust_column_width = -1;
       tab_bar_style = "powerline";
       confirm_os_window_close = 0;
+      font_size = "11.5";
 
       macos_titlebar_color = "background";
       macos_thicken_font = "0.25";

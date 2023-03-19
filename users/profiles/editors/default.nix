@@ -127,7 +127,6 @@ in {
 
       # ui
       FTerm-nvim
-      bufferline-nvim
       cinnamon-nvim
       dressing-nvim
       flare-nvim
@@ -140,7 +139,6 @@ in {
       hover-nvim
       indent-blankline-nvim
       lsp_lines-nvim
-      lualine-nvim
       neo-tree-nvim
       neodim
       neorg-telescope
