@@ -45,7 +45,7 @@
               :base16 ["Bright Blue" "Example: #4dc4ff"]
               :base17 ["Bright Magenta" "Example: #de73ff"]}]
   (luasnip.add_snippets :all
-                        (merge (icollect [name dscr (pairs base16)]
-                                 (snip name dscr))
+                        (merge! (icollect [name dscr (pairs base16)]
+                                  (snip name dscr))
                                [(luasnip.snippet :date
                                                  [(luasnip.function_node #(os.date "%Y-%m-%d"))])])))

@@ -40,6 +40,7 @@ in {
       killall
       librespeed-cli
       luajit
+      manix
       ncdu
       neofetch
       nethack

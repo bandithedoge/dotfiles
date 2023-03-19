@@ -5,8 +5,8 @@
 }: {
   home.packages = with pkgs; [
     ardour
-    # bandithedoge.cardinal
-    # bandithedoge.zrythm
+    bandithedoge.cardinal
+    bandithedoge.zrythm
     bespokesynth
     breeze-icons
     cadence
@@ -22,19 +22,26 @@
     reaper
     soundtracker
     strawberry
-    vcv-rack
     yabridge
     yabridgectl
+    qtractor
 
     # plugins
+    CHOWTapeModel
+    ChowCentaur
     ChowKick
     adlplug
     aether-lv2
+    airwindows-lv2
+    ams-lv2
     artyFX
     autotalent
+    bandithedoge.dpf-plugins
+    bandithedoge.lv2vst
     bchoppr
     boops
     bristol
+    calf
     caps
     delayarchitect
     distrho
@@ -46,12 +53,13 @@
     guitarix
     gxplugins-lv2
     helm
-    infamousPlugins
+    hydrogen
     lsp-plugins
     mod-distortion
     molot-lite
     mooSpace
     ninjas2
+    qsampler
     surge-XT
     talentedhack
     tunefish

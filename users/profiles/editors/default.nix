@@ -5,6 +5,7 @@
 }: {
   # common packages {{{
   home.packages = with pkgs; [
+    checkmake
     editorconfig-checker
 
     # rust
@@ -50,6 +51,7 @@
     statix
 
     # lua
+    bandithedoge.fennel-language-server
     fennel
     fnlfmt
     luajitPackages.luacheck
@@ -60,6 +62,7 @@
     clang
     clang-tools
     cmake
+    cmake-language-server
     cppcheck
     ninja
     pkg-config
@@ -83,6 +86,7 @@
 
     # yaml
     nodePackages.yaml-language-server
+    actionlint
 
     # purescript
     nodePackages.purescript-language-server
@@ -96,15 +100,15 @@
     # dart
     flutter
     dart
+
+    # writing
+    marksman
   ];
   # }}}
 
   # neovim {{{
   programs.neovim = {
     enable = true;
-    package = pkgs.neovim.overrideAttrs (oldAttrs: {
-      patches = [];
-    });
     plugins = with pkgs.bandithedoge.vimPlugins; [
       hibiscus-nvim
       impatient-nvim
@@ -129,7 +133,6 @@
       # utilities
       colortils-nvim
       Comment-nvim
-      detect-language-nvim
       direnv-vim
       editorconfig-nvim
       mkdir-nvim
@@ -207,6 +210,7 @@
       nvim-luaref
       nvim-parinfer
       package-info-nvim
+      purescript-vim
       rasi-vim
       vim-coffee-script
       yaml-companion-nvim

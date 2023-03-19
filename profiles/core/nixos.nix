@@ -14,6 +14,9 @@
       auth include login
     '';
     polkit.enable = true;
+    sudo.extraConfig = ''
+      Defaults insults
+    '';
   };
 
   services.dbus = {

@@ -27,22 +27,21 @@
       flake = false;
       url = "github:bandithedoge/nur-packages";
     };
-    parinfer-rust = {
-      flake = false;
-      url = "github:eraserhd/parinfer-rust";
-    };
+    hyprpaper.url = "github:hyprwm/hyprpaper";
     mozilla.url = "github:mozilla/nixpkgs-mozilla";
     neorg.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
-    neovim.url = "github:neovim/neovim?dir=contrib";
+    neovim.url = "github:nix-community/neovim-nightly-overlay";
+    nil.url = "github:oxalica/nil";
     nix-gaming.url = "github:fufexan/nix-gaming";
+    nix-index-database.url = "github:Mic92/nix-index-database";
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
     nur.url = "github:nix-community/NUR";
     prismlauncher.url = "github:PrismLauncher/PrismLauncher";
-    nil.url = "github:oxalica/nil";
 
     colors.url = "github:Misterio77/nix-colors";
     musnix.url = "github:musnix/musnix";
-    kmonad.url = "github:kmonad/kmonad?dir=nix";
+    kmonad.url = "github:kmonad/kmonad";
+    kmonad.flake = false;
     nixmox.url = "github:Sorixelle/nixmox";
   };
 
@@ -51,26 +50,24 @@
     digga,
     nixpkgs,
     home-manager,
-    musnix,
-    kmonad,
     nixos-hardware,
     ...
   } @ inputs: let
     overlays = with inputs; [
-      nur.overlay
+      hyprpaper.overlays.default
+      mozilla.overlays.firefox
+      neorg.overlays.default
       neovim.overlay
+      nil.overlays.default
+      nix-gaming.overlays.default
       nixmox.overlay
       nixpkgs-wayland.overlay
-      mozilla.overlays.firefox
-      nix-gaming.overlays.default
-      prismlauncher.overlay
-      nil.overlays.default
-      (import (parinfer-rust + "/overlay.nix"))
+      nur.overlay
+      prismlauncher.overlays.default
       (_: prev: {
         bandithedoge = import nur-bandithedoge {pkgs = prev;};
         colors = colors.lib-core;
       })
-      neorg.overlays.default
       (import ./overlay.nix)
     ];
 
@@ -81,7 +78,8 @@
         editors
       ];
       gui = [gui];
-      gaming = [gaming];
+      gaming = [gaming gaming-lite];
+      gaming-lite = [gaming-lite];
       darwin = [os-specific.darwin];
       linux = [os-specific.linux];
     };
@@ -107,11 +105,11 @@
         hostDefaults = {
           system = "x86_64-linux";
           channelName = "nixpkgs";
-          modules = [
+          modules = with inputs; [
             digga.nixosModules.nixConfig
             home-manager.nixosModules.home-manager
             musnix.nixosModules.musnix
-            kmonad.nixosModules.default
+            "${kmonad}/nix/nixos-module.nix"
             {
               home-manager.users.bandithedoge = {
                 imports = with userSuites; linux;
@@ -142,6 +140,11 @@
             modules = [
               nixos-hardware.nixosModules.lenovo-thinkpad-t440p
               nixos-hardware.nixosModules.common-pc-laptop-ssd
+              {
+                home-manager.users.bandithedoge = {
+                  imports = with userSuites; gaming-lite;
+                };
+              }
             ];
           };
           machine-nixos = {
@@ -191,7 +194,9 @@
       };
 
       home = {
-        modules = [];
+        modules = with inputs; [
+          nix-index-database.hmModules.nix-index
+        ];
 
         importables = {
           profiles = userProfiles;

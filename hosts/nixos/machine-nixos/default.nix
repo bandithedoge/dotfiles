@@ -6,7 +6,8 @@
 }: {
   imports = with suites;
     base
-    ++ os-specific;
+    ++ os-specific
+    ++ gaming;
 
   environment.systemPackages = with pkgs; [
     wine-tkg

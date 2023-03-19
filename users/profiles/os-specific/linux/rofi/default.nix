@@ -5,7 +5,7 @@ pkgs.poetry2nix.mkPoetryApplication rec {
 
   postInstall = ''
     wrapProgram $out/bin/keepass \
-      --prefix PATH : ${pkgs.lib.makeBinPath [pkgs.xdotool]}
+      --prefix PATH : ${pkgs.lib.makeBinPath [pkgs.wtype]}
   '';
 
   overrides = pkgs.poetry2nix.overrides.withDefaults (self: super: {
@@ -15,7 +15,7 @@ pkgs.poetry2nix.mkPoetryApplication rec {
 
     # https://github.com/NixOS/nixpkgs/issues/204494
     rofi-menu = super.rofi-menu.overridePythonAttrs (old: {
-      buildInputs = old.buildInputs ++ [pkgs.poetry];
+      buildInputs = old.buildInputs ++ [pkgs.poetry python.pkgs.poetry-core];
     });
   });
 }

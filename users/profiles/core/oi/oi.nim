@@ -23,9 +23,9 @@ when isMainModule:
   let
     doc = dedent &"""
       Usage:
-        oi rebuild [-p=<path> (-t | --show-trace)]
-        oi update [(-p=<path> | --path=<path>)] [<input> ...]
-        oi cleanup
+        oi (rebuild | r) [-p=<path> (-t | --show-trace)]
+        oi (update | u) [(-p=<path> | --path=<path>)] [<input> ...]
+        oi (cleanup | c)
         oi (-h | --help)
 
       Options:
@@ -44,7 +44,7 @@ when isMainModule:
   if getEnv("GITHUB_TOKEN", "") != "":
     putEnv("NIX_CONFIG", "access-tokens = github.com=$GITHUB_TOKEN")
 
-  if args["rebuild"]:
+  if args["rebuild"] or args["r"]:
     let cmd =
       if isDarwin:
         &"darwin-rebuild --flake {path}"
@@ -62,7 +62,7 @@ when isMainModule:
       "|& nom\""
     )
 
-  if args["update"]:
+  if args["update"] or args["u"]:
     if inputs.len() == 0:
       exec &"nix flake update {path}"
       exec (if isNixOS: "sudo " else: "") & "nix-channel --update"
@@ -70,7 +70,7 @@ when isMainModule:
       for input in inputs:
         exec &"nix flake lock {path} --update-input {input}"
 
-  if args["cleanup"]:
+  if args["cleanup"] or args["c"]:
     if isNixOS: exec "sudo nix-env --delete-generations +3"
     exec (if isNixOS or isDarwin: "sudo " else: "") & "nix-collect-garbage -d"
     exec (if isNixOS: "sudo " else: "") & "nix-store --optimise"

@@ -6,7 +6,9 @@
                                :borderchars [" " " " " " " " " " " " " " " "]
                                :mappings {:i {:<esc> actions.close
                                               :<C-j> actions.move_selection_next
-                                              :<C-k> actions.move_selection_previous}}}
+                                              :<C-k> actions.move_selection_previous
+                                              :<C-h> actions.preview_scrolling_up
+                                              :<C-l> actions.preview_scrolling_down}}}
                     :pickers {:commands {:theme :ivy :border false}
                               :diagnostics {:theme :ivy
                                             :border false

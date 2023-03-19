@@ -1,27 +1,32 @@
 {
-  config,
   pkgs,
+  config,
   ...
-}: {
-  imports = [./audio.nix ./x/default.nix];
+}: let
+  rofi-stuff = pkgs.callPackage ./rofi {};
+in {
+  imports = [
+    ./audio.nix
+    ./wayland.nix
+  ];
 
   home = {
     packages = with pkgs; [
       anydesk
       blender
+      cutter
       dfeet
       discord-canary
       ferdium
       flowblade
       ghidra
       gparted
-      icon-library
+      jadx
       keepassxc
       krita
       nim
-      oomoxFull
       pavucontrol
-      pcmanfm
+      pciutils
       rclone
       tigervnc
       transmission-gtk
@@ -60,8 +65,8 @@
 
   qt = {
     # {{{
-    enable = true;
-    platformTheme = "gnome";
+    enable = false;
+    # platformTheme = "gnome";
     style = {
       name = "adwaita-dark";
       package = pkgs.adwaita-qt;
@@ -353,6 +358,147 @@
       completion-highlight-bg = base02;
       recolor-lightcolor = base00;
       recolor-darkcolor = base06;
+    };
+    mappings = {
+      "-" = "zoom out";
+      "=" = "zoom in";
+    };
+  };
+  # }}}
+
+  programs.rofi = {
+    # {{{
+    enable = true;
+    package = pkgs.rofi-wayland;
+    font = "${pkgs.rice.uiFont} 12";
+    plugins = with pkgs; [rofi-calc];
+    extraConfig = {
+      modi = "power:${rofi-stuff}/bin/power,drun,run,calc";
+
+      drun-match-fields = "name,exec";
+      drun-display-format = "{name}";
+      show-icons = true;
+      scroll-method = 1;
+
+      kb-mode-complete = "";
+      kb-remove-to-eol = "";
+      kb-remove-to-sol = "";
+      kb-remove-char-forward = "Delete";
+      kb-row-up = "Control+k";
+      kb-row-down = "Control+j";
+      kb-mode-next = "Control+l";
+      kb-mode-previous = "Control+h";
+      kb-page-prev = "Control+u";
+      kb-page-next = "Control+d";
+      kb-accept-entry = "Return";
+      kb-remove-char-back = "BackSpace";
+      kb-screenshot = "Control+Shift+s";
+    };
+    theme = with pkgs.rice; let
+      inherit (config.lib.formats.rasi) mkLiteral;
+      padding = mkLiteral "5px";
+    in {
+      "*" = {
+        background-color = mkLiteral base10;
+        text-color = mkLiteral base05;
+      };
+
+      window = {
+        border = mkLiteral "2px";
+        children = map mkLiteral ["mainbox"];
+        border-color = mkLiteral base0F;
+      };
+
+      mainbox = {
+        children = map mkLiteral ["inputbar" "message" "listview" "mode-switcher"];
+        spacing = padding;
+        margin = padding;
+      };
+
+      inputbar = {
+        children = map mkLiteral ["prompt" "entry"];
+        spacing = mkLiteral "0";
+      };
+
+      prompt = {
+        background-color = mkLiteral base0F;
+        text-color = mkLiteral base00;
+        vertical-align = mkLiteral "0.5";
+        horizontal-align = mkLiteral "0.5";
+        inherit padding;
+      };
+
+      entry = {
+        background-color = mkLiteral base00;
+        vertical-align = mkLiteral "0.5";
+        inherit padding;
+      };
+
+      listview = {
+        background-color = mkLiteral base00;
+        scrollbar = true;
+        spacing = mkLiteral "0px 5px";
+        inherit padding;
+      };
+
+      element = {
+        children = map mkLiteral ["element-icon" "element-text"];
+        background-color = mkLiteral "transparent";
+        padding = mkLiteral "2px";
+        spacing = padding;
+      };
+      element-icon = {
+        background-color = mkLiteral "inherit";
+        size = mkLiteral "1.25em";
+      };
+      element-text = {
+        background-color = mkLiteral "inherit";
+        highlight = mkLiteral "bold ${base0F}";
+        vertical-align = mkLiteral "0.5";
+      };
+
+      "element.selected.normal".background-color = mkLiteral base02;
+      "element.urgent".text-color = mkLiteral base08;
+      "element.active".text-color = mkLiteral base0B;
+      "element.selected.urgent".background-color = mkLiteral base08;
+      "element.selected.active".background-color = mkLiteral base0B;
+
+      scrollbar = {
+        background-color = mkLiteral base00;
+        handle-color = mkLiteral base0F;
+        handle-width = mkLiteral "5px";
+      };
+
+      button = {
+        background-color = mkLiteral base01;
+        text-color = mkLiteral base03;
+      };
+      "button.selected" = {
+        background-color = mkLiteral base0F;
+        text-color = mkLiteral base00;
+      };
+    };
+  }; # }}}
+
+  # polkit {{{
+  systemd.user.services.polkit-gnome-authentication-agent-1 = {
+    Unit = {
+      Description = "polkit-gnome-authentication-agent-1";
+      After = ["graphical-session.target"];
+    };
+
+    Install = {
+      WantedBy = ["graphical-session.target"];
+      Wants = ["graphical-session.target"];
+      After = ["graphical-session.target"];
+    };
+
+    Service = {
+      Type = "simple";
+      ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+      Restart = "on-failure";
+      RestartSec = 1;
+      TimeoutStopSec = 10;
     };
   };
   # }}}

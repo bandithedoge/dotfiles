@@ -12,58 +12,62 @@
       schemastore (require :schemastore)
       yaml (require :yaml-companion)
       document-color (require :document-color)
-      defaults {:capabilities (merge (cmp_nvim_lsp.default_capabilities)
-                                     {:textDocument {:completion {:completionItem {:snippetSupport true}}}})
+      defaults {:capabilities (merge! (cmp_nvim_lsp.default_capabilities)
+                                      {:textDocument {:completion {:completionItem {:snippetSupport true}}}})
                 :single_file_support true}]
   (lsp.bashls.setup defaults)
+  (lsp.cmake.setup defaults)
   (lsp.clangd.setup defaults)
   (lsp.cssls.setup defaults)
   (lsp.dartls.setup defaults)
   (lsp.dhall_lsp_server.setup defaults)
   (lsp.emmet_ls.setup defaults)
-  (lsp.eslint.setup (merge defaults
-                           {:filetypes [:coffee
-                                        :javascript
-                                        :javascript.jsx
-                                        :javascriptreact
-                                        :pug
-                                        :typescript
-                                        :typescript.tsx
-                                        :typescriptreact
-                                        :vue]
-                            :settings {:packageManager :pnpm}}))
+  (lsp.eslint.setup (merge! defaults
+                            {:filetypes [:coffee
+                                         :javascript
+                                         :javascript.jsx
+                                         :javascriptreact
+                                         :pug
+                                         :typescript
+                                         :typescript.tsx
+                                         :typescriptreact
+                                         :vue]
+                             :settings {:packageManager :pnpm}}))
+  (lsp.fennel_language_server.setup defaults)
   (lsp.gdscript.setup defaults)
   (lsp.gopls.setup defaults)
-  (lsp.hls.setup (merge defaults
-                        {:settings {:haskell {:formattingProvider :fourmolu}}}))
+  (lsp.hls.setup (merge! defaults
+                         {:settings {:haskell {:formattingProvider :fourmolu}}
+                          :filetypes [:haskell :lhaskell :cabal]}))
   (lsp.html.setup defaults)
-  (lsp.jsonls.setup (merge defaults
-                           {:settings {:json {:schemas (schemastore.json.schemas)
-                                              :validate {:enable true}}}}))
-  (lsp.nil_ls.setup (merge defaults {:autostart true}))
+  (lsp.jsonls.setup (merge! defaults
+                            {:settings {:json {:schemas (schemastore.json.schemas)
+                                               :validate {:enable true}}}}))
+  (lsp.marksman.setup defaults)
+  (lsp.nil_ls.setup (merge! defaults {:autostart true}))
   (lsp.nimls.setup defaults)
+  (lsp.lua_ls.setup defaults)
   (lsp.psalm.setup defaults)
   (lsp.purescriptls.setup defaults)
-  (lsp.pylsp.setup (merge defaults
-                          {:settings {:pylsp {:plugins {:autopep8 {:enabled false}
-                                                        :black {:enabled true
-                                                                :line_length 120}
-                                                        :flake8 {:enabled true
-                                                                 :maxLineLength 120}
-                                                        :pycodestyle {:maxLineLength 120}
-                                                        :jedi_completion {:fuzzy true
-                                                                          :eager true}
-                                                        :pydocstyle {:enabled true
-                                                                     :convention :pep257}
-                                                        :pylint {:enabled true}
-                                                        :yapf {:enabled false}}}}}))
+  (lsp.pylsp.setup (merge! defaults
+                           {:settings {:pylsp {:plugins {:autopep8 {:enabled false}
+                                                         :black {:enabled true
+                                                                 :line_length 120}
+                                                         :flake8 {:enabled true
+                                                                  :maxLineLength 120}
+                                                         :pycodestyle {:maxLineLength 120}
+                                                         :jedi_completion {:fuzzy true
+                                                                           :eager true}
+                                                         :pydocstyle {:enabled true
+                                                                      :convention :pep257}
+                                                         :pylint {:enabled true}
+                                                         :yapf {:enabled false}}}}}))
   (lsp.rust_analyzer.setup defaults)
   (lsp.solargraph.setup defaults)
-  (lsp.sumneko_lua.setup defaults)
   (lsp.tailwindcss.setup defaults)
-  (lsp.tsserver.setup (merge defaults
-                             {:capabilities {:textDocument {:colorProvider {:dynamicRegistration true}}}
-                              :on_attach document-color.buf_attach}))
+  (lsp.tsserver.setup (merge! defaults
+                              {:capabilities {:textDocument {:colorProvider {:dynamicRegistration true}}}
+                               :on_attach document-color.buf_attach}))
   (lsp.yamlls.setup (yaml.setup))
   (lsp.zls.setup defaults))
 
@@ -92,10 +96,13 @@
                                                           [:--tab-width
                                                            params.options.tabSize]))
                                        :extra_filetypes [:toml :coffee :pug]})
+                     (d.markdownlint.with {:command :markdownlint-cli2})
+                     d.actionlint
+                     d.checkmake
                      d.fish
                      d.shellcheck
                      d.statix
-                     (d.markdownlint.with {:command :markdownlint-cli2})
+                     a.gitrebase
                      a.shellcheck
                      a.statix]))
 

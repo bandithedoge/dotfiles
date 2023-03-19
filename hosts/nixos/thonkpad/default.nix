@@ -7,12 +7,13 @@
   imports = with suites;
     base
     ++ gui
-    ++ audio;
+    ++ audio
+    ++ gaming;
 
   environment = {
     systemPackages = with pkgs; [
       connman-gtk
-      wine-staging
+      wineWowPackages.staging
     ];
     variables = {
       BROWSER = "qutebrowser";
@@ -57,6 +58,7 @@
   hardware = {
     opengl = {
       enable = true;
+      driSupport = true;
       driSupport32Bit = true;
     };
     trackpoint.enable = true;
@@ -87,6 +89,7 @@
   # keyboard {{{
   services.kmonad = {
     enable = true;
+    package = pkgs.bandithedoge.haskellPackages.kmonad;
     keyboards.internal = {
       name = "laptop-internal";
       device = "/dev/input/by-path/platform-i8042-serio-0-event-kbd";
@@ -113,8 +116,4 @@
   # what the fuck is this
   security.pki.certificateFiles = [/etc/ssl/certs/certyfikat.crt];
   # }}}
-
-  home-manager.users."bandithedoge" = {
-    programs.alacritty.settings.font.size = 10;
-  };
 }

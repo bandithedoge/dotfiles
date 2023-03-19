@@ -51,12 +51,6 @@
 
 ;; }}}
 
-;; detect-language.nvim {{{
-(let [detect-language (require :detect-language)]
-  (detect-language.setup {}))
-
-;; }}}
-
 ;; stabilize.nvim {{{
 (let [stabilize (require :stabilize)]
   (stabilize.setup {}))
