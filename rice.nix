@@ -1,23 +1,23 @@
-rec {
-  base00 = "#303446";
-  base01 = "#414559";
-  base02 = "#51576d";
-  base03 = "#838ba7";
-  base04 = "#b5bfe2";
-  base05 = "#c6d0f5";
-  base06 = "#c6d0f5";
-  base07 = "#c6d0f5";
-  base08 = "#e78284";
-  base09 = "#ef9f76";
-  base0A = "#e5c890";
-  base0B = "#a6d189";
-  base0C = "#81c8be";
-  base0D = "#8caaee";
-  base0E = "#ca9ee6";
-  base0F = "#babbf1";
+{pkgs}: rec {
+  base00 = "#2b3339";
+  base01 = "#323c41";
+  base02 = "#3a454a";
+  base03 = "#868d80";
+  base04 = "#d3c6aa";
+  base05 = "#d3c6aa";
+  base06 = "#e9e8d2";
+  base07 = "#fff9e8";
+  base08 = "#e67e80";
+  base09 = "#e69875";
+  base0A = "#dbbc7f";
+  base0B = "#a7c080";
+  base0C = "#83c092";
+  base0D = "#7fbbb3";
+  base0E = "#d699b6";
+  base0F = "#93b259";
 
-  base10 = "#292c3c";
-  base11 = "#232634";
+  base10 = "#232a2f";
+  base11 = "#1e2327";
   base12 = base08;
   base13 = base0A;
   base14 = base0B;
@@ -31,6 +31,71 @@ rec {
   terminal = "st";
   wm = "river";
   menu = "rofi -show drun";
+
+  wallpaper = ./wallpaper.jpg;
+  wallpaperBlurred = pkgs.runCommand "blur" {} ''
+    ${pkgs.imagemagick}/bin/magick ${./wallpaper.jpg} -gaussian-blur 0x12 -format png $out
+  '';
+
+  gtk = let
+    color = pkgs.lib.removePrefix "#";
+    src = pkgs.writeText "materia-rice" ''
+      FG=${color base00}
+      BG=${color base05}
+      HDR_BG=${color base00}
+      HDR_FG=${color base04}
+      BTN_BG=${color base05}
+      ACCENT_BG=${color base05}
+      SEL_BG=${color base0F}
+      TXT_BG=${color base05}
+
+      ICONS_LIGHT_FOLDER=${color base05}
+      ICONS_MEDIUM=${color base03}
+      ICONS_DARK=${color base0F}
+      ICONS_SYMBOLIC_ACTION=${color base05}
+      ICONS_SYMBOLIC_PANEL=${color base04}
+
+      TERMINAL_BACKGROUND=${color base00}
+      TERMINAL_FOREGROUND=${color base05}
+      TERMINAL_CURSOR=${color base0F}
+      TERMINAL_COLOR0=${color base01}
+      TERMINAL_COLOR1=${color base08}
+      TERMINAL_COLOR2=${color base0B}
+      TERMINAL_COLOR3=${color base09}
+      TERMINAL_COLOR4=${color base0D}
+      TERMINAL_COLOR5=${color base0E}
+      TERMINAL_COLOR6=${color base0C}
+      TERMINAL_COLOR7=${color base06}
+      TERMINAL_COLOR8=${color base02}
+      TERMINAL_COLOR9=${color base12}
+      TERMINAL_COLOR10=${color base14}
+      TERMINAL_COLOR11=${color base13}
+      TERMINAL_COLOR12=${color base16}
+      TERMINAL_COLOR13=${color base17}
+      TERMINAL_COLOR14=${color base15}
+      TERMINAL_COLOR15=${color base0F}
+    '';
+  in {
+    theme = {
+      name = "materia-rice";
+      package = pkgs.oomoxPlugins.theme-materia.generate {
+        inherit src;
+        name = "materia-rice";
+      };
+    };
+    iconTheme = {
+      name = "suruplus-rice";
+      package = pkgs.oomoxPlugins.icons-suruplus.generate {
+        inherit src;
+        name = "suruplus-rice";
+      };
+    };
+    cursorTheme = {
+      name = "phinger-cursors";
+      package = pkgs.phinger-cursors;
+      size = 16;
+    };
+  };
 
   def = {
     lua = ''
@@ -66,6 +131,9 @@ rec {
       terminal = "${terminal}"
       wm = "${wm}"
       menu = "${menu}"
+
+      wallpaper = "${wallpaper}"
+      wallpaperBlurred = "${wallpaperBlurred}"
     '';
     scss = ''
       $base00: ${base00};

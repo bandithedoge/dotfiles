@@ -30,19 +30,26 @@
   (nvim-tree.setup {:hijack_cursor true
                     :hijack_netrw true
                     :update_cwd true
+                    :reload_on_bufenter true
+                    :sync_root_with_cwd true
+                    :update_focused_file {:enable true}
                     :diagnostics {:enable true :show_on_dirs true}
                     :view {:mappings {:list [{:key :h :cb (cb :dir_up)}
                                              {:key :l :cb (cb :cd)}]}
-                           :width 30}
+                           :width 30
+                           :signcolumn :yes}
                     :renderer {:indent_markers {:enable true}
-                               :icons {:git_placement :after}}
+                               :icons {:git_placement :signcolumn
+                                       :show {:folder_arrow false}}
+                               :add_trailing true
+                               :full_name true}
                     :filters {:dotfiles false :custom [:.DS_Store]}}))
 
 ;; }}}
 
 ;; FTerm.nvim {{{
 (let [fterm (require :FTerm)]
-  (global fterm_float (fterm:new {:hl :NormalPopover :border :solid})))
+  (set _G.fterm_float (fterm:new {:hl :NormalFloat :border :solid})))
 
 ;; }}}
 

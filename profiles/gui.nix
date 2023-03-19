@@ -3,17 +3,13 @@
   pkgs,
   ...
 }: let
-  rice = import ../rice.nix;
-  launchwm = pkgs.writeShellScriptBin "launchwm" ''
-    #!/usr/bin/env bash
-    XKB_DEFAULT_LAYOUT=pl ${rice.wm}
-  '';
+  rice = import ../rice.nix {inherit pkgs;};
 in {
   environment.systemPackages = with pkgs; [
     connman-gtk
-    greetd.tuigreet
-    launchwm
+    i3lock-color
     xorg.setxkbmap
+    betterlockscreen
   ];
 
   services.xserver = {
@@ -21,10 +17,16 @@ in {
     displayManager = {
       lightdm = {
         enable = true;
+        background = rice.wallpaperBlurred;
+        extraSeatDefaults = ''
+          greeter-show-manual-login=false
+          font-name="${rice.uiFont}"
+        '';
         greeters.gtk = {
           enable = true;
           clock-format = "%A %d %B %T";
           indicators = ["~host" "~spacer" "~spacer" "~clock" "~power"];
+          inherit (rice.gtk) theme iconTheme cursorTheme;
         };
       };
       sx = {
@@ -46,12 +48,15 @@ in {
 
   programs.xss-lock = {
     enable = true;
-    lockerCommand = "${pkgs.i3lock-fancy-rapid}/bin/i3lock-fancy-rapid";
+    lockerCommand = with rice; ''
+      ${pkgs.betterlockscreen}/bin/betterlockscreen -l
+    '';
   };
+
+  services.accounts-daemon.enable = true;
 
   fonts.fonts = with pkgs; [
     (nerdfonts.override {fonts = ["JetBrainsMono"];})
     roboto
-    material-design-icons
   ];
 }

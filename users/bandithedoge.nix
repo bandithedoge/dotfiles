@@ -8,7 +8,7 @@
   users.users."bandithedoge" = {
     name = "bandithedoge";
     shell = pkgs.fish;
-    extraGroups = ["wheel" "networkmanager"];
+    extraGroups = ["wheel" "networkmanager" "audio"];
     isNormalUser = true;
     uid = 1000;
   };

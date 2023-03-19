@@ -3,7 +3,7 @@
   pkgs,
   ...
 }: let
-  rice = import ../../../../rice.nix;
+  rice = import ../../../../rice.nix {inherit pkgs;};
 in {
   home = {
     packages = with pkgs; [
@@ -14,30 +14,26 @@ in {
       imv
       libappindicator
       libappindicator-gtk3
+      oomoxFull
       pavucontrol
       tigervnc
       wine
     ];
-    sessionVariables = {
-      XDG_CURRENT_DESKTOP = "Unity";
+    pointerCursor = {
+      inherit (rice.gtk.cursorTheme) package name size;
+      x11.enable = true;
+      gtk.enable = true;
     };
   };
 
-  # gtk {{{
   gtk = {
+    # {{{
     enable = true;
     font = {
       name = rice.uiFont;
       size = 12;
     };
-    iconTheme = {
-      package = pkgs.numix-icon-theme;
-      name = "Numix";
-    };
-    theme = {
-      package = pkgs.materia-theme;
-      name = "Materia-dark";
-    };
+    inherit (rice.gtk) theme iconTheme;
     gtk3.extraConfig = {
       gtk-application-prefer-dark-theme = true;
       gtk-enable-primary-paste = false;

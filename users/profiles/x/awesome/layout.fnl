@@ -1,4 +1,5 @@
 (local awful (require :awful))
+(local beautiful (require :beautiful))
 (local contrib (require :vicious.contrib))
 (local gears (require :gears))
 (local vicious (require :vicious))
@@ -27,6 +28,7 @@
                             [l.tile]))
 
 (let [f (lambda [s]
+          (gears.wallpaper.maximized beautiful.wallpaper s true)
           (awful.tag [:1 :2 :3 :4 :5 :6 :7 :8 :9] s (. awful.layout.layouts 1))
           (set s.mytasklist
                (awful.widget.tasklist {:screen s
@@ -35,8 +37,10 @@
                                                               #($1:emit_signal "request::activate"
                                                                                :tasklist
                                                                                {:raise true}))
-                                                      (button {} 4 #(awful.client.focus.byidx 1))
-                                                      (button {} 5 #(awful.client.focus.byidx -1)))}))
+                                                      (button {} 4
+                                                              #(awful.client.focus.byidx 1))
+                                                      (button {} 5
+                                                              #(awful.client.focus.byidx -1)))}))
           (set s.mytaglist
                (awful.widget.taglist {:screen s
                                       :filter awful.widget.taglist.filter.noempty
@@ -164,7 +168,8 @@
                                                                                "'>"
                                                                                level
                                                                                "%</span>")
-                                                                           (.. level "%")))
+                                                                           (.. level
+                                                                               "%")))
                                                                     5 :BAT0)])
                                          (widget [(icon "")
                                                   (vicious.register (wibox.widget.textbox)

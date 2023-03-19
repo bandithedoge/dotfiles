@@ -36,6 +36,7 @@
     kmonad.url = "github:kmonad/kmonad?dir=nix";
     nixgl.url = "github:guibou/nixGL";
     firefox-darwin.url = "github:bandithedoge/nixpkgs-firefox-darwin";
+    nixmox.url = "github:Sorixelle/nixmox";
   };
 
   outputs = {
@@ -53,6 +54,7 @@
       # neovim-nightly-overlay.overlay
       nixgl.overlay
       neorg.overlay
+      nixmox.overlay
       # nixpkgs-wayland.overlay
       # (import (parinfer-rust + "/overlay.nix"))
       (_: prev: {

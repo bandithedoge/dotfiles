@@ -3,47 +3,13 @@
   config,
   ...
 }: let
-  rice = import ../../../rice.nix;
-
-  my-st = pkgs.st.overrideAttrs (oldAttrs: {
-    inherit (pkgs.bandithedoge.st-flexipatch) src;
-
-    prePatch = let
-      configFile = pkgs.writeText "config.def.h" (with rice; ''
-        ${builtins.readFile ./st/config.def.h}
-
-        static char *font = "${monoFont}:pixelsize=15:autohint=true";
-
-        static const char *colorname[] = {
-          "${base01}", "${base08}", "${base0B}", "${base09}", "${base0D}", "${base0E}", "${base0C}", "${base06}",
-
-          "${base02}", "${base12}", "${base14}", "${base13}", "${base16}", "${base17}", "${base15}", "${base0F}",
-
-          [255] = 0,
-
-          "${base0F}", /* 256 -> cursor */
-          "${base00}", /* 257 -> rev cursor*/
-          "${base00}", /* 258 -> bg */
-          "${base05}", /* 259 -> fg */
-        };
-
-      '');
-    in ''
-      cp ${configFile} config.def.h
-      cp ${./st/patches.def.h} patches.def.h
-      cp ${./st/config.mk} config.mk
-    '';
-
-    buildInputs =
-      oldAttrs.buildInputs
-      ++ (with pkgs; [
-        harfbuzz
-        freetype
-      ]);
-  });
+  rice = import ../../../rice.nix {inherit pkgs;};
 in {
   home.packages = with pkgs; [
-    my-st
+    (callPackage ./st {})
+    (callPackage ./dmenu {})
+    j4-dmenu-desktop
+    eww
   ];
 
   xsession = {
@@ -64,7 +30,6 @@ in {
     fade = true;
     fadeDelta = 5;
     shadow = true;
-    shadowExclude = ["class_g = 'awesome'"];
     opacityRules = builtins.concatMap (class: [
       "95:class_g = '${class}' && focused"
       "85:class_g = '${class}' && !focused"
@@ -97,6 +62,51 @@ in {
       awesome-client "awesome.restart()"
     '';
   };
+
+  # betterlockscreen {{{
+  systemd.user.services.betterlockscreen = {
+    Unit = {
+      Description = "Update betterlockscreen background";
+      After = ["graphical-session-pre.target"];
+      PartOf = ["graphical-session.target"];
+    };
+
+    Install.WantedBy = ["graphical-session.target"];
+
+    Service = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.betterlockscreen}/bin/betterlockscreen -u ${rice.wallpaperBlurred}";
+    };
+  };
+
+  xdg.configFile."betterlockscreenrc".text = let
+    color = c: (pkgs.lib.removePrefix "#" c) + "ff";
+    blank = "00000000";
+  in
+    with rice; ''
+      fx_list=()
+      quiet=true
+
+      font="${uiFont}"
+      loginbox=${color base00}
+      time_format="%a %d %b %T"
+
+      greetercolor=${color base04}
+      layoutcolor=${color base03}
+      timecolor=${color base05}
+
+      insidewrongcolor=${color base08}
+      ringcolor=${color base02}
+      ringvercolor=${color base0E}
+      ringwrongcolor=${color base08}
+
+      bshlcolor=${color base08}
+      keyhlcolor=${color base0F}
+      modifcolor=${color base0F}
+      verifcolor=${color base0E}
+      wrongcolor=${color base08}
+    '';
+  # }}}
 
   programs.rofi = {
     # {{{

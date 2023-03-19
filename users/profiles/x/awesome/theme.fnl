@@ -6,7 +6,7 @@
       dpi xresources.apply_dpi]
   {:font (.. _G.uiFont " 9")
    :useless_gap (dpi 5)
-   :wallpaper #(assets.wallpaper _G.base00 _G.base05 _G.base0F $1)
+   :wallpaper _G.wallpaper
    ;; common colors
    :bg_normal _G.base00
    :bg_focus _G.base0F
@@ -40,5 +40,9 @@
    ;; graphs
    :graph_bg _G.base02
    :graph_fg _G.base0F
+   ;; notifications
+   :notification_bg _G.base02
+   :notification_border_width 2
+   :notification_border_color _G.base0F
    ;; layout icons
    :layout_tile (.. themes :default/layouts/tilew.png)})

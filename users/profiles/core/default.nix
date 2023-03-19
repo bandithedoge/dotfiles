@@ -4,9 +4,7 @@
   config,
   ...
 }: let
-  isNixOS = pkgs.lib.strings.hasInfix "nixos" (builtins.readFile /etc/os-release);
-
-  rice = import ../../../rice.nix;
+  rice = import ../../../rice.nix {inherit pkgs;};
 
   oi = pkgs.callPackage ./oi {};
 in {

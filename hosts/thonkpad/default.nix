@@ -47,7 +47,7 @@
   services.upower.enable = true;
   services.thermald.enable = true;
   services.tlp.enable = true;
-  services.logind.lidSwitch = "hybrid-sleep";
+  services.logind.lidSwitch = "suspend";
   hardware.opengl.enable = true;
   hardware.opengl.driSupport32Bit = true;
   hardware.trackpoint.enable = true;

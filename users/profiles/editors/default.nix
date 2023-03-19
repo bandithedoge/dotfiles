@@ -3,7 +3,7 @@
   config,
   ...
 }: let
-  rice = import ../../../rice.nix;
+  rice = import ../../../rice.nix {inherit pkgs;};
 in {
   # common packages {{{
   home.packages = with pkgs; [
