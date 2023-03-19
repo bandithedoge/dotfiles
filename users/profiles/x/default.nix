@@ -1,10 +1,11 @@
+{ pkgs
+, config
+, ...
+}:
+let
+  rice = import ../../../rice.nix { inherit pkgs; };
+in
 {
-  pkgs,
-  config,
-  ...
-}: let
-  rice = import ../../../rice.nix {inherit pkgs;};
-in {
   home.packages = with pkgs; [
     eww
   ];
@@ -13,7 +14,7 @@ in {
     enable = true;
     windowManager.awesome = {
       enable = true;
-      package = pkgs.awesome.override {lua = pkgs.luajit;};
+      package = pkgs.awesome.override { lua = pkgs.luajit; };
       luaModules = with pkgs.luaPackages; [
         vicious
       ];
@@ -29,10 +30,10 @@ in {
     shadow = true;
     opacityRules =
       builtins.concatMap
-      (class: [
-        "95:class_g = '${class}' && focused"
-        "85:class_g = '${class}' && !focused"
-      ]) ["kitty"];
+        (class: [
+          "95:class_g = '${class}' && focused"
+          "85:class_g = '${class}' && !focused"
+        ]) [ "kitty" ];
   };
 
   xdg.configFile."sx/sxrc" = {
@@ -45,18 +46,23 @@ in {
   };
 
   xdg.configFile."awesome/rc.lua" = {
-    text = ''
-      package.path = package.path .. ";${pkgs.luaPackages.fennel}/?.lua"
+    text =
+      let
+        inherit (pkgs.luaPackages) fennel;
+        dbus_proxy = pkgs.bandithedoge.luaPackages.lua-dbus_proxy.src;
+      in
+      ''
+        package.path = package.path .. ";${fennel}/?.lua;${dbus_proxy}/src/?/init.lua;${dbus_proxy}/src/?.lua;"
 
-      local fennel = require("fennel")
-      debug.traceback = fennel.traceback
-      fennel.path = fennel.path .. ";${./awesome}/?.fnl"
-      table.insert(package.loaders or package.searchers, fennel.searcher)
+        local fennel = require("fennel")
+        debug.traceback = fennel.traceback
+        fennel.path = fennel.path .. ";${./awesome}/?.fnl"
+        table.insert(package.loaders or package.searchers, fennel.searcher)
 
-      ${rice.def.lua}
+        ${rice.def.lua}
 
-      require "config"
-    '';
+        require "config"
+      '';
     onChange = ''
       awesome-client "awesome.restart()"
     '';
@@ -66,11 +72,11 @@ in {
   systemd.user.services.betterlockscreen = {
     Unit = {
       Description = "Update betterlockscreen background";
-      After = ["graphical-session-pre.target"];
-      PartOf = ["graphical-session.target"];
+      After = [ "graphical-session-pre.target" ];
+      PartOf = [ "graphical-session.target" ];
     };
 
-    Install.WantedBy = ["graphical-session.target"];
+    Install.WantedBy = [ "graphical-session.target" ];
 
     Service = {
       Type = "oneshot";
@@ -78,10 +84,11 @@ in {
     };
   };
 
-  xdg.configFile."betterlockscreenrc".text = let
-    color = c: (pkgs.lib.removePrefix "#" c) + "ff";
-    blank = "00000000";
-  in
+  xdg.configFile."betterlockscreenrc".text =
+    let
+      color = c: (pkgs.lib.removePrefix "#" c) + "ff";
+      blank = "00000000";
+    in
     with rice; ''
       fx_list=()
       quiet=true
@@ -130,7 +137,8 @@ in {
     theme = with rice; let
       inherit (config.lib.formats.rasi) mkLiteral;
       padding = mkLiteral "5px";
-    in {
+    in
+    {
       "*" = {
         border-color = mkLiteral base0F;
         background-color = mkLiteral base00;
@@ -138,13 +146,13 @@ in {
       };
 
       mainbox.children =
-        map mkLiteral ["inputbar" "message" "mode-switcher" "listview"];
+        map mkLiteral [ "inputbar" "message" "mode-switcher" "listview" ];
 
       window = {
         border = mkLiteral "2px";
       };
 
-      entry = {inherit padding;};
+      entry = { inherit padding; };
 
       prompt = {
         inherit padding;

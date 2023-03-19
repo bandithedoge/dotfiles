@@ -9,6 +9,7 @@ in {
     packages = with pkgs; [
       bandithedoge.luakit
       cutter
+      dfeet
       discord
       ghidra
       icon-library
@@ -17,7 +18,6 @@ in {
       pavucontrol
       tigervnc
       wine
-      zeal
     ];
     pointerCursor = {
       inherit (rice.gtk.cursorTheme) package name size;

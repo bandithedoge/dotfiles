@@ -12,7 +12,6 @@ in {
 
   xdg = {
     enable = true;
-    # configHome = "${config.home.homeDirectory}/.config";
     configFile."rice.json".text = builtins.toJSON rice;
   };
 

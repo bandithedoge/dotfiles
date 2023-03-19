@@ -34,34 +34,33 @@
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
     musnix.url = "github:musnix/musnix";
     kmonad.url = "github:kmonad/kmonad?dir=nix";
-    nixgl.url = "github:guibou/nixGL";
     nixmox.url = "github:Sorixelle/nixmox";
   };
 
-  outputs = {
-    self,
-    digga,
-    nixpkgs,
-    home-manager,
-    musnix,
-    kmonad,
-    nixos-hardware,
-    ...
-  } @ inputs: let
-    overlays = with inputs; [
-      nur.overlay
-      neovim-nightly-overlay.overlay
-      nixgl.overlay
-      neorg.overlay
-      nixmox.overlay
-      # nixpkgs-wayland.overlay
-      # (import (parinfer-rust + "/overlay.nix"))
-      (_: prev: {
-        bandithedoge = import nur-bandithedoge {pkgs = prev;};
-      })
-      (import ./overlay.nix)
-    ];
-  in
+  outputs =
+    { self
+    , digga
+    , nixpkgs
+    , home-manager
+    , musnix
+    , kmonad
+    , nixos-hardware
+    , ...
+    } @ inputs:
+    let
+      overlays = with inputs; [
+        nur.overlay
+        neovim-nightly-overlay.overlay
+        neorg.overlay
+        nixmox.overlay
+        nixpkgs-wayland.overlay
+        (import (parinfer-rust + "/overlay.nix"))
+        (_: prev: {
+          bandithedoge = import nur-bandithedoge { pkgs = prev; };
+        })
+        (import ./overlay.nix)
+      ];
+    in
     digga.lib.mkFlake {
       inherit self inputs;
 
@@ -92,7 +91,7 @@
           ];
         };
 
-        imports = [(digga.lib.importHosts ./hosts)];
+        imports = [ (digga.lib.importHosts ./hosts) ];
 
         importables = rec {
           profiles =
@@ -101,9 +100,9 @@
               users = digga.lib.rakeLeaves ./users;
             };
           suites = with profiles; {
-            base = [core users.bandithedoge];
-            gui = [gui];
-            audio = [audio];
+            base = [ core users.bandithedoge ];
+            gui = [ gui ];
+            audio = [ audio ];
           };
         };
 
@@ -118,7 +117,7 @@
       };
 
       home = {
-        modules = [];
+        modules = [ ];
 
         importables = rec {
           profiles = digga.lib.rakeLeaves ./users/profiles;
@@ -127,7 +126,7 @@
               core
               editors
             ];
-            linux = [os-specific.linux];
+            linux = [ os-specific.linux ];
             gui = [
               # wayland
               x
@@ -139,7 +138,7 @@
         };
 
         users = {
-          bandithedoge = {suites, ...}: {
+          bandithedoge = { suites, ... }: {
             imports = with suites;
               base
               ++ gui
@@ -150,9 +149,10 @@
       };
 
       # just wsl things
-      homeConfigurations."bandithedoge" = let
-        system = "x86_64-linux";
-      in
+      homeConfigurations."bandithedoge" =
+        let
+          system = "x86_64-linux";
+        in
         home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.${system};
           modules = [
@@ -162,7 +162,7 @@
                 username = "bandithedoge";
                 stateVersion = "21.11";
               };
-              nixpkgs = {inherit overlays;};
+              nixpkgs = { inherit overlays; };
             }
             ./users/profiles/core
             ./users/profiles/editors

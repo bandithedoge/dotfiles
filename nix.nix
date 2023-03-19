@@ -1,5 +1,4 @@
-{pkgs, ...}:
-{
+{ pkgs, ... }: {
   nix = {
     package = pkgs.nixVersions.stable;
     settings = {
@@ -10,6 +9,7 @@
         "https://kira-bruneau.cachix.org"
         "https://nix-community.cachix.org"
         "https://nixpkgs-wayland.cachix.org"
+        "https://cache.iog.io"
       ];
       trusted-public-keys = [
         "bandithedoge.cachix.org-1:ZtcHw1anyEa4t6H8m3o/ctYFrwYFPAwoENSvofamE6g="
@@ -18,8 +18,9 @@
         "kira-bruneau.cachix.org-1:FJSccwNPRNHPBHN+qxAme2Svp537q7dDuHkqLnyOTaQ="
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
         "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
+        "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
       ];
-      trusted-users = ["root" "@wheel" "bandithedoge"];
+      trusted-users = [ "root" "@wheel" "bandithedoge" ];
     };
     extraOptions = ''
       extra-experimental-features = nix-command flakes

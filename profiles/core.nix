@@ -37,7 +37,6 @@
   time.timeZone = "Europe/Warsaw";
 
   programs.ccache.enable = true;
-  programs.steam.enable = true;
 
   users.mutableUsers = true;
 }
