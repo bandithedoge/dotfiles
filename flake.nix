@@ -23,6 +23,8 @@
       };
     };
 
+    nixos-wsl.url = "github:nix-community/NixOS-WSL";
+
     nur-bandithedoge = {
       flake = false;
       url = "github:bandithedoge/nur-packages";
@@ -212,23 +214,31 @@
       };
 
       # just wsl things
-      homeConfigurations."bandithedoge" = let
+      nixosConfigurations.wsl = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-      in
-        home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages.${system};
-          modules = [
-            {
-              home = {
-                homeDirectory = "/home/bandithedoge";
-                username = "bandithedoge";
-                stateVersion = "21.11";
+        modules = with inputs; [
+          home-manager.nixosModules.home-manager
+          nixos-wsl.nixosModules.wsl
+          ./nix.nix
+          ./wsl.nix
+          {
+            home-manager = {
+              useUserPackages = true;
+              users.bandithedoge = {
+                imports = [
+                  ./users/profiles/core/default.nix
+                  ./users/profiles/editors
+                  nix-index-database.hmModules.nix-index
+                ];
+                nixpkgs = {inherit overlays;};
+                home = {
+                  homeDirectory = "/home/bandithedoge";
+                  username = "bandithedoge";
+                };
               };
-              nixpkgs = {inherit overlays;};
-            }
-            ./users/profiles/core
-            ./users/profiles/editors
-          ];
-        };
+            };
+          }
+        ];
+      };
     };
 }
