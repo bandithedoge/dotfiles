@@ -1,6 +1,5 @@
 {
   pkgs,
-  home-manager,
   ...
 }: {
   home.packages = with pkgs; [
@@ -37,6 +36,7 @@
     artyFX
     autotalent
     bandithedoge.dpf-plugins
+    bandithedoge.ildaeil
     bandithedoge.lv2vst
     bchoppr
     boops
@@ -47,6 +47,7 @@
     distrho
     dragonfly-reverb
     drumgizmo
+    drumkv1
     eq10q
     fmit
     geonkick
@@ -60,6 +61,7 @@
     mooSpace
     ninjas2
     qsampler
+    samplv1
     surge-XT
     talentedhack
     tunefish

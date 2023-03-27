@@ -41,7 +41,6 @@ in {
       macos_titlebar_color = "background";
       macos_thicken_font = "0.25";
 
-      background_opacity = if pkgs.stdenv.isLinux then "0.95" else null;
       background = base00;
       foreground = base05;
       selection_background = base05;

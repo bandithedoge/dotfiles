@@ -33,7 +33,6 @@
                                          :typescriptreact
                                          :vue]
                              :settings {:packageManager :pnpm}}))
-  (lsp.fennel_language_server.setup defaults)
   (lsp.gdscript.setup defaults)
   (lsp.gopls.setup defaults)
   (lsp.hls.setup (merge! defaults

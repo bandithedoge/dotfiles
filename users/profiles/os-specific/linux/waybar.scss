@@ -9,11 +9,12 @@ window#waybar {
     font-size: small;
 }
 
-#tags {
+#workspaces {
     font-family: $monoFont;
 
     button {
         padding: 0 5px;
+        background-color: $base02;
         color: $base03;
         border-radius: 0px;
         min-width: 0;
@@ -21,12 +22,7 @@ window#waybar {
         transition: none;
     }
 
-    button.occupied {
-        background-color: $base02;
-        color: $base04;
-    }
-
-    button.focused {
+    button.active {
         background-color: $base0F;
         color: $base00;
     }
@@ -50,4 +46,8 @@ window#waybar {
     .needs-attention {
         background-color: $base08;
     }
+}
+
+#window {
+    margin-left: -10px;
 }

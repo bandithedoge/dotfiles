@@ -51,7 +51,6 @@
     statix
 
     # lua
-    bandithedoge.fennel-language-server
     fennel
     fnlfmt
     luajitPackages.luacheck
@@ -109,126 +108,129 @@
   # neovim {{{
   programs.neovim = {
     enable = true;
-    plugins = with pkgs.bandithedoge.vimPlugins; [
-      hibiscus-nvim
-      impatient-nvim
-      mini-nvim
-      tangerine-nvim
+    plugins = with pkgs.bandithedoge.vimPlugins;
+      [
+        hibiscus-nvim
+        impatient-nvim
+        lazily-nvim
+        tangerine-nvim
+        nightfox-nvim
+        mini-nvim
 
-      # treesitter
-      pkgs.vimPlugins.nvim-treesitter.withAllGrammars
-      nvim-ts-autotag
-      nvim-ts-context-commentstring
-      nvim-ts-rainbow
-      playground
-      spellsitter-nvim
+        # treesitter
+        pkgs.vimPlugins.nvim-treesitter.withAllGrammars
+        nvim-ts-autotag
+        nvim-ts-context-commentstring
+        nvim-ts-rainbow
+        playground
+        spellsitter-nvim
 
-      # libraries
-      nui-nvim
-      nvim-web-devicons
-      plenary-nvim
-      popup-nvim
-      sqlite-lua
+        # libraries
+        nui-nvim
+        nvim-web-devicons
+        plenary-nvim
+        popup-nvim
+        sqlite-lua
 
-      # utilities
-      colortils-nvim
-      Comment-nvim
-      direnv-vim
-      editorconfig-nvim
-      mkdir-nvim
-      neogen
-      nvim-autopairs
-      nvim-expand-expr
-      presence-nvim
-      remember-nvim
-      sort-nvim
-      stabilize-nvim
+        # utilities
+        colortils-nvim
+        Comment-nvim
+        direnv-vim
+        editorconfig-nvim
+        mkdir-nvim
+        neogen
+        nvim-autopairs
+        nvim-expand-expr
+        presence-nvim
+        remember-nvim
+        sort-nvim
+        stabilize-nvim
 
-      # ui
-      FTerm-nvim
-      barbar-nvim
-      cinnamon-nvim
-      dressing-nvim
-      fidget-nvim
-      flare-nvim
-      fm-nvim
-      foldsigns-nvim
-      gitsigns-nvim
-      glow-hover-nvim
-      heirline-nvim
-      hover-nvim
-      incline-nvim
-      indent-blankline-nvim
-      lsp_lines-nvim
-      lualine-nvim
-      neo-tree-nvim
-      neodim
-      numbers-nvim
-      nvim-colorizer-lua
-      nvim-hlslens
-      pretty-fold-nvim
-      todo-comments-nvim
-      trouble-nvim
+        # ui
+        FTerm-nvim
+        barbar-nvim
+        cinnamon-nvim
+        dressing-nvim
+        fidget-nvim
+        flare-nvim
+        fm-nvim
+        foldsigns-nvim
+        gitsigns-nvim
+        glow-hover-nvim
+        heirline-nvim
+        hover-nvim
+        incline-nvim
+        indent-blankline-nvim
+        lsp_lines-nvim
+        lualine-nvim
+        neo-tree-nvim
+        neodim
+        numbers-nvim
+        nvim-colorizer-lua
+        nvim-hlslens
+        pretty-fold-nvim
+        reticle-nvim
+        todo-comments-nvim
+        trouble-nvim
 
-      # keybindings
-      fold-cycle-nvim
-      icon-picker-nvim
-      which-key-nvim
+        # keybindings
+        fold-cycle-nvim
+        icon-picker-nvim
+        which-key-nvim
 
-      # lsp
-      document-color-nvim
-      lsp_extensions-nvim
-      lsp_signature-nvim
-      lspkind-nvim
-      null-ls-nvim
-      nvim-lspconfig
-      SchemaStore-nvim
+        # lsp
+        document-color-nvim
+        lsp_extensions-nvim
+        lsp_signature-nvim
+        lspkind-nvim
+        null-ls-nvim
+        nvim-lspconfig
+        SchemaStore-nvim
 
-      # completion
-      cmp-cmdline
-      cmp-nvim-lsp
-      cmp-nvim-lsp-document-symbol
-      cmp-nvim-lua
-      cmp-path
-      cmp-under-comparator
-      cmp_luasnip
-      nvim-cmp
+        # completion
+        cmp-cmdline
+        cmp-nvim-lsp
+        cmp-nvim-lsp-document-symbol
+        cmp-nvim-lua
+        cmp-path
+        cmp-under-comparator
+        cmp_luasnip
+        nvim-cmp
 
-      # dap
-      nvim-dap
-      nvim-dap-ui
+        # dap
+        nvim-dap
+        nvim-dap-ui
 
-      # writing
-      pkgs.vimPlugins.neorg
+        # writing
+        pkgs.vimPlugins.neorg
 
-      # language-specific
-      crates-nvim
-      dhall-vim
-      flutter-tools-nvim
-      lua-dev-nvim
-      nim-nvim
-      nvim-luaref
-      nvim-parinfer
-      package-info-nvim
-      purescript-vim
-      rasi-vim
-      vim-coffee-script
-      yaml-companion-nvim
-      yuck-vim
+        # language-specific
+        crates-nvim
+        dhall-vim
+        flutter-tools-nvim
+        lua-dev-nvim
+        nim-nvim
+        nvim-luaref
+        nvim-parinfer
+        package-info-nvim
+        purescript-vim
+        rasi-vim
+        vim-coffee-script
+        yaml-companion-nvim
+        yuck-vim
 
-      # colors
-      nightfox-nvim
+        # colors
 
-      # telescope
-      telescope-dap-nvim
-      telescope-frecency-nvim
-      telescope-nvim
-      telescope-zf-native-nvim
+        # telescope
+        telescope-dap-nvim
+        telescope-frecency-nvim
+        telescope-nvim
+        telescope-zf-native-nvim
 
-      # snippets
-      friendly-snippets
-      LuaSnip
-    ];
+        # snippets
+        friendly-snippets
+        LuaSnip
+      ];
     extraConfig = with pkgs.rice; ''
       set runtimepath^=${./nvim}
 

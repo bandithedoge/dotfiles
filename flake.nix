@@ -29,6 +29,7 @@
       flake = false;
       url = "github:bandithedoge/nur-packages";
     };
+    hyprland.url = "github:hyprwm/Hyprland";
     hyprpaper.url = "github:hyprwm/hyprpaper";
     mozilla.url = "github:mozilla/nixpkgs-mozilla";
     neorg.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
@@ -56,6 +57,7 @@
     ...
   } @ inputs: let
     overlays = with inputs; [
+      hyprland.overlays.default
       hyprpaper.overlays.default
       mozilla.overlays.firefox
       neorg.overlays.default
@@ -197,6 +199,7 @@
 
       home = {
         modules = with inputs; [
+          hyprland.homeManagerModules.default
           nix-index-database.hmModules.nix-index
         ];
 

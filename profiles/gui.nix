@@ -34,7 +34,7 @@
   services.xserver = {
     enable = false;
     displayManager = {
-      sessionPackages = with pkgs; [river];
+      sessionPackages = with pkgs; [hyprland];
     };
   };
 
@@ -58,7 +58,7 @@
 
   security = {
     polkit.enable = true;
-    pam.services.waylock = {};
+    pam.services.gtklock = {};
   };
 
   programs.steam.enable = true;
@@ -70,6 +70,7 @@
     extraPortals = with pkgs; [
       xdg-desktop-portal-gtk
       xdg-desktop-portal-wlr
+      xdg-desktop-portal-hyprland
     ];
   };
 }

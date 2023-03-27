@@ -2,7 +2,6 @@
   rofi-stuff = pkgs.callPackage ./rofi {};
 in {
   home.packages = with pkgs; [
-    river
     wev
     wl-clipboard
   ];
@@ -14,84 +13,119 @@ in {
       preload = ${wallpaper}
       wallpaper = , ${wallpaper}
     '';
-    # river {{{
-    "river/init".source = let
-      mod = "Super";
-      color = c: "0x${pkgs.lib.removePrefix "#" c}";
+  };
+
+  wayland.windowManager.hyprland = {
+    enable = true;
+    extraConfig = let
+      color = c: "0xFF${pkgs.lib.removePrefix "#" c}";
+      mod = "SUPER";
     in
-      with pkgs.rice;
-        pkgs.writeShellScript "river" ''
-          riverctl map normal ${mod} Return spawn ${terminal}
-          riverctl map normal ${mod} Space spawn "${menu}"
-          riverctl map normal ${mod} B spawn $BROWSER
-          riverctl map normal ${mod} P spawn strawberry
-          riverctl map normal ${mod}+Control P spawn ${rofi-stuff}/bin/keepass
-          riverctl map normal ${mod} D spawn discordcanary
-          riverctl map normal None Print spawn ${pkgs.writeShellScript "screenshot" ''
-            sel=$(${pkgs.slurp}/bin/slurp -d -b "${base00}AA" -c "${base0F}FF" -B "${base00}FF" -F "${uiFont}")
-            ${pkgs.grim}/bin/grim -g "$sel" - | ${pkgs.swappy}/bin/swappy -f -
-          ''}
+      with pkgs.rice; ''
+        general {
+          border_size = 2
+          gaps_in = 5
+          gaps_out = 10
+          layout = master
+          resize_on_border = true
+          col.inactive_border = ${color base00}
+          col.active_border = ${color base0F}
+        }
 
-          riverctl map normal ${mod} W close
-          riverctl map normal ${mod}+Control Q exit
-          riverctl map normal ${mod} T toggle-float
-          riverctl map normal ${mod} F toggle-fullscreen
+        decoration {
+          multisample_edges = false
+          blur = false
+        }
 
-          riverctl map normal ${mod} J focus-view next
-          riverctl map normal ${mod} K focus-view previous
-          riverctl map normal ${mod}+Shift J swap next
-          riverctl map normal ${mod}+Shift K swap previous
-          riverctl map normal ${mod}+Control H send-layout-cmd rivertile "main-ratio -0.05"
-          riverctl map normal ${mod}+Control L send-layout-cmd rivertile "main-ratio +0.05"
-          riverctl map-pointer normal ${mod} BTN_LEFT move-view
-          riverctl map-pointer normal ${mod} BTN_RIGHT resize-view
+        input {
+          kb_layout = pl
+          scroll_method = 2fg
+          touchpad {
+            disable_while_typing = false
+            natural_scroll = true
+            tap-to-click = false
+          }
+        }
 
-          riverctl map normal ${mod} H focus-output previous
-          riverctl map normal ${mod} L focus-output next
-          riverctl map normal ${mod}+Shift H send-to-output previous
-          riverctl map normal ${mod}+Shift L send-to-output next
+        misc {
+          disable_hyprland_logo = true
+          disable_splash_rendering = true
+          mouse_move_enables_dpms = true
+          key_press_enables_dpms = true
+          disable_autoreload = true
+          focus_on_activate = true
+          animate_manual_resizes = false
+          animate_mouse_windowdragging = false
+        }
 
-          for i in $(seq 1 9)
-          do
-            tags=$((1 << ($i - 1)))
-            riverctl map normal ${mod} $i set-focused-tags $tags
-            riverctl map normal ${mod}+Shift $i set-view-tags $tags
-          done
+        animations {
+          animation = windows, 1, 2, default, popin 80%
+          animation = windowsOut, 0, 2, default
+          animation = border, 1, 2, default
+          animation = workspaces, 1, 2, default, fade
+          animation = fade, 1, 2, default
+        }
 
-          riverctl map normal None XF86AudioMute spawn "amixer set Master toggle"
-          riverctl map normal None XF86AudioRaiseVolume spawn "amixer set Master 5%+"
-          riverctl map normal None XF86AudioLowervolume spawn "amixer set Master 5%-"
-          riverctl map normal None XF86AudioPlay spawn "playerctl play-pause"
-          riverctl map normal None XF86AudioPrev spawn "playerctl previous"
-          riverctl map normal None XF86AudioNext spawn "playerctl next"
+        master {
+          new_on_top = true
+          mfact = 0.5
+        }
 
-          riverctl map-switch normal lid close spawn "${pkgs.waylock}/bin/waylock -init-color ${color base00} -input-color ${color base02} -fail-color ${color base08}"
+        ${builtins.concatStringsSep "\n" (map (class: "windowrulev2 = opacity 0.95 0.85, class:^(${class})$\n") [
+          "kitty"
+        ])}
 
-          riverctl keyboard-layout pl
-          riverctl input pointer-2-7-SynPS/2_Synaptics_TouchPad disable-while-typing disabled
-          riverctl input pointer-2-7-SynPS/2_Synaptics_TouchPad natural-scroll enabled
-          riverctl input pointer-2-7-SynPS/2_Synaptics_TouchPad scroll-method two-finger
-          riverctl input pointer-2-7-SynPS/2_Synaptics_TouchPad tap disabled
+        env = QT_QPA_PLATFORM, wayland;xcb
+        env = SDL_VIDEODRIVER, wayland
 
-          riverctl background-color ${color base00}
-          riverctl border-color-focused ${color base0F}
-          riverctl border-color-unfocused ${color base00}
-          riverctl border-width 2
-          riverctl focus-follows-cursor normal
+        exec-once = ${pkgs.hyprpaper}/bin/hyprpaper
+        exec-once = ${pkgs.waybar-hyprland}/bin/waybar
 
-          riverctl default-layout rivertile
-          rivertile \
-            -view-padding 5 \
-            -outer-padding 5 \
-            -main-ratio 0.5 \
-            &
+        bindm = ${mod}, mouse:272, movewindow
+        bindm = ${mod}, mouse:273, resizewindow
 
-          ${pkgs.hyprpaper}/bin/hyprpaper &
-          ${pkgs.waybar}/bin/waybar &
+        bind = ${mod}, Return, exec, ${terminal}
+        bind = ${mod}, Space, exec, ${menu}
+        bind = ${mod}, b, exec, $BROWSER
+        bind = ${mod}, p, exec, strawberry
+        bind = ${mod} CTRL, p, exec, ${rofi-stuff}/bin/keepass
+        bind = ${mod}, d, exec, discordcanary
+        bind = , Print, exec, ${pkgs.writeShellScript "screenshot" ''
+          sel=$(${pkgs.slurp}/bin/slurp -d -b "${base00}AA" -c "${base0F}FF" -B "${base00}FF" -F "${uiFont}")
+          ${pkgs.grim}/bin/grim -g "$sel" - | ${pkgs.swappy}/bin/swappy -f -
+        ''}
 
-          exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=river
-        '';
-    # }}}
+        bind = , XF86AudioMute, exec, amixer set Master toggle
+        bind = , XF86AudioRaiseVolume, exec, amixer set Master 5%+
+        bind = , XF86AudioLowerVolume, exec, amixer set Master 5%-
+        bind = , XF86AudioPlay, exec, playerctl play-pause
+        bind = , XF86AudioPrev, exec, playerctl previous
+        bind = , XF86AudioNext, exec, playerctl next
+
+        binde = ${mod}, w, killactive
+        bind = ${mod} CTRL, q, exit
+        bind = ${mod}, t, togglefloating
+        bind = ${mod}, f, fullscreen
+
+        binde = ${mod}, j, layoutmsg, cyclenext
+        binde = ${mod}, k, layoutmsg, cycleprev
+        binde = ${mod} SHIFT, j, layoutmsg, swapnext
+        binde = ${mod} SHIFT, k, layoutmsg, swapprev
+        binde = ${mod} CTRL, h, resizeactive, -10 0
+        binde = ${mod} CTRL, j, resizeactive, 0 10
+        binde = ${mod} CTRL, k, resizeactive, 0 -10
+        binde = ${mod} CTRL, l, resizeactive, 10 0
+
+        binde = ${mod}, h, focusmonitor, -1
+        binde = ${mod}, l, focusmonitor, +1
+        binde = ${mod} SHIFT, h, movetoworkspace, m-1
+        binde = ${mod} SHIFT, l, movetoworkspace, m+1
+
+        ${builtins.concatStringsSep "\n" (map (x: ''
+          bind = ${mod}, ${x}, workspace, ${x}
+          bind = ${mod} SHIFT, ${x}, movetoworkspace, ${x}
+        '') (map builtins.toString (pkgs.lib.range 1 9)))}
+      '';
   };
 
   programs.waybar = {
@@ -107,8 +141,8 @@ in {
         position = "top";
         height = 27;
         modules-left = [
-          "river/tags"
-          "river/window"
+          "wlr/workspaces"
+          "hyprland/window"
         ];
         modules-right = [
           "tray"
@@ -121,6 +155,9 @@ in {
           "clock"
         ];
         modules = {
+          "hyprland/window" = {
+            max-length = 64;
+          };
           "custom/network" = {
             exec = pkgs.writeShellScript "network" ''
               network () {
@@ -236,6 +273,25 @@ in {
     };
     style = pkgs.rice.compileSCSS ./waybar.scss;
   }; # }}}
+
+  services.swayidle = let
+    command = "${pkgs.gtklock}/bin/gtklock";
+  in {
+    enable = true;
+    systemdTarget = "graphical-session.target";
+    timeouts = [
+      {
+        timeout = 120;
+        inherit command;
+      }
+    ];
+    events = [
+      {
+        event = "before-sleep";
+        inherit command;
+      }
+    ];
+  };
 
   services.mako = with pkgs.rice; {
     enable = true;
