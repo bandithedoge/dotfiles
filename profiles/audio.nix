@@ -1,11 +1,7 @@
-{
-  config,
-  pkgs,
-  ...
-}: {
+{...}: {
   services.pipewire = {
     enable = true;
-
+    audio.enable = true;
     pulse.enable = true;
     jack.enable = true;
     alsa = {
@@ -18,7 +14,7 @@
     rate = 48000;
     samples = 512;
   in {
-    "pipewire/pipewire.conf".text = builtins.toJSON {
+    "pipewire/pipewire.conf.d/99-ll.conf".text = builtins.toJSON {
       "context.properties" = {
         "link.max-buffers" = 16;
         "log.level" = 2;
@@ -42,11 +38,8 @@
         }
         {name = "libpipewire-module-protocol-native";}
         {name = "libpipewire-module-profiler";}
-        {name = "libpipewire-module-metadata";}
         {name = "libpipewire-module-spa-device-factory";}
         {name = "libpipewire-module-spa-node-factory";}
-        {name = "libpipewire-module-client-node";}
-        {name = "libpipewire-module-client-device";}
         {
           name = "libpipewire-module-portal";
           flags = ["ifexists" "nofail"];
@@ -60,7 +53,7 @@
         {name = "libpipewire-module-session-manager";}
       ];
     };
-    "pipewire/pipewire-pulse.conf".text = builtins.toJSON {
+    "pipewire/pipewire-pulse.conf.d/99-ll.conf".text = builtins.toJSON {
       "context.properties" = {
         "log.level" = 2;
       };
@@ -76,20 +69,7 @@
           flags = ["ifexists" "nofail"];
         }
         {name = "libpipewire-module-protocol-native";}
-        {name = "libpipewire-module-client-node";}
         {name = "libpipewire-module-adapter";}
-        {name = "libpipewire-module-metadata";}
-        {
-          name = "libpipewire-module-protocol-pulse";
-          args = {
-            "pulse.min.req" = "${builtins.toString samples}/${builtins.toString rate}";
-            "pulse.default.req" = "${builtins.toString samples}/${builtins.toString rate}";
-            "pulse.max.req" = "${builtins.toString samples}/${builtins.toString rate}";
-            "pulse.min.quantum" = "${builtins.toString samples}/${builtins.toString rate}";
-            "pulse.max.quantum" = "${builtins.toString samples}/${builtins.toString rate}";
-            "server.address" = ["unix:native"];
-          };
-        }
       ];
       "stream.properties" = {
         "node.latency" = "${builtins.toString samples}/${builtins.toString rate}";
