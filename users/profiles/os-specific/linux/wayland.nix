@@ -281,7 +281,7 @@ in {
     systemdTarget = "graphical-session.target";
     timeouts = [
       {
-        timeout = 120;
+        timeout = 300;
         inherit command;
       }
     ];

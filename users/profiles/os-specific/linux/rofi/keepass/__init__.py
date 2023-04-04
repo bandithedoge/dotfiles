@@ -15,7 +15,7 @@ def format_entry(entry: pykeepass.entry.Entry) -> str:
 
 
 def type(string: str) -> None:
-    run(["wtype", string])
+    run(["xdotool", "type", string])
 
 
 def main() -> None:

@@ -100,10 +100,8 @@
                      d.checkmake
                      d.fish
                      d.shellcheck
-                     d.statix
                      a.gitrebase
-                     a.shellcheck
-                     a.statix]))
+                     a.shellcheck]))
 
 (let [lsp_signature (require :lsp_signature)]
   (lsp_signature.setup {:bind true

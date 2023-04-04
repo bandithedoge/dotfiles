@@ -3,7 +3,6 @@
 (local dbus (require :dbus_proxy))
 (local gears (require :gears))
 (local helpers (require :vicious.helpers))
-(local naughty (require :naughty))
 (local vicious (require :vicious))
 (local wibox (require :wibox))
 
@@ -25,6 +24,9 @@
   (let [w (wibox.widget.graph)]
     (w:set_width 40)
     w))
+
+(fn red [text]
+  (.. "<span foreground='" _G.base08 "'>" text :</span>))
 
 (lambda [s]
   (set s.mytasklist
@@ -52,109 +54,111 @@
                                (button {} 4 #(awful.layout.inc 1))
                                (button {} 5 #(awful.layout.inc -1))))
   ;; volume {{{
-  (set s.myvolumeicon (icon ""))
-  (set s.myvolumetext (wibox.widget.textbox))
-  (set s.myvolumebox (widget [s.myvolumeicon s.myvolumetext]))
-  (let [update-widget (fn []
-                        (awful.spawn.easy_async "amixer get Master"
-                                                #(let [(volume state) (string.match $1
-                                                                                    "%[([%d]+)%%%].*%[([%l]*)%]")]
-                                                   (s.myvolumeicon:set_markup (if (= state
-                                                                                     :on)
-                                                                                  "墳"
-                                                                                  (.. "<span foreground='"
-                                                                                      _G.base08
-                                                                                      "'>"
-                                                                                      "婢</span>")))
-                                                   (s.myvolumetext:set_markup (if (= state
-                                                                                     :on)
-                                                                                  (.. volume
-                                                                                      "%")
-                                                                                  "")))))]
-    (update-widget)
-    (awful.spawn.with_line_callback "alsactl monitor" {:stdout update-widget}))
-  (s.myvolumebox:connect_signal "button::press"
-                                #(match $4
-                                   1 (awful.spawn "amixer set Master toggle")
-                                   3 (awful.spawn :pavucontrol)
-                                   4 (awful.spawn "amixer set Master 5%+")
-                                   5 (awful.spawn "amixer set Master 5%-")))
+  (let [icon (icon "")
+        text (wibox.widget.textbox)]
+    (set s.myvolumebox (widget [icon text]))
+    (let [update-widget (fn []
+                          (awful.spawn.easy_async "amixer get Master"
+                                                  #(let [(volume state) (string.match $1
+                                                                                      "%[([%d]+)%%%].*%[([%l]*)%]")]
+                                                     (icon:set_markup (if (= state
+                                                                             :on)
+                                                                          "墳"
+                                                                          (red "婢")))
+                                                     (text:set_markup (if (= state
+                                                                             :on)
+                                                                          (.. volume
+                                                                              "%")
+                                                                          "")))))]
+      (update-widget)
+      (awful.spawn.with_line_callback "alsactl monitor" {:stdout update-widget}))
+    (s.myvolumebox:connect_signal "button::press"
+                                  #(match $4
+                                     1 (awful.spawn "amixer set Master toggle")
+                                     3 (awful.spawn :pavucontrol)
+                                     4 (awful.spawn "amixer set Master 5%+")
+                                     5 (awful.spawn "amixer set Master 5%-"))))
   ;; }}}
   (when (= _G.hostname :thonkpad)
     ;; network {{{
-    (set s.mywifiicon (icon ""))
-    (set s.mywifibox (wibox.widget.textbox))
-    (set s.myneticon (icon ""))
-    (set s.mynetworkbox (widget [s.mywifiicon s.mywifibox s.myneticon]))
-    (s.mynetworkbox:connect_signal "button::press" #(awful.spawn :connman-gtk))
-    (let [p (dbus.Proxy:new {:bus dbus.Bus.SYSTEM
-                             :name :net.connman
-                             :path :/net/connman/technology/wifi
-                             :interface :net.connman.Technology})
-          parse-info #(if (= $1 "Not connected.") nil
-                          ($1:match "SSID: ([^\\n]*)"))
-          update-widget #(awful.spawn.easy_async "iw dev wlp3s0 link"
-                                                 #(let [info (parse-info $1)]
-                                                    (s.mywifiicon:set_markup (if (not info)
-                                                                                 (.. "<span foreground='"
-                                                                                     _G.base08
-                                                                                     "'>睊</span>")
-                                                                                 "直"))
-                                                    (s.mywifibox:set_markup (or info
-                                                                                ""))))]
-      (update-widget)
-      (p:connect_signal update-widget :PropertyChanged))
-    (let [p (dbus.Proxy:new {:bus dbus.Bus.SYSTEM
-                             :name :net.connman
-                             :path :/net/connman/technology/ethernet
-                             :interface :net.connman.Technology})
-          update-widget #(awful.spawn.easy_async "cat /sys/class/net/enp0s25/carrier"
-                                                 #(s.myneticon:set_markup (if (= (tonumber $1)
-                                                                                 0)
-                                                                              (.. "<span foreground='"
-                                                                                  _G.base08
-                                                                                  "'></span>")
-                                                                              "")))]
-      (update-widget)
-      (p:connect_signal update-widget :PropertyChanged))
+    (let [wifi-icon (icon "")
+          ethernet-icon (icon "")
+          text (wibox.widget.textbox)]
+      (set s.mynetworkbox (widget [ethernet-icon wifi-icon text]))
+      (let [update-widget #(do
+                             (awful.spawn.easy_async "cat /sys/class/net/wlp3s0/carrier"
+                                                     #((if (not= $4 0)
+                                                           (do
+                                                             (wifi-icon:set_markup (red "睊"))
+                                                             (text:set_visible false))
+                                                           (if (= (tonumber $1)
+                                                                  1)
+                                                               (do
+                                                                 (wifi-icon:set_markup "直")
+                                                                 (awful.spawn.easy_async "iwgetid -r"
+                                                                                         #(if (not= $4
+                                                                                                    0)
+                                                                                              (text:set_visible false)
+                                                                                              (do
+                                                                                                (text:set_markup $1)
+                                                                                                (text:set_visible true)))))
+                                                               (do
+                                                                 (wifi-icon:set_markup "睊")
+                                                                 (text:set_visible false))))))
+                             (awful.spawn.easy_async "cat /sys/class/net/enp0s25/carrier"
+                                                     #(ethernet-icon:set_markup (if (= (tonumber $1)
+                                                                                       1)
+                                                                                    ""
+                                                                                    (red "")))))]
+        (update-widget)
+        (let [wifi (dbus.Proxy:new {:bus dbus.Bus.SYSTEM
+                                    :name :net.connman
+                                    :path :/net/connman/technology/wifi
+                                    :interface :net.connman.Technology})
+              ethernet (dbus.Proxy:new {:bus dbus.Bus.SYSTEM
+                                        :name :net.connman
+                                        :path :/net/connman/technology/ethernet
+                                        :interface :net.connman.Technology})]
+          (wifi:connect_signal update-widget :PropertyChanged)
+          (ethernet:connect_signal update-widget :PropertyChanged)))
+      (s.mynetworkbox:connect_signal "button::press"
+                                     #(awful.spawn :connman-gtk)))
     ;; }}}
     ;; battery {{{
-    (set s.mybatteryicon (icon ""))
-    (set s.mybatterytext (wibox.widget.textbox))
-    (set s.mybatterybox (widget [s.mybatteryicon s.mybatterytext]))
-    (let [p (dbus.Proxy:new {:bus dbus.Bus.SYSTEM
-                             :name :org.freedesktop.UPower
-                             :path :/org/freedesktop/UPower/devices/DisplayDevice
-                             :interface :org.freedesktop.DBus.Properties})
-          update-widget #(let [battery (helpers.pathtotable :/sys/class/power_supply/BAT0)
-                               remaining (if battery.charge_now
-                                             battery.charge_now
-                                             battery.energy_now)
-                               capacity (if battery.charge_now
-                                            battery.charge_full
-                                            battery.energy_full)
-                               percentage (math.min (math.floor (* (/ remaining
-                                                                      capacity)
-                                                                   100))
-                                                    100)
-                               icons {"Full\n" ""
-                                      "Unknown\n" ""
-                                      "Charged\n" ""
-                                      "Charging\n" ""
-                                      "Discharging\n" ""}]
-                           (s.mybatteryicon:set_markup (if (<= percentage 15)
-                                                           (if (not= battery.status
-                                                                     "Charging\n")
-                                                               (.. "<span foreground='"
-                                                                   _G.base08
-                                                                   "'></span>")
-                                                               (. icons
-                                                                  battery.status))
-                                                           (. icons
-                                                              battery.status)))
-                           (s.mybatterytext:set_markup (.. percentage "%")))]
-      (update-widget)
-      (p:connect_signal update-widget :PropertiesChanged)))
+    (let [icon (icon "")
+          text (wibox.widget.textbox)]
+      (set s.mybatterybox (widget [icon text]))
+      (let [p (dbus.Proxy:new {:bus dbus.Bus.SYSTEM
+                               :name :org.freedesktop.UPower
+                               :path :/org/freedesktop/UPower/devices/DisplayDevice
+                               :interface :org.freedesktop.DBus.Properties})
+            update-widget #(let [battery (helpers.pathtotable :/sys/class/power_supply/BAT0)
+                                 remaining (if battery.charge_now
+                                               battery.charge_now
+                                               battery.energy_now)
+                                 capacity (if battery.charge_now
+                                              battery.charge_full
+                                              battery.energy_full)
+                                 percentage (math.min (math.floor (* (/ remaining
+                                                                        capacity)
+                                                                     100))
+                                                      100)
+                                 icons {"Full\n" ""
+                                        "Unknown\n" ""
+                                        "Charged\n" ""
+                                        "Charging\n" ""
+                                        "Discharging\n" ""}]
+                             (icon:set_markup (if (<= percentage 15)
+                                                  (if (not= battery.status "Charging
+")
+                                                      (.. "<span foreground='"
+                                                          _G.base08
+                                                          "'></span>")
+                                                      (. icons battery.status))
+                                                  (. icons battery.status)))
+                             (text:set_markup (.. percentage "%")))]
+        (update-widget)
+        (p:connect_signal update-widget :PropertiesChanged))))
   ;; }}}
   (set s.mywibox (awful.wibar {:position :top
                                :screen s

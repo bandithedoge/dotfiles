@@ -23,4 +23,5 @@
     );
 
   environment.shells = with pkgs; [fish bashInteractive];
+  programs.fish.enable = true;
 }

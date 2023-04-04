@@ -2,40 +2,41 @@
   environment.systemPackages = with pkgs; [
     winetricks
     xorg.setxkbmap
-    rice.gtk.theme.package
-    rice.gtk.iconTheme.package
   ];
-
-  services.greetd = {
-    enable = true;
-    settings.default_session = {
-      command = "${pkgs.cage}/bin/cage -s -- ${pkgs.greetd.regreet}/bin/regreet";
-      user = "greeter";
-    };
-  };
-
-  systemd.tmpfiles.rules = [
-    "d /var/log/regreet 0755 greeter greeter - -"
-    "d /var/cache/regreet 0755 greeter greeter - -"
-  ];
-
-  environment.etc."greetd/regreet.toml".source = with pkgs.rice;
-    (pkgs.formats.toml {}).generate "regreet.toml" {
-      background = wallpaperBlurred;
-      GTK = {
-        application_prefer_dark_theme = true;
-        cursor_theme_name = gtk.cursorTheme.name;
-        font_name = "${uiFont} 16";
-        icon_theme_name = gtk.iconTheme.name;
-        theme_name = gtk.theme.name;
-      };
-    };
 
   services.xserver = {
-    enable = false;
+    enable = true;
     displayManager = {
-      sessionPackages = with pkgs; [hyprland];
+      lightdm = {
+        enable = true;
+        background = pkgs.rice.wallpaperBlurred;
+        greeters.slick = {
+          enable = true;
+          inherit (pkgs.rice.gtk) theme iconTheme cursorTheme;
+          font.name = pkgs.rice.uiFont;
+        };
+        greeters.gtk = {
+          enable = false;
+          inherit (pkgs.rice.gtk) theme iconTheme cursorTheme;
+          clock-format = "%A %d %B %T";
+          indicators = ["~host" "~spacer" "~clock" "~spacer" "~power"];
+          extraConfig = with pkgs.rice; ''
+            background = ${wallpaperBlurred}
+            font-name = ${uiFont}
+          '';
+        };
+      };
+      sx.enable = true;
     };
+    windowManager.session = [
+      {
+        name = "sx";
+        start = ''
+          ${pkgs.sx}/bin/sx
+        '';
+      }
+    ];
+    layout = "pl";
   };
 
   services.accounts-daemon.enable = true;
@@ -56,10 +57,7 @@
     };
   };
 
-  security = {
-    polkit.enable = true;
-    pam.services.gtklock = {};
-  };
+  security.polkit.enable = true;
 
   programs.steam.enable = true;
 

@@ -39,53 +39,73 @@
 
   gtk = let
     color = pkgs.lib.removePrefix "#";
-    src = pkgs.writeText "materia-rice" ''
-      FG=${color base00}
-      BG=${color base05}
-      HDR_BG=${color base00}
-      HDR_FG=${color base04}
-      BTN_BG=${color base05}
-      ACCENT_BG=${color base05}
-      SEL_BG=${color base0F}
-      TXT_BG=${color base05}
+    src = pkgs.writeText "materia-rice" (pkgs.lib.generators.toKeyValue {} {
+      BG = color base00;
+      FG = color base05;
+      HDR_BG = color base02;
+      HDR_FG = color base04;
+      HDR_BTN_BG = color base01;
+      HDR_BTN_FG = color base05;
+      BTN_BG = color base02;
+      BTN_FG = color base05;
+      ACCENT_BG = color base0F;
+      ACCENT_FG = color base00;
+      SEL_BG = color base0F;
+      TXT_BG = color base05;
 
-      ICONS_LIGHT_FOLDER=${color base05}
-      ICONS_MEDIUM=${color base03}
-      ICONS_DARK=${color base0F}
-      ICONS_SYMBOLIC_ACTION=${color base05}
-      ICONS_SYMBOLIC_PANEL=${color base04}
+      TERMINAL_BACKGROUND = color base00;
+      TERMINAL_FOREGROUND = color base05;
+      TERMINAL_CURSOR = color base0F;
+      TERMINAL_COLOR0 = color base01;
+      TERMINAL_COLOR1 = color base08;
+      TERMINAL_COLOR2 = color base0B;
+      TERMINAL_COLOR3 = color base09;
+      TERMINAL_COLOR4 = color base0D;
+      TERMINAL_COLOR5 = color base0E;
+      TERMINAL_COLOR6 = color base0C;
+      TERMINAL_COLOR7 = color base06;
+      TERMINAL_COLOR8 = color base02;
+      TERMINAL_COLOR9 = color base12;
+      TERMINAL_COLOR10 = color base14;
+      TERMINAL_COLOR11 = color base13;
+      TERMINAL_COLOR12 = color base16;
+      TERMINAL_COLOR13 = color base17;
+      TERMINAL_COLOR14 = color base15;
+      TERMINAL_COLOR15 = color base0F;
 
-      TERMINAL_BACKGROUND=${color base00}
-      TERMINAL_FOREGROUND=${color base05}
-      TERMINAL_CURSOR=${color base0F}
-      TERMINAL_COLOR0=${color base01}
-      TERMINAL_COLOR1=${color base08}
-      TERMINAL_COLOR2=${color base0B}
-      TERMINAL_COLOR3=${color base09}
-      TERMINAL_COLOR4=${color base0D}
-      TERMINAL_COLOR5=${color base0E}
-      TERMINAL_COLOR6=${color base0C}
-      TERMINAL_COLOR7=${color base06}
-      TERMINAL_COLOR8=${color base02}
-      TERMINAL_COLOR9=${color base12}
-      TERMINAL_COLOR10=${color base14}
-      TERMINAL_COLOR11=${color base13}
-      TERMINAL_COLOR12=${color base16}
-      TERMINAL_COLOR13=${color base17}
-      TERMINAL_COLOR14=${color base15}
-      TERMINAL_COLOR15=${color base0F}
-    '';
+      MATERIA_COLOR_VARIANT = "dark";
+      MATERIA_STYLE_COMPACT = "True";
+      MATERIA_SURFACE = color base02;
+      MATERIA_VIEW = color base01;
+    });
   in {
     theme = {
-      name = "adw-gtk3";
-      package = pkgs.adw-gtk3;
+      name = "Materia-Rice";
+      package = pkgs.materia-theme.overrideAttrs (old: {
+        nativeBuildInputs =
+          old.nativeBuildInputs
+          ++ (with pkgs; [
+            bc
+            optipng
+            (runCommandLocal "rendersvg" {} ''
+              mkdir -p $out/bin
+              ln -s ${resvg}/bin/resvg $out/bin/rendersvg
+            '')
+          ]);
+        patchPhase = ''
+          sed -e '/handle-horz-.*/d' -e '/handle-vert-.*/d' \
+            -i ./src/gtk-2.0/assets.txt
+
+          export HOME="$NIX_BUILD_ROOT"
+
+          patchShebangs .
+          ./change_color.sh -o Materia-Rice ${src} -t $out/share/themes -i False
+        '';
+      });
     };
     iconTheme = {
-      name = "suruplus-rice";
-      package = pkgs.oomoxPlugins.icons-suruplus.generate {
-        inherit src;
-        name = "suruplus-rice";
-      };
+      name = "Papirus-Dark";
+      package = pkgs.papirus-icon-theme;
     };
     cursorTheme = {
       name = "phinger-cursors";

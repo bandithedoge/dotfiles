@@ -55,12 +55,18 @@
                              :lualine_y [[#(.. " " vim.bo.shiftwidth)]
                                          :fileformat
                                          :filetype]
-                             :lualine_z [:location]}}))
+                             :lualine_z [:location]}
+                  :tabline {:lualine_a [{1 :buffers
+                                         :symbols {:modified " "
+                                                   :alternate_file ""}
+                                         :padding 2
+                                         :buffers_color {:active {:bg _G.base0F
+                                                                  :fg _G.base00}
+                                                         :inactive {:bg _G.base02
+                                                                    :fg _G.base03}}}]}}))
 
-(let [bufferline (require :bufferline)]
-  (bufferline.setup {:animation false
-                     :auto_hide true
-                     :maximum_padding 2
-                     :icon_separator_active ""
-                     :icon_separator_inactive ""
-                     :icon_close_tab_modified ""}))
+; (let [bufferline (require :bufferline)]
+;   (bufferline.setup {:animation false
+;                      :auto_hide true
+;                      :maximum_padding 2
+;                      :icons {:modified ""}}))

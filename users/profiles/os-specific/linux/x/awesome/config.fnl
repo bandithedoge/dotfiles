@@ -4,9 +4,11 @@
 (local awful (require :awful))
 (local beautiful (require :beautiful))
 (local gears (require :gears))
-(local naughty (require :naughty))
 
 (local keys (require :keys))
+
+; https://github.com/awesomeWM/awesome/issues/1285
+(tset package :loaded :naughty.dbus {})
 
 (local join gears.table.join)
 (local button awful.button)
@@ -21,24 +23,24 @@
 
 (root.keys keys.globalkeys)
 
-(set naughty.config.presets.critical {:bg _G.base08 :fg _G.base00 :timeout 0})
+(awful.spawn.easy_async "xss-lock -- betterlockscreen -l")
 
 ;; error handling {{{
 (fn error [text]
-  (naughty.notify {:preset naughty.config.presets.critical :title :FUCK : text}))
+  (awful.spawn.easy_async (.. "notify-send" text)))
 
 (when awesome.startup_errors
   (error awesome.startup_errors))
 
 (do
-  (var in_error false)
+  (var in-error false)
   (awesome.connect_signal "debug::error"
                           (lambda [err]
-                            (when in_error
+                            (when in-error
                               nil)
-                            (set in_error true)
+                            (set in-error true)
                             (error (tostring err))
-                            (set in_error false))))
+                            (set in-error false))))
 
 ;; }}}
 

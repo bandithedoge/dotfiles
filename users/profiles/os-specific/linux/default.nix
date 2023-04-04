@@ -7,7 +7,8 @@
 in {
   imports = [
     ./audio.nix
-    ./wayland.nix
+    # ./wayland.nix
+    ./x
   ];
 
   home = {
@@ -24,6 +25,7 @@ in {
       jadx
       keepassxc
       krita
+      libreoffice-fresh
       nim
       pavucontrol
       pciutils

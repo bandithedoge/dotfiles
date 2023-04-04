@@ -1,11 +1,10 @@
-{
-  config,
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   home.packages = with pkgs; [
     (lutris.override {extraLibraries = pkgs: with pkgs; [mangohud];})
+    bastet
+    nethack
     opentyrian
+    unnethack
     vitetris
   ];
 

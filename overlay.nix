@@ -1,4 +1,4 @@
-_: prev: {
+final: prev: {
   rice = prev.callPackage ./rice.nix {};
   dummy = prev.hello;
 

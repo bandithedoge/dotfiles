@@ -5,7 +5,7 @@ pkgs.poetry2nix.mkPoetryApplication rec {
 
   postInstall = ''
     wrapProgram $out/bin/keepass \
-      --prefix PATH : ${pkgs.lib.makeBinPath [pkgs.wtype]}
+      --prefix PATH : ${pkgs.lib.makeBinPath [pkgs.xdotool]}
   '';
 
   overrides = pkgs.poetry2nix.overrides.withDefaults (self: super: {

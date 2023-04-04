@@ -1,6 +1,5 @@
 {
   suites,
-  config,
   pkgs,
   ...
 }: {
@@ -44,8 +43,12 @@
       event = "button/lid.*";
       action = ''
         case "$1" in
-          close) awesome-client "vicious.suspend()";;
-          open) awesome-client "vicious.activate()";;
+          close) awesome-client "vicious.suspend()" ;;
+          open)
+            awesome-client "vicious.activate()"
+            modprobe -r psmouse
+            modprobe psmouse
+            ;;
         esac
       '';
     };
