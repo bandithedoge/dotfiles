@@ -83,15 +83,15 @@
 
 ;; cinnamon.nvim {{{
 
-(let [cinnamon (require :cinnamon)]
-  (cinnamon.setup {:extra_keymaps true :default_delay 3 :centered false}))
+; (let [cinnamon (require :cinnamon)]
+;   (cinnamon.setup {:extra_keymaps true :default_delay 3 :centered false}))
 
 ;; }}}
 
 ;; flare.nvim {{{
 
-(let [flare (require :flare)]
-  (flare.setup {:hl_group :PmenuSel}))
+; (let [flare (require :flare)]
+;   (flare.setup {:hl_group :PmenuSel}))
 
 ;; }}}
 

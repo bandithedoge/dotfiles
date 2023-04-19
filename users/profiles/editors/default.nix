@@ -146,10 +146,10 @@
 
       # ui
       FTerm-nvim
-      cinnamon-nvim
+      # cinnamon-nvim
       dressing-nvim
       fidget-nvim
-      flare-nvim
+      # flare-nvim
       fm-nvim
       foldsigns-nvim
       gitsigns-nvim

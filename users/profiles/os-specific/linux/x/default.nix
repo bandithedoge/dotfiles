@@ -67,6 +67,8 @@ in {
       ]) [
         "kitty"
       ];
+    vSync = false;
+    backend = "egl";
   };
 
   services.dunst = {
