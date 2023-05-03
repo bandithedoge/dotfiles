@@ -3,3 +3,4 @@
 "topgrade.toml" = "~/AppData/Roaming/topgrade.toml"
 "terminal.json" = "~/AppData/Local/Packages/Microsoft.WindowsTerminalPreview_8wekyb3d8bbwe/LocalState/settings.json"
 "powershell.ps1" = "~/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1"
+"winget.json" = "~/AppData/Local/Microsoft/WinGet/Settings/defaultState/settings.json"

@@ -1,0 +1,20 @@
+{
+    "$schema": "https://aka.ms/winget-settings.schema.json",
+    "visual": {
+        "progressBar": "rainbow"
+    },
+    "installBehavior": {
+        "preferences": {
+            "scope": "machine"
+        }
+    },
+    "telemetry": {
+        "disable": true
+    },
+    "experimentalFeatures": {
+        "dependencies": true,
+        "pinning": true,
+        "configuration": true,
+        "windowsFeature": true
+    }
+}
