@@ -52,12 +52,12 @@
                                           :sources [:nvim_diagnostic]
                                           :update_in_insert true}]
                              :lualine_x [:diff :branch]
-                             :lualine_y [[#(.. " " vim.bo.shiftwidth)]
+                             :lualine_y [[#(.. "⇥ " vim.bo.shiftwidth)]
                                          :fileformat
                                          :filetype]
                              :lualine_z [:location]}
                   :tabline {:lualine_a [{1 :buffers
-                                         :symbols {:modified " "
+                                         :symbols {:modified " 󰆓"
                                                    :alternate_file ""}
                                          :padding 2
                                          :buffers_color {:active {:bg _G.base0F

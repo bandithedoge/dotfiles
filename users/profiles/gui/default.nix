@@ -37,9 +37,8 @@ in {
       confirm_os_window_close = 0;
       shell = "${pkgs.fish}/bin/fish";
       sync_to_monitor = false;
-
       macos_titlebar_color = "background";
-      macos_thicken_font = "0.25";
+      text_composition_strategy = "legacy";
 
       background = base00;
       foreground = base05;

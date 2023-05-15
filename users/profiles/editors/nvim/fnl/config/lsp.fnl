@@ -106,7 +106,7 @@
 (let [lsp_signature (require :lsp_signature)]
   (lsp_signature.setup {:bind true
                         :handler_opts {:border :solid}
-                        :hint_prefix "漣"
+                        :hint_prefix "󰌵"
                         :floating_window false
                         :floating_window_above_cur_line true}))
 

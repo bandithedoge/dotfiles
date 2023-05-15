@@ -1,14 +1,5 @@
-{
-  config,
-  pkgs,
-  ...
-}: {
-  virtualisation = {
-    libvirtd.enable = true;
-    virtualbox.host = {
-      enable = true;
-    };
-  };
-
+{pkgs, ...}: {
   environment.systemPackages = with pkgs; [virt-manager];
+
+  virtualisation.libvirtd.enable = true;
 }

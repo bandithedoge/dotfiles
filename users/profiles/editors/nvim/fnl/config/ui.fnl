@@ -81,20 +81,6 @@
 
 ;; }}}
 
-;; cinnamon.nvim {{{
-
-; (let [cinnamon (require :cinnamon)]
-;   (cinnamon.setup {:extra_keymaps true :default_delay 3 :centered false}))
-
-;; }}}
-
-;; flare.nvim {{{
-
-; (let [flare (require :flare)]
-;   (flare.setup {:hl_group :PmenuSel}))
-
-;; }}}
-
 ;; foldsigns.nvim {{{
 
 (let [foldsigns (require :foldsigns)]
@@ -145,11 +131,11 @@
                                                                       :renamed ""
                                                                       :untracked ""
                                                                       :ignored ""
-                                                                      :unstaged "ﱡ"
-                                                                      :staged ""
-                                                                      :conflict ""}
+                                                                      :unstaged "󰄱"
+                                                                      :staged ""
+                                                                      :conflict "󱈸"}
                                                             :align :left}
-                                               :modified {:symbol "ﱣ"}}
+                                               :modified {:symbol "󰆓"}}
                    :window {:width 30
                             :mappings {:<2-LeftMouse> :open
                                        :<cr> :open

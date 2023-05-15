@@ -76,19 +76,6 @@ in {
   };
 
   systemd.user.services = {
-    # xss-lock = {
-    #   Unit = {
-    #     Description = "xss-lock";
-    #     After = ["graphical-session-pre.target"];
-    #   };
-    #
-    #   Install.WantedBy = ["graphical-session.target"];
-    #
-    #   Service = {
-    #     ExecStart = "${pkgs.xss-lock}/bin/xss-lock -- ${pkgs.betterlockscreen} -l";
-    #   };
-    # };
-
     betterlockscreen = {
       Unit = {
         Description = "Update betterlockscreen background";

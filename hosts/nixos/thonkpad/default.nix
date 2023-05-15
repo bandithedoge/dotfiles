@@ -7,7 +7,8 @@
     base
     ++ gui
     ++ audio
-    ++ gaming;
+    ++ gaming
+    ++ virt;
 
   environment = {
     systemPackages = with pkgs; [
@@ -34,26 +35,20 @@
 
   powerManagement = {
     enable = true;
+    powerDownCommands = ''
+      awesome-client "vicious.suspend()"
+    '';
+    resumeCommands = ''
+      awesome-client "vicious.activate()"
+
+      modprobe -r psmouse
+      modprobe psmouse
+    '';
     powertop.enable = true;
   };
 
-  services.acpid = {
-    enable = true;
-    handlers.lid = {
-      event = "button/lid.*";
-      action = ''
-        case "$1" in
-          close) awesome-client "vicious.suspend()" ;;
-          open)
-            awesome-client "vicious.activate()"
-            modprobe -r psmouse
-            modprobe psmouse
-            ;;
-        esac
-      '';
-    };
-  };
-
+  services.acpid.enable = true;
+  # services.thinkfan.enable = true;
   services.thermald.enable = true;
   services.tlp.enable = true;
   services.logind.lidSwitch = "suspend";

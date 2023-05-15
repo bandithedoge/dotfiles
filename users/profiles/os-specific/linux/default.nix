@@ -7,19 +7,22 @@
 in {
   imports = [
     ./audio.nix
-    # ./wayland.nix
     ./x
   ];
 
   home = {
     packages = with pkgs; [
       anydesk
+      appimage-run
+      bandithedoge.basiliskii-bin
+      bandithedoge.sheepshaver-bin
       blender
       cutter
       dfeet
       discord-canary
       ferdium
       flowblade
+      font-manager
       ghidra
       gparted
       jadx
@@ -29,6 +32,7 @@ in {
       nim
       pavucontrol
       pciutils
+      pcmanfm
       rclone
       tigervnc
       transmission-gtk
@@ -41,7 +45,7 @@ in {
   };
 
   # gtk {{{
-  gtk = {
+  gtk = rec {
     enable = true;
     font = {
       name = pkgs.rice.uiFont;
@@ -55,6 +59,7 @@ in {
       gtk-toolbar-style = "";
       gtk-decoration-layout = "menu";
     };
+    gtk4 = gtk3;
   };
 
   xdg.configFile = let
@@ -68,11 +73,7 @@ in {
   qt = {
     # {{{
     enable = true;
-    platformTheme = "gnome";
-    style = {
-      name = "adwaita-dark";
-      package = pkgs.adwaita-qt;
-    };
+    platformTheme = "gtk";
   };
   # }}}
 

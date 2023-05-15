@@ -4,6 +4,7 @@
 (local awful (require :awful))
 (local beautiful (require :beautiful))
 (local gears (require :gears))
+(local wibox (require :wibox))
 
 (local keys (require :keys))
 
@@ -27,7 +28,7 @@
 
 ;; error handling {{{
 (fn error [text]
-  (awful.spawn.easy_async (.. "notify-send" text)))
+  (awful.spawn.easy_async (.. :notify-send text)))
 
 (when awesome.startup_errors
   (error awesome.startup_errors))

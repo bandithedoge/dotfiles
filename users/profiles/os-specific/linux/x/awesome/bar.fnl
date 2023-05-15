@@ -63,8 +63,8 @@
                                                                                       "%[([%d]+)%%%].*%[([%l]*)%]")]
                                                      (icon:set_markup (if (= state
                                                                              :on)
-                                                                          "墳"
-                                                                          (red "婢")))
+                                                                          "󰕾"
+                                                                          (red "󰖁")))
                                                      (text:set_markup (if (= state
                                                                              :on)
                                                                           (.. volume
@@ -89,12 +89,12 @@
                              (awful.spawn.easy_async "cat /sys/class/net/wlp3s0/carrier"
                                                      #((if (not= $4 0)
                                                            (do
-                                                             (wifi-icon:set_markup (red "睊"))
+                                                             (wifi-icon:set_markup (red "󰖪"))
                                                              (text:set_visible false))
                                                            (if (= (tonumber $1)
                                                                   1)
                                                                (do
-                                                                 (wifi-icon:set_markup "直")
+                                                                 (wifi-icon:set_markup "󰖩")
                                                                  (awful.spawn.easy_async "iwgetid -r"
                                                                                          #(if (not= $4
                                                                                                     0)
@@ -103,13 +103,13 @@
                                                                                                 (text:set_markup $1)
                                                                                                 (text:set_visible true)))))
                                                                (do
-                                                                 (wifi-icon:set_markup "睊")
+                                                                 (wifi-icon:set_markup "󰖪")
                                                                  (text:set_visible false))))))
                              (awful.spawn.easy_async "cat /sys/class/net/enp0s25/carrier"
                                                      #(ethernet-icon:set_markup (if (= (tonumber $1)
                                                                                        1)
-                                                                                    ""
-                                                                                    (red "")))))]
+                                                                                    "󰈁"
+                                                                                    (red "󰈂")))))]
         (update-widget)
         (let [wifi (dbus.Proxy:new {:bus dbus.Bus.SYSTEM
                                     :name :net.connman
@@ -143,17 +143,17 @@
                                                                         capacity)
                                                                      100))
                                                       100)
-                                 icons {"Full\n" ""
-                                        "Unknown\n" ""
-                                        "Charged\n" ""
-                                        "Charging\n" ""
-                                        "Discharging\n" ""}]
+                                 icons {"Full\n" "󰁹"
+                                        "Unknown\n" "󰂑"
+                                        "Charged\n" "󰂅"
+                                        "Charging\n" "󰢝"
+                                        "Discharging\n" "󰁾"}]
                              (icon:set_markup (if (<= percentage 15)
                                                   (if (not= battery.status "Charging
 ")
                                                       (.. "<span foreground='"
                                                           _G.base08
-                                                          "'></span>")
+                                                          "'>󰂎</span>")
                                                       (. icons battery.status))
                                                   (. icons battery.status)))
                              (text:set_markup (.. percentage "%")))]
@@ -171,7 +171,7 @@
                           (join {:layout wibox.layout.fixed.horizontal
                                  :spacing 10}
                                 [s.mynetworkbox
-                                 (widget [(icon "﬙")
+                                 (widget [(icon "󰘚")
                                           (vicious.cache vicious.widgets.cpu)
                                           (vicious.register (graph)
                                                             vicious.widgets.cpu
@@ -179,7 +179,7 @@
                                           (vicious.register (wibox.widget.textbox)
                                                             vicious.widgets.cpu
                                                             "$1%" 1)])
-                                 (widget [(icon "")
+                                 (widget [(icon "󰍛")
                                           (vicious.cache vicious.widgets.mem)
                                           (vicious.register (graph)
                                                             vicious.widgets.mem
@@ -187,7 +187,7 @@
                                           (vicious.register (wibox.widget.textbox)
                                                             vicious.widgets.mem
                                                             "$2 MB" 1)])
-                                 (widget [(icon "﨎")
+                                 (widget [(icon "")
                                           (vicious.cache vicious.widgets.hwmontemp)
                                           (vicious.register (graph)
                                                             vicious.widgets.hwmontemp
@@ -198,7 +198,7 @@
                                                             [:coretemp])])
                                  s.mybatterybox
                                  (if (= _G.hostname :thonkpad) s.myvolumebox)
-                                 (widget [(icon "")
+                                 (widget [(icon "󰅐")
                                           (vicious.register (wibox.widget.textbox)
                                                             vicious.widgets.date
                                                             "%A %d %B %T" 1)])

@@ -43,7 +43,7 @@
 
     colors.url = "github:Misterio77/nix-colors";
     musnix.url = "github:musnix/musnix";
-    kmonad.url = "github:kmonad/kmonad";
+    kmonad.url = "github:kmonad/kmonad?dir=nix";
     kmonad.flake = false;
     nixmox.url = "github:Sorixelle/nixmox";
   };

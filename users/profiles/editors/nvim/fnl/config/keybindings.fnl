@@ -14,7 +14,7 @@
 (map! [n] :K vim.lsp.buf.hover)
 
 (let [wk (require :which-key)]
-  (wk.setup {:ignore_missing true :icons {:separator ""} :show_help false})
+  (wk.setup {:ignore_missing true :icons {:separator "󰍟"} :show_help false})
   (wk.register (let [t (require :telescope.builtin)
                      telescope (require :telescope)
                      fm (require :fm-nvim)
@@ -44,7 +44,7 @@
                              :W ["<cmd>:close<cr>" "Close window"]
                              :w [mini-br.delete "Close buffer"]
                              :T [#(_G.fterm_float:toggle) :Terminal]
-                             :i ["<cmd>:PickEverything<cr>" "Insert symbol"]
+                             :i ["<cmd>:IconPickerNormal alt_font emoji nerd_font nerd_font_v3 symbols<cr>" "Insert symbol"]
                              :<C-w> [#(mini-br.delete 0 true)
                                      "Close buffer (force)"]
                              :c {:name :Colors

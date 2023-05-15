@@ -67,8 +67,10 @@
     enable = true;
     extraPortals = with pkgs; [
       xdg-desktop-portal-gtk
-      xdg-desktop-portal-wlr
-      xdg-desktop-portal-hyprland
     ];
+  };
+
+  boot.kernel.sysctl = {
+    "vm.mmap_min_addr" = 0;
   };
 }

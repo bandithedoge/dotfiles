@@ -1,5 +1,6 @@
 {pkgs, ...}: {
   nix = {
+    enable = true;
     package = pkgs.lib.mkForce pkgs.nixUnstable;
     settings = {
       substituters = [
@@ -23,13 +24,14 @@
         "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
       ];
       trusted-users = ["root" "@wheel" "bandithedoge"];
+      auto-optimise-store = true;
     };
     extraOptions = ''
-      extra-experimental-features = nix-command flakes
       allow-dirty = true
-      auto-optimise-store = true
-      warn-dirty = false
+      extra-experimental-features = nix-command flakes
       log-lines = 50
+      use-xdg-base-directories = true
+      warn-dirty = false
     '';
   };
 }

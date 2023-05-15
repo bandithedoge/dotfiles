@@ -97,10 +97,12 @@
 
     # dart
     flutter
-    dart
 
     # writing
     marksman
+
+    # faust
+    faust
   ];
   # }}}
 
@@ -146,10 +148,8 @@
 
       # ui
       FTerm-nvim
-      # cinnamon-nvim
       dressing-nvim
       fidget-nvim
-      # flare-nvim
       fm-nvim
       foldsigns-nvim
       gitsigns-nvim
@@ -204,6 +204,7 @@
       # language-specific
       crates-nvim
       dhall-vim
+      faust-nvim
       flutter-tools-nvim
       lua-dev-nvim
       nim-nvim
@@ -213,10 +214,9 @@
       purescript-vim
       rasi-vim
       vim-coffee-script
+      vim-faust
       yaml-companion-nvim
       yuck-vim
-
-      # colors
 
       # telescope
       telescope-dap-nvim
@@ -228,24 +228,21 @@
       friendly-snippets
       LuaSnip
     ];
-    extraConfig = with pkgs.rice; ''
-      set runtimepath^=${./nvim}
+    extraConfig = "set runtimepath^=${./nvim}";
+    extraLuaConfig = with pkgs.rice; ''
+      ${def.lua}
 
-      lua << EOF
-        ${def.lua}
+      vim.o.guifont = monoFont .. ":h16"
 
-        vim.o.guifont = monoFont .. ":h16"
+      require("impatient").enable_profile()
 
-        require("impatient").enable_profile()
-
-        require("tangerine").setup {
-          target = vim.fn.stdpath [[cache]] .. "/tangerine",
-          rtpdirs = {"ftplugin"},
-          compiler = {
-            hooks = {"oninit"}
-          }
+      require("tangerine").setup {
+        target = vim.fn.stdpath [[cache]] .. "/tangerine",
+        rtpdirs = {"ftplugin"},
+        compiler = {
+          hooks = {"oninit"}
         }
-      EOF
+      }
     '';
   };
   xdg.configFile."nvim" = {

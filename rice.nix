@@ -34,7 +34,7 @@
 
   wallpaper = ./wallpaper.jpg;
   wallpaperBlurred = pkgs.runCommand "blur" {} ''
-    ${pkgs.imagemagick}/bin/magick ${./wallpaper.jpg} -gaussian-blur 0x12 -format png $out
+    ${pkgs.imagemagick}/bin/magick ${wallpaper} -gaussian-blur 0x12 -format png $out
   '';
 
   gtk = let
