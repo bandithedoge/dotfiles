@@ -22,6 +22,7 @@
   wsl = {
     enable = true;
     defaultUser = "bandithedoge";
+    startMenuLaunchers = true;
     interop.includePath = false;
     wslConf.interop = {
       enabled = false;
@@ -43,6 +44,8 @@
     fish
     bashInteractive
   ];
+
+  programs.fish.enable = true;
 
   system.stateVersion = "23.05";
 }

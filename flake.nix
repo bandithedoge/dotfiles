@@ -243,5 +243,19 @@
           }
         ];
       };
+
+      homeConfigurations.wsl = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.x86_64-linux;
+        modules = [
+          {
+            home = {
+              homeDirectory = "/home/bandithedoge";
+              username = "bandithedoge";
+            };
+          }
+          ./users/profiles/core
+          ./users/profiles/editors
+        ];
+      };
     };
 }
