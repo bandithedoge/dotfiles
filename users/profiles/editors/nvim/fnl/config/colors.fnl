@@ -130,7 +130,12 @@
                                 :BufferInactiveSign {:link :BufferInactive}
                                 :BufferInactiveMod {:link :BufferInactive}
                                 :NoiceLspProgressTitle {:bg _G.base02
-                                                        :fg _G.base03}}}})
+                                                        :fg _G.base03}
+                                :IndentBlanklineContextChar {:fg _G.base0F}
+                                :CybuFocus {:bg _G.base0F :fg _G.base00}
+                                :CybuAdjacent {:bg _G.base02 :fg _G.base03}
+                                :CybuBorder {:bg _G.base02}
+                                :CybuBackground {:bg _G.base02}}}})
 
 (nightfox.compile)
 (vim.cmd "colorscheme nightfox")

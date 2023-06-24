@@ -5,16 +5,16 @@
 
 (let [fold-cycle (require :fold-cycle)]
   (fold-cycle.setup {:softwrap_movement_fix true})
-  (map! [n] :<tab> #(fold-cycle.open))
-  (map! [n] :<s-tab> #(fold-cycle.close)))
+  (map! [n] :<tab> #(fold-cycle.open)))
 
 (map! [n] :<cr> ":noh<cr>")
 (map! [n] :<bs> ":WhichKey <localleader><cr>")
+(map! [n] :<s-tab> ":CybuLastusedNext<cr>")
 
 (map! [n] :K vim.lsp.buf.hover)
 
 (let [wk (require :which-key)]
-  (wk.setup {:ignore_missing true :icons {:separator "󰍟"} :show_help false})
+  (wk.setup {:ignore_missing false :icons {:separator "󰍟"} :show_help false})
   (wk.register (let [t (require :telescope.builtin)
                      telescope (require :telescope)
                      fm (require :fm-nvim)
@@ -37,26 +37,24 @@
                                  :d ["<cmd>:cd ~/dotfiles<cr>" :Dotfiles]
                                  :g ["<cmd>:cd ~/git<cr>" :Git]
                                  :s ["<cmd>:cd ~/sql<cr>" :School]}
-                             :b ["<cmd>:Neotree float buffers<cr>" :Buffers]
+                             :b [t.buffers :Buffers]
                              :F [fm.Lf "File explorer"]
                              :g [fm.Lazygit :Git]
                              :t ["<cmd>:Neotree toggle<cr>" "File tree"]
                              :W ["<cmd>:close<cr>" "Close window"]
                              :w [mini-br.delete "Close buffer"]
                              :T [#(_G.fterm_float:toggle) :Terminal]
-                             :i ["<cmd>:IconPickerNormal alt_font emoji nerd_font nerd_font_v3 symbols<cr>" "Insert symbol"]
+                             :i ["<cmd>:IconPickerNormal alt_font emoji nerd_font nerd_font_v3 symbols<cr>"
+                                 "Insert symbol"]
                              :<C-w> [#(mini-br.delete 0 true)
                                      "Close buffer (force)"]
-                             :c {:name :Colors
-                                 :c ["<cmd>:Colortils picker<cr>"
-                                     "Color picker"]
-                                 :l ["<cmd>:Colortils lighten<cr>" :Lighten]
-                                 :d ["<cmd>:Colortils darken<cr>" :Darken]}}
+                             :h [telescope.extensions.yank_history.yank_history
+                                 "Yank history"]}
                   :<localleader> {:a [lsp.code_action "Code actions"]
                                   :g [neogen.generate "Generate annotation"]
                                   :t [trouble.toggle :Trouble]
-                                  :j [lsp.definition "Jump to definition"]
-                                  :D [t.diagnostics :Diagnostics]
+                                  :D ["<cmd>:Glance definitions<cr>"
+                                      "Show definitions"]
                                   :e [expand_expr.expand "Expand expression"]
                                   :f [lsp.format "Format file"]
                                   :r [lsp.rename :Rename]
@@ -68,4 +66,5 @@
                                           "Toggle breakpoint"]
                                       :c [dap.continue :Continue]
                                       :o [dap.step_over "Step over"]
-                                      :i [dap.step_into "Step into"]}}})))
+                                      :i [dap.step_into "Step into"]}
+                                  :l {:name :Language}}})))

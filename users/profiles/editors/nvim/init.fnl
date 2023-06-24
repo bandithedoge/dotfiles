@@ -46,4 +46,5 @@
                 (require :config.treesitter)
                 (require :config.ui)
                 (require :config.utilities)
-                (require :config.writing)) 70)
+                (require :config.writing))
+  70)

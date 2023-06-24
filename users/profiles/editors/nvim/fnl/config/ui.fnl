@@ -1,11 +1,11 @@
 (require-macros :hibiscus.vim)
 
 ;; indent-blankline.nvim {{{
-
 (let [indent_blankline (require :indent_blankline)]
   (indent_blankline.setup {:show_current_context true
                            :char "│"
                            :use_treesitter true
+                           :use_treesitter_scope true
                            :filetype_exclude [:help :TelescopePrompt :neo-tree]
                            :buftype_exclude [:terminal]
                            :show_foldtext false
@@ -14,47 +14,40 @@
 ;; }}}
 
 ;; nvim-colorizer.lua {{{
-
 (let [colorizer (require :colorizer)]
   (colorizer.setup {:filetypes ["*"] :user_default_options {:css true}}))
 
 ;; }}}
 
 ;; gitsigns.nvim {{{
-
 (let [gitsigns (require :gitsigns)]
   (gitsigns.setup {:diff_opts {:internal true}}))
 
 ;; }}}
 
 ;; FTerm.nvim {{{
-
 (let [fterm (require :FTerm)]
   (set _G.fterm_float (fterm:new {:hl :NormalFloat :border :solid})))
 
 ;; }}}
 
 ;; mini.nvim {{{
-
 (let [trailspace (require :mini.trailspace)]
   (trailspace.setup))
 
 ;; }}}
 
 ;; fm-nvim {{{
-
 (let [fm-nvim (require :fm-nvim)]
   (fm-nvim.setup {:ui {:float {:border :solid :float_hl :NormalPopover}}}))
 
 ;; nvim-hlslens {{{
-
 (let [hlslens (require :hlslens)]
   (hlslens.setup))
 
 ;; }}}
 
 ;; pretty-fold.nvim {{{
-
 (let [pretty-fold (require :pretty-fold)]
   (pretty-fold.setup {:fill_char " "
                       :process_comment_signs false
@@ -64,10 +57,10 @@
 ;; }}}
 
 ;; dressing.nvim {{{
-
 (let [dressing (require :dressing)
       themes (require :telescope.themes)]
-  (dressing.setup {:input {:border :solid :win_options {:winblend 0}}
+  (dressing.setup {:title_pos :center
+                   :input {:border :solid :win_options {:winblend 0}}
                    :select {:backend [:telescope :nui :builtin]
                             :telescope (themes.get_cursor {:border true
                                                            :borderchars [" "
@@ -82,28 +75,18 @@
 ;; }}}
 
 ;; foldsigns.nvim {{{
-
 (let [foldsigns (require :foldsigns)]
   (foldsigns.setup))
 
 ;; }}}
 
 ;; todo-comments.nvim {{{
-
 (let [todo-comments (require :todo-comments)]
   (todo-comments.setup {}))
 
 ;; }}}
 
-;; trouble.nvim {{{
-
-(let [trouble (require :trouble)]
-  (trouble.setup {:auto_preview false}))
-
-;; }}}
-
 ;; hover.nvim {{{
-
 (let [hover (require :hover)]
   (hover.setup {:init #(do
                          (require :hover.providers.lsp)
@@ -116,7 +99,6 @@
 ;; }}}
 
 ;; neo-tree.nvim {{{
-
 (let [neo-tree (require :neo-tree)
       bufremove (require :mini.bufremove)]
   (neo-tree.setup {:sources [:buffers :filesystem]
@@ -129,11 +111,11 @@
                                                                       :deleted ""
                                                                       :modified ""
                                                                       :renamed ""
-                                                                      :untracked ""
-                                                                      :ignored ""
-                                                                      :unstaged "󰄱"
+                                                                      :untracked ""
+                                                                      :ignored ""
+                                                                      :unstaged ""
                                                                       :staged ""
-                                                                      :conflict "󱈸"}
+                                                                      :conflict "󰘬"}
                                                             :align :left}
                                                :modified {:symbol "󰆓"}}
                    :window {:width 30
@@ -156,7 +138,8 @@
                                                     :h :navigate_up
                                                     :l :set_root}}
                                 :filtered_items {:hide_dotfiles false
-                                                 :hide_gitignored false}}
+                                                 :hide_gitignored false
+                                                 :hide_hidden false}}
                    :buffers {:window {:mappings {:d :bdelete :D :bforce}}
                              :commands {:bdelete #(let [node ($1.tree:get_node)
                                                         path (node:get_id)]
@@ -167,15 +150,13 @@
                                                                      true))}}}))
 
 ;; neodim {{{
-
 (let [neodim (require :neodim)]
   (neodim.setup {:blend_color _G.base00}))
 
 ;; }}}
 
-;; fidget.nvim {{{
-
-(let [fidget (require :fidget)]
-  (fidget.setup {:text {:spinner :dots}}))
-
-;; }}}
+;; cybu.nvim {{{
+(let [cybu (require :cybu)]
+  (cybu.setup {:position {:anchor :topcenter}
+               :style {:border :solid}
+               :behavior {:mode {:last_used {:view :paging :switch :immediate}}}}))

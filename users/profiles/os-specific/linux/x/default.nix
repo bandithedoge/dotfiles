@@ -4,10 +4,18 @@
   ...
 }: let
   rofi-stuff = pkgs.callPackage ../rofi {};
+
+  my-xmonad = pkgs.callPackage ./xmonad {};
 in {
+  imports = [./eww];
+
   home.packages = with pkgs; [
     betterlockscreen
+    haskellPackages.xmonad-dbus
     libnotify
+    my-xmonad
+    trayer
+    wmctrl
     xclip
     xorg.xev
     xss-lock

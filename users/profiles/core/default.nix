@@ -1,7 +1,5 @@
 {
   pkgs,
-  home-manager,
-  config,
   ...
 }: let
   oi = pkgs.callPackage ./oi {};
@@ -54,6 +52,7 @@ in {
       sox
       tree
       unzip
+      wget
       xdg-ninja
       xdragon
       yt-dlp
@@ -78,6 +77,8 @@ in {
     };
   };
   # }}}
+
+  xdg.configFile."rice.json".text = builtins.toJSON (pkgs.lib.filterAttrsRecursive (_: v: !builtins.isFunction v) pkgs.rice);
 
   programs = {
     home-manager = {

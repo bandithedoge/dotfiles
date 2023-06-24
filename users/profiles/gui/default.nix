@@ -2,12 +2,7 @@
   pkgs,
   config,
   ...
-}: let
-  configPath =
-    if pkgs.stdenv.isDarwin
-    then "Library/Application Support"
-    else config.xdg.configHome;
-in {
+}: {
   programs.kitty = {
     # {{{
     enable = true;
@@ -139,23 +134,6 @@ in {
           }
         '';
       };
-    };
-  }; # }}}
-
-  home.file.${configPath + "/discordcanary/settings.json"}.text = builtins.toJSON {
-    # {{{
-    enableHardwareAcceleration = false;
-    OPEN_ON_STARTUP = false;
-    openasar = {
-      setup = true;
-      js = ''
-        const css = `
-          ${builtins.readFile (pkgs.rice.compileSCSS ./discord.scss)}
-        `;
-        const style = document.createElement("style");
-        style.textContent = css;
-        document.head.appendChild(style);
-      '';
     };
   }; # }}}
 }

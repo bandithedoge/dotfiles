@@ -25,19 +25,15 @@
 
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
 
-    nur-bandithedoge = {
-      flake = false;
-      url = "github:bandithedoge/nur-packages";
-    };
-    hyprland.url = "github:hyprwm/Hyprland";
-    hyprpaper.url = "github:hyprwm/hyprpaper";
     mozilla.url = "github:mozilla/nixpkgs-mozilla";
     neorg.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
     neovim.url = "github:nix-community/neovim-nightly-overlay";
     nil.url = "github:oxalica/nil";
+    nix-doom-emacs.url = "github:nix-community/nix-doom-emacs";
     nix-gaming.url = "github:fufexan/nix-gaming";
     nix-index-database.url = "github:Mic92/nix-index-database";
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
+    nur-bandithedoge.url = "github:bandithedoge/nur-packages";
     nur.url = "github:nix-community/NUR";
     prismlauncher.url = "github:PrismLauncher/PrismLauncher";
 
@@ -57,8 +53,10 @@
     ...
   } @ inputs: let
     overlays = with inputs; [
-      hyprland.overlays.default
-      hyprpaper.overlays.default
+      (final: prev: {
+        bandithedoge = import nur-bandithedoge {pkgs = prev;};
+        colors = colors.lib-core;
+      })
       mozilla.overlays.firefox
       neorg.overlays.default
       neovim.overlay
@@ -68,10 +66,6 @@
       nixpkgs-wayland.overlay
       nur.overlay
       prismlauncher.overlays.default
-      (_: prev: {
-        bandithedoge = import nur-bandithedoge {pkgs = prev;};
-        colors = colors.lib-core;
-      })
       (import ./overlay.nix)
     ];
 
@@ -199,8 +193,8 @@
 
       home = {
         modules = with inputs; [
-          hyprland.homeManagerModules.default
           nix-index-database.hmModules.nix-index
+          nix-doom-emacs.hmModule
         ];
 
         importables = {

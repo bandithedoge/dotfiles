@@ -45,14 +45,13 @@
 (require :remember)
 ;; }}}
 
-;; colortils.nvim {{{
-(let [colortils (require :colortils)]
-  (colortils.setup {:border :solid}))
-
-;; }}}
-
 ;; stabilize.nvim {{{
 (let [stabilize (require :stabilize)]
   (stabilize.setup {}))
 
+;; }}}
+
+;; yanky.nvim {{{
+(let [yanky (require :yanky)]
+  (yanky.setup))
 ;; }}}

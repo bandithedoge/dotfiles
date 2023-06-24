@@ -35,6 +35,7 @@ in {
       pcmanfm
       rclone
       tigervnc
+      tor-browser-bundle-bin
       transmission-gtk
     ];
     pointerCursor = {
@@ -81,7 +82,7 @@ in {
     # {{{
     enable = true;
     searchEngines = {
-      DEFAULT = "https://serx.ml/search?q={}";
+      DEFAULT = "https://www.startpage.com/sp/search?query={}";
       g = "https://www.google.com/search?q={}";
       a = "https://wiki.archlinux.org/?search={}";
       n = "https://nixos.wiki/index.php?search={}";

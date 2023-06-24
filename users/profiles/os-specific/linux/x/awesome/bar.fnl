@@ -187,7 +187,7 @@
                                           (vicious.register (wibox.widget.textbox)
                                                             vicious.widgets.mem
                                                             "$2 MB" 1)])
-                                 (widget [(icon "")
+                                 (widget [(icon "󰔏")
                                           (vicious.cache vicious.widgets.hwmontemp)
                                           (vicious.register (graph)
                                                             vicious.widgets.hwmontemp

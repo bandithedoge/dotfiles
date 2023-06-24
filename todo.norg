@@ -1,0 +1,13 @@
+@document.meta
+title: todo
+created: 2023-05-15
+@end
+
+- ( ) nice readme
+- ( ) move to gitui
+
+* nvim
+  - ( ) fix diagnostics icons
+  - ( ) fix gitsigns pipe character
+  - ( ) neorg highlights
+  - ( ) neorg keybindings

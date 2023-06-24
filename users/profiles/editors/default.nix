@@ -5,6 +5,7 @@
 }: {
   # common packages {{{
   home.packages = with pkgs; [
+    act
     checkmake
     editorconfig-checker
 
@@ -69,6 +70,7 @@
     nimlsp
 
     # go
+    go
     gopls
 
     # php
@@ -133,7 +135,6 @@
       sqlite-lua
 
       # utilities
-      colortils-nvim
       Comment-nvim
       direnv-vim
       editorconfig-nvim
@@ -145,20 +146,19 @@
       remember-nvim
       sort-nvim
       stabilize-nvim
+      yanky-nvim
 
       # ui
       FTerm-nvim
+      cybu-nvim
       dressing-nvim
-      fidget-nvim
       fm-nvim
       foldsigns-nvim
       gitsigns-nvim
       glow-hover-nvim
       heirline-nvim
       hover-nvim
-      incline-nvim
       indent-blankline-nvim
-      lsp_lines-nvim
       lualine-nvim
       neo-tree-nvim
       neodim
@@ -168,7 +168,6 @@
       pretty-fold-nvim
       reticle-nvim
       todo-comments-nvim
-      trouble-nvim
 
       # keybindings
       fold-cycle-nvim
@@ -177,12 +176,16 @@
 
       # lsp
       document-color-nvim
+      fidget-nvim
+      glance-nvim
       lsp_extensions-nvim
+      lsp_lines-nvim
       lsp_signature-nvim
       lspkind-nvim
       null-ls-nvim
       nvim-lspconfig
       SchemaStore-nvim
+      trouble-nvim
 
       # completion
       cmp-cmdline
@@ -206,6 +209,7 @@
       dhall-vim
       faust-nvim
       flutter-tools-nvim
+      haskell-tools-nvim
       lua-dev-nvim
       nim-nvim
       nvim-luaref
@@ -213,6 +217,7 @@
       package-info-nvim
       purescript-vim
       rasi-vim
+      typescript-nvim
       vim-coffee-script
       vim-faust
       yaml-companion-nvim

@@ -14,7 +14,15 @@
     // (
       if !pkgs.stdenv.isDarwin
       then {
-        extraGroups = ["wheel" "networkmanager" "audio" "adbusers" "plugdev" "vboxusers"];
+        extraGroups = [
+          "adbusers"
+          "audio"
+          "docker"
+          "networkmanager"
+          "plugdev"
+          "vboxusers"
+          "wheel"
+        ];
         isNormalUser = true;
       }
       else {
