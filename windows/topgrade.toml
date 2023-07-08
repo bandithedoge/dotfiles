@@ -1,10 +1,10 @@
+[misc]
 disable = ["powershell", "flutter", "wsl", "pnpm"]
 ignore_failures = ["winget"]
 cleanup = true
 assume_yes = true
 set_title = true
 skip_notify = true
-display_preamble = true
 
 [commands]
 "Scoop cleanup" = "scoop cache rm *; scoop cleanup *"
@@ -13,4 +13,3 @@ display_preamble = true
 enable_winget = true
 self_rename = true
 accept_all_updates = true
-wsl_update_pre_release = true
