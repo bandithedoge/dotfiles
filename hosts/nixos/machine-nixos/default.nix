@@ -1,6 +1,5 @@
 {
   suites,
-  config,
   pkgs,
   ...
 }: {
