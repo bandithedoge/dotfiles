@@ -25,7 +25,7 @@
       serviceConfig = {
         Type = "oneshot";
         ExecStart = [
-          "${pkgs.coreutils}/bin/mkdir -p /home/bandithedoge/dotfiles /home/bandithedoge/git /home/bandithedoge/sql"
+          "${pkgs.coreutils-full}/bin/mkdir -p /home/bandithedoge/dotfiles /home/bandithedoge/git /home/bandithedoge/sql"
           "/run/wrappers/bin/mount --bind /mnt/c/Users/bandithedoge/dotfiles /home/bandithedoge/dotfiles"
           "/run/wrappers/bin/mount --bind /mnt/e/git /home/bandithedoge/git"
           "/run/wrappers/bin/mount --bind /mnt/e/sql /home/bandithedoge/sql"
@@ -56,10 +56,12 @@
     isNormalUser = true;
   };
 
-  environment.shells = with pkgs; [
-    fish
-    bashInteractive
-  ];
+  environment = {
+    shells = with pkgs; [
+      fish
+      bashInteractive
+    ];
+  };
 
   programs.fish.enable = true;
 

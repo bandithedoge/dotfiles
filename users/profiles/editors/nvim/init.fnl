@@ -1,3 +1,6 @@
+(require-macros :hibiscus.core)
+(require-macros :hibiscus.vim)
+
 (require :config.colors)
 
 (set vim.g.mapleader " ")
@@ -25,6 +28,7 @@
 (set vim.wo.cursorline true)
 (set vim.wo.foldmethod :marker)
 (vim.opt.shortmess:append :atcsqS)
+(set vim.o.splitkeep :screen)
 
 (set vim.o.copyindent true)
 (set vim.o.expandtab true)
@@ -33,18 +37,38 @@
 (set vim.o.softtabstop 4)
 (set vim.o.tabstop 4)
 
+(g! mapleader " ")
+(g! maplocalleader "\\")
+
+(map! [n] :<cr> ":noh<cr>")
+
 (vim.cmd "au BufReadPre *.nfo :setlocal fileencodings=cp437,utf-8")
 
-(vim.defer_fn (lambda []
-                (require :config.completion)
-                (require :config.dap)
-                (require :config.keybindings)
-                (require :config.lsp)
-                (require :config.snippets)
-                (require :config.statusline)
-                (require :config.telescope)
-                (require :config.treesitter)
-                (require :config.ui)
-                (require :config.utilities)
-                (require :config.writing))
-  70)
+(lambda _G.use [?name ?opts ?alt-name]
+  (if _G.USING_NIX
+      (merge! {:dir (.. _G.LAZY_PLUGINS "/"
+                        (string.gsub (string.match (or ?alt-name ?name) "/(.+)")
+                                     "%." "-"))
+               :name (string.match (or ?alt-name ?name) "/(.+)")}
+              (or ?opts {}))
+      (merge! [?name] (or ?opts {}))))
+
+(lambda _G.key [lhs ?rhs ?opts]
+  (merge! [lhs ?rhs] (or ?opts {})))
+
+(let [lazy (require :lazy)]
+  (lazy.setup [(require :config.completion)
+               (require :config.dap)
+               (require :config.keybindings)
+               (require :config.languages)
+               (require :config.lsp)
+               (require :config.snippets)
+               (require :config.statusline)
+               (require :config.telescope)
+               (require :config.treesitter)
+               (require :config.ui)
+               (require :config.utilities)
+               (require :config.writing)]
+              {:install {:missing (not _G.USING_NIX)}}))
+
+(set vim.o.loadplugins true)

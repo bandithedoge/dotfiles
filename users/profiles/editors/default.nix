@@ -14,12 +14,12 @@
     rustfmt
 
     # python
-    poetry
-    python310Packages.black
-    python310Packages.isort
-    python310Packages.pyls-isort
-    python310Packages.python-lsp-black
-    python310Packages.python-lsp-server
+    # poetry
+    black
+    isort
+    python311Packages.pyls-isort
+    python311Packages.python-lsp-black
+    python311Packages.python-lsp-server
 
     # shell
     nodePackages.bash-language-server
@@ -114,128 +114,140 @@
     plugins = with pkgs.bandithedoge.vimPlugins; [
       hibiscus-nvim
       impatient-nvim
-      lazily-nvim
       tangerine-nvim
       nightfox-nvim
-      mini-nvim
-
-      # treesitter
-      pkgs.vimPlugins.nvim-treesitter.withAllGrammars
-      nvim-ts-autotag
-      nvim-ts-context-commentstring
-      nvim-ts-rainbow
-      playground
-      spellsitter-nvim
-
-      # libraries
-      nui-nvim
-      nvim-web-devicons
-      plenary-nvim
-      popup-nvim
-      sqlite-lua
-
-      # utilities
-      Comment-nvim
-      direnv-vim
-      editorconfig-nvim
-      mkdir-nvim
-      neogen
-      nvim-autopairs
-      nvim-expand-expr
-      presence-nvim
-      remember-nvim
-      sort-nvim
-      stabilize-nvim
-      yanky-nvim
-
-      # ui
-      FTerm-nvim
-      cybu-nvim
-      dressing-nvim
-      fm-nvim
-      foldsigns-nvim
-      gitsigns-nvim
-      glow-hover-nvim
-      heirline-nvim
-      hover-nvim
-      indent-blankline-nvim
-      lualine-nvim
-      neo-tree-nvim
-      neodim
-      numbers-nvim
-      nvim-colorizer-lua
-      nvim-hlslens
-      pretty-fold-nvim
-      reticle-nvim
-      todo-comments-nvim
-
-      # keybindings
-      fold-cycle-nvim
-      icon-picker-nvim
-      which-key-nvim
-
-      # lsp
-      document-color-nvim
-      fidget-nvim
-      glance-nvim
-      lsp_extensions-nvim
-      lsp_lines-nvim
-      lsp_signature-nvim
-      lspkind-nvim
-      null-ls-nvim
-      nvim-lspconfig
-      SchemaStore-nvim
-      trouble-nvim
-
-      # completion
-      cmp-cmdline
-      cmp-nvim-lsp
-      cmp-nvim-lsp-document-symbol
-      cmp-nvim-lua
-      cmp-path
-      cmp-under-comparator
-      cmp_luasnip
-      nvim-cmp
-
-      # dap
-      nvim-dap
-      nvim-dap-ui
-
-      # writing
-      pkgs.vimPlugins.neorg
-
-      # language-specific
-      crates-nvim
-      dhall-vim
-      faust-nvim
-      flutter-tools-nvim
-      haskell-tools-nvim
-      lua-dev-nvim
-      nim-nvim
-      nvim-luaref
-      nvim-parinfer
-      package-info-nvim
-      purescript-vim
-      rasi-vim
-      typescript-nvim
-      vim-coffee-script
-      vim-faust
-      yaml-companion-nvim
-      yuck-vim
-
-      # telescope
-      telescope-dap-nvim
-      telescope-frecency-nvim
-      telescope-nvim
-      telescope-zf-native-nvim
-
-      # snippets
-      friendly-snippets
-      LuaSnip
+      lazy-nvim
     ];
     extraConfig = "set runtimepath^=${./nvim}";
-    extraLuaConfig = with pkgs.rice; ''
+    extraLuaConfig = with pkgs.rice; let
+      lazyPlugins =
+        pkgs.linkFarm "lazy-plugins"
+        (map (drv: {
+            name = drv.pname or drv.name;
+            path = drv;
+          })
+          (with pkgs.bandithedoge.vimPlugins; [
+            mini-nvim
+
+            # treesitter
+            (pkgs.symlinkJoin {
+              name = "nvim-treesitter";
+              paths = with pkgs.vimPlugins.nvim-treesitter;
+                [
+                  withAllGrammars
+                ]
+                ++ map pkgs.neovimUtils.grammarToPlugin allGrammars;
+            })
+            nvim-ts-autotag
+            nvim-ts-context-commentstring
+            nvim-ts-rainbow
+            playground
+
+            # libraries
+            nui-nvim
+            nvim-web-devicons
+            plenary-nvim
+            popup-nvim
+            sqlite-lua
+
+            # utilities
+            Comment-nvim
+            direnv-vim
+            editorconfig-nvim
+            fold-cycle-nvim
+            icon-picker-nvim
+            mkdir-nvim
+            neogen
+            nvim-autopairs
+            nvim-expand-expr
+            presence-nvim
+            remember-nvim
+            sort-nvim
+            yanky-nvim
+
+            # ui
+            FTerm-nvim
+            cybu-nvim
+            dressing-nvim
+            fm-nvim
+            foldsigns-nvim
+            gitsigns-nvim
+            hover-nvim
+            indent-blankline-nvim
+            lualine-nvim
+            neo-tree-nvim
+            neodim
+            nvim-colorizer-lua
+            nvim-hlslens
+            pretty-fold-nvim
+            todo-comments-nvim
+
+            # keybindings
+            which-key-nvim
+
+            # lsp
+            document-color-nvim
+            fidget-nvim
+            glance-nvim
+            lsp_extensions-nvim
+            lsp_lines-nvim
+            lsp_signature-nvim
+            lspkind-nvim
+            null-ls-nvim
+            nvim-lspconfig
+            SchemaStore-nvim
+            trouble-nvim
+
+            # completion
+            cmp-cmdline
+            cmp-nvim-lsp
+            cmp-nvim-lsp-document-symbol
+            cmp-nvim-lua
+            cmp-path
+            cmp-under-comparator
+            cmp_luasnip
+            nvim-cmp
+
+            # dap
+            nvim-dap
+            nvim-dap-ui
+
+            # writing
+            pkgs.vimPlugins.neorg
+
+            # language-specific
+            crates-nvim
+            dhall-vim
+            faust-nvim
+            flutter-tools-nvim
+            haskell-tools-nvim
+            lua-dev-nvim
+            nim-nvim
+            nvim-luaref
+            nvim-parinfer
+            package-info-nvim
+            purescript-vim
+            rasi-vim
+            typescript-nvim
+            vim-coffee-script
+            vim-faust
+            yaml-companion-nvim
+            yuck-vim
+
+            # telescope
+            telescope-frecency-nvim
+            telescope-nvim
+            telescope-zf-native-nvim
+
+            # snippets
+            friendly-snippets
+            LuaSnip
+          ]));
+    in ''
       ${def.lua}
+
+      LAZY_PLUGINS = "${lazyPlugins}"
+      USING_NIX = true
 
       vim.o.guifont = monoFont .. ":h16"
 

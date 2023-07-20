@@ -23,7 +23,7 @@
       };
     };
 
-    nixos-wsl.url = "github:nix-community/NixOS-WSL";
+    nixos-wsl.url = "github:nix-community/NixOS-WSL/22.05-5c211b47";
 
     mozilla.url = "github:mozilla/nixpkgs-mozilla";
     neorg.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
@@ -227,7 +227,10 @@
                   ./users/profiles/editors
                   nix-index-database.hmModules.nix-index
                 ];
-                nixpkgs = {inherit overlays;};
+                nixpkgs = {
+                  inherit overlays;
+                  config.allowUnfree = true;
+                };
                 home = {
                   homeDirectory = "/home/bandithedoge";
                   username = "bandithedoge";
@@ -239,7 +242,10 @@
       };
 
       homeConfigurations.wsl = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux;
+        pkgs = import nixpkgs {
+          system = "x86_64-linux";
+          config.allowUnfree = true;
+        };
         modules = [
           {
             home = {

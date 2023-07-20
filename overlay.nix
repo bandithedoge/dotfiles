@@ -4,9 +4,9 @@ final: prev: {
 
   discord-canary = prev.discord-canary.override {withOpenASAR = true;};
 
-  python310Packages =
-    prev.python310Packages
-    // {
-      inherit (prev) poetry;
-    };
+  # python310Packages =
+  #   prev.python310Packages
+  #   // {
+  #     inherit (prev) poetry;
+  #   };
 }
