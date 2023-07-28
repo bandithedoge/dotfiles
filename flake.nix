@@ -36,6 +36,7 @@
     nur-bandithedoge.url = "github:bandithedoge/nur-packages";
     nur.url = "github:nix-community/NUR";
     prismlauncher.url = "github:PrismLauncher/PrismLauncher";
+    nixd.url = "github:nix-community/nixd";
 
     colors.url = "github:Misterio77/nix-colors";
     musnix.url = "github:musnix/musnix";
@@ -62,6 +63,7 @@
       neovim.overlay
       nil.overlays.default
       nix-gaming.overlays.default
+      nixd.overlays.default
       nixmox.overlay
       nixpkgs-wayland.overlay
       nur.overlay

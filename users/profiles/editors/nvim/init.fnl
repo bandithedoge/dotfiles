@@ -41,6 +41,7 @@
 (g! maplocalleader "\\")
 
 (map! [n] :<cr> ":noh<cr>")
+(map! [n] :K vim.lsp.buf.hover)
 
 (vim.cmd "au BufReadPre *.nfo :setlocal fileencodings=cp437,utf-8")
 

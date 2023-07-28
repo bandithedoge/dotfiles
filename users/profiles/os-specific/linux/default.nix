@@ -81,6 +81,7 @@ in {
   programs.qutebrowser = {
     # {{{
     enable = true;
+    package = pkgs.qutebrowser-qt6;
     searchEngines = {
       DEFAULT = "https://www.startpage.com/sp/search?query={}";
       g = "https://www.google.com/search?q={}";
@@ -326,9 +327,9 @@ in {
     enable = true;
     scripts = with pkgs.mpvScripts; [
       cutter
-      thumbnail
+      quality-menu
       sponsorblock
-      youtube-quality
+      thumbnail
     ];
   };
   # }}}

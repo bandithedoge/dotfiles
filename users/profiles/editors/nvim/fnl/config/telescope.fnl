@@ -33,6 +33,8 @@
                          {:desc "Highlight groups"})
                  (_G.key :<leader>ft "<cmd>Telescope builtin<cr>"
                          {:desc :Telescope})
+                 (_G.key :<leader>fg "<cmd>Telescope live_grep<cr>"
+                         {:desc "Live Grep"})
                  (_G.key :<leader>b "<cmd>Telescope buffers<cr>"
                          {:desc :Buffers})
                  (_G.key :<leader>h "<cmd>Telescope yank_history<cr>"

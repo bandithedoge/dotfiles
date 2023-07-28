@@ -8,13 +8,14 @@
     act
     checkmake
     editorconfig-checker
+    qtcreator-qt6
 
     # rust
     rust-analyzer
     rustfmt
 
     # python
-    # poetry
+    poetry
     black
     isort
     python311Packages.pyls-isort
@@ -28,7 +29,7 @@
     shfmt
 
     # web
-    bandithedoge.nodePackages.emmet-ls
+    bandithedoge.nodePackages.emmet-language-server
     bandithedoge.nodePackages.tailwindcss-language-server
     nodePackages.eslint
     nodePackages.fixjson
@@ -49,6 +50,7 @@
     # nix
     alejandra
     nil
+    nixd
 
     # lua
     fennel
@@ -61,10 +63,10 @@
     clang
     clang-tools
     cmake
-    cmake-language-server
-    cppcheck
+    neocmakelsp
     ninja
     pkg-config
+    qt6.qtdeclarative
 
     # nim
     nimlsp
@@ -113,7 +115,6 @@
     enable = true;
     plugins = with pkgs.bandithedoge.vimPlugins; [
       hibiscus-nvim
-      impatient-nvim
       tangerine-nvim
       nightfox-nvim
       lazy-nvim
@@ -250,8 +251,6 @@
       USING_NIX = true
 
       vim.o.guifont = monoFont .. ":h16"
-
-      require("impatient").enable_profile()
 
       require("tangerine").setup {
         target = vim.fn.stdpath [[cache]] .. "/tangerine",

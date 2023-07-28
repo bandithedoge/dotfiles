@@ -17,7 +17,7 @@
                     (trailspace.setup {}))})
  ;; }}}
  ;; Comment.nvim {{{
- (_G.use :numToStr/Comment.nvim)
+ (_G.use :numToStr/Comment.nvim {:config true})
  ;; }}}
  ;; sort.nvim {{{
  (_G.use :sQVe/sort.nvim {:cmd :Sort})

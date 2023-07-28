@@ -37,11 +37,27 @@ import System.Exit
 import qualified XMonad.DBus as D
 
 -- layouts {{{
-myLayout = toggleLayouts (noBorders Full) $ tall ||| tabbed
+myLayout rice =
+  avoidStruts $
+    toggleLayouts (noBorders Full) $
+      tall ||| tabs
  where
   gaps = spacingWithEdge 5
+  theme =
+    def
+      { activeColor = base0F rice
+      , activeBorderColor = base0F rice
+      , activeTextColor = base00 rice
+      , inactiveColor = base02 rice
+      , inactiveBorderColor = base02 rice
+      , inactiveTextColor = base03 rice
+      , urgentColor = base08 rice
+      , urgentBorderColor = base08 rice
+      , urgentTextColor = base00 rice
+      , fontName = "xft:" ++ uiFont rice
+      }
   tall = gaps $ ResizableTall 1 (3 / 100) 0.5 []
-  tabbed = noBorders simpleTabbed
+  tabs = noBorders $ tabbedBottom shrinkText theme
 
 -- }}}
 
@@ -63,7 +79,7 @@ myKeys rice =
   , ("M-S-l", sendMessage $ IncMasterN (-1))
   , ("M-<Tab>", sendMessage NextLayout)
   , ("M-t", withFocused $ windows . W.sink)
-  , ("M-f", sendMessage $ Toggle "Full")
+  , ("M-f", sendMessage (Toggle "Full") <> sendMessage ToggleStruts)
   ]
     -- switch to workspace
     ++ [ ("M-" ++ show x, windows $ W.greedyView (show x))
@@ -132,7 +148,7 @@ main = withHelper $ do
     . docks
     $ def
       { modMask = mod1Mask
-      , layoutHook = myLayout
+      , layoutHook = myLayout rice
       , startupHook = myStartupHook
       , borderWidth = 2
       , normalBorderColor = base00 rice

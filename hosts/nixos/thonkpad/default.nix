@@ -22,7 +22,7 @@
 
   # hardware {{{
   boot = {
-    kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.linuxPackages_xanmod_latest;
     kernelModules = ["kvm-intel"];
     extraModulePackages = [];
     initrd = {
@@ -35,10 +35,11 @@
 
   powerManagement = {
     enable = true;
+    cpuFreqGovernor = pkgs.lib.mkForce "conservative";
     powerDownCommands = ''
       awesome-client "vicious.suspend()"
     '';
-    resumeCommands = ''
+    powerUpCommands = ''
       awesome-client "vicious.activate()"
 
       modprobe -r psmouse

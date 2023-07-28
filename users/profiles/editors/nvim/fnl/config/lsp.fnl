@@ -10,7 +10,8 @@
          {:event [:BufReadPre :BufNewFile]
           :dependencies [(_G.use :folke/neodev.nvim nil :/lua-dev.nvim)
                          (_G.use :akinsho/flutter-tools.nvim)
-                         (_G.use :MrcJkb/haskell-tools.nvim)
+                         (_G.use :MrcJkb/haskell-tools.nvim
+                                 {:dependencies [(_G.use :nvim-telescope/telescope.nvim)]})
                          (_G.use :jose-elias-alvarez/typescript.nvim)
                          (_G.use :vuki656/package-info.nvim)
                          (_G.use :Saecki/crates.nvim)
@@ -34,7 +35,8 @@
                          (_G.use :DNLHC/glance.nvim)]
           :opts #(let [cmp-nvim-lsp (require :cmp_nvim_lsp)]
                    {:capabilities (merge! (cmp-nvim-lsp.default_capabilities)
-                                          {:textDocument {:completion {:completionItem {:snippetSupport true}}}})
+                                          {:textDocument {:completion {:completionItem {:snippetSupport true}}}
+                                           :workspace {:didChangeWatchedFiles {:dynamicRegistration true}}})
                     :single_file_support true})
           :config #(let [lsp (require :lspconfig)]
                      ;; lua {{{
@@ -93,22 +95,20 @@
                                                               :vue]
                                                   :settings {:packageManager :pnpm}}))
                        (lsp.cssls.setup $2)
+                       (lsp.emmet_language_server.setup $2)
                        (lsp.html.setup $2)
                        (lsp.tailwindcss.setup (merge! $2
                                                       (let [document-color (require :document-color)]
                                                         {:capabilities {:textDocument {:colorProvider {:dynamicRegistration true}}}
                                                          :on_attach document-color.buf_attach}))))
-                     ;; }}}
                      ;; rust {{{
                      (let [crates (require :crates)]
                        (crates.setup {:null_ls {:enabled true}})
                        (lsp.rust_analyzer.setup $2))
                      ;; }}}
                      (lsp.bashls.setup $2)
-                     (lsp.cmake.setup $2)
                      (lsp.clangd.setup $2)
                      (lsp.dhall_lsp_server.setup $2)
-                     (lsp.emmet_ls.setup $2)
                      (lsp.gdscript.setup $2)
                      (lsp.gopls.setup $2)
                      (lsp.jsonls.setup (merge! $2
@@ -116,7 +116,10 @@
                                                  {:settings {:json {:schemas (schemastore.json.schemas)
                                                                     :validate {:enable true}}}})))
                      (lsp.marksman.setup $2)
+                     (lsp.neocmake.setup $2)
                      (lsp.nil_ls.setup (merge! $2 {:autostart true}))
+                     (lsp.nixd.setup (merge! $2 
+                                             {:settings {:nixd {:formatting {:command :alejandra}}}}))
                      (lsp.nimls.setup $2)
                      (lsp.psalm.setup $2)
                      (lsp.purescriptls.setup $2)
@@ -133,6 +136,7 @@
                                                                                          :convention :pep257}
                                                                             :pylint {:enabled true}
                                                                             :yapf {:enabled false}}}}}))
+                     (lsp.qmlls.setup $2)
                      (lsp.solargraph.setup $2)
                      (lsp.yamlls.setup (let [yaml (require :yaml-companion)]
                                          (yaml.setup $2)))

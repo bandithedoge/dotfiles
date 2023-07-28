@@ -51,21 +51,6 @@
           :event [:BufReadPre :BufNewFile]
           :config true})
  ;; }}}
- ;; hover.nvim {{{
- (_G.use :lewis6991/hover.nvim
-         {:keys [(_G.key :K :<cmd>Hover<cr>)
-                 (_G.key :gK :<cmd>HoverSelect<cr>)]
-          :cmd [:Hover :HoverSelect]
-          :opts {:init #(do
-                          (require :hover.providers.lsp)
-                          (require :hover.providers.gh)
-                          (require :hover.providers.man))
-                 :preview_opts {:border :solid}}
-          :config #(let [hover (require :hover)]
-                     (hover.setup $2)
-                     (command! [] :Hover `hover.hover)
-                     (command! [] :HoverSelect `hover.hover_select))})
- ;; }}}
  ;; neo-tree.nvim {{{
  (_G.use :nvim-neo-tree/neo-tree.nvim
          {:dependencies [(_G.use :nvim-lua/plenary.nvim)
