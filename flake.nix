@@ -213,7 +213,7 @@
       };
 
       # just wsl things
-      nixosConfigurations.wsl = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.machine-windows = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = with inputs; [
           home-manager.nixosModules.home-manager

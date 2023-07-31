@@ -25,7 +25,8 @@
                               :<C-l> (cmp.mapping.scroll_docs 4)
                               :<M-Tab> (cmp.mapping #(luasnip.expand_or_jump))
                               :<M-S-Tab> #(luasnip.jump -1)}
-                    :formatting {:format (lspkind.cmp_format {:with_text true})}
+                    :formatting {:format (lspkind.cmp_format {:mode :symbol_text})}
+                    :experimental {:ghost_text {:hl_group :Comment}}
                     :sources [{:name :crates}
                               {:name :luasnip}
                               {:name :neorg}

@@ -61,6 +61,7 @@
                                 :NormalFloat {:bg :bg2 :fg :fg1}
                                 :Search {:bg :sel1 :fg :bg1}
                                 :Cursor {:bg :sel1 :fg :bg1}
+                                :TermCursor {:link :Cursor}
                                 :VertSplit {:bg _G.base10 :fg _G.base02}
                                 :StatusLine {:bg _G.base01 :fg _G.base05}
                                 :Hlargs {:fg _G.base0F}

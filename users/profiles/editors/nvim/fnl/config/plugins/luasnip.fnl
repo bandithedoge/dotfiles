@@ -1,8 +1,12 @@
 (require-macros :hibiscus.core)
 
 [(_G.use :L3MON4D3/LuaSnip
-         {:dependencies [(_G.use :rafamadriz/friendly-snippets)]
+         {:dependencies [(_G.use :rafamadriz/friendly-snippets {:config #(let [loader (require :luasnip.loaders.from_vscode)]
+                                                                           (loader.lazy_load))})]
           :event :InsertEnter
+          :keys [(_G.key :<tab> #(let [luasnip (require :luasnip)] (if (luasnip.jumpable 1) (luasnip.jump 1) :<tab>)) {:expr true :silent true :mode :i})
+                 (_G.key :<tab> #(let [luasnip (require :luasnip)] (luasnip.jump 1) {:mode :s}))
+                 (_G.key :<S-tab> #(let [luasnip (require :luasnip)] (luasnip.jump -1) {:mode [:i :s]}))]
           :config #(let [luasnip (require :luasnip)
                          snip (fn snip [name dscr]
                                 "Returns a simple text snippet for LuaSnip"
@@ -51,8 +55,6 @@
                                  :base15 ["Bright Cyan" "Example: #4cd1e0"]
                                  :base16 ["Bright Blue" "Example: #4dc4ff"]
                                  :base17 ["Bright Magenta" "Example: #de73ff"]}]
-                     (luasnip.add_snippets :all
-                                           (merge! (icollect [name dscr (pairs base16)]
-                                                     (snip name dscr))
-                                                   [(luasnip.snippet :date
-                                                                     [(luasnip.function_node #(os.date "%Y-%m-%d"))])])))})]
+                     (luasnip.add_snippets :all (icollect [name dscr (pairs base16)]
+                                                 (snip name dscr))))})]
+

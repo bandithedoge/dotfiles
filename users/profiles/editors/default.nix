@@ -35,12 +35,12 @@
     nodePackages.fixjson
     nodePackages.markdownlint-cli2
     nodePackages.pnpm
-    nodePackages.prettier
     nodePackages.prettier-plugin-toml
     nodePackages.stylelint
     nodePackages.typescript
     nodePackages.typescript-language-server
     nodePackages.vscode-langservers-extracted
+    prettierd
     yarn
 
     # ruby
@@ -74,9 +74,6 @@
     # go
     go
     gopls
-
-    # php
-    phpPackages.psalm
 
     # haskell
     cabal2nix
@@ -152,14 +149,12 @@
             sqlite-lua
 
             # utilities
-            Comment-nvim
             direnv-vim
             editorconfig-nvim
             fold-cycle-nvim
             icon-picker-nvim
             mkdir-nvim
             neogen
-            nvim-autopairs
             nvim-expand-expr
             presence-nvim
             remember-nvim
@@ -182,6 +177,7 @@
             nvim-hlslens
             pretty-fold-nvim
             todo-comments-nvim
+            trouble-nvim
 
             # keybindings
             which-key-nvim
@@ -190,14 +186,12 @@
             document-color-nvim
             fidget-nvim
             glance-nvim
-            lsp_extensions-nvim
             lsp_lines-nvim
             lsp_signature-nvim
             lspkind-nvim
             null-ls-nvim
             nvim-lspconfig
             SchemaStore-nvim
-            trouble-nvim
 
             # completion
             cmp-cmdline
@@ -236,7 +230,6 @@
             yuck-vim
 
             # telescope
-            telescope-frecency-nvim
             telescope-nvim
             telescope-zf-native-nvim
 
@@ -253,12 +246,14 @@
       vim.o.guifont = monoFont .. ":h16"
 
       require("tangerine").setup {
-        target = vim.fn.stdpath [[cache]] .. "/tangerine",
+        target = vim.fn.stdpath "cache" .. "/tangerine",
         rtpdirs = {"ftplugin"},
         compiler = {
           hooks = {"oninit"}
         }
       }
+
+      require("config")
     '';
   };
   xdg.configFile."nvim" = {

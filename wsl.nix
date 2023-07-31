@@ -46,8 +46,6 @@
     };
   };
 
-  networking.hostName = "wsl";
-
   users.users.bandithedoge = {
     name = "bandithedoge";
     shell = pkgs.fish;

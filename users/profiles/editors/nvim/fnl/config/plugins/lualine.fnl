@@ -44,7 +44,7 @@
                            :component_separators ""
                            :section_separators ""
                            :globalstatus true}
-                 :extensions [:nvim-tree :neo-tree]
+                 :extensions [:neo-tree :lazy :nvim-dap-ui :trouble :man]
                  :sections {:lualine_a [:mode]
                             :lualine_b [{1 :filename :path 0}]
                             :lualine_c [{1 :diagnostics
@@ -62,6 +62,4 @@
                                         :buffers_color {:active {:bg _G.base0F
                                                                  :fg _G.base00}
                                                         :inactive {:bg _G.base02
-                                                                   :fg _G.base03}}}]}}
-          :config #(let [lualine (require :lualine)]
-                     (lualine.setup $2))})]
+                                                                   :fg _G.base03}}}]}}})]
