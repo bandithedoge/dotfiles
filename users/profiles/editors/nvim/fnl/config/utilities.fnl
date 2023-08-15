@@ -32,7 +32,7 @@
                             (expand-expr.expand))
                          {:desc "Expand expression"})]})
  ;;
- (_G.use :direnv/direnv.vim)
+ (_G.use :direnv/direnv.vim {:cond _G.USING_NIX})
  ;;
  (_G.use :gpanders/editorconfig.nvim)
  ;;

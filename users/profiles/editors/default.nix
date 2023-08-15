@@ -8,7 +8,7 @@
     act
     checkmake
     editorconfig-checker
-    qtcreator-qt6
+    qtcreator
 
     # rust
     rust-analyzer
@@ -49,7 +49,7 @@
 
     # nix
     alejandra
-    nil
+    # nil
     nixd
 
     # lua
@@ -260,7 +260,6 @@
     source = ./nvim;
     recursive = true;
     onChange = ''
-      rm -rf ${config.xdg.cacheHome}/nvim/tangerine
       ${config.programs.neovim.finalPackage}/bin/nvim -E -c ":FnlCompile" -c q
     '';
   };

@@ -77,7 +77,7 @@
                (require :config.plugins.neorg)
                (require :config.plugins.telescope)
                (require :config.plugins.treesitter)
-               (when (not _G.USING_NIX) (require :config.standalone))]
+               (require :config.standalone)]
               {:install {:missing (not _G.USING_NIX)}
                :performance {:rtp {:reset (not _G.USING_NIX)}
                              :reset_packpath false}}))
