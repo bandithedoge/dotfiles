@@ -21,19 +21,9 @@
                                                        " "]}}})
                          (_G.use :MrcJkb/haskell-tools.nvim
                                  {:dependencies [(_G.use :nvim-telescope/telescope.nvim)]
-                                  :opts {:tools {:hover {:disable true}
-                                                 :hls {:default_settings {:haskell {:formattingProvider :fourmolu}}
-                                                       :on_attach #(let [haskell-tools (require :haskell-tools)]
-                                                                     (map! [n
-                                                                            :buffer]
-                                                                           :<localleader>lh
-                                                                           `haskell-tools.hoogle.hoogle_signature
-                                                                           :Hoogle)
-                                                                     (map! [n
-                                                                            :buffer]
-                                                                           :<localleader>lr
-                                                                           `haskell-tools.repl.toggle
-                                                                           "GHCi repl"))}}}})
+                                  :ft [:haskell :lhaskell :cabal :cabalproject]
+                                  :init #(set vim.g.haskell_tools {:tools {:hover {:disable true}}
+                                                                   :hls {:default_settings {:haskell {:formattingProvider :fourmolu}}}})})
                          (_G.use :jose-elias-alvarez/typescript.nvim)
                          (_G.use :vuki656/package-info.nvim {:opts {:colors {:up_to_date _G.base0B
                                                                              :outdated _G.base08}

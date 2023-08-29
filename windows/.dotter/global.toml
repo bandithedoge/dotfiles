@@ -5,5 +5,4 @@
 "powershell.ps1" = "~/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1"
 "winget.json" = "~/AppData/Local/Microsoft/WinGet/Settings/defaultState/settings.json"
 "../users/profiles/editors/nvim" = {target = "~/AppData/Local/nvim", type = "symbolic"}
-"../users/profiles/editors/nvim/ftplugin" = {target = "~/AppData/Local/nvim/fnl/ftplugin", type = "symbolic"}
 "nvim_init.lua" = "~/AppData/Local/nvim/init.lua"

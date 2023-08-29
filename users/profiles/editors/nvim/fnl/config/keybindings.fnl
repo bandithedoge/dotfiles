@@ -31,4 +31,5 @@
                                                     :s [lsp.document_symbol
                                                         :Symbols]
                                                     :d {:name :Debug}
-                                                    :l {:name :Language}}})))})
+                                                    :l {:name :Language}
+                                                    :lr {:name :Repl}}})))})

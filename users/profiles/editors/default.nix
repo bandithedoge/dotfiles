@@ -247,7 +247,6 @@
 
       require("tangerine").setup {
         target = vim.fn.stdpath "cache" .. "/tangerine",
-        rtpdirs = {"ftplugin"},
         compiler = {
           hooks = {"oninit"}
         }

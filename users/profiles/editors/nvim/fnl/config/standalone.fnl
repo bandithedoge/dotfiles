@@ -1,7 +1,6 @@
-[(_G.use "udayvir-singh/hibiscus.nvim" {:cond (not _G.USING_NIX)})
+[(_G.use "udayvir-singh/tangerine.nvim" {:cond (not _G.USING_NIX)})
  ;;
- (_G.use "rktjmp/hotpot.nvim" {:cond (not _G.USING_NIX)
-                               :tag :v0.7.0})
+ (_G.use "udayvir-singh/hibiscus.nvim" {:cond (not _G.USING_NIX)})
  ;;
  (_G.use "EdenEast/nightfox.nvim" {:cond (not _G.USING_NIX)})
  ;;
