@@ -7,7 +7,8 @@
                          (_G.use :saadparwaiz1/cmp_luasnip
                                  {:dependencies [(_G.use :L3MON4D3/LuaSnip)]})
                          (_G.use :onsails/lspkind.nvim)
-                         (_G.use :lukas-reineke/cmp-under-comparator)]
+                         (_G.use :lukas-reineke/cmp-under-comparator)
+                         (_G.use :p00f/clangd_extensions.nvim)]
           :event [:InsertEnter :CmdlineEnter]
           :opts #(let [cmp (require :cmp)
                        luasnip (require :luasnip)
@@ -37,6 +38,7 @@
                                             cmp.config.compare.offset
                                             cmp.config.compare.score
                                             cmp-under-comparator.under
+                                            (require :clangd_extensions.cmp_scores)
                                             cmp.config.compare.kind
                                             cmp.config.compare.sort_text
                                             cmp.config.compare.length

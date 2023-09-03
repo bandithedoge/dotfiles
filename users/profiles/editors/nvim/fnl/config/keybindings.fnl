@@ -23,8 +23,6 @@
                                                    :lazy.nvim]}
                                     :<localleader> {:a [lsp.code_action
                                                         "Code actions"]
-                                                    :D ["<cmd>Glance definitions<cr>"
-                                                        "Show definitions"]
                                                     :f [lsp.format
                                                         "Format file"]
                                                     :r [lsp.rename :Rename]

@@ -38,12 +38,6 @@
   wsl = {
     enable = true;
     defaultUser = "bandithedoge";
-    startMenuLaunchers = true;
-    interop.includePath = false;
-    wslConf.interop = {
-      enabled = false;
-      appendWindowsPath = false;
-    };
   };
 
   users.users.bandithedoge = {
@@ -55,6 +49,9 @@
   };
 
   environment = {
+    systemPackages = with pkgs; [
+      wslu
+    ];
     shells = with pkgs; [
       fish
       bashInteractive

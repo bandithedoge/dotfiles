@@ -138,7 +138,6 @@
             })
             nvim-ts-autotag
             nvim-ts-context-commentstring
-            nvim-ts-rainbow
             playground
 
             # libraries
@@ -156,17 +155,16 @@
             mkdir-nvim
             neogen
             nvim-expand-expr
-            presence-nvim
             remember-nvim
             sort-nvim
             yanky-nvim
 
             # ui
-            FTerm-nvim
             cybu-nvim
             dressing-nvim
             fm-nvim
             foldsigns-nvim
+            FTerm-nvim
             gitsigns-nvim
             hover-nvim
             indent-blankline-nvim
@@ -176,6 +174,7 @@
             nvim-colorizer-lua
             nvim-hlslens
             pretty-fold-nvim
+            rainbow-delimiters-nvim
             todo-comments-nvim
             trouble-nvim
 
@@ -211,6 +210,7 @@
             pkgs.vimPlugins.neorg
 
             # language-specific
+            clangd_extensions-nvim
             crates-nvim
             dhall-vim
             faust-nvim

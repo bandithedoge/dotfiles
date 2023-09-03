@@ -1,15 +1,20 @@
+(require-macros :hibiscus.vim)
+
 (_G.use :nvim-neorg/neorg
         {:dependencies [(_G.use :nvim-lua/plenary.nvim)]
          :ft :norg
          :opts {:load {:core.defaults {}
-                       :core.completion {:config {:engine :nvim-cmp}}
-                       :core.dirman {:config {:workspaces {:school "~/sql"}
-                                              :autochdir true}}
                        :core.esupports.metagen {:config {:type :auto
                                                          :template [[:title
                                                                      #(vim.fn.expand "%:p:t:r")]
                                                                     [:created
                                                                      #(os.date "%Y-%m-%d")]]}}
+                       :core.integrations.treesitter {:config {:configure_parsers (not _G.USING_NIX)
+                                                               :install_parsers (not _G.USING_NIX)}}
+                       :core.keybinds {:config {:neorg_leader :<localleader>l}}
+                       :core.completion {:config {:engine :nvim-cmp}}
+                       :core.dirman {:config {:workspaces {:school "~/sql"}
+                                              :autochdir true}}
                        :core.concealer {:config {:icons {:heading {:enabled true
                                                                    :level_1 {:icon "❋"
                                                                              :highlight :rainbowcol1}

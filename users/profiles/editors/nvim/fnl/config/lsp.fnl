@@ -32,23 +32,24 @@
                          (_G.use :hrsh7th/nvim-cmp)
                          (_G.use :b0o/SchemaStore.nvim)
                          (_G.use :mrshmllow/document-color.nvim)
-                         (_G.use :someone-stole-my-name/yaml-companion.nvim)]
+                         (_G.use :someone-stole-my-name/yaml-companion.nvim)
+                         (_G.use :p00f/clangd_extensions.nvim)]
           :opts #(let [cmp-nvim-lsp (require :cmp_nvim_lsp)]
                    {:capabilities (merge! (cmp-nvim-lsp.default_capabilities)
                                           {:textDocument {:completion {:completionItem {:snippetSupport true}}}}
                                          :workspace {:didChangeWatchedFiles {:dynamicRegistration true}})}
                   :single_file_support true)
           :config #(let [lsp (require :lspconfig)]
-                     ;; javascript {{{
-                     (let [typescript (require :typescript)]
-                       (typescript.setup {:server {:on_attach #(map! [n
-                                                                      :buffer]
-                                                                     :<localleader>ld
-                                                                     :TypescriptGoToSourceDefinition
-                                                                     "Go to source definition")}}))
-                     ;; }}}
-                     (lsp.rust_analyzer.setup $2)
+                     (lsp.bashls.setup $2)
+                     (lsp.clangd.setup (merge! $2
+                                               {:on_attach #(let [inlay-hints (require :clangd_extensions.inlay_hints)]
+                                                              ; (map! [n :buffer] :<localleader>ls :ClangdSwitchSourceHeader "Switch source/header")
+                                                              (inlay-hints.setup_autocmd)
+                                                              (inlay-hints.set_inlay_hints))}))
+                     (lsp.cssls.setup $2)
                      (lsp.dartls.setup $2)
+                     (lsp.dhall_lsp_server.setup $2)
+                     (lsp.emmet_language_server.setup $2)
                      (lsp.eslint.setup (merge! $2
                                                {:filetypes [:coffee
                                                             :javascript
@@ -60,23 +61,14 @@
                                                             :typescriptreact
                                                             :vue]
                                                 :settings {:packageManager :pnpm}}))
-                     (lsp.cssls.setup $2)
-                     (lsp.emmet_language_server.setup $2)
-                     (lsp.html.setup $2)
-                     (lsp.tailwindcss.setup (merge! $2
-                                                    (let [document-color (require :document-color)]
-                                                      {:capabilities {:textDocument {:colorProvider {:dynamicRegistration true}}}
-                                                       :on_attach document-color.buf_attach})))
-                     (lsp.lua_ls.setup $2)
-                     (lsp.bashls.setup $2)
-                     (lsp.clangd.setup $2)
-                     (lsp.dhall_lsp_server.setup $2)
                      (lsp.gdscript.setup $2)
                      (lsp.gopls.setup $2)
+                     (lsp.html.setup $2)
                      (lsp.jsonls.setup (merge! $2
                                                (let [schemastore (require :schemastore)]
                                                  {:settings {:json {:schemas (schemastore.json.schemas)
                                                                     :validate {:enable true}}}})))
+                     (lsp.lua_ls.setup $2)
                      (lsp.marksman.setup $2)
                      (lsp.neocmake.setup $2)
                      (lsp.nil_ls.setup (merge! $2 {:autostart true}))
@@ -97,14 +89,25 @@
                                                                                          :convention :pep257}
                                                                             :pylint {:enabled true}
                                                                             :yapf {:enabled false}}}}}))
+                     (lsp.rust_analyzer.setup $2)
                      (lsp.qmlls.setup $2)
                      (lsp.solargraph.setup $2)
+                     (lsp.tailwindcss.setup (merge! $2
+                                                    (let [document-color (require :document-color)]
+                                                      {:capabilities {:textDocument {:colorProvider {:dynamicRegistration true}}}
+                                                       :on_attach document-color.buf_attach})))
                      (lsp.yamlls.setup (let [yaml (require :yaml-companion)]
                                          (yaml.setup $2)))
-                     (lsp.zls.setup $2))})
+                     (lsp.zls.setup $2)
+                     (let [typescript (require :typescript)]
+                       (typescript.setup {:server {:on_attach #(map! [n :buffer]
+                                                                     :<localleader>ld
+                                                                     :TypescriptGoToSourceDefinition
+                                                                     "Go to source definition")}})))})
  ;;
  (_G.use :jose-elias-alvarez/null-ls.nvim
-         {:dependencies [(_G.use :jose-elias-alvarez/typescript.nvim)]
+         {:dependencies [(_G.use :neovim/nvim-lspconfig)
+                         (_G.use :jose-elias-alvarez/typescript.nvim)]
           :event [:BufReadPre :BufNewFile]
           :config #(let [null-ls (require :null-ls)
                          b null-ls.builtins
@@ -143,11 +146,13 @@
                                         (require :typescript.extensions.null-ls.code-actions)]))})
  ;;
  (_G.use :j-hui/fidget.nvim {:dependencies [(_G.use :neovim/nvim-lspconfig)]
+                             :event [:BufReadPre :BufNewFile]
                              :opts {:text {:spinner :dots
                                            :done "󰄬"}}})
  ;;
  (_G.use :ray-x/lsp_signature.nvim
          {:dependencies [(_G.use :neovim/nvim-lspconfig)]
+          :event [:BufReadPre :BufNewFile]
           :opts {:bind true
                  :handler_opts {:border :solid}
                  :hint_prefix "󰌵"
@@ -156,5 +161,5 @@
  ;;
  (_G.use :DNLHC/glance.nvim
          {:dependencies [(_G.use :neovim/nvim-lspconfig)]
-          :event :VeryLazy
+          :keys [(_G.key :<localleader> "<cmd>Glance definitions<cr>" {:desc :Definitions})]
           :opts {:border {:enable true :top_char "" :bottom_char ""}}})]

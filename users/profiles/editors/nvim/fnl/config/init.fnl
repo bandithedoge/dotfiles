@@ -14,6 +14,7 @@
 (set! guifont (.. _G.monoFont ::h12))
 (set! hidden true)
 (set! inccommand :split)
+(set! laststatus 3)
 (set! linebreak true)
 (set! mouse :a)
 (set! number true)
@@ -28,6 +29,7 @@
 (set! softtabstop 4)
 (set! splitbelow true)
 (set! splitkeep :screen)
+(set! splitkeep :screen)
 (set! splitright true)
 (set! tabstop 4)
 (set! termguicolors true)
@@ -39,7 +41,7 @@
 (g! mapleader " ")
 (g! maplocalleader "\\")
 
-(map! [n] :<cr> ":noh<cr>")
+(map! [n] :<c-cr> ":noh<cr>")
 (map! [n] :K vim.lsp.buf.hover)
 
 (when vim.g.neovide
@@ -79,7 +81,9 @@
                (require :config.plugins.treesitter)
                (require :config.standalone)]
               {:install {:missing (not _G.USING_NIX)}
+               :checker {:enabled (not _G.USING_NIX)}
                :performance {:rtp {:reset (not _G.USING_NIX)}
-                             :reset_packpath false}}))
+                             :reset_packpath false}
+               :readme {:enabled false}}))
 
 (set! loadplugins true)

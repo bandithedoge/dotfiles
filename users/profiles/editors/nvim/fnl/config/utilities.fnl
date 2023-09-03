@@ -1,4 +1,5 @@
 (require-macros :hibiscus.vim)
+
 [(_G.use :sQVe/sort.nvim {:cmd :Sort})
  ;;
  (_G.use :danymat/neogen
@@ -16,7 +17,8 @@
                          {:desc "Insert symbol"})]
           :config true})
  ;;
- (_G.use :vladdoster/remember.nvim {:config #(require :remember)})
+ (_G.use :vladdoster/remember.nvim {:config #(require :remember)
+                                    :event [:BufReadPre :BufNewFile]})
  ;;
  (_G.use :gbprod/yanky.nvim {:config true})
  ;;
@@ -36,6 +38,4 @@
  ;;
  (_G.use :gpanders/editorconfig.nvim)
  ;;
- (_G.use :jghauser/mkdir.nvim)
- ;;
- (_G.use :andweeb/presence.nvim)]
+ (_G.use :jghauser/mkdir.nvim)]
