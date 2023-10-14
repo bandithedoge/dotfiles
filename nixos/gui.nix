@@ -1,0 +1,69 @@
+{pkgs, ...}: {
+  environment.systemPackages = with pkgs; [
+    winetricks
+    xorg.setxkbmap
+    rice.gtk.theme.package
+    rice.gtk.iconTheme.package
+    rice.gtk.cursorTheme.package
+  ];
+
+  services.greetd.enable = true;
+
+  programs.regreet = {
+    enable = true;
+    settings = with pkgs.rice; {
+      background = {
+        path = wallpaperBlurred;
+        fit = "Fill";
+      };
+      GTK = {
+        application_prefer_dark_theme = true;
+        cursor_theme_name = gtk.cursorTheme.name;
+        font = "${uiFont} 16";
+        icon_theme_name = gtk.iconTheme.name;
+        theme_name = gtk.theme.name;
+      };
+    };
+  };
+
+  programs.hyprland.enable = true;
+
+  services.accounts-daemon.enable = true;
+
+  programs.ns-usbloader.enable = true;
+
+  programs.steam.enable = true;
+
+  services.flatpak.enable = true;
+
+  programs.system-config-printer.enable = true;
+
+  xdg.portal = {
+    enable = true;
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-gtk
+    ];
+  };
+
+  gtk.iconCache.enable = true;
+
+  fonts = {
+    enableDefaultPackages = true;
+    packages = with pkgs; [
+      (nerdfonts.override {fonts = ["JetBrainsMono"];})
+      emojione
+      roboto
+    ];
+    fontconfig = {
+      enable = true;
+      defaultFonts = {
+        monospace = [pkgs.rice.monoFont];
+        sansSerif = [pkgs.rice.uiFont];
+      };
+    };
+  };
+
+  boot.kernel.sysctl = {
+    "vm.mmap_min_addr" = 0;
+  };
+}

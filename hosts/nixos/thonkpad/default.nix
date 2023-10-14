@@ -1,15 +1,4 @@
-{
-  suites,
-  pkgs,
-  ...
-}: {
-  imports = with suites;
-    base
-    ++ gui
-    ++ audio
-    ++ gaming
-    ++ virt;
-
+{pkgs, ...}: {
   environment = {
     systemPackages = with pkgs; [
       connman-gtk
@@ -22,13 +11,9 @@
 
   # hardware {{{
   boot = {
-    kernelPackages = pkgs.linuxPackages_xanmod_latest;
+    kernelPackages = pkgs.linuxPackages_cachyos;
     kernelModules = ["kvm-intel"];
-    extraModulePackages = [];
-    initrd = {
-      availableKernelModules = ["xhci_pci" "ehci_pci" "ahci" "usb_storage" "sd_mod" "sr_mod" "rtsx_pci_sdmmc"];
-      kernelModules = [];
-    };
+    initrd.availableKernelModules = ["xhci_pci" "ehci_pci" "ahci" "usb_storage" "sd_mod" "sr_mod" "rtsx_pci_sdmmc"];
     loader.systemd-boot.enable = true;
     supportedFilesystems = ["ntfs"];
   };
@@ -36,12 +21,7 @@
   powerManagement = {
     enable = true;
     cpuFreqGovernor = pkgs.lib.mkForce "conservative";
-    powerDownCommands = ''
-      awesome-client "vicious.suspend()"
-    '';
     powerUpCommands = ''
-      awesome-client "vicious.activate()"
-
       modprobe -r psmouse
       modprobe psmouse
     '';
@@ -49,18 +29,19 @@
   };
 
   services.acpid.enable = true;
-  # services.thinkfan.enable = true;
   services.thermald.enable = true;
   services.tlp.enable = true;
   services.logind.lidSwitch = "suspend";
 
   hardware = {
+    firmware = with pkgs; [
+      linux-firmware
+    ];
     opengl = {
       enable = true;
       driSupport = true;
       driSupport32Bit = true;
     };
-    trackpoint.enable = true;
   };
 
   services.xserver.libinput = {
@@ -99,20 +80,20 @@
       config = builtins.readFile ./kmonad.kbd;
     };
   };
+
+  system.activationScripts.kmonad.text = "${pkgs.systemd}/bin/systemctl try-restart kmonad-laptop-internal";
   # }}}
 
   # networking {{{
-  networking.wireless = {
-    enable = true;
-    userControlled.enable = true;
-  };
+  networking.hostName = "thonkpad";
+  services.connman.enable = true;
 
-  services.connman = {
-    enable = true;
-    enableVPN = false;
-  };
-
-  # what the fuck is this
-  security.pki.certificateFiles = [/etc/ssl/certs/certyfikat.crt];
+  # jebać ose
+  security.pki.certificateFiles = [
+    (pkgs.fetchurl {
+      url = "https://ose.gov.pl/media/2022/09/certyfikat-OSE.crt";
+      sha256 = "0Du2OmOnvCzaGz3ZHu7KsnL23WjDxNfgn3VFqzf2ffA=";
+    })
+  ];
   # }}}
 }

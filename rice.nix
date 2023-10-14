@@ -161,6 +161,45 @@ in
         $wallpaper: "${wallpaper}";
         $wallpaperBlurred: "${wallpaperBlurred}";
       '';
+      hypr = let
+        c = color: "0xFF" + (pkgs.lib.removePrefix "#" color);
+      in ''
+        $base00 = ${c base00}
+        $base01 = ${c base00}
+        $base02 = ${c base00}
+        $base03 = ${c base00}
+        $base04 = ${c base00}
+        $base05 = ${c base00}
+        $base06 = ${c base00}
+        $base07 = ${c base00}
+        $base08 = ${c base00}
+        $base09 = ${c base09}
+        $base0A = ${c base0A}
+        $base0B = ${c base0B}
+        $base0C = ${c base0C}
+        $base0D = ${c base0D}
+        $base0E = ${c base0E}
+        $base0F = ${c base0F}
+
+        $base10 = ${c base10}
+        $base11 = ${c base11}
+        $base12 = ${c base12}
+        $base13 = ${c base13}
+        $base14 = ${c base14}
+        $base15 = ${c base15}
+        $base16 = ${c base16}
+        $base17 = ${c base17}
+
+        $monoFont = ${monoFont}
+        $uiFont = ${uiFont}
+
+        $terminal = ${terminal}
+        $wm = ${wm}
+        $menu = ${menu}
+
+        $wallpaper = ${wallpaper}
+        $wallpaperBlurred = ${wallpaperBlurred}
+      '';
     };
 
     compileSCSS = path: let

@@ -1,7 +1,7 @@
 {pkgs, ...}: {
   nix = {
     enable = true;
-    package = pkgs.lib.mkForce pkgs.nixUnstable;
+    # package = pkgs.lib.mkForce pkgs.nixUnstable;
     settings = {
       substituters = [
         "https://bandithedoge.cachix.org"
@@ -34,7 +34,6 @@
       allow-dirty = true
       extra-experimental-features = nix-command flakes
       log-lines = 50
-      use-xdg-base-directories = true
       warn-dirty = false
     '';
   };

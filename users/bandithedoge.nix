@@ -1,10 +1,7 @@
 {
   pkgs,
-  hmUsers,
   ...
 }: {
-  home-manager.users = {inherit (hmUsers) bandithedoge;};
-
   users.users."bandithedoge" =
     {
       name = "bandithedoge";
@@ -18,7 +15,6 @@
           "adbusers"
           "audio"
           "docker"
-          "networkmanager"
           "plugdev"
           "vboxusers"
           "wheel"
@@ -32,4 +28,7 @@
 
   environment.shells = with pkgs; [fish bashInteractive];
   programs.fish.enable = true;
+
+  home-manager.users.bandithedoge.imports = [../home/default];
 }
+

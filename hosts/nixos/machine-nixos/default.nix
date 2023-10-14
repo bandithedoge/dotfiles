@@ -3,11 +3,6 @@
   pkgs,
   ...
 }: {
-  imports = with suites;
-    base
-    ++ os-specific
-    ++ gaming;
-
   environment.systemPackages = with pkgs; [
     wine-tkg
   ];
@@ -53,11 +48,6 @@
 
   hardware.opengl.enable = true;
 
-  services.printing = {
-    enable = true;
-    drivers = with pkgs; [gutenprint];
-  };
-
   powerManagement.cpuFreqGovernor = "performance";
   # }}}
 
@@ -92,6 +82,4 @@
     BROWSER = "firefox";
     WINEFSYNC = "1";
   };
-
-  system.stateVersion = "22.05";
 }
