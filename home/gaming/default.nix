@@ -26,11 +26,14 @@
       hud_compact = true;
       table_columns = 4;
 
-      toggle_hud = "Shift_R+F12";
+      toggle_fps_limit = "Shift_R+F1";
+      toggle_logging = "Shift_R+F2";
+      upload_log = "Shift_R+F3";
+      reload_cfg = "Shift_R+F4";
       toggle_hud_position = "Shift_R+F11";
+      toggle_hud = "Shift_R+F12";
 
       time = true;
-      version = true;
       cpu_stats = true;
       cpu_temp = true;
       cpu_mhz = true;
@@ -45,13 +48,14 @@
       histogram = true;
       frametime = true;
       frame_timing = true;
+      battery = true;
+      battery_icon = true;
 
+      engine_version = true;
       gpu_name = true;
       vulkan_driver = true;
       wine = true;
       gamemode = true;
-      vkbasalt = true;
-      arch = true;
       show_fps_limit = true;
       resolution = true;
     };

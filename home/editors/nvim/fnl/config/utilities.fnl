@@ -23,7 +23,7 @@
  (_G.use :gbprod/yanky.nvim {:config true})
  ;;
  (_G.use :jghauser/fold-cycle.nvim
-         {:init #(map! [n :buffer] :<Tab>
+         {:init #(map! [n] :<Tab>
                        #(let [fold-cycle (require :fold-cycle)]
                           fold-cycle.open))
           :opts {:softwrap_movement_fix true}})

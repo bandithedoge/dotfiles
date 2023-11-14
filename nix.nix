@@ -1,7 +1,6 @@
-{pkgs, ...}: {
+{...}: {
   nix = {
     enable = true;
-    # package = pkgs.lib.mkForce pkgs.nixUnstable;
     settings = {
       substituters = [
         "https://bandithedoge.cachix.org"

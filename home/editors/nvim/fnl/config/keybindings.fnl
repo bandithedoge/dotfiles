@@ -4,7 +4,7 @@
         {:keys [(_G.key :<bs> "<cmd>WhichKey <localleader><cr>")]
          :lazy false
          :opts {:ignore_missing false
-                :icons {:separator "󰍟"}
+                :icons {:separator "󰅂"}
                 :show_help false}
          :config #(let [wk (require :which-key)]
                     (wk.setup $2)
@@ -17,13 +17,10 @@
                                                        :Git]
                                                    :s ["<cmd>cd ~/sql<cr>"
                                                        :School]}
-                                               :W ["<cmd>close<cr>"
+                                               :W [:<cmd>close<cr>
                                                    "Close window"]
-                                               :l ["<cmd>Lazy<cr>"
-                                                   :lazy.nvim]}
-                                    :<localleader> {:a [lsp.code_action
-                                                        "Code actions"]
-                                                    :f [lsp.format
+                                               :l [:<cmd>Lazy<cr> :lazy.nvim]}
+                                    :<localleader> {:f [lsp.format
                                                         "Format file"]
                                                     :r [lsp.rename :Rename]
                                                     :s [lsp.document_symbol

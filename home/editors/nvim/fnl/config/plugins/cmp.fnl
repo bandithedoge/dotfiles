@@ -6,9 +6,11 @@
                          (_G.use :hrsh7th/cmp-path)
                          (_G.use :saadparwaiz1/cmp_luasnip
                                  {:dependencies [(_G.use :L3MON4D3/LuaSnip)]})
-                         (_G.use :onsails/lspkind.nvim)
-                         (_G.use :lukas-reineke/cmp-under-comparator)
-                         (_G.use :p00f/clangd_extensions.nvim)]
+                         (_G.use :onsails/lspkind.nvim
+                                 {:opts {:mode :symbol_text :preset :codicons}
+                                  :config #(let [lspkind (require :lspkind)]
+                                             (lspkind.init $1))})
+                         (_G.use :lukas-reineke/cmp-under-comparator)]
           :event [:InsertEnter :CmdlineEnter]
           :opts #(let [cmp (require :cmp)
                        luasnip (require :luasnip)
@@ -26,7 +28,7 @@
                               :<C-l> (cmp.mapping.scroll_docs 4)
                               :<M-Tab> (cmp.mapping #(luasnip.expand_or_jump))
                               :<M-S-Tab> #(luasnip.jump -1)}
-                    :formatting {:format (lspkind.cmp_format {:mode :symbol_text})}
+                    :formatting {:format (lspkind.cmp_format)}
                     :experimental {:ghost_text {:hl_group :Comment}}
                     :sources [{:name :crates}
                               {:name :luasnip}
@@ -38,7 +40,6 @@
                                             cmp.config.compare.offset
                                             cmp.config.compare.score
                                             cmp-under-comparator.under
-                                            (require :clangd_extensions.cmp_scores)
                                             cmp.config.compare.kind
                                             cmp.config.compare.sort_text
                                             cmp.config.compare.length

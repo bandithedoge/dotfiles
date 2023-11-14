@@ -40,7 +40,7 @@
           :opts {:hl :NormalFloat :border :solid}})
  ;;
  (_G.use :is0n/fm-nvim
-         {:keys [(_G.key :<leader>g :<cmd>Gitui<cr> {:desc :Git})]
+         {:keys [(_G.key :<leader>g :<cmd>Lazygit<cr> {:desc :Git})]
           :opts {:ui {:float {:border :solid :float_hl :Normal}}}})
  ;;
  (_G.use :kevinhwang91/nvim-hlslens
@@ -62,13 +62,6 @@
  ;;
  (_G.use :zbirenbaum/neodim {:event :LspAttach :opts {:blend_color _G.base00}})
  ;;
- (_G.use :ghillb/cybu.nvim
-         {:keys [(_G.key :<s-tab> :<cmd>CybuLastusedNext<cr>)]
-          :opts {:position {:anchor :topcenter}
-                 :style {:border :solid}
-                 :behavior {:mode {:last_used {:view :paging
-                                               :switch :immediate}}}}})
- ;;
  (_G.use :folke/trouble.nvim
          {:cmd [:TroubleToggle :Trouble]
           :keys [(_G.key :<localleader>t :<cmd>TroubleToggle<cr>
@@ -83,4 +76,48 @@
                      (vim.diagnostic.config {:virtual_text false
                                              :virtual_lines {:highlight_whole_line false
                                                              :only_current_line true}}))}
-         :/lsp_lines.nvim)]
+         :/lsp_lines.nvim)
+ (_G.use :akinsho/bufferline.nvim
+         {:lazy false
+          :keys [(_G.key :<leader><tab> :<cmd>BufferLineCycleNext<cr>
+                         {:desc "Next buffer"})
+                 (_G.key :<leader><s-tab> :<cmd>BufferLineCyclePrev<cr>
+                         {:desc "Previous buffer"})]
+          :opts #(let [bufferline (require :bufferline)]
+                   {:options {:close_command #(let [bufremove (require :mini.bufremove)]
+                                                (bufremove.delete $1))
+                              :buffer_close_icon "󰅖"
+                              :modified_icon "󰆓"
+                              :close_icon "󰅖"
+                              :left_trunc_marker "󰅁"
+                              :right_trunc_marker "󰅂"
+                              :separator_style [" " " "]
+                              :style_preset bufferline.style_preset.no_italic
+                              :always_show_bufferline false}
+                    :highlights {:fill {:bg _G.base10}
+                                 :background {:bg _G.base00}
+                                 :tab {:bg _G.base00}
+                                 :separator {:bg _G.base10}
+                                 :separator_visible {:bg _G.base10}
+                                 :separator_selected {:bg _G.base10}
+                                 :buffer_visible {:fg _G.base04 :bg _G.base02}
+                                 :buffer_selected {:fg _G.base0F
+                                                   :bg _G.base02
+                                                   :bold true}
+                                 :modified {:fg _G.base08 :bg _G.base00}
+                                 :modified_visible {:fg _G.base08
+                                                    :bg _G.base02}
+                                 :modified_selected {:fg _G.base08
+                                                     :bg _G.base02}
+                                 :close_button {:bg _G.base00}
+                                 :close_button_visible {:bg _G.base02}
+                                 :close_button_selected {:bg _G.base02}
+                                 :indicator_visible {:bg _G.base02
+                                                     :fg _G.base03}
+                                 :indicator_selected {:bg _G.base02
+                                                      :fg _G.base0F}
+                                 :duplicate {:bg _G.base00 :fg _G.base03}
+                                 :duplicate_visible {:bg _G.base02
+                                                     :fg _G.base03}
+                                 :duplicate_selected {:bg _G.base02
+                                                      :fg _G.base0F}}})})]

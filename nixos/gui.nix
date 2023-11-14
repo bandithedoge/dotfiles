@@ -1,10 +1,11 @@
 {pkgs, ...}: {
   environment.systemPackages = with pkgs; [
+    greetd.greetd
+    rice.gtk.cursorTheme.package
+    rice.gtk.iconTheme.package
+    rice.gtk.theme.package
     winetricks
     xorg.setxkbmap
-    rice.gtk.theme.package
-    rice.gtk.iconTheme.package
-    rice.gtk.cursorTheme.package
   ];
 
   services.greetd.enable = true;

@@ -44,7 +44,6 @@
 (map! [n] :j :gj)
 (map! [n] :k :gk)
 (map! [n] :<c-cr> ":noh<cr>")
-(map! [n] :K vim.lsp.buf.hover)
 
 (when vim.g.neovide
   (let [padding 10]
@@ -74,12 +73,11 @@
                (require :config.ui)
                (require :config.utilities)
                (require :config.plugins.cmp)
-               (require :config.plugins.lualine)
+               (require :config.plugins.heirline)
                (require :config.plugins.luasnip)
                (require :config.plugins.mini)
-               ; (require :config.plugins.neo-tree)
-               (require :config.plugins.nvim-tree)
                (require :config.plugins.neorg)
+               (require :config.plugins.nvim-tree)
                (require :config.plugins.telescope)
                (require :config.plugins.treesitter)
                (require :config.standalone)]

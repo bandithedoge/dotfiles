@@ -72,8 +72,6 @@ when isMainModule:
         exec &"nix flake lock {path} --update-input {input}"
 
   if args["cleanup"] or args["c"]:
-    if isNixOS: exec "sudo nix-env --delete-generations +3"
-    exec "home-manager remove-generations"
-    exec (if isNixOS or isDarwin: "sudo " else: "") & "nix-collect-garbage"
+    exec (if isNixOS or isDarwin: "sudo " else: "") & "nix-collect-garbage -d"
     exec (if isNixOS: "sudo " else: "") & "nix-store --optimise"
     if isDarwin: exec "brew cleanup -s --prune=all"

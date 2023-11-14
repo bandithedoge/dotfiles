@@ -55,28 +55,30 @@ in
       });
     in {
       theme = {
-        name = "Materia-Rice";
-        package = pkgs.materia-theme.overrideAttrs (old: {
-          nativeBuildInputs =
-            old.nativeBuildInputs
-            ++ (with pkgs; [
-              bc
-              optipng
-              (runCommandLocal "rendersvg" {} ''
-                mkdir -p $out/bin
-                ln -s ${resvg}/bin/resvg $out/bin/rendersvg
-              '')
-            ]);
-          patchPhase = ''
-            sed -e '/handle-horz-.*/d' -e '/handle-vert-.*/d' \
-              -i ./src/gtk-2.0/assets.txt
-
-            export HOME="$NIX_BUILD_ROOT"
-
-            patchShebangs .
-            ./change_color.sh -o Materia-Rice ${src} -t $out/share/themes -i False
-          '';
-        });
+        name = "adw-gtk3-dark";
+        package = pkgs.adw-gtk3;
+        # name = "Materia-Rice";
+        # package = pkgs.materia-theme.overrideAttrs (old: {
+        #   nativeBuildInputs =
+        #     old.nativeBuildInputs
+        #     ++ (with pkgs; [
+        #       bc
+        #       optipng
+        #       (runCommandLocal "rendersvg" {} ''
+        #         mkdir -p $out/bin
+        #         ln -s ${resvg}/bin/resvg $out/bin/rendersvg
+        #       '')
+        #     ]);
+        #   patchPhase = ''
+        #     sed -e '/handle-horz-.*/d' -e '/handle-vert-.*/d' \
+        #       -i ./src/gtk-2.0/assets.txt
+        #
+        #     export HOME="$NIX_BUILD_ROOT"
+        #
+        #     patchShebangs .
+        #     ./change_color.sh -o Materia-Rice ${src} -t $out/share/themes -i False
+        #   '';
+        # });
       };
       iconTheme = {
         name = "Papirus-Dark";

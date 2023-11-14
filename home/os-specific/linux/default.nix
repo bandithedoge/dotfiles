@@ -18,10 +18,13 @@ in {
       bandithedoge.basiliskii-bin
       bandithedoge.sheepshaver-bin
       blender
-      dfeet
+      bottles
+      d-spy
       discord-canary
       ferdium
+      freecad
       gparted
+      inkscape
       keepassxc
       krita
       libnotify
@@ -63,6 +66,13 @@ in {
   in {
     "gtk-4.0/gtk.css".source = css;
     "gtk-3.0/gtk.css".source = css;
+  };
+  # }}}
+
+  # qt {{{
+  qt = {
+    enable = true;
+    style.name = "adwaita-dark";
   };
   # }}}
 
@@ -505,7 +515,7 @@ in {
     inherit (gtk) iconTheme;
     settings = {
       global = {
-        offset = "10x10";
+        offset = "5x5";
         progress_bar_frame_width = 2;
         frame_width = 2;
         frame_color = base0F;

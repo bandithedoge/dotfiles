@@ -10,8 +10,10 @@
     home-manager.url = "github:nix-community/home-manager";
     nixos-wsl.url = "github:nix-community/NixOS-WSL/22.05-5c211b47";
 
-    hyprland-split-monitor-workspaces.inputs.hyprland.follows = "hyprland";
-    hyprland-split-monitor-workspaces.url = "github:Duckonaut/split-monitor-workspaces";
+    hyprland-split-monitor-workspaces = {
+      inputs.hyprland.follows = "hyprland";
+      url = "github:Duckonaut/split-monitor-workspaces";
+    };
     hyprland.url = "github:hyprwm/Hyprland";
     mozilla.url = "github:mozilla/nixpkgs-mozilla";
     neorg.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
@@ -24,6 +26,7 @@
     nur-bandithedoge.url = "github:bandithedoge/nur-packages";
     nur.url = "github:nix-community/NUR";
     nyx.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
+    poetry2nix.url = "github:nix-community/poetry2nix";
     prismlauncher.url = "github:PrismLauncher/PrismLauncher";
 
     colors.url = "github:Misterio77/nix-colors";
@@ -59,6 +62,7 @@
               nixmox.overlay
               nixpkgs-wayland.overlay
               nur.overlay
+              poetry2nix.overlays.default
               prismlauncher.overlays.default
               (import ./overlay.nix)
             ];

@@ -4,17 +4,14 @@
          {:event [:BufReadPre :BufNewFile]
           :init #(do
                    (g! parinfer_no_maps true)
-                   (augroup! :Parinfer
-                             [[User]
-                              [parinfer]
-                              #(do
-                                 (map! [i :buffer] :<Tab>
-                                       "<Plug>(parinfer-tab)")
-                                 (map! [i :buffer] :<S-Tab>
-                                       "<Plug>(parinfer-backtab)")
-                                 (map! [n :buffer] :<Tab>
-                                       #(let [fold-cycle (require :fold-cycle)]
-                                          fold-cycle.open)))]))})
+                   (vim.api.nvim_create_autocmd :User
+                                        {:pattern :parinfer
+                                         :callback #(do
+                                                      (map! [i :buffer] :<Tab>
+                                                            "<Plug>(parinfer-tab)")
+                                                      (map! [i :buffer]
+                                                            :<S-Tab>
+                                                            "<Plug>(parinfer-backtab)"))}))})
  ;;
  (_G.use :madskjeldgaard/faust-nvim
          {:ft :faust
@@ -22,8 +19,6 @@
                      (faust.load_snippets))})
  ;;
  (_G.use :vmchale/dhall-vim)
- ;;
- (_G.use :alaviss/nim.nvim)
  ;;
  (_G.use :milisims/nvim-luaref)
  ;;

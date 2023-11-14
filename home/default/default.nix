@@ -51,6 +51,7 @@ in {
       tree
       unzip
       vimiv-qt
+      wgcf
       wget
       xdg-ninja
       xdragon
@@ -198,9 +199,11 @@ in {
   };
   # }}}
 
+  programs.lazygit.enable = true;
+
   programs.gitui = {
     # {{{
-    enable = true;
+    enable = false;
     keyConfig =
       # {{{
       # copied from https://github.com/extrawurst/gitui/blob/master/vim_style_key_config.ron

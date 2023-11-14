@@ -1,7 +1,7 @@
 {pkgs ? import <nixpkgs> {}}:
 pkgs.poetry2nix.mkPoetryApplication rec {
   projectDir = ./.;
-  python = pkgs.python310;
+  python = pkgs.python311;
 
   postInstall = ''
     wrapProgram $out/bin/keepass \
@@ -15,7 +15,10 @@ pkgs.poetry2nix.mkPoetryApplication rec {
 
     # https://github.com/NixOS/nixpkgs/issues/204494
     rofi-menu = super.rofi-menu.overridePythonAttrs (old: {
-      buildInputs = old.buildInputs ++ [pkgs.poetry python.pkgs.poetry-core];
+      buildInputs = old.buildInputs ++ [python.pkgs.poetry-core];
+      postPatch = ''
+        substituteInPlace pyproject.toml --replace 'poetry.masonry.api' 'poetry.core.masonry.api'
+      '';
     });
   });
 }

@@ -35,8 +35,7 @@
                          (_G.use :hrsh7th/nvim-cmp)
                          (_G.use :b0o/SchemaStore.nvim)
                          (_G.use :mrshmllow/document-color.nvim)
-                         (_G.use :someone-stole-my-name/yaml-companion.nvim)
-                         (_G.use :p00f/clangd_extensions.nvim)]
+                         (_G.use :someone-stole-my-name/yaml-companion.nvim)]
           :opts #(let [cmp-nvim-lsp (require :cmp_nvim_lsp)]
                    {:capabilities (merge! (cmp-nvim-lsp.default_capabilities)
                                           {:textDocument {:completion {:completionItem {:snippetSupport true}}}}
@@ -46,11 +45,7 @@
                    true)
           :config #(let [lsp (require :lspconfig)]
                      (lsp.bashls.setup $2)
-                     (lsp.clangd.setup (merge! $2
-                                               {:on_attach #(let [inlay-hints (require :clangd_extensions.inlay_hints)]
-                                                              ; (map! [n :buffer] :<localleader>ls :ClangdSwitchSourceHeader "Switch source/header")
-                                                              (inlay-hints.setup_autocmd)
-                                                              (inlay-hints.set_inlay_hints))}))
+                     (lsp.clangd.setup $2)
                      (lsp.cssls.setup $2)
                      (lsp.dartls.setup $2)
                      (lsp.emmet_language_server.setup $2)
@@ -128,8 +123,6 @@
                                         f.shfmt
                                         f.stylelint
                                         f.stylua
-                                        f.trim_newlines
-                                        f.trim_whitespace
                                         (f.prettierd.with {:extra_args (lambda [params]
                                                                          (and params.options
                                                                               params.options.tabSize
@@ -143,22 +136,16 @@
                                         d.checkmake
                                         d.clazy
                                         d.cmake_lint
-                                        d.editorconfig_checker
                                         d.fish
                                         d.shellcheck
-                                        d.trail_space
-                                        a.gitrebase
                                         a.shellcheck
                                         (require :typescript.extensions.null-ls.code-actions)]))})
  ;;
  (_G.use :j-hui/fidget.nvim
-         {:dependencies [(_G.use :neovim/nvim-lspconfig)]
-          :event [:BufReadPre :BufNewFile]
-          :opts {:text {:spinner :dots :done "󰄬"}}})
+         {:event [:LspAttach] :opts {:text {:spinner :dots :done "󰄬"}}})
  ;;
  (_G.use :ray-x/lsp_signature.nvim
-         {:dependencies [(_G.use :neovim/nvim-lspconfig)]
-          :event [:BufReadPre :BufNewFile]
+         {:event [:LspAttach]
           :opts {:bind true
                  :handler_opts {:border :solid}
                  :hint_prefix "󰌵"
@@ -167,6 +154,18 @@
  ;;
  (_G.use :DNLHC/glance.nvim
          {:dependencies [(_G.use :neovim/nvim-lspconfig)]
-          :keys [(_G.key :<localleader> "<cmd>Glance definitions<cr>"
+          :keys [(_G.key :<localleader>D "<cmd>Glance definitions<cr>"
                          {:desc :Definitions})]
-          :opts {:border {:enable true :top_char "" :bottom_char ""}}})]
+          :opts {:border {:enable true :top_char "" :bottom_char ""}}})
+ ;;
+ (_G.use :nvimdev/lspsaga.nvim
+         {:dependencies [(_G.use :nvim-tree/nvim-web-devicons)]
+          :event :LspAttach
+          :keys [(_G.key :<localleader>a "<cmd>Lspsaga code_action<cr>"
+                         {:desc "Code actions"})
+                 (_G.key :K "<cmd>Lspsaga hover_doc<cr>")]
+          :opts {:ui {:code_action " 󰌵" :border :solid :title false}
+                 :code_action {:num_shortcut false :show_server_name true}
+                 :lightbulb {:sign false}
+                 :symbol_in_winbar {:enable false
+                                    :show_file false}}})]

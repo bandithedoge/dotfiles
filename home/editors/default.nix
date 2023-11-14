@@ -101,6 +101,7 @@
       nightfox-nvim
       lazy-nvim
     ];
+
     extraConfig = "set runtimepath^=${./nvim}";
     extraLuaConfig = with pkgs.rice; let
       lazyPlugins =
@@ -144,15 +145,16 @@
             yanky-nvim
 
             # ui
-            FTerm-nvim
+            bufferline-nvim
             cybu-nvim
             dressing-nvim
             fm-nvim
             foldsigns-nvim
+            FTerm-nvim
             gitsigns-nvim
+            heirline-nvim
             hover-nvim
             indent-blankline-nvim
-            lualine-nvim
             neodim
             nvim-colorizer-lua
             nvim-hlslens
@@ -172,6 +174,7 @@
             lsp_lines-nvim
             lsp_signature-nvim
             lspkind-nvim
+            lspsaga-nvim
             none-ls-nvim
             nvim-lspconfig
             SchemaStore-nvim
@@ -194,14 +197,12 @@
             pkgs.vimPlugins.neorg
 
             # language-specific
-            clangd_extensions-nvim
             crates-nvim
             dhall-vim
             faust-nvim
             flutter-tools-nvim
             haskell-tools-nvim
             neodev-nvim
-            nim-nvim
             nvim-luaref
             nvim-parinfer
             package-info-nvim

@@ -22,8 +22,8 @@
     enable = true;
     cpuFreqGovernor = pkgs.lib.mkForce "conservative";
     powerUpCommands = ''
-      modprobe -r psmouse
-      modprobe psmouse
+      ${pkgs.kmod}/bin/modprobe -r psmouse
+      ${pkgs.kmod}/bin/modprobe psmouse
     '';
     powertop.enable = true;
   };
@@ -81,7 +81,7 @@
     };
   };
 
-  system.activationScripts.kmonad.text = "${pkgs.systemd}/bin/systemctl try-restart kmonad-laptop-internal";
+  # system.activationScripts.kmonad.text = "${pkgs.systemd}/bin/systemctl try-restart kmonad-laptop-internal";
   # }}}
 
   # networking {{{

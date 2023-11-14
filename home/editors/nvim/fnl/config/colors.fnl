@@ -57,7 +57,8 @@
                                        :sel0 _G.base02
                                        :sel1 _G.base0F}}
                  :specs {:nightfox {}}
-                 :groups {:all {:FloatBorder {:bg :bg2 :fg :bg2}
+                 :groups {:all {:Title {:fg _G.base0F :style :bold}
+                                :FloatBorder {:bg :bg2 :fg :bg2}
                                 :NormalFloat {:bg :bg2 :fg :fg1}
                                 :Search {:bg :sel1 :fg :bg1}
                                 :Cursor {:bg :sel1 :fg :bg1}
@@ -78,6 +79,7 @@
                                              :style "bold,underline"}
                                 :Folded {:bg :bg2}
                                 :NvimTreeCursorLine {:bg :bg2}
+                                :NvimTreeCursorColumn {:link :NvimTreeCursorLine}
                                 :NvimTreeModified {:fg _G.base08}
                                 :NvimTreeModifiedFile {:link :NvimTreeModified}
                                 :CursorLineNr {:fg :sel1 :style :bold}
@@ -137,7 +139,8 @@
                                 :CybuFocus {:bg _G.base0F :fg _G.base00}
                                 :CybuAdjacent {:bg _G.base02 :fg _G.base03}
                                 :CybuBorder {:bg _G.base02}
-                                :CybuBackground {:bg _G.base02}}}})
+                                :CybuBackground {:bg _G.base02}
+                                :NavicSeparator {:fg _G.base03}}}})
 
 (nightfox.compile)
-(vim.cmd "colorscheme nightfox")
+(vim.cmd.colorscheme :nightfox)

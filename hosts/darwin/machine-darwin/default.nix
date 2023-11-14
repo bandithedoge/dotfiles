@@ -1,4 +1,8 @@
-{config, pkgs, suites, ...}:
 {
-	imports = with suites; base;
+  config,
+  pkgs,
+  suites,
+  ...
+}: {
+  imports = with suites; base;
 }

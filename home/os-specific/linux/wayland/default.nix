@@ -4,7 +4,9 @@ in {
   home = {
     packages = with pkgs; [
       swaybg
+      wev
       wl-clipboard
+      wlr-which-key
     ];
     sessionVariables = {
       GDK_BACKEND = "wayland,x11";
@@ -193,7 +195,7 @@ in {
   }; # }}}
 
   services.swayidle = let
-    command = "${pkgs.gtklock}/bin/gtklock";
+    command = "${pkgs.chayang}/bin/chayang -d 10 && ${pkgs.lib.getExe pkgs.gtklock}";
   in {
     enable = true;
     systemdTarget = "graphical-session.target";
@@ -210,4 +212,37 @@ in {
       }
     ];
   };
+
+  xdg.configFile."wlr-which-key/config.yaml".text = with pkgs.rice;
+    builtins.toJSON {
+      font = uiFont;
+      background = base02;
+      color = base05;
+      border = base0F;
+      separator = " 󰅂 ";
+      border_width = 2;
+      corner_r = 0;
+      padding = 5;
+      anchor = "bottom-right";
+      margin_bottom = 5;
+      margin_right = 5;
+      menu = {
+        d = {
+          desc = "Discord";
+          cmd = "discordcanary";
+        };
+        p = {
+          desc = "Music player";
+          cmd = "strawberry";
+        };
+        b = {
+          desc = "Web browser";
+          cmd = "qutebrowser";
+        };
+        g = {
+          desc = "Game launcher";
+          cmd = "lutris";
+        };
+      };
+    };
 }
