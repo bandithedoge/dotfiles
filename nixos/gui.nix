@@ -33,8 +33,6 @@
 
   programs.ns-usbloader.enable = true;
 
-  programs.steam.enable = true;
-
   services.flatpak.enable = true;
 
   programs.system-config-printer.enable = true;

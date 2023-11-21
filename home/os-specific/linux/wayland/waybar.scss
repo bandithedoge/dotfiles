@@ -22,6 +22,10 @@ window#waybar {
         transition: none;
     }
 
+    button.visible {
+        color: $base0F;
+    }
+
     button.active {
         background-color: $base0F;
         color: $base00;

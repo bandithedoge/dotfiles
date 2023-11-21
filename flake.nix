@@ -19,6 +19,7 @@
     neorg.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
     neovim.url = "github:nix-community/neovim-nightly-overlay";
     nil.url = "github:oxalica/nil";
+    nix-alien.url = "github:thiagokokada/nix-alien";
     nix-gaming.url = "github:fufexan/nix-gaming";
     nix-index-database.url = "github:Mic92/nix-index-database";
     nixd.url = "github:nix-community/nixd";
@@ -57,6 +58,7 @@
               neorg.overlays.default
               neovim.overlay
               nil.overlays.default
+              nix-alien.overlays.default
               nix-gaming.overlays.default
               nixd.overlays.default
               nixmox.overlay
@@ -64,6 +66,10 @@
               nur.overlay
               poetry2nix.overlays.default
               prismlauncher.overlays.default
+              (_: prev: {
+                inherit (nix-gaming.packages.${prev.system}) wine-ge;
+                inherit (prismlauncher.packages.${prev.system}) prismlauncher prismlauncher-unwrapped;
+              })
               (import ./overlay.nix)
             ];
             nixpkgs = {
@@ -101,13 +107,16 @@
                 ./nixos/gaming.nix
                 ./nixos/virt.nix
                 {
-                  home-manager.users.bandithedoge.imports = [
-                    self.homeModules.default
-                    ./home/editors
-                    ./home/gaming
-                    ./home/gui
-                    ./home/os-specific/linux
-                  ];
+                  home-manager.users.bandithedoge = {
+                    hostname = "thonkpad";
+                    imports = [
+                      self.homeModules.default
+                      ./home/editors
+                      ./home/gaming
+                      ./home/gui
+                      ./home/os-specific/linux
+                    ];
+                  };
                 }
               ];
           };
@@ -115,7 +124,7 @@
           machine-nixos = self.nixos-flake.lib.mkLinuxSystem {
             nixpkgs = defaults.nixpkgs // {hostPlatform = "x86_64-linux";};
             imports = with inputs.nixos-hardware.nixosModules;
-              defaults.imports
+              defaults.imports.nixos
               ++ [
                 common-pc
                 common-pc-ssd
@@ -127,19 +136,23 @@
                 ./nixos/gaming.nix
                 ./nixos/virt.nix
                 {
-                  home-manager.users.bandithedoge.imports = [
-                    self.homeModules.default
-                    ./home/editors
-                    ./home/gaming
-                    ./home/gui
-                    ./home/os-specific/linux
-                  ];
+                  home-manager.users.bandithedoge = {
+                    hostname = "machine-nixos";
+                    imports = [
+                      self.homeModules.default
+                      ./home/editors
+                      ./home/gaming
+                      ./home/gui
+                      ./home/os-specific/linux
+                    ];
+                  };
                 }
               ];
           };
         };
 
         homeModules.default = {pkgs, ...}: {
+          options.hostname = pkgs.lib.mkOption {type = pkgs.lib.types.str;};
           imports = with inputs; [
             ./nix.nix
             hyprland.homeManagerModules.default

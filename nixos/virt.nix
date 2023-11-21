@@ -1,5 +1,5 @@
 {pkgs, ...}: {
-  environment.systemPackages = with pkgs; [virt-manager];
+  environment.systemPackages = with pkgs; [virt-manager virtiofsd];
 
   virtualisation = {
     libvirtd.enable = true;

@@ -1,4 +1,8 @@
-{pkgs, ...}: let
+{
+  pkgs,
+  config,
+  ...
+}: let
   rofi-stuff = pkgs.callPackage ../rofi {};
 in {
   home = {
@@ -66,17 +70,29 @@ in {
         ];
         modules-right = [
           "tray"
-          "custom/network"
+          (
+            if config.hostname == "thonkpad"
+            then "custom/network"
+            else ""
+          )
           "cpu"
           "memory"
           "temperature"
-          "custom/battery"
+          (
+            if config.hostname == "thonkpad"
+            then "custom/battery"
+            else ""
+          )
           "wireplumber"
           "clock"
         ];
         "hyprland/window" = {
           max-length = 64;
           separate-outputs = true;
+        };
+        tray = {
+          spacing = 15;
+          reverse-direction = true;
         };
         "custom/network" = {
           exec = pkgs.writeShellScript "network" ''
@@ -135,6 +151,10 @@ in {
         };
         temperature = rec {
           inherit interval;
+          thermal-zone =
+            if config.hostname == "machine-nixos"
+            then 2
+            else 0;
           states.critical = 80;
           tooltip = false;
           format = "${icon "󰔏"} {temperatureC}°C";
@@ -237,11 +257,15 @@ in {
         };
         b = {
           desc = "Web browser";
-          cmd = "qutebrowser";
+          cmd = "$BROWSER";
         };
         g = {
           desc = "Game launcher";
-          cmd = "lutris";
+          cmd = "cartridges";
+        };
+        k = {
+          desc = "Password manager";
+          cmd = "keepassxc";
         };
       };
     };

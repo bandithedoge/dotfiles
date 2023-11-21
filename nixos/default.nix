@@ -1,5 +1,7 @@
 {pkgs, ...}: {
-  system.stateVersion = "23.05";
+  system.stateVersion = "23.11";
+
+  hardware.enableRedistributableFirmware = true;
 
   environment = {
     systemPackages = with pkgs; [

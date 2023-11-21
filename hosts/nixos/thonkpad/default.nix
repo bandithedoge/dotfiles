@@ -2,7 +2,6 @@
   environment = {
     systemPackages = with pkgs; [
       connman-gtk
-      wineWowPackages.staging
     ];
     variables = {
       BROWSER = "qutebrowser";

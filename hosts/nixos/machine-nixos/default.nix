@@ -1,31 +1,9 @@
-{
-  suites,
-  pkgs,
-  ...
-}: {
-  environment.systemPackages = with pkgs; [
-    wine-tkg
-  ];
-
-  # displays {{{
-  services.xserver = {
-    xrandrHeads = [
-      "DVI-D-0"
-      {
-        output = "HDMI-A-0";
-        primary = true;
-        monitorConfig = ''
-          Option "Position" "1920 45"
-        '';
-      }
-    ];
-  };
-  # }}}
+{pkgs, ...}: {
+  environment.systemPackages = with pkgs; [];
 
   # hardware {{{
   boot = {
-    kernelPackages = pkgs.linuxKernel.packages.linux_xanmod_latest;
-    kernelParams = ["threadirqs"];
+    kernelPackages = pkgs.linuxPackages_cachyos;
     initrd = {
       availableKernelModules = ["xhci_pci" "ehci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod"];
       kernelModules = [];
@@ -38,27 +16,38 @@
     };
   };
 
-  networking.useDHCP = true;
+  powerManagement.cpuFreqGovernor = "performance";
+  # }}}
+
+  networking = {
+    hostName = "machine-nixos";
+
+    networkmanager = {
+      enable = true;
+      plugins = with pkgs; [networkmanager-openvpn];
+    };
+
+    wireguard = {
+      enable = true;
+    };
+  };
 
   programs.openvpn3.enable = true;
 
-  hardware.cpu.intel.updateMicrocode = true;
-
-  services.xserver.libinput.mouse.accelProfile = "flat";
-
-  hardware.opengl.enable = true;
-
-  powerManagement.cpuFreqGovernor = "performance";
-  # }}}
+  services.ananicy = {
+    enable = true;
+    package = pkgs.ananicy-cpp;
+    rulesProvider = pkgs.ananicy-cpp-rules;
+  };
 
   # drives {{{
   fileSystems = {
     "/" = {
-      device = "/dev/disk/by-uuid/418f785a-3ee1-423b-bf2d-f3a3329c77d2";
+      device = "/dev/disk/by-label/nixos";
       fsType = "btrfs";
     };
     "/boot" = {
-      device = "/dev/disk/by-uuid/90CD-E31C";
+      device = "/dev/disk/by-label/boot";
       fsType = "vfat";
     };
     "/mnt/data" = {
@@ -75,7 +64,12 @@
     };
   };
 
-  swapDevices = [{device = "/dev/disk/by-uuid/80f501f4-d78a-48e4-96d2-e723122fb0d5";}];
+  swapDevices = [
+    {
+      device = "/swap/swapfile";
+      size = 4 * 1024;
+    }
+  ];
   # }}}
 
   environment.variables = {

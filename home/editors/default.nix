@@ -50,6 +50,7 @@
     # lua
     fennel
     fnlfmt
+    luajit
     luajitPackages.luacheck
     selene
     stylua
@@ -233,6 +234,10 @@
 
       require("tangerine").setup {
         target = vim.fn.stdpath "cache" .. "/tangerine",
+        rtpdirs = {
+          "after",
+          "ftplugin"
+        },
         compiler = {
           hooks = {"oninit"}
         }

@@ -30,16 +30,13 @@ in {
       gh
       git
       hactool
-      htop
       imagemagick
+      innoextract
       jq
       killall
       librespeed-cli
-      luajit
       manix
-      ncdu
       neofetch
-      nethack
       niv
       nix-prefetch
       oi
@@ -48,13 +45,12 @@ in {
       rclone
       ripgrep
       sox
-      tree
+      unar
       unzip
       vimiv-qt
       wgcf
       wget
       xdg-ninja
-      xdragon
       yt-dlp
     ];
     # }}}

@@ -1,0 +1,29 @@
+:root {
+    --arrowpanel-background: #{$base02} !important;
+    --arrowpanel-border-color: #{$base03} !important;
+    --arrowpanel-color: #{$base05} !important;
+    --arrowpanel-dimmed: rgba(0,0,0,0.4) !important;
+    --lwt-accent-color-inactive: #{$base03} !important;
+    --lwt-accent-color: #{$base0F} !important;
+    --lwt-text-color: #{$base05} !important;
+    --lwt-toolbarbutton-active-background: #{$base0F} !important;
+    --lwt-toolbarbutton-hover-background: #{$base02} !important;
+    --tab-selected-bgcolor: #{$base02} !important;
+    --toolbar-bgcolor: rgba(0,0,0,0.4) !important;
+    --toolbar-field-background-color: #{$base10} !important;
+    --toolbar-field-border-color: #{$base02} !important;
+    --toolbar-field-color: #{$base05} !important;
+    --toolbar-field-focus-background-color: #{$base02} !important;
+    --toolbar-field-focus-border-color: #{$base0F} !important;
+    --toolbar-field-focus-color: #{$base05} !important;
+    --toolbarbutton-icon-fill: #{$base05} !important;
+    --urlbar-popup-url-color: #{$base0F} !important;
+}
+
+.titlebar-close {
+    display: none;
+}
+
+#nav-bar {
+	border-right-width: 0 !important;
+}

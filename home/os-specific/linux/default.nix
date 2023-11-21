@@ -13,7 +13,6 @@ in {
 
   home = {
     packages = with pkgs; [
-      anydesk
       appimage-run
       bandithedoge.basiliskii-bin
       bandithedoge.sheepshaver-bin
@@ -30,11 +29,14 @@ in {
       libnotify
       libreoffice-fresh
       nim
+      nix-alien
       pavucontrol
       pciutils
       rclone
       tor-browser-bundle-bin
       transmission-gtk
+      wine-ge
+      xdragon
     ];
     pointerCursor = {
       inherit (pkgs.rice.gtk.cursorTheme) package name size;
@@ -61,6 +63,8 @@ in {
     gtk4 = gtk3;
   };
 
+  dconf.settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
+
   xdg.configFile = let
     css = pkgs.rice.compileSCSS ./gtk.scss;
   in {
@@ -70,10 +74,13 @@ in {
   # }}}
 
   # qt {{{
-  qt = {
-    enable = true;
-    style.name = "adwaita-dark";
-  };
+  # qt = {
+  #   enable = true;
+  #   style = {
+  #     name = "adwaita-dark";
+  #     package = pkgs.adwaita-qt;
+  #   };
+  # };
   # }}}
 
   programs.qutebrowser = {
@@ -324,11 +331,24 @@ in {
     # {{{
     enable = true;
     scripts = with pkgs.mpvScripts; [
-      cutter
-      quality-menu
+      uosc
+      mpris
+      thumbfast
+      visualizer
       sponsorblock
-      thumbnail
+      quality-menu
     ];
+    config = {
+      profile = "sw-fast";
+      video-sync = "display-resample";
+      osd-bar = false;
+      border = false;
+      save-position-on-quit = true;
+      vo = "gpu-next";
+      hwdec = "auto-safe";
+      ao = "pipewire";
+    };
+    scriptOpts.uosc.timeline_style = "bar";
   };
   # }}}
 
@@ -483,6 +503,10 @@ in {
     };
   }; # }}}
 
+  programs.obs-studio = {
+    enable = true;
+  };
+
   # polkit {{{
   systemd.user.services.polkit-gnome-authentication-agent-1 = {
     Unit = {
@@ -505,6 +529,16 @@ in {
     };
   };
   # }}}
+
+  systemd.user.services.network-manager-applet = {
+    Unit = {
+      Description = "Network Manager applet";
+      After = ["graphical-session-pre.target"];
+      PartOf = ["graphical-session.target"];
+    };
+    Install.WantedBy = ["graphical-session.target"];
+    Service.ExecStart = "${pkgs.networkmanagerapplet}/bin/nm-applet";
+  };
 
   services.syncthing.enable = true;
 
