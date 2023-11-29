@@ -70,6 +70,7 @@ in {
         ];
         modules-right = [
           "tray"
+          "mpris"
           (
             if config.hostname == "thonkpad"
             then "custom/network"
@@ -93,6 +94,17 @@ in {
         tray = {
           spacing = 15;
           reverse-direction = true;
+        };
+        mpris = {
+          player = "strawberry";
+          format = "${icon "{status_icon}"}{artist} - {title}";
+          status-icons = {
+            playing = "󰐊";
+            paused = "󰏤";
+            stopped = "󰓛";
+          };
+          on-scroll-up = "playerctl volume 0.05+";
+          on-scroll-down = "playerctl volume 0.05-";
         };
         "custom/network" = {
           exec = pkgs.writeShellScript "network" ''
@@ -261,7 +273,7 @@ in {
         };
         g = {
           desc = "Game launcher";
-          cmd = "cartridges";
+          cmd = "lutris";
         };
         k = {
           desc = "Password manager";

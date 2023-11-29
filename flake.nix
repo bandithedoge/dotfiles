@@ -10,6 +10,9 @@
     home-manager.url = "github:nix-community/home-manager";
     nixos-wsl.url = "github:nix-community/NixOS-WSL/22.05-5c211b47";
 
+    nur-bandithedoge.url = "github:bandithedoge/nur-packages";
+    # nur-bandithedoge.url = "path:/home/bandithedoge/git/nur-packages";
+
     hyprland-split-monitor-workspaces = {
       inputs.hyprland.follows = "hyprland";
       url = "github:Duckonaut/split-monitor-workspaces";
@@ -24,7 +27,6 @@
     nix-index-database.url = "github:Mic92/nix-index-database";
     nixd.url = "github:nix-community/nixd";
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
-    nur-bandithedoge.url = "github:bandithedoge/nur-packages";
     nur.url = "github:nix-community/NUR";
     nyx.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
     poetry2nix.url = "github:nix-community/poetry2nix";
@@ -81,6 +83,7 @@
             };
             imports = {
               nixos = with inputs; [
+                self.nixosModules.default
                 home-manager.nixosModules.home-manager
                 hyprland.nixosModules.default
                 musnix.nixosModules.musnix
@@ -149,6 +152,10 @@
                 }
               ];
           };
+        };
+
+        nixosModules.default = {...}: {
+          home-manager.extraSpecialArgs = {inherit inputs;};
         };
 
         homeModules.default = {pkgs, ...}: {

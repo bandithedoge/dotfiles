@@ -52,8 +52,8 @@
                  :process_comment_signs false
                  :sections {:left [:content] :right [:number_of_folded_lines]}}})
  ;;
- (_G.use :lewis6991/foldsigns.nvim
-         {:event [:BufReadPre :BufNewFile] :config true})
+ ; (_G.use :lewis6991/foldsigns.nvim
+ ;         {:event [:BufReadPre :BufNewFile] :config true})
  ;;
  (_G.use :folke/todo-comments.nvim
          {:dependencies [(_G.use :nvim-lua/plenary.nvim)]

@@ -22,6 +22,7 @@ in {
       discord-canary
       ferdium
       freecad
+      gnome.zenity
       gparted
       inkscape
       keepassxc
@@ -530,16 +531,6 @@ in {
   };
   # }}}
 
-  systemd.user.services.network-manager-applet = {
-    Unit = {
-      Description = "Network Manager applet";
-      After = ["graphical-session-pre.target"];
-      PartOf = ["graphical-session.target"];
-    };
-    Install.WantedBy = ["graphical-session.target"];
-    Service.ExecStart = "${pkgs.networkmanagerapplet}/bin/nm-applet";
-  };
-
   services.syncthing.enable = true;
 
   fonts.fontconfig.enable = true;
@@ -549,6 +540,7 @@ in {
     inherit (gtk) iconTheme;
     settings = {
       global = {
+        follow = "keyboard";
         offset = "5x5";
         progress_bar_frame_width = 2;
         frame_width = 2;

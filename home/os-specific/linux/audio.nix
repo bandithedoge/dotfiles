@@ -1,7 +1,4 @@
-{
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   home.packages = with pkgs; [
     ardour
     bandithedoge.cardinal
@@ -9,6 +6,7 @@
     bespokesynth
     carla
     furnace
+    giada
     playerctl
     reaper
     strawberry
@@ -16,11 +14,15 @@
     # plugins
     ChowKick
     bandithedoge.ildaeil
+    bandithedoge.octasine
     delayarchitect
+    distrho
     dragonfly-reverb
+    eq10q
     geonkick
     guitarix
     lsp-plugins
+    open-music-kontrollers.mephisto
     yabridge
     yabridgectl
   ];
@@ -31,7 +33,12 @@
   };
 
   xdg.configFile."yabridgectl/config.toml".text = ''
-    plugin_dirs = ['/mnt/soft/Bottles/audio/drive_c/Program Files/Common Files/VST3', '/mnt/soft/Bottles/audio/drive_c/Program Files/Common Files/CLAP']
+    plugin_dirs = [
+      '/mnt/soft/Bottles/audio/drive_c/Program Files/Common Files/VST3',
+      '/mnt/soft/Bottles/audio/drive_c/Program Files/Common Files/CLAP',
+      '/mnt/soft/Bottles/audio/drive_c/Program Files/VstPlugins',
+      '/mnt/soft/Bottles/audio/drive_c/Program Files/Steinberg/VSTPlugins'
+    ]
 
     ["iZotope*.vst3"]
     group = "izotope"

@@ -13,7 +13,10 @@
                                                               :rainbowcol6
                                                               :rainbowcol7]}))})
                          (_G.use :windwp/nvim-ts-autotag)
-                         (_G.use :JoosepAlviste/nvim-ts-context-commentstring)
+                         (_G.use :JoosepAlviste/nvim-ts-context-commentstring
+                                 {:init #(g! skip_ts_context_commentstring_module
+                                             true)
+                                  :config true})
                          (_G.use :nvim-treesitter/playground)]
           :build (when (not _G.USING_NIX) ":TSUpdate")
           :event [:BufReadPost :BufNewFile]
@@ -21,8 +24,7 @@
                  :highlight {:enable true}
                  :indent {:enable true}
                  :playground {:enable true}
-                 :autotag {:enable true :filetypes [:html :xml]}
-                 :context_commentstring {:enable true}}
+                 :autotag {:enable true :filetypes [:html :xml]}}
           :config #(let [ts (require :nvim-treesitter.configs)
                          parsers (require :nvim-treesitter.parsers)
                          parser-configs (parsers.get_parser_configs)]

@@ -11,6 +11,7 @@
         "https://emacsng.cachix.org"
         "https://ezkea.cachix.org"
         "https://hyprland.cachix.org"
+        "https://jakestanger.cachix.org"
         "https://kira-bruneau.cachix.org"
         "https://nix-community.cachix.org"
         "https://nix-gaming.cachix.org"
@@ -25,6 +26,7 @@
         "ezkea.cachix.org-1:ioBmUbJTZIKsHmWWXPe1FSFbeVe+afhfgqgTSNd34eI="
         "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
         "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+        "jakestanger.cachix.org-1:VWJE7AWNe5/KOEvCQRxoE8UsI2Xs2nHULJ7TEjYm7mM="
         "kira-bruneau.cachix.org-1:FJSccwNPRNHPBHN+qxAme2Svp537q7dDuHkqLnyOTaQ="
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
         "nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4="
@@ -34,7 +36,6 @@
       auto-optimise-store = true;
     };
     extraOptions = ''
-      allow-dirty = true
       extra-experimental-features = nix-command flakes
       log-lines = 50
       warn-dirty = false

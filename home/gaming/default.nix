@@ -1,10 +1,21 @@
 {pkgs, ...}: {
   home.packages = with pkgs; [
+    (lutris.override {
+      steamSupport = false;
+      extraPkgs = pkgs: with pkgs; [gamescope_git];
+      extraLibraries = pkgs:
+        with pkgs; [
+          nspr
+          xorg.libXScrnSaver
+          xorg.libXdamage
+          xorg.libXfixes
+          xorg.libXft
+        ];
+    })
     bandithedoge.raze
     bastet
-    cartridges
+    gamescope_git
     gzdoom
-    lutris
     nethack
     opentyrian
     prismlauncher
@@ -23,7 +34,6 @@
       gl_vsync = 0;
 
       round_corners = 5;
-      hud_compact = true;
       table_columns = 4;
 
       toggle_fps_limit = "Shift_R+F10";
@@ -42,6 +52,7 @@
       swap = true;
       procmem = true;
       fps = true;
+      fps_color_change = true;
       histogram = true;
       frametime = true;
       frame_timing = true;
@@ -50,6 +61,7 @@
 
       engine_version = true;
       gpu_name = true;
+      exec_name = true;
       vulkan_driver = true;
       wine = true;
       fsr = true;
@@ -57,11 +69,5 @@
       show_fps_limit = true;
       resolution = true;
     };
-  };
-
-  xdg.configFile."com.github.tkashkin.gamehub/tweaks/gamescope.json".text = builtins.toJSON {
-    id = "gamescope";
-    name = "Gamescope";
-    command = "gamescope -f -g 1080 -H 1080 -- mangohud \${command}";
   };
 }
