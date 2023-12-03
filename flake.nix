@@ -31,6 +31,7 @@
     nyx.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
     poetry2nix.url = "github:nix-community/poetry2nix";
     prismlauncher.url = "github:PrismLauncher/PrismLauncher";
+    zjstatus.url = "github:dj95/zjstatus";
 
     colors.url = "github:Misterio77/nix-colors";
     musnix.url = "github:musnix/musnix";

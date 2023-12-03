@@ -1,17 +1,29 @@
 {pkgs ? import <nixpkgs> {}}:
-pkgs.nimPackages.buildNimPackage {
+pkgs.buildNimPackage {
   name = "oi";
   src = ./.;
-
-  nimBinOnly = true;
 
   nativeBuildInputs = with pkgs; [
     makeWrapper
   ];
 
-  buildInputs = with pkgs.nimPackages; [
-    docopt
-  ];
+  preBuild = let
+    nimCfg = pkgs.lib.pipe ./lock.json [
+      builtins.readFile
+      builtins.fromJSON
+      (builtins.getAttr "depends")
+      (builtins.filter ({packages, ...}: !(builtins.any (pkg: builtins.elem pkg []) packages)))
+      (map ({
+        path,
+        srcDir,
+        ...
+      }: ''path:"${builtins.storePath path}/${srcDir}"''))
+      pkgs.lib.concatLines
+      (pkgs.writeText "nim.cfg")
+    ];
+  in ''
+    cp ${nimCfg} ./nim.cfg
+  '';
 
   postInstall = ''
     wrapProgram $out/bin/oi --prefix PATH : ${

@@ -1,4 +1,9 @@
-{pkgs, ...}: let
+{
+  pkgs,
+  lib,
+  inputs,
+  ...
+}: let
   oi = pkgs.callPackage ./oi {};
 in {
   imports = [./xdg.nix];
@@ -268,6 +273,89 @@ in {
           )
         '';
     # }}}
+  };
+  # }}}
+
+  # zellij {{{
+  programs.zellij = {
+    enable = true;
+    enableFishIntegration = true;
+  };
+
+  xdg.configFile = {
+    "zellij/config.kdl".text = ''
+      pane_frames false
+
+      keybinds clear-defaults=true {
+        normal {
+          bind "Ctrl t" { SwitchToMode "Tab"; }
+        }
+        tab {
+          bind "h" { MoveFocus "Left"; }
+          bind "j" { MoveFocus "Down"; }
+          bind "k" { MoveFocus "Up"; }
+          bind "l" { MoveFocus "Right"; }
+          bind "u" { HalfPageScrollUp; }
+          bind "d" { HalfPageScrollDown; }
+          bind "Tab" { GoToNextTab; SwitchToMode "Normal"; }
+          bind "w" { CloseFocus; SwitchToMode "Normal"; }
+          bind "n" { NewTab; SwitchToMode "Normal"; }
+          bind "v" { NewPane "Right"; SwitchToMode "Normal"; }
+          bind "s" { NewPane "Down"; SwitchToMode "Normal"; }
+          bind "/" { SwitchToMode "EnterSearch"; SearchInput 0; }
+          bind "e" { EditScrollback; SwitchToMode "Normal"; }
+        }
+        search {
+          bind "n" { Search "down"; }
+          bind "p" { Search "up"; }
+          bind "c" { SearchToggleOption "CaseSensitivity"; }
+          bind "w" { SearchToggleOption "Wrap"; }
+          bind "o" { SearchToggleOption "WholeWord"; }
+        }
+        entersearch {
+          bind "Ctrl c" "Esc" { SwitchToMode "Scroll"; }
+          bind "Enter" { SwitchToMode "Search"; }
+        }
+        shared_except "normal" {
+          bind "Ctrl t" { SwitchToMode "Normal"; }
+          bind "Esc" { SwitchToMode "Normal"; }
+        }
+      }
+    '';
+    "zellij/layouts/default.kdl".text = with pkgs.rice; ''
+      layout {
+        pane size=1 borderless=true {
+          plugin location="file:${inputs.zjstatus.packages.${pkgs.system}.default}/bin/zjstatus.wasm" {
+            format_left "{mode}#[bg=${base10}] {tabs}"
+            format_space "#[bg=${base10}]"
+
+            mode_normal "#[bg=${base02},fg=${base0F},bold] {name} "
+            mode_tab "#[bg=${base0F},fg=${base00},bold] {name} "
+
+            tab_normal "#[bg=${base02},fg=${base03}] {name} "
+            tab_active "#[bg=${base0F},fg=${base00}] {name} "
+          }
+        }
+        pane split_direction="vertical" {
+          pane
+        }
+      }
+    '';
+    "zellij/themes/default.kdl".text = lib.hm.generators.toKDL {} (with pkgs.rice; {
+      themes.default = {
+        fg = base05;
+        bg = base00;
+        black = base10;
+        red = base08;
+        green = base0B;
+        yellow = base0A;
+        blue = base0D;
+        magenta = base0E;
+        cyan = base0C;
+        white = base06;
+        orange = base09;
+      };
+    });
   };
   # }}}
 
