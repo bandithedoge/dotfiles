@@ -17,7 +17,6 @@
   };
 
   powerManagement.cpuFreqGovernor = "performance";
-  # }}}
 
   networking = {
     hostName = "machine-nixos";
@@ -75,5 +74,6 @@
   environment.variables = {
     BROWSER = "firefox";
     WINEFSYNC = "1";
+    ROC_ENABLE_PRE_VEGA = "1";
   };
 }

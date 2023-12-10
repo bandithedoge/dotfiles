@@ -46,7 +46,6 @@
     # nix
     alejandra
     nil
-    nixd
 
     # lua
     fennel

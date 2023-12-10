@@ -68,9 +68,10 @@
                      (lsp.lua_ls.setup $2)
                      (lsp.marksman.setup $2)
                      (lsp.neocmake.setup $2)
-                     (lsp.nil_ls.setup (merge! $2 {:autostart true}))
-                     (lsp.nixd.setup (merge! $2
-                                             {:settings {:nixd {:formatting {:command :alejandra}}}}))
+                     (lsp.nil_ls.setup (merge! $2
+                                               {:autostart true
+                                                :settings {:nil {:formatting {:command [:alejandra]}
+                                                                 :flake {:autoEvalInputs true}}}}))
                      (lsp.nimls.setup $2)
                      (lsp.pylsp.setup (merge! $2
                                               {:settings {:pylsp {:plugins {:autopep8 {:enabled false}
@@ -111,8 +112,7 @@
                          d b.diagnostics
                          a b.code_actions]
                      (null-ls.setup)
-                     (null-ls.register [f.alejandra
-                                        f.black
+                     (null-ls.register [f.black
                                         f.cabal_fmt
                                         f.fish_indent
                                         f.fixjson
@@ -167,5 +167,4 @@
           :opts {:ui {:code_action " 󰌵" :border :solid :title false}
                  :code_action {:num_shortcut false :show_server_name true}
                  :lightbulb {:sign false}
-                 :symbol_in_winbar {:enable false
-                                    :show_file false}}})]
+                 :symbol_in_winbar {:enable false :show_file false}}})]

@@ -13,10 +13,8 @@
     nur-bandithedoge.url = "github:bandithedoge/nur-packages";
     # nur-bandithedoge.url = "path:/home/bandithedoge/git/nur-packages";
 
-    hyprland-split-monitor-workspaces = {
-      inputs.hyprland.follows = "hyprland";
-      url = "github:Duckonaut/split-monitor-workspaces";
-    };
+    hyprland-split-monitor-workspaces.inputs.hyprland.follows = "hyprland";
+    hyprland-split-monitor-workspaces.url = "github:Duckonaut/split-monitor-workspaces";
     hyprland.url = "github:hyprwm/Hyprland";
     mozilla.url = "github:mozilla/nixpkgs-mozilla";
     neorg.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
@@ -25,7 +23,6 @@
     nix-alien.url = "github:thiagokokada/nix-alien";
     nix-gaming.url = "github:fufexan/nix-gaming";
     nix-index-database.url = "github:Mic92/nix-index-database";
-    nixd.url = "github:nix-community/nixd";
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
     nur.url = "github:nix-community/NUR";
     nyx.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
@@ -48,6 +45,17 @@
         nixosConfigurations = let
           defaults = rec {
             overlays = with inputs; [
+              mozilla.overlays.firefox
+              neorg.overlays.default
+              neovim.overlay
+              nil.overlays.default
+              nix-alien.overlays.default
+              nix-gaming.overlays.default
+              nixmox.overlay
+              nixpkgs-wayland.overlay
+              nur.overlay
+              poetry2nix.overlays.default
+              prismlauncher.overlays.default
               (_: prev: {
                 bandithedoge = import nur-bandithedoge {
                   pkgs = import nur-bandithedoge.inputs.nixpkgs {inherit (prev) system;};
@@ -56,22 +64,9 @@
                 hyprlandPlugins = {
                   split-monitor-workspaces = hyprland-split-monitor-workspaces.packages.${prev.system}.default;
                 };
-              })
-              mozilla.overlays.firefox
-              neorg.overlays.default
-              neovim.overlay
-              nil.overlays.default
-              nix-alien.overlays.default
-              nix-gaming.overlays.default
-              nixd.overlays.default
-              nixmox.overlay
-              nixpkgs-wayland.overlay
-              nur.overlay
-              poetry2nix.overlays.default
-              prismlauncher.overlays.default
-              (_: prev: {
                 inherit (nix-gaming.packages.${prev.system}) wine-ge;
                 inherit (prismlauncher.packages.${prev.system}) prismlauncher prismlauncher-unwrapped;
+                inherit (emacs.packages.${prev.system}) emacs-unstable-pgtk;
               })
               (import ./overlay.nix)
             ];

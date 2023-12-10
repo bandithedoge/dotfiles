@@ -11,6 +11,7 @@ in {
       wev
       wl-clipboard
       wlr-which-key
+      satty
     ];
     sessionVariables = {
       GDK_BACKEND = "wayland,x11";
@@ -22,6 +23,7 @@ in {
   wayland.windowManager.hyprland = {
     # {{{
     enable = true;
+    recommendedEnvironment = true;
     plugins = with pkgs.hyprlandPlugins; [
       split-monitor-workspaces
     ];
@@ -41,15 +43,32 @@ in {
         "foot"
       ])}
 
-      bind = , Print, exec, ${pkgs.writeShellScript "screenshot" (with pkgs.rice; ''
-        sel=$(${pkgs.slurp}/bin/slurp -d -b "${base00}AA" -c "${base0F}FF" -B "${base00}FF" -F "${uiFont}")
-        ${pkgs.grim}/bin/grim -g "$sel" - | ${pkgs.swappy}/bin/swappy -f -
+      bind = , Print, exec, ${pkgs.writeShellScript "screenshot" (with pkgs; ''
+        ${lib.getExe wayshot} -o $(hyprctl activeworkspace -j | ${lib.getExe jq} .monitor -r) --stdout | satty -f -
       '')}
 
       bind = $mod CTRL, p, exec, ${rofi-stuff}/bin/keepass
     '';
   };
   # }}}
+
+  wayland.windowManager.sway = {
+    enable = true;
+    package = pkgs.sway_git;
+    config = {
+      bars = [];
+      colors = with pkgs.rice; {
+        background = base00;
+        focused = {
+          background = base0F;
+          border = base0F;
+          childBorder = base0F;
+          indicator = base0F;
+          text = base00;
+        };
+      };
+    };
+  };
 
   programs.waybar = {
     # {{{
@@ -309,7 +328,7 @@ in {
       menu = {
         d = {
           desc = "Discord";
-          cmd = "discordcanary";
+          cmd = "vencorddesktop";
         };
         p = {
           desc = "Music player";

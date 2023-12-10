@@ -13,13 +13,13 @@ in {
 
   home = {
     packages = with pkgs; [
+      (blender.withPackages (p: [(bandithedoge.pythonPackages.py-slvs.override {pythonPkgs = p;})]))
       appimage-run
       bandithedoge.basiliskii-bin
       bandithedoge.sheepshaver-bin
-      blender
       bottles
+      caprine-bin
       d-spy
-      discord-canary
       ferdium
       freecad
       gnome.zenity
@@ -36,6 +36,7 @@ in {
       rclone
       tor-browser-bundle-bin
       transmission-gtk
+      vesktop
       wine-ge
       xdragon
     ];

@@ -12,6 +12,7 @@
 
   programs.regreet = {
     enable = true;
+    cageArgs = ["-s" "-m" "last"];
     settings = with pkgs.rice; {
       background = {
         path = wallpaperBlurred;
