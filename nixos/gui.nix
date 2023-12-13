@@ -8,6 +8,8 @@
     xorg.setxkbmap
   ];
 
+  services.xserver.displayManager.sessionPackages = with pkgs; [sway];
+
   services.greetd.enable = true;
 
   programs.regreet = {
@@ -40,10 +42,7 @@
 
   xdg.portal = {
     enable = true;
-    config.hyprland.default = ["hyprland" "gtk"];
-    extraPortals = with pkgs; [
-      xdg-desktop-portal-gtk
-    ];
+    config.hyprland.default = ["wlr" "gtk"];
   };
 
   gtk.iconCache.enable = true;
