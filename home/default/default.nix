@@ -284,7 +284,15 @@ in {
 
   xdg.configFile = {
     "zellij/config.kdl".text = ''
+      on_force_close "quit"
       pane_frames false
+      session_serialization false
+
+      ui {
+        pane_frames {
+          hide_session_name true
+        }
+      }
 
       keybinds clear-defaults=true {
         normal {
@@ -324,9 +332,13 @@ in {
     '';
     "zellij/layouts/default.kdl".text = with pkgs.rice; ''
       layout {
+        pane split_direction="vertical" {
+          pane
+        }
         pane size=1 borderless=true {
           plugin location="file:${inputs.zjstatus.packages.${pkgs.system}.default}/bin/zjstatus.wasm" {
-            format_left "{mode}#[bg=${base10}] {tabs}"
+            format_left "{mode}#[bg=${base10},fg=${base03}] {session}"
+            format_right "{tabs}"
             format_space "#[bg=${base10}]"
 
             mode_normal "#[bg=${base02},fg=${base0F},bold] {name} "
@@ -335,9 +347,6 @@ in {
             tab_normal "#[bg=${base02},fg=${base03}] {name} "
             tab_active "#[bg=${base0F},fg=${base00}] {name} "
           }
-        }
-        pane split_direction="vertical" {
-          pane
         }
       }
     '';

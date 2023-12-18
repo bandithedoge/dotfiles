@@ -19,6 +19,7 @@ in {
       GDK_BACKEND = "wayland,x11";
       QT_QPA_PLATFORM = "wayland;xcb";
       SDL_VIDEODRIVER = "wayland";
+      _JAVA_AWT_WM_NONREPARENTING = "1";
     };
   };
 
@@ -106,7 +107,7 @@ in {
         commands = [
           {
             command = "opacity 0.95";
-            criteria.app_id = "foot";
+            criteria.app_id = pkgs.rice.terminal;
           }
           {
             command = "floating disable";
@@ -165,7 +166,7 @@ in {
           "${mod}+backspace" = "exec wlr-which-key";
           "${mod}+Control+p" = "exec ${rofi-stuff}/bin/keepass";
           Print = "exec ${pkgs.writeShellScript "screenshot" (with pkgs; ''
-            ${lib.getExe wayshot} -o $(swaymsg -t get_outputs | ${lib.getExe jq} 'map(select(.focused)).[0].name' -r) --stdout | satty -f -
+            ${lib.getExe wayshot} -o $(swaymsg -t get_outputs | ${lib.getExe jq} 'map(select(.focused)).[0].name' -r) --stdout | satty -f - --output-filename ~/Pictures/$(date "+%F-%T").png
           '')}";
 
           "${mod}+w" = "kill";
@@ -387,7 +388,7 @@ in {
           format = "${icon ""} {volume}%";
           format-muted = red (icon "");
           on-click = "amixer set Master toggle";
-          on-click-right = "pavucontrol";
+          on-click-right = "pwvucontrol";
         };
         clock = {
           inherit interval;
@@ -415,54 +416,6 @@ in {
         inherit command;
       }
     ];
-  };
-
-  programs.foot = {
-    enable = true;
-    settings = let
-      color = pkgs.lib.removePrefix "#";
-    in
-      with pkgs.rice; {
-        main = {
-          font = "${monoFont}:size=12";
-          letter-spacing = "-1px";
-          pad = "5x5 center";
-        };
-        bell = {
-          urgent = "yes";
-          notify = "yes";
-          visual = "yes";
-        };
-        cursor = {
-          style = "beam";
-          blink = "yes";
-          color = "${color base00} ${color base0F}";
-        };
-        mouse.hide-when-typing = "yes";
-        colors = {
-          foreground = color base05;
-          background = color base00;
-          regular0 = color base01;
-          regular1 = color base08;
-          regular2 = color base0B;
-          regular3 = color base09;
-          regular4 = color base0D;
-          regular5 = color base0E;
-          regular6 = color base0C;
-          regular7 = color base06;
-          bright0 = color base02;
-          bright1 = color base12;
-          bright2 = color base14;
-          bright3 = color base13;
-          bright4 = color base16;
-          bright5 = color base17;
-          bright6 = color base15;
-          bright7 = color base0F;
-          selection-background = color base05;
-          selection-foreground = color base00;
-          flash = color base0F;
-        };
-      };
   };
 
   xdg.configFile."wlr-which-key/config.yaml".text = with pkgs.rice;

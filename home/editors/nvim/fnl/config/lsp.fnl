@@ -1,10 +1,18 @@
 (require-macros :hibiscus.vim)
 (require-macros :hibiscus.core)
 
-(exec! [sign define DiagnosticSignError text= texthl=DiagnosticSignError]
-       [sign define DiagnosticSignWarn text= texthl=DiagnosticSignWarn]
-       [sign define DiagnosticSignInfo text= texthl=DiagnosticSignInfo]
-       [sign define DiagnosticSignHint text=󰌵 texthl=DiagnosticSignHint])
+(vim.fn.sign_define [{:name :DiagnosticSignError
+                      :text ""
+                      :texthl :DiagnosticSignError}
+                     {:name :DiagnosticSignWarn
+                      :text ""
+                      :texthl :DiagnosticSignWarn}
+                     {:name :DiagnosticSignInfo
+                      :text ""
+                      :texthl :DiagnosticSignInfo}
+                     {:name :DiagnosticSignHint
+                      :text "󰌵"
+                      :texthl :DiagnosticSignHint}])
 
 [(_G.use :neovim/nvim-lspconfig
          {:event [:BufReadPre :BufNewFile]
@@ -45,7 +53,11 @@
                    true)
           :config #(let [lsp (require :lspconfig)]
                      (lsp.bashls.setup $2)
-                     (lsp.clangd.setup $2)
+                     (lsp.clangd.setup (merge! $2
+                                               {:on_attach #(map! [n :buffer]
+                                                                  :<localleader>ls
+                                                                  :<cmd>ClangdSwitchSourceHeader<cr>
+                                                                  "Switch source/header")}))
                      (lsp.cssls.setup $2)
                      (lsp.dartls.setup $2)
                      (lsp.emmet_language_server.setup $2)
@@ -86,8 +98,9 @@
                                                                                          :convention :pep257}
                                                                             :pylint {:enabled true}
                                                                             :yapf {:enabled false}}}}}))
-                     (lsp.rust_analyzer.setup $2)
                      (lsp.qmlls.setup $2)
+                     (lsp.rust_analyzer.setup $2)
+                     (lsp.swift_mesonls.setup $2)
                      (lsp.tailwindcss.setup (merge! $2
                                                     (let [document-color (require :document-color)]
                                                       {:capabilities {:textDocument {:colorProvider {:dynamicRegistration true}}}

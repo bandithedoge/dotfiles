@@ -57,6 +57,7 @@
     sumneko-lua-language-server
 
     # c
+    bandithedoge.swift-mesonlsp-bin
     clang
     clang-tools
     clazy
@@ -156,7 +157,6 @@
             heirline-nvim
             hover-nvim
             indent-blankline-nvim
-            neodim
             nvim-colorizer-lua
             nvim-hlslens
             nvim-tree-lua

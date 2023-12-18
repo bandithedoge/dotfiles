@@ -31,7 +31,6 @@ in {
       libreoffice-fresh
       nim
       nix-alien
-      pavucontrol
       pciutils
       rclone
       tor-browser-bundle-bin

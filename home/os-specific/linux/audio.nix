@@ -8,15 +8,16 @@
     furnace
     giada
     playerctl
+    pwvucontrol
     reaper
     strawberry
 
     # plugins
     ChowKick
+    bandithedoge.distrho-ports
     bandithedoge.ildaeil
     bandithedoge.octasine
     delayarchitect
-    distrho
     dragonfly-reverb
     eq10q
     geonkick

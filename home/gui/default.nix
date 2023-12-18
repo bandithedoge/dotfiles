@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  config,
+  ...
+}: {
   programs.kitty = {
     # {{{
     enable = true;
@@ -65,9 +69,68 @@
   };
   # }}}
 
+  programs.alacritty = {
+    enable = true;
+    settings = {
+      window = {
+        padding = {
+          x = 5;
+          y = 5;
+        };
+        dynamic_padding = true;
+        class.general = "alacritty";
+      };
+      font = {
+        normal.family = pkgs.rice.monoFont;
+        size = 11.5;
+      };
+      colors = with pkgs.rice; {
+        primary = {
+          foreground = base05;
+          background = base00;
+        };
+        cursor = {
+          text = base00;
+          cursor = base0F;
+        };
+        normal = {
+          black = base01;
+          red = base08;
+          green = base0B;
+          yellow = base0A;
+          blue = base0D;
+          magenta = base0E;
+          cyan = base0C;
+        };
+        bright = {
+          black = base03;
+          red = base12;
+          green = base14;
+          yellow = base13;
+          blue = base16;
+          magenta = base17;
+          cyan = base15;
+          white = base0F;
+        };
+      };
+      bell = {
+        animation = "EaseOutQuad";
+        duration = 500;
+        color = pkgs.rice.base0F;
+      };
+      cursor = {
+        style = "Beam";
+        blinking = "On";
+        thickness = 0.25;
+      };
+      terminal.osc52 = "CopyPaste";
+      mouse.hide_when_typing = true;
+    };
+  };
+
   programs.firefox = {
     # {{{
-    enable = true;
+    enable = config.hostname == "machine-nixos";
     package =
       if !pkgs.stdenv.isDarwin
       then

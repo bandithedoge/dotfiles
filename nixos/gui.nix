@@ -42,7 +42,11 @@
 
   xdg.portal = {
     enable = true;
-    config.hyprland.default = ["wlr" "gtk"];
+    config.sway.default = ["wlr" "gtk"];
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-wlr
+      xdg-desktop-portal-gtk
+    ];
   };
 
   gtk.iconCache.enable = true;

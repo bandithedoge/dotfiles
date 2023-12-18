@@ -26,10 +26,6 @@
                      (hooks.register hooks.type.SCOPE_HIGHLIGHT
                                      hooks.builtin.scope_highlight_from_extmark))})
  ;;
- ; (_G.use :NvChad/nvim-colorizer.lua
- ;         {:event [:BufReadPre :BufNewFile]
- ;          :opts {:user_default_options {:css true}}})
- ;;
  (_G.use :lewis6991/gitsigns.nvim
          {:event [:BufReadPre :BufNewFile] :opts {:diff_opts {:internal true}}})
  ;;
@@ -52,15 +48,10 @@
                  :process_comment_signs false
                  :sections {:left [:content] :right [:number_of_folded_lines]}}})
  ;;
- ; (_G.use :lewis6991/foldsigns.nvim
- ;         {:event [:BufReadPre :BufNewFile] :config true})
- ;;
  (_G.use :folke/todo-comments.nvim
          {:dependencies [(_G.use :nvim-lua/plenary.nvim)]
           :event [:BufReadPre :BufNewFile]
           :opts {:signs false}})
- ;;
- (_G.use :zbirenbaum/neodim {:event :LspAttach :opts {:blend_color _G.base00}})
  ;;
  (_G.use :folke/trouble.nvim
          {:cmd [:TroubleToggle :Trouble]
