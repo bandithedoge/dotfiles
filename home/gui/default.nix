@@ -70,6 +70,7 @@
   # }}}
 
   programs.alacritty = {
+    # {{{
     enable = true;
     settings = {
       window = {
@@ -126,7 +127,7 @@
       terminal.osc52 = "CopyPaste";
       mouse.hide_when_typing = true;
     };
-  };
+  }; # }}}
 
   programs.firefox = {
     # {{{

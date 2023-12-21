@@ -122,7 +122,7 @@ in {
         }
         {command = "autotiling-rs";}
         {
-          command = "systemctl --user restart waybar";
+          command = "killall -r 'waybar*'; waybar";
           always = true;
         }
       ];
@@ -226,7 +226,6 @@ in {
   programs.waybar = {
     # {{{
     enable = true;
-    systemd.enable = true;
     settings = with pkgs.rice; let
       red = s: "<span foreground=\"${base08}\">${s}</span>";
       icon = i: "<span font=\"${monoFont} 11\">${i}<tt> </tt></span>";

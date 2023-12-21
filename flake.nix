@@ -103,7 +103,6 @@
                 ./hosts/nixos/thonkpad
                 ./nixos/audio.nix
                 ./nixos/gui.nix
-                ./nixos/gaming.nix
                 ./nixos/virt.nix
                 {
                   home-manager.users.bandithedoge = {

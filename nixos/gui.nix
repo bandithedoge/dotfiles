@@ -70,4 +70,13 @@
   boot.kernel.sysctl = {
     "vm.mmap_min_addr" = 0;
   };
+
+  security.pam.loginLimits = [
+    {
+      domain = "bandithedoge";
+      type = "hard";
+      item = "nofile";
+      value = "524288";
+    }
+  ];
 }

@@ -53,11 +53,7 @@
                    true)
           :config #(let [lsp (require :lspconfig)]
                      (lsp.bashls.setup $2)
-                     (lsp.clangd.setup (merge! $2
-                                               {:on_attach #(map! [n :buffer]
-                                                                  :<localleader>ls
-                                                                  :<cmd>ClangdSwitchSourceHeader<cr>
-                                                                  "Switch source/header")}))
+                     (lsp.clangd.setup $2)
                      (lsp.cssls.setup $2)
                      (lsp.dartls.setup $2)
                      (lsp.emmet_language_server.setup $2)
@@ -155,7 +151,12 @@
                                         (require :typescript.extensions.null-ls.code-actions)]))})
  ;;
  (_G.use :j-hui/fidget.nvim
-         {:event [:LspAttach] :opts {:text {:spinner :dots :done "󰄬"}}})
+         {:opts {:progress {:suppress_on_insert true
+                            :ignore_done_already true
+                            :display {:done_style :diffAdded
+                                      :progress_style :Comment
+                                      :group_style :FloatTitle
+                                      :icon_style :Normal}}}})
  ;;
  (_G.use :ray-x/lsp_signature.nvim
          {:event [:LspAttach]
