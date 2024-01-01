@@ -8,7 +8,6 @@
     };
   };
 
-  # hardware {{{
   boot = {
     kernelPackages = pkgs.linuxPackages_cachyos;
     kernelModules = ["kvm-intel"];
@@ -26,11 +25,33 @@
     '';
     powertop.enable = true;
   };
+  services = {
+    kmonad = {
+      # {{{
+      enable = true;
+      package = pkgs.bandithedoge.haskellPackages.kmonad;
+      keyboards.internal = {
+        name = "laptop-internal";
+        device = "/dev/input/by-path/platform-i8042-serio-0-event-kbd";
+        defcfg = {
+          enable = true;
+          fallthrough = true;
+        };
+        config = builtins.readFile ./kmonad.kbd;
+      };
+    }; # }}}
 
-  services.acpid.enable = true;
-  services.thermald.enable = true;
-  services.tlp.enable = true;
-  services.logind.lidSwitch = "suspend";
+    xserver.libinput = {
+      enable = true;
+      touchpad.tapping = false;
+    };
+
+    acpid.enable = true;
+    thermald.enable = true;
+    tlp.enable = true;
+    logind.lidSwitch = "suspend";
+    connman.enable = true;
+  };
 
   hardware = {
     firmware = with pkgs; [
@@ -42,12 +63,6 @@
       driSupport32Bit = true;
     };
   };
-
-  services.xserver.libinput = {
-    enable = true;
-    touchpad.tapping = false;
-  };
-  # }}}
 
   # drives {{{
   fileSystems = {
@@ -63,29 +78,11 @@
   };
 
   swapDevices = [{device = "/dev/disk/by-uuid/7eaade78-9c5e-4c25-8de4-20cf7ced3e72";}];
-  # }}}
-
-  # keyboard {{{
-  services.kmonad = {
-    enable = true;
-    package = pkgs.bandithedoge.haskellPackages.kmonad;
-    keyboards.internal = {
-      name = "laptop-internal";
-      device = "/dev/input/by-path/platform-i8042-serio-0-event-kbd";
-      defcfg = {
-        enable = true;
-        fallthrough = true;
-      };
-      config = builtins.readFile ./kmonad.kbd;
-    };
-  };
 
   # system.activationScripts.kmonad.text = "${pkgs.systemd}/bin/systemctl try-restart kmonad-laptop-internal";
   # }}}
 
-  # networking {{{
   networking.hostName = "thonkpad";
-  services.connman.enable = true;
 
   # jebać ose
   security.pki.certificateFiles = [
@@ -94,5 +91,4 @@
       sha256 = "0Du2OmOnvCzaGz3ZHu7KsnL23WjDxNfgn3VFqzf2ffA=";
     })
   ];
-  # }}}
 }

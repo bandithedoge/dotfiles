@@ -1,7 +1,6 @@
 {
   pkgs,
   config,
-  inputs,
   ...
 }: {
   # common packages {{{
@@ -18,9 +17,10 @@
     poetry
     black
     isort
-    python311Packages.pyls-isort
-    python311Packages.python-lsp-black
-    python311Packages.python-lsp-server
+    python3
+    python3Packages.pyls-isort
+    python3Packages.python-lsp-black
+    python3Packages.python-lsp-server
 
     # shell
     nodePackages.bash-language-server
@@ -254,4 +254,25 @@
     '';
   };
   # }}}
+
+  programs.emacs = {
+    enable = true;
+    package = pkgs.emacsWithPackagesFromUsePackage {
+      config = pkgs.writeText "emacs.el" ''
+        ${pkgs.rice.def.elisp}
+        ${builtins.readFile ./emacs.el}
+      '';
+      defaultInitFile = true;
+      package = pkgs.emacs-unstable-pgtk;
+      alwaysEnsure = true;
+
+      extraEmacsPackages = epkgs: with epkgs; [
+        treesit-grammars.with-all-grammars
+      ];
+
+      override = final: prev: {
+        smartparens-mode = prev.smartparens;
+      };
+    };
+  };
 }

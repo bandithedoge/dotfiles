@@ -23,42 +23,9 @@ in {
     };
   };
 
-  wayland.windowManager.hyprland = {
-    # {{{
-    enable = true;
-    recommendedEnvironment = true;
-    plugins = with pkgs.hyprlandPlugins; [
-      split-monitor-workspaces
-    ];
-    extraConfig = ''
-      ${pkgs.rice.def.hypr}
-
-      ${builtins.readFile ./hyprland.conf}
-
-      ${builtins.concatStringsSep "\n" (map (x: let
-        x' = toString x;
-      in ''
-        bind = $mod, ${x'}, split-workspace, ${x'}
-        bind = $mod SHIFT, ${x'}, split-movetoworkspacesilent, ${x'}
-      '') (pkgs.lib.range 1 9))}
-
-      ${builtins.concatStringsSep "\n" (map (x: "windowrulev2 = opacity 0.95 0.85, class:(${x})") [
-        "foot"
-      ])}
-
-      bind = , Print, exec, ${pkgs.writeShellScript "screenshot" (with pkgs; ''
-        ${lib.getExe wayshot} -o $(hyprctl activeworkspace -j | ${lib.getExe jq} .monitor -r) --stdout | satty -f -
-      '')}
-
-      bind = $mod CTRL, p, exec, ${rofi-stuff}/bin/keepass
-    '';
-  };
-  # }}}
-
   wayland.windowManager.sway = {
     # {{{
     enable = true;
-    # package = pkgs.sway_git;
     config = {
       bars = [];
       inherit (pkgs.rice) terminal menu;
@@ -122,7 +89,8 @@ in {
         }
         {command = "autotiling-rs";}
         {
-          command = "killall -r 'waybar*'; waybar";
+          # command = "killall -r '*waybar'; waybar";
+          command = "systemctl --user restart waybar";
           always = true;
         }
       ];
@@ -226,6 +194,10 @@ in {
   programs.waybar = {
     # {{{
     enable = true;
+    systemd = {
+      enable = true;
+      target = "sway-session.target";
+    };
     settings = with pkgs.rice; let
       red = s: "<span foreground=\"${base08}\">${s}</span>";
       icon = i: "<span font=\"${monoFont} 11\">${i}<tt> </tt></span>";
@@ -402,10 +374,10 @@ in {
     command = "${pkgs.chayang}/bin/chayang -d 10 && ${pkgs.lib.getExe pkgs.gtklock}";
   in {
     enable = true;
-    systemdTarget = "graphical-session.target";
+    systemdTarget = "sway-session.target";
     timeouts = [
       {
-        timeout = 120;
+        timeout = 180;
         inherit command;
       }
     ];
@@ -417,40 +389,42 @@ in {
     ];
   };
 
-  xdg.configFile."wlr-which-key/config.yaml".text = with pkgs.rice;
-    builtins.toJSON {
-      font = uiFont;
-      background = base02;
-      color = base05;
-      border = base0F;
-      separator = " 󰅂 ";
-      border_width = 2;
-      corner_r = 0;
-      padding = 5;
-      anchor = "bottom-right";
-      margin_bottom = 5;
-      margin_right = 5;
-      menu = {
-        d = {
-          desc = "Discord";
-          cmd = "vencorddesktop";
-        };
-        p = {
-          desc = "Music player";
-          cmd = "strawberry";
-        };
-        b = {
-          desc = "Web browser";
-          cmd = "$BROWSER";
-        };
-        g = {
-          desc = "Game launcher";
-          cmd = "lutris";
-        };
-        k = {
-          desc = "Password manager";
-          cmd = "keepassxc";
+  xdg.configFile = {
+    "wlr-which-key/config.yaml".text = with pkgs.rice;
+      builtins.toJSON {
+        font = uiFont;
+        background = base02;
+        color = base05;
+        border = base0F;
+        separator = " 󰅂 ";
+        border_width = 2;
+        corner_r = 0;
+        padding = 5;
+        anchor = "bottom-right";
+        margin_bottom = 5;
+        margin_right = 5;
+        menu = {
+          d = {
+            desc = "Discord";
+            cmd = "vencorddesktop";
+          };
+          p = {
+            desc = "Music player";
+            cmd = "strawberry";
+          };
+          b = {
+            desc = "Web browser";
+            cmd = "$BROWSER";
+          };
+          g = {
+            desc = "Game launcher";
+            cmd = "lutris";
+          };
+          k = {
+            desc = "Password manager";
+            cmd = "keepassxc";
+          };
         };
       };
-    };
+  };
 }

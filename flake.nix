@@ -13,9 +13,7 @@
     nur-bandithedoge.url = "github:bandithedoge/nur-packages";
     # nur-bandithedoge.url = "path:/home/bandithedoge/git/nur-packages";
 
-    hyprland-split-monitor-workspaces.inputs.hyprland.follows = "hyprland";
-    hyprland-split-monitor-workspaces.url = "github:Duckonaut/split-monitor-workspaces";
-    hyprland.url = "github:hyprwm/Hyprland";
+    emacs.url = "github:nix-community/emacs-overlay";
     mozilla.url = "github:mozilla/nixpkgs-mozilla";
     neorg.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
     neovim.url = "github:nix-community/neovim-nightly-overlay";
@@ -45,6 +43,7 @@
         nixosConfigurations = let
           defaults = rec {
             overlays = with inputs; [
+              emacs.overlays.default
               mozilla.overlays.firefox
               neorg.overlays.default
               neovim.overlay
@@ -81,7 +80,6 @@
               nixos = with inputs; [
                 self.nixosModules.default
                 home-manager.nixosModules.home-manager
-                hyprland.nixosModules.default
                 musnix.nixosModules.musnix
                 nyx.nixosModules.default
                 "${kmonad}/nix/nixos-module.nix"
@@ -157,7 +155,6 @@
           options.hostname = pkgs.lib.mkOption {type = pkgs.lib.types.str;};
           imports = with inputs; [
             ./nix.nix
-            hyprland.homeManagerModules.default
             nix-index-database.hmModules.nix-index
           ];
         };

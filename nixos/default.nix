@@ -9,28 +9,28 @@
       ntfs3g
     ];
   };
+  services = {
+    dbus = {
+      enable = true;
+      packages = with pkgs; [dconf];
+    };
 
-  services.dbus = {
-    enable = true;
-    packages = with pkgs; [dconf];
+    printing = {
+      enable = true;
+      cups-pdf.enable = true;
+      drivers = with pkgs; [gutenprint];
+    };
+
+    devmon.enable = true;
+    openssh.enable = true;
+    upower.enable = true;
   };
 
-  programs.dconf.enable = true;
-
-  services.devmon.enable = true;
-  programs.udevil.enable = true;
-
-  services.openssh.enable = true;
-
-  programs.ccache.enable = true;
-  programs.adb.enable = true;
-
-  services.upower.enable = true;
-
-  services.printing = {
-    enable = true;
-    cups-pdf.enable = true;
-    drivers = with pkgs; [gutenprint];
+  programs = {
+    dconf.enable = true;
+    udevil.enable = true;
+    ccache.enable = true;
+    adb.enable = true;
   };
 
   security = {

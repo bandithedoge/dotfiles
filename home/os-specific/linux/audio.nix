@@ -40,8 +40,10 @@
       '/mnt/soft/Bottles/audio/drive_c/Program Files/VstPlugins',
       '/mnt/soft/Bottles/audio/drive_c/Program Files/Steinberg/VSTPlugins'
     ]
+  '';
 
-    ["iZotope*.vst3"]
+  home.file.".vst3/yabridge/yabridge.toml".text = ''
+    ["iZotope/*.vst3"]
     group = "izotope"
   '';
 }

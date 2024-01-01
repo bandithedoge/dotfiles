@@ -202,6 +202,36 @@ in
         $wallpaper = ${wallpaper}
         $wallpaperBlurred = ${wallpaperBlurred}
       '';
+      elisp = ''
+        (defconst base00 "${base00}" "base00")
+        (defconst base01 "${base01}" "base01")
+        (defconst base02 "${base02}" "base02")
+        (defconst base03 "${base03}" "base03")
+        (defconst base04 "${base04}" "base04")
+        (defconst base05 "${base05}" "base05")
+        (defconst base06 "${base06}" "base06")
+        (defconst base07 "${base07}" "base07")
+        (defconst base08 "${base08}" "base08")
+        (defconst base09 "${base09}" "base09")
+        (defconst base0A "${base0A}" "base0A")
+        (defconst base0B "${base0B}" "base0B")
+        (defconst base0C "${base0C}" "base0C")
+        (defconst base0D "${base0D}" "base0D")
+        (defconst base0E "${base0E}" "base0E")
+        (defconst base0F "${base0F}" "base0F")
+
+        (defconst base10 "${base10}" "base10")
+        (defconst base11 "${base11}" "base11")
+        (defconst base12 "${base12}" "base12")
+        (defconst base13 "${base13}" "base13")
+        (defconst base14 "${base14}" "base14")
+        (defconst base15 "${base15}" "base15")
+        (defconst base16 "${base16}" "base16")
+        (defconst base17 "${base17}" "base17")
+
+        (defconst mono-font "${monoFont}" "monoFont")
+        (defconst ui-font "${uiFont}" "uiFont")
+      '';
     };
 
     compileSCSS = path: let

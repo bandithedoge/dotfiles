@@ -1,44 +1,50 @@
-{pkgs, ...}: {
-  environment.systemPackages = with pkgs; [
-    greetd.greetd
-    rice.gtk.cursorTheme.package
-    rice.gtk.iconTheme.package
-    rice.gtk.theme.package
-    winetricks
-    xorg.setxkbmap
-  ];
+{
+  pkgs,
+  config,
+  ...
+}: {
+  environment.systemPackages = with pkgs;
+    [
+      greetd.greetd
+      rice.gtk.cursorTheme.package
+      rice.gtk.iconTheme.package
+      rice.gtk.theme.package
+      winetricks
+      xorg.setxkbmap
+      qt5.qtwayland
+      qt6.qtwayland
+    ]
+    ++ config.hardware.opengl.extraPackages
+    ++ config.hardware.opengl.extraPackages32;
 
-  services.xserver.displayManager.sessionPackages = with pkgs; [sway];
-
-  services.greetd.enable = true;
-
-  programs.regreet = {
-    enable = true;
-    cageArgs = ["-s" "-m" "last"];
-    settings = with pkgs.rice; {
-      background = {
-        path = wallpaperBlurred;
-        fit = "Fill";
-      };
-      GTK = {
-        application_prefer_dark_theme = true;
-        cursor_theme_name = gtk.cursorTheme.name;
-        font = "${uiFont} 16";
-        icon_theme_name = gtk.iconTheme.name;
-        theme_name = gtk.theme.name;
+  programs = {
+    regreet = {
+      enable = true;
+      cageArgs = ["-s" "-d" "-m" "last"];
+      settings = with pkgs.rice; {
+        background = {
+          path = wallpaperBlurred;
+          fit = "Fill";
+        };
+        GTK = {
+          application_prefer_dark_theme = true;
+          cursor_theme_name = gtk.cursorTheme.name;
+          font = "${uiFont} 16";
+          icon_theme_name = gtk.iconTheme.name;
+          theme_name = gtk.theme.name;
+        };
       };
     };
+    ns-usbloader.enable = true;
+    system-config-printer.enable = true;
   };
 
-  programs.hyprland.enable = true;
-
-  services.accounts-daemon.enable = true;
-
-  programs.ns-usbloader.enable = true;
-
-  services.flatpak.enable = true;
-
-  programs.system-config-printer.enable = true;
+  services = {
+    xserver.displayManager.sessionPackages = with pkgs; [sway];
+    greetd.enable = true;
+    accounts-daemon.enable = true;
+    flatpak.enable = true;
+  };
 
   xdg.portal = {
     enable = true;
@@ -55,6 +61,7 @@
     enableDefaultPackages = true;
     packages = with pkgs; [
       (nerdfonts.override {fonts = ["JetBrainsMono"];})
+      bandithedoge.symbols-nerd-font
       emojione
       roboto
     ];
@@ -67,8 +74,17 @@
     };
   };
 
-  boot.kernel.sysctl = {
-    "vm.mmap_min_addr" = 0;
+  qt = {
+    enable = true;
+    style = "adwaita-dark";
+  };
+
+  boot = {
+    extraModulePackages = with config.boot.kernelPackages; [v4l2loopback];
+    kernelModules = ["v4l2loopback"];
+    kernel.sysctl = {
+      "vm.mmap_min_addr" = 0;
+    };
   };
 
   security.pam.loginLimits = [

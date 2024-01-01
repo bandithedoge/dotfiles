@@ -1,7 +1,6 @@
 {pkgs, ...}: {
   environment.systemPackages = with pkgs; [];
 
-  # hardware {{{
   boot = {
     kernelPackages = pkgs.linuxPackages_cachyos;
     initrd = {

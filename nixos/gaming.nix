@@ -3,11 +3,14 @@
     steamtinkerlaunch
   ];
 
-  programs.gamemode.enable = true;
-  programs.steam = {
-    enable = true;
-    package = pkgs.steam.override {
-      extraPkgs = pkgs: with pkgs; [xz];
+  programs = {
+    gamemode.enable = true;
+
+    steam = {
+      enable = true;
+      package = pkgs.steam.override {
+        extraPkgs = pkgs: with pkgs; [xz];
+      };
     };
   };
 
