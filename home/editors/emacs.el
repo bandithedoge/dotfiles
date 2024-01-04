@@ -1,7 +1,37 @@
+(setq auto-mode-case-fold nil
+      bidi-inhibit-bpa t
+      highlight-nonselected-windows nil
+      fast-but-imprecise-scrolling t
+      ffap-machine-p-known 'reject
+      idle-update-delay 1.0
+      inhibit-compacting-font-caches t
+      pgtk-wait-for-event-timeout 0.001
+      redisplay-skip-fontification-on-input t)
+      
+(setq-default bidi-display-reordering 'left-to-right
+              bidi-paragraph-direction 'left-to-right
+              cursor-in-non-selected-windows nil)
+
+(push '(menu-bar-lines . 0) default-frame-alist)
+(push '(tool-bar-lines . 0) default-frame-alist)
+(push '(vertical-scroll-bars) default-frame-alist)
+(setq menu-bar-mode nil
+      tool-bar-mode nil
+      scroll-bar-mode nil)
+
 (eval-when-compile
   (require 'use-package))
 
 (require 'bind-key)
+
+(use-package gcmh
+  :demand t
+  :custom
+  (gcmh-idle-delay 'auto)
+  (gcmh-auto-idle-delay-factor 10)
+  (gchm-high-cons-threshold (* 32 1024 1024))
+  :config
+  (gcmh-mode 1))
 
 (use-package use-package
   :custom
@@ -34,6 +64,7 @@
   :bind*
   ("<leader>w" ("Kill buffer" . kill-this-buffer))
   ("<leader>W" ("Close window" . evil-window-delete))
+  ("<localleader>l" ("" . nil))
   :custom
   (evil-echo-state nil)
   (evil-ex-interactive-search-highlight 'selected-window)
@@ -221,6 +252,7 @@
 
 (use-package treesit-auto
   :config
+  (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
 
 (use-package projectile
@@ -251,5 +283,38 @@
   (use-package treemacs-nerd-icons
     :config
     (treemacs-load-theme "nerd-icons"))
-  (use-package treemacs-evil)
-  (use-package treemacs-projectile))
+  (use-package treemacs-evil
+    :after evil)
+  (use-package treemacs-projectile
+    :after projectile)
+  (use-package lsp-treemacs
+    :after lsp-mode))
+
+(use-package dashboard
+  :after solaire-mode
+  :custom
+  (dashboard-center-content t)
+  (dashboard-icon-type 'nerd-icons)
+  (dashboard-items '((projects . 5)
+                     (recents . 10)))
+  (dashboard-path-style 'truncate-beginning)
+  (dashboard-startup-banner 'logo)
+  :config
+  (dashboard-setup-startup-hook))
+
+(use-package lsp-mode
+  :bind-keymap* ("<localleader>l" . lsp-mode-map)
+  :custom
+  (lsp-enable-folding nil)
+  (lsp-enable-on-type-formatting nil)
+  (lsp-headerline-breadcrumb-enable nil)
+  (lsp-keymap-prefix "<localleader>l")
+  :init
+  (setq-default read-process-output-max (* 1024 1024))
+  :config
+  (use-package consult-lsp
+    :after consult))
+
+(use-package nix-mode
+  :hook (nix-mode . lsp-deferred)
+  :mode "\\.nix\\'")

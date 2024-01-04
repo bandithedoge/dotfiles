@@ -250,7 +250,7 @@
     source = ./nvim;
     recursive = true;
     onChange = ''
-      ${config.programs.neovim.finalPackage}/bin/nvim -E -c ":FnlCompile!" -c q
+      ${pkgs.lib.getExe config.programs.neovim.finalPackage} -E -c ":FnlCompile!" -c q
     '';
   };
   # }}}

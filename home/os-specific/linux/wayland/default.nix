@@ -89,8 +89,10 @@ in {
         }
         {command = "autotiling-rs";}
         {
-          # command = "killall -r '*waybar'; waybar";
-          command = "systemctl --user restart waybar";
+          command =
+            if config.hostname == "thonkpad"
+            then "killall -r 'waybar*'; waybar"
+            else "systemctl --user restart waybar";
           always = true;
         }
       ];
@@ -195,7 +197,7 @@ in {
     # {{{
     enable = true;
     systemd = {
-      enable = true;
+      enable = config.hostname != "thonkpad";
       target = "sway-session.target";
     };
     settings = with pkgs.rice; let
@@ -214,7 +216,6 @@ in {
         ];
         modules-right = [
           "tray"
-          # "mpris"
           (
             if config.hostname == "thonkpad"
             then "custom/network"
@@ -238,17 +239,6 @@ in {
         tray = {
           spacing = 15;
           reverse-direction = true;
-        };
-        mpris = {
-          player = "strawberry";
-          format = "${icon "{status_icon}"}{artist} - {title}";
-          status-icons = {
-            playing = "󰐊";
-            paused = "󰏤";
-            stopped = "󰓛";
-          };
-          on-scroll-up = "playerctl volume 0.05+";
-          on-scroll-down = "playerctl volume 0.05-";
         };
         "custom/network" = {
           exec = pkgs.writeShellScript "network" ''
