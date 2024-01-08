@@ -21,7 +21,6 @@
     nix-alien.url = "github:thiagokokada/nix-alien";
     nix-gaming.url = "github:fufexan/nix-gaming";
     nix-index-database.url = "github:Mic92/nix-index-database";
-    nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
     nur.url = "github:nix-community/NUR";
     nyx.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
     poetry2nix.url = "github:nix-community/poetry2nix";
@@ -51,7 +50,6 @@
               nix-alien.overlays.default
               nix-gaming.overlays.default
               nixmox.overlay
-              nixpkgs-wayland.overlay
               nur.overlay
               poetry2nix.overlays.default
               prismlauncher.overlays.default

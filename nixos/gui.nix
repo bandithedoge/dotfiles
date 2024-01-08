@@ -40,7 +40,7 @@
   };
 
   services = {
-    xserver.displayManager.sessionPackages = with pkgs; [sway];
+    xserver.displayManager.sessionPackages = with pkgs; [swayfx];
     greetd.enable = true;
     accounts-daemon.enable = true;
     flatpak.enable = true;
@@ -87,12 +87,15 @@
     };
   };
 
-  security.pam.loginLimits = [
-    {
-      domain = "bandithedoge";
-      type = "hard";
-      item = "nofile";
-      value = "524288";
-    }
-  ];
+  security.pam = {
+    services.swaylock = {};
+    loginLimits = [
+      {
+        domain = "bandithedoge";
+        type = "hard";
+        item = "nofile";
+        value = "524288";
+      }
+    ];
+  };
 }

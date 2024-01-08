@@ -8,6 +8,8 @@ in {
   home = {
     packages = with pkgs; [
       autotiling-rs
+      chayang
+      gtklock
       satty
       swaybg
       swaysome
@@ -23,20 +25,21 @@ in {
     };
   };
 
-  wayland.windowManager.sway = {
+  wayland.windowManager.sway = with pkgs.rice; {
     # {{{
     enable = true;
+    package = pkgs.swayfx;
     config = {
       bars = [];
-      inherit (pkgs.rice) terminal menu;
-      colors = with pkgs.rice; {
+      inherit terminal menu;
+      colors = {
         background = base00;
         focused = {
-          background = base0F;
+          background = base00;
           border = base0F;
           childBorder = base0F;
           indicator = base0F;
-          text = base00;
+          text = base0F;
         };
         focusedInactive = {
           background = base00;
@@ -74,7 +77,7 @@ in {
         commands = [
           {
             command = "opacity 0.95";
-            criteria.app_id = pkgs.rice.terminal;
+            criteria.app_id = "(${terminal})|(emacs)";
           }
           {
             command = "floating disable";
@@ -189,7 +192,12 @@ in {
       };
     };
     extraConfig = ''
-      titlebar_border_thickness 0
+      blur enable
+      blur_xray enable
+      shadows enable
+
+      titlebar_separator disable
+      titlebar_border_thickness 2
     '';
   }; # }}}
 
@@ -361,7 +369,36 @@ in {
   }; # }}}
 
   services.swayidle = let
-    command = "${pkgs.chayang}/bin/chayang -d 10 && ${pkgs.lib.getExe pkgs.gtklock}";
+    command = "chayang -d 10 && gtklock";
+    # command = with pkgs.rice; ''
+    #   chayang -d 10 && swaylock \
+    #     --image ${wallpaperBlurred} \
+    #     --font "${uiFont}" \
+    #     -n \
+    #     --line-color "${base00}" \
+    #     --inside-color "${base00}" \
+    #     --text-color "${base05}" \
+    #     --text-clear-color "${base00}" \
+    #     --text-caps-lock-color "${base00}" \
+    #     --text-ver-color "${base00}" \
+    #     --text-wrong-color "${base00}" \
+    #     --inside-clear-color "${base0F}" \
+    #     --inside-caps-lock-color "${base08}" \
+    #     --inside-ver-color "${base0F}" \
+    #     --inside-wrong-color "${base08}" \
+    #     --key-hl-color "${base0F}"
+    #     --bs-hl-color "${base08}" \
+    #     --ring-color "${base00}" \
+    #     --ring-caps-lock-color "${base00}" \
+    #     --ring-ver-color "${base00}" \
+    #     --ring-wrong-color "${base00}" \
+    #     --separator-color "${base00}" \
+    #     --indicator \
+    #     --grace 5 \
+    #     --clock \
+    #     --timestr "%H:%M:%S" \
+    #     --datestr "%A %d %B"
+    # '';
   in {
     enable = true;
     systemdTarget = "sway-session.target";
