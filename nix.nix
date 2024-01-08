@@ -37,4 +37,6 @@
       warn-dirty = false
     '';
   };
+
+  nixpkgs.config.allowUnfree = true;
 }

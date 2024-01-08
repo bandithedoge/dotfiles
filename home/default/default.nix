@@ -8,11 +8,9 @@
 in {
   imports = [./xdg.nix];
 
-  inherit (import ../../nix.nix {inherit pkgs;}) nix;
+  inherit (import ../../nix.nix {inherit pkgs;}) nix nixpkgs;
 
   manual.manpages.enable = false;
-
-  nixpkgs.config = {allowBroken = true;};
 
   home = {
     # {{{

@@ -87,6 +87,7 @@
     flutter
 
     # writing
+    ltex-ls
     marksman
 
     # faust
@@ -257,18 +258,26 @@
 
   programs.emacs = {
     enable = true;
-    package = pkgs.emacsWithPackagesFromUsePackage {
-      config = pkgs.writeText "emacs.el" ''
-        ${pkgs.rice.def.elisp}
-        ${builtins.readFile ./emacs.el}
-      '';
-      defaultInitFile = true;
+    package = pkgs.emacsWithPackagesFromUsePackage rec {
       package = pkgs.emacs-unstable-pgtk;
+      config = pkgs.runCommand "" {} ''
+        cp ${./emacs.org} emacs.org
+        ${pkgs.lib.getExe package} --batch \
+          -l org emacs.org \
+          -f org-babel-tangle
+        cat <<EOF > $out
+          ${pkgs.rice.def.elisp}
+        EOF
+        cat init.el >> $out
+      '';
+
+      defaultInitFile = true;
       alwaysEnsure = true;
 
-      extraEmacsPackages = epkgs: with epkgs; [
-        treesit-grammars.with-all-grammars
-      ];
+      extraEmacsPackages = epkgs:
+        with epkgs; [
+          treesit-grammars.with-all-grammars
+        ];
 
       override = final: prev: {
         smartparens-mode = prev.smartparens;

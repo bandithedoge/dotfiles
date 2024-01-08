@@ -21,6 +21,7 @@ in {
       caprine-bin
       d-spy
       deluge
+      discord
       freecad
       gnome.zenity
       gparted
@@ -30,6 +31,7 @@ in {
       krita
       libnotify
       libreoffice-fresh
+      nicotine-plus
       nim
       nix-alien
       pciutils

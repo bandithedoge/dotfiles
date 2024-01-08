@@ -2,7 +2,7 @@ final: prev: {
   rice = prev.callPackage ./rice.nix {};
   dummy = prev.hello;
 
-  # discord-canary = prev.discord-canary.override {withOpenASAR = true;};
+  discord = prev.discord.override {withOpenASAR = true;};
 
   # python310Packages =
   #   prev.python310Packages
