@@ -46,7 +46,7 @@
               mozilla.overlays.firefox
               neorg.overlays.default
               neovim.overlay
-              nil.overlays.default
+              # nil.overlays.default
               nix-alien.overlays.default
               nix-gaming.overlays.default
               nixmox.overlay

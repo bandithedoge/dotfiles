@@ -108,10 +108,17 @@
                    ("*" . evil-visualstar/begin-search-forward)
                    ("#" . evil-visualstar/begin-search-backward)))
       (use-package vimish-fold
-       :config
-       (use-package evil-vimish-fold
-           :config
-           (global-evil-vimish-fold-mode 1))))
+        :custom
+        (vimish-fold-indication-mode 'right-fringe)
+        :config
+        (use-package evil-vimish-fold
+          :bind
+          ([remap evil-toggle-fold] . vimish-fold-toggle)
+          :hook ((text-mode prog-mode) . (lambda ()
+                                           (evil-vimish-fold-mode)
+                                           (evil-close-folds)))
+          :config
+          (vimish-fold-global-mode 1))))
 
   (use-package general
     :after evil
@@ -121,10 +128,17 @@
 #+end_src
 * Utilities
 #+begin_src emacs-lisp
-  (use-package tempel
-    :init
-    (add-to-list 'completion-at-point-functions #'tempel-complete)
-    (use-package tempel-collection))
+  ;; (use-package tempel
+  ;;   :init
+  ;;   (add-to-list 'completion-at-point-functions #'tempel-complete)
+  ;;   (use-package tempel-collection))
+  (use-package yasnippet
+    :custom
+    (yas-verbosity 2)
+    (yas-snippet-dirs nil)
+    :config
+    (yas-global-mode +1)
+    (use-package yasnippet-snippets))
 
   (use-package projectile
     :custom
@@ -229,6 +243,7 @@
     (use-package nerd-icons-corfu))
 #+end_src
 * UI
+** Emacs builtins
 #+begin_src elisp
   (use-package display-line-numbers
       :hook ((prog-mode text-mode) . display-line-numbers-mode)
@@ -239,44 +254,10 @@
       :config
       (global-hl-line-mode))
 
-  (use-package nerd-icons
-      :custom
-      (nerd-icons-font-family "Symbols Nerd Font"))
-
-  (use-package doom-themes
-      :config
-      (use-package all-the-icons)
-      (load-theme 'doom-one t)
-      (doom-themes-visual-bell-config)
-      (doom-themes-org-config)
-      (doom-themes-treemacs-config)
-      (use-package solaire-mode
-       :config
-       (push '(treemacs-window-background-face . solaire-default-face) solaire-mode-remap-alist)
-       (push '(treemacs-hl-line-face . solaire-hl-line-face) solaire-mode-remap-alist)
-       (solaire-global-mode +1)))
-
-  (use-package doom-modeline
-      :hook (after-init . doom-modeline-mode)
-      :custom
-      (doom-modeline-buffer-encoding 'nondefault)
-      (doom-modeline-enable-word-count t)
-      (doom-modeline-height 30)
-      (doom-modeline-indent-info t)
-      (doom-modeline-irc nil)
-      (doom-modeline-time nil)
-      :config
-      (use-package anzu
-       :config
-       (global-anzu-mode +1)
-       (use-package evil-anzu
-           :after evil
-           :config
-           (global-anzu-mode +1))))
-
   (use-package which-key
       :custom
       (which-key-idle-delay 0.3)
+      (which-key-prefix-prefix nil)
       :config
       (which-key-setup-side-window-bottom)
       (which-key-mode))
@@ -295,15 +276,17 @@
 
   (use-package helpful
       :bind*
-      ("<leader>hc" ("Callable" . helpful-callable))
-      ("<leader>hf" ("Function" . helpful-function))
-      ("<leader>hm" ("Macro" . helpful-macro))
-      ("<leader>hC" ("Command" . helpful-command))
-      ("<leader>hk" ("Key" . helpful-key))
-      ("<leader>hv" ("Variable" . helpful-variable))
-      ("<leader>hp" ("Thing at point" . helpful-at-point))
-      ("<leader>hP" ("Package" . describe-package))
-      ("<leader>hg" ("Customize group" . customize-group)))
+      (:prefix "<leader>h"
+               :prefix-map +help
+               ("c" ("Callable" . helpful-callable))
+               ("f" ("Function" . helpful-function))
+               ("m" ("Macro" . helpful-macro))
+               ("C" ("Command" . helpful-command))
+               ("k" ("Key" . helpful-key))
+               ("v" ("Variable" . helpful-variable))
+               ("p" ("Thing at point" . helpful-at-point))
+               ("P" ("Package" . describe-package))
+               ("g" ("Customize group" . customize-group))))
 
   (use-package treemacs
       :bind* ("<leader>t" ("File tree" . treemacs))
@@ -329,26 +312,84 @@
        :after projectile)
       (use-package lsp-treemacs
        :after lsp-mode))
-#+end_src
 
+  (use-package ligature
+    :config
+    (ligature-set-ligatures t '("-|" "-~" "---" "-<<" "-<" "--" "->" "->>" "-->" "///" "/=" "/=="
+                                "/>" "//" "/*" "*>" "***" "*/" "<-" "<<-" "<=>" "<=" "<|" "<||"
+                                "<|||" "<|>" "<:" "<>" "<-<" "<<<" "<==" "<<=" "<=<" "<==>" "<-|"
+                                "<<" "<~>" "<=|" "<~~" "<~" "<$>" "<$" "<+>" "<+" "</>" "</" "<*"
+                                "<*>" "<->" "<!--" ":>" ":<" ":::" "::" ":?" ":?>" ":=" "::=" "=>>"
+                                "==>" "=/=" "=!=" "=>" "===" "=:=" "==" "!==" "!!" "!=" ">]" ">:"
+                                ">>-" ">>=" ">=>" ">>>" ">-" ">=" "&&&" "&&" "|||>" "||>" "|>" "|]"
+                                "|}" "|=>" "|->" "|=" "||-" "|-" "||=" "||" ".." ".?" ".=" ".-" "..<"
+                                "..." "+++" "+>" "++" "[||]" "[<" "[|" "{|" "??" "?." "?=" "?:" "##"
+                                "###" "####" "#[" "#{" "#=" "#!" "#:" "#_(" "#_" "#?" "#(" ";;" "_|_"
+                                "__" "~~" "~~>" "~>" "~-" "~@" "$>" "^=" "]#"))
+    (global-ligature-mode t))
+#+end_src
+** Theming
+#+begin_src emacs-lisp
+  (use-package nerd-icons
+      :custom
+      (nerd-icons-font-family "Symbols Nerd Font"))
+
+  (use-package doom-themes
+      :config
+      (use-package all-the-icons)
+      (load-theme 'doom-one t)
+      (doom-themes-visual-bell-config)
+      (doom-themes-org-config)
+      (doom-themes-treemacs-config)
+      (use-package solaire-mode
+       :config
+       (push '(treemacs-window-background-face . solaire-default-face) solaire-mode-remap-alist)
+       (push '(treemacs-hl-line-face . solaire-hl-line-face) solaire-mode-remap-alist)
+       (solaire-global-mode +1)))
+#+end_src
+** Modeline
+#+begin_src emacs-lisp
+  (use-package doom-modeline
+      :hook (after-init . doom-modeline-mode)
+      :custom
+      (doom-modeline-buffer-encoding 'nondefault)
+      (doom-modeline-enable-word-count t)
+      (doom-modeline-height 30)
+      (doom-modeline-indent-info t)
+      (doom-modeline-irc nil)
+      (doom-modeline-time nil)
+      :config
+      (use-package anzu
+       :config
+       (global-anzu-mode +1)
+       (use-package evil-anzu
+           :after evil
+           :config
+           (global-anzu-mode +1))))
+#+end_src
 * Languages
 #+begin_src emacs-lisp
   (use-package lsp-mode
-    :bind* (:map lsp-mode-map
-            :prefix "<localleader>l"
-            :prefix-map lsp
-            ("sr" . lsp-workspace-restart)
-            ("sq" . lsp-workspace-shutdown)
-            ("f" . lsp-format-buffer))
+    :bind (:map lsp-mode-map
+                :prefix "<localleader>l"
+                :prefix-map +lsp
+                ("f" ("Format" . lsp-format-buffer))
+                :prefix "<localleader>ls"
+                :prefix-map +server
+                ("q" ("Shutdown" . lsp-workspace-shutdown))
+                ("r" ("Restart" . lsp-workspace-restart)))
+    :hook ((text-mode org-mode prog-mode) . lsp-deferred)
     :custom
     (lsp-enable-folding nil)
     (lsp-enable-on-type-formatting nil)
     (lsp-headerline-breadcrumb-enable nil)
+    (lsp-pwsh-folding-enable nil)
     :init
     (setq-default read-process-output-max (* 1024 1024))
     :config
     (use-package consult-lsp)
-    :after consult)
+    (use-package lsp-ltex
+      :after lsp-mode))
 
   (use-package parinfer-rust-mode
     :hook ((emacs-lisp-mode lisp-mode fennel-mode) . parinfer-rust-mode)
@@ -361,14 +402,6 @@
     (treesit-auto-add-to-auto-mode-alist 'all)
     (global-treesit-auto-mode))
 #+end_src
-** LanguageTool
-#+begin_src emacs-lisp
-  (use-package lsp-ltex
-    :after lsp-mode
-    :hook ((text-mode org-mode) . (lambda ()
-                                   (require 'lsp-ltex)
-                                   (lsp-deferred))))
-#+end_src
 ** Org
 #+begin_src emacs-lisp
   (use-package org
@@ -377,12 +410,12 @@
           ([remap evil-save] . org-edit-src-save))
     :bind*
     (:map org-mode-map
-           ("<localleader>eo" ("ODT" . org-odt-export-to-odt))
-           ("<localleader>eh" ("HTML" . org-html-export-to-html))
-           ("<localleader>g" ("Goto" . consult-org-heading))
-           ("<localleader>s" ("Edit special" . org-edit-special))
-           ("<localleader>t" ("TODO" . org-todo))
-           ("<localleader>x" ("Checkbox" . org-toggle-checkbox)))
+          ("<localleader>eo" ("ODT" . org-odt-export-to-odt))
+          ("<localleader>eh" ("HTML" . org-html-export-to-html))
+          ("<localleader>g" ("Goto" . consult-org-heading))
+          ("<localleader>s" ("Edit special" . org-edit-special))
+          ("<localleader>t" ("TODO" . org-todo))
+          ("<localleader>x" ("Checkbox" . org-toggle-checkbox)))
     :custom
     (org-eldoc-breadcrumb-separator (concat " " (nerd-icons-mdicon "nf-md-chevron_right") " "))
     (org-enforce-todo-dependencies t)
@@ -413,12 +446,24 @@
     (use-package ob-async)
     (use-package ox-pandoc
       :bind (:map org-mode-map
-                  ("<localleader>ed" ("DOCX" . org-pandoc-export-to-docx)))))
+                  ("<localleader>ed" ("DOCX" . org-pandoc-export-to-docx))))
+    (use-package org-variable-pitch
+      :hook (org-mode . org-variable-pitch-minor-mode)
+      :config
+      (add-to-list 'org-variable-pitch-fixed-faces 'line-number)
+      (add-to-list 'org-variable-pitch-fixed-faces 'line-number-current-line)
+      (add-to-list 'org-variable-pitch-fixed-faces 'corfu-default)
+      (set-face-attribute 'org-variable-pitch-fixed-face nil
+                          :family mono-font
+                          :height 110))
+    (use-package org-modern
+      :hook (org-mode . org-modern-mode)
+      :custom
+      (org-modern-hide-stars nil)))
 #+end_src
 ** Nix
 #+begin_src emacs-lisp
   (use-package nix-mode
-    :hook (nix-mode . lsp-deferred)
     :mode "\\.nix"
     :custom
     (lsp-nix-nil-formatter ["alejandra"]))

@@ -337,5 +337,5 @@
     };
   }; # }}}
 
-  programs.librewolf.enable = true;
+  programs.librewolf.enable = config.hostname == "machine-nixos";
 }
