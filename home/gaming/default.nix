@@ -1,22 +1,29 @@
 {pkgs, ...}: {
   home.packages = with pkgs; [
     (lutris.override {
-      steamSupport = false;
-      extraPkgs = pkgs: with pkgs; [gamescope_git];
-      extraLibraries = pkgs:
-        with pkgs; [
+      extraPkgs = pkgs':
+        with pkgs'; [
+          gamescope
+          gamemode
+        ];
+      extraLibraries = pkgs':
+        with pkgs'; [
           nspr
           xorg.libXScrnSaver
           xorg.libXdamage
           xorg.libXfixes
           xorg.libXft
+          libadwaita
+          pango
+          gtk4
         ];
     })
     bandithedoge.raze
     bastet
-    gamescope_git
+    gamescope
     gzdoom
     nethack
+    openmw
     opentyrian
     prismlauncher
     unnethack

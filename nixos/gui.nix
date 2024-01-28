@@ -6,16 +6,14 @@
   environment.systemPackages = with pkgs;
     [
       greetd.greetd
+      qt5.qtwayland
+      qt6.qtwayland
       rice.gtk.cursorTheme.package
       rice.gtk.iconTheme.package
       rice.gtk.theme.package
       winetricks
       xorg.setxkbmap
-      qt5.qtwayland
-      qt6.qtwayland
-    ]
-    ++ config.hardware.opengl.extraPackages
-    ++ config.hardware.opengl.extraPackages32;
+    ];
 
   programs = {
     regreet = {

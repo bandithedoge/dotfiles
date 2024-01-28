@@ -54,6 +54,10 @@ when isMainModule:
       else:
         &"home-manager --extra-experimental-features 'nix-command flakes' --flake {path}#{username}"
 
+    let
+      oldSystemPath = expandSymlink "/run/current-system/sw"
+      oldHomePath = expandSymlink &"/etc/static/profiles/per-user/{username}"
+
     exec(
       # we need to use bash since sh doesn't support the "|&" syntax
       # "&>" doesn't work on Alpine for some reason
@@ -62,6 +66,15 @@ when isMainModule:
       (if showTrace: "--show-trace " else: "") &
       "|& nom\""
     )
+
+    let
+      newSystemPath = expandSymlink "/run/current-system/sw"
+      newHomePath = expandSymlink &"/etc/static/profiles/per-user/{username}"
+
+    if isNixOS:
+      exec &"nvd diff {oldSystemPath} {newSystemPath}"
+
+    exec &"nvd diff {oldHomePath} {newHomePath}"
 
   if args["update"] or args["u"]:
     if inputs.len() == 0:

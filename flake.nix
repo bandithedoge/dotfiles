@@ -55,13 +55,16 @@
               prismlauncher.overlays.default
               (_: prev: {
                 bandithedoge = import nur-bandithedoge {
-                  pkgs = import nur-bandithedoge.inputs.nixpkgs {inherit (prev) system;};
+                  pkgs = import nur-bandithedoge.inputs.nixpkgs {
+                    inherit (prev) system;
+                    config.allowUnfree = true;
+                  };
                 };
                 colors = colors.lib-core;
                 hyprlandPlugins = {
                   split-monitor-workspaces = hyprland-split-monitor-workspaces.packages.${prev.system}.default;
                 };
-                inherit (nix-gaming.packages.${prev.system}) wine-ge;
+                inherit (nix-gaming.packages.${prev.system}) wine-tkg;
                 inherit (prismlauncher.packages.${prev.system}) prismlauncher prismlauncher-unwrapped;
                 inherit (emacs.packages.${prev.system}) emacs-unstable-pgtk;
               })
@@ -76,10 +79,10 @@
             };
             imports = {
               nixos = with inputs; [
-                self.nixosModules.default
                 home-manager.nixosModules.home-manager
                 musnix.nixosModules.musnix
                 nyx.nixosModules.default
+                self.nixosModules.default
                 "${kmonad}/nix/nixos-module.nix"
                 self.nixosModules.home-manager
                 ./users/bandithedoge.nix

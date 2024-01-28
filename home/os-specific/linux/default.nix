@@ -16,18 +16,20 @@ in {
       (blender.withPackages (p: [(bandithedoge.pythonPackages.py-slvs.override {pythonPkgs = p;})]))
       appimage-run
       bandithedoge.basiliskii-bin
+      bandithedoge.deemix-gui-bin
       bandithedoge.sheepshaver-bin
       bottles
       caprine-bin
+      cutter
       d-spy
       deluge
       discord
       freecad
       gnome.zenity
       gparted
+      imhex
       inkscape
       keepassxc
-      kotatogram-desktop
       krita
       libnotify
       libreoffice-fresh
@@ -37,18 +39,20 @@ in {
       pciutils
       qbittorrent
       rclone
+      telegram-desktop
       tor-browser-bundle-bin
       vesktop
-      wine-ge
+      wine-tkg
       xd
       xdragon
+      zoom-us
     ];
     pointerCursor = {
       inherit (pkgs.rice.gtk.cursorTheme) package name size;
       x11.enable = true;
       gtk.enable = true;
     };
-    sessionVariables.WINELOADER = pkgs.lib.getExe pkgs.wine-ge;
+    sessionVariables.WINELOADER = pkgs.lib.getExe pkgs.wine-tkg;
   };
 
   # gtk {{{

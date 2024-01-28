@@ -1,6 +1,4 @@
 {pkgs, ...}: {
-  environment.systemPackages = with pkgs; [];
-
   boot = {
     kernelPackages = pkgs.linuxPackages_cachyos;
     initrd = {
@@ -71,8 +69,10 @@
   # }}}
 
   environment.variables = {
-    BROWSER = "firefox";
+    BROWSER = "firefox-nightly";
     WINEFSYNC = "1";
     ROC_ENABLE_PRE_VEGA = "1";
   };
+
+  hardware.opengl.extraPackages = with pkgs; [mesa.opencl];
 }

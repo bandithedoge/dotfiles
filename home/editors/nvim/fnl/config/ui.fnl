@@ -112,3 +112,4 @@
                                                      :fg _G.base03}
                                  :duplicate_selected {:bg _G.base02
                                                       :fg _G.base0F}}})})]
+

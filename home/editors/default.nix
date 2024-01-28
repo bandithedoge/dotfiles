@@ -2,7 +2,10 @@
   pkgs,
   config,
   ...
-}: {
+}:
+{
+  imports = [./emacs.nix];
+
   # common packages {{{
   home.packages = with pkgs; [
     act
@@ -15,12 +18,10 @@
 
     # python
     poetry
-    black
-    isort
     python3
-    python3Packages.pyls-isort
-    python3Packages.python-lsp-black
+    python3Packages.debugpy
     python3Packages.python-lsp-server
+    ruff-lsp
 
     # shell
     nodePackages.bash-language-server
@@ -35,12 +36,12 @@
     nodePackages.fixjson
     nodePackages.markdownlint-cli2
     nodePackages.pnpm
+    nodePackages.prettier
     nodePackages.prettier-plugin-toml
     nodePackages.stylelint
     nodePackages.typescript
     nodePackages.typescript-language-server
     nodePackages.vscode-langservers-extracted
-    prettierd
     yarn
 
     # nix
@@ -63,13 +64,15 @@
     clazy
     cmake
     cmake-format
+    gdb
+    lldb
     neocmakelsp
     ninja
     pkg-config
     qt6.qtdeclarative
 
     # nim
-    nimlsp
+    bandithedoge.nimlangserver
 
     # haskell
     cabal2nix
@@ -89,6 +92,7 @@
     # writing
     ltex-ls
     marksman
+    python3Packages.grip
 
     # faust
     faust
@@ -253,35 +257,5 @@
     onChange = ''
       ${pkgs.lib.getExe config.programs.neovim.finalPackage} -E -c ":FnlCompile!" -c q
     '';
-  };
-  # }}}
-
-  programs.emacs = {
-    enable = true;
-    package = pkgs.emacsWithPackagesFromUsePackage rec {
-      package = pkgs.emacs-unstable-pgtk;
-      config = pkgs.runCommand "" {} ''
-        cp ${./emacs.org} emacs.org
-        ${pkgs.lib.getExe package} --batch \
-          -l org emacs.org \
-          -f org-babel-tangle
-        cat <<EOF > $out
-          ${pkgs.rice.def.elisp}
-        EOF
-        cat init.el >> $out
-      '';
-
-      defaultInitFile = true;
-      alwaysEnsure = true;
-
-      extraEmacsPackages = epkgs:
-        with epkgs; [
-          treesit-grammars.with-all-grammars
-        ];
-
-      override = final: prev: {
-        smartparens-mode = prev.smartparens;
-      };
-    };
   };
 }

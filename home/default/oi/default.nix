@@ -31,6 +31,7 @@ pkgs.buildNimPackage {
         bash
         home-manager
         nix-output-monitor
+        nvd
       ])
     }
   '';

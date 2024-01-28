@@ -1,4 +1,8 @@
-{pkgs ? import <nixpkgs> {}}:
+{
+  pkgs ? import <nixpkgs> {
+    overlays = [(builtins.getFlake "github:nix-community/poetry2nix").overlays.default];
+  },
+}:
 pkgs.poetry2nix.mkPoetryApplication rec {
   projectDir = ./.;
   python = pkgs.python311;

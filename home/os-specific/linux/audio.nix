@@ -7,6 +7,7 @@
     carla
     furnace
     giada
+    picard
     playerctl
     pwvucontrol
     reaper
@@ -17,13 +18,24 @@
     bandithedoge.distrho-ports
     bandithedoge.ildaeil
     bandithedoge.octasine
+    bandithedoge.tal.bassline-101
+    bandithedoge.tal.chorus-lx
+    bandithedoge.tal.dac
+    bandithedoge.tal.drum
+    bandithedoge.tal.dub-x
+    bandithedoge.tal.filter-2
+    bandithedoge.tal.j-8
+    bandithedoge.tal.mod
+    bandithedoge.tal.noisemaker
+    bandithedoge.tal.reverb-4
+    bandithedoge.tal.sampler
+    bandithedoge.tal.u-no-lx
+    bandithedoge.tal.vocoder
     delayarchitect
     dragonfly-reverb
     eq10q
     geonkick
-    guitarix
     lsp-plugins
-    open-music-kontrollers.mephisto
     yabridge
     yabridgectl
   ];
@@ -35,10 +47,10 @@
 
   xdg.configFile."yabridgectl/config.toml".text = ''
     plugin_dirs = [
-      '/mnt/soft/Bottles/audio/drive_c/Program Files/Common Files/VST3',
-      '/mnt/soft/Bottles/audio/drive_c/Program Files/Common Files/CLAP',
-      '/mnt/soft/Bottles/audio/drive_c/Program Files/VstPlugins',
-      '/mnt/soft/Bottles/audio/drive_c/Program Files/Steinberg/VSTPlugins'
+      '/mnt/soft/Bottles/plugins/drive_c/Program Files/Common Files/VST3',
+      '/mnt/soft/Bottles/plugins/drive_c/Program Files/Common Files/CLAP',
+      '/mnt/soft/Bottles/plugins/drive_c/Program Files/VstPlugins',
+      '/mnt/soft/Bottles/plugins/drive_c/Program Files/Steinberg/VSTPlugins'
     ]
   '';
 

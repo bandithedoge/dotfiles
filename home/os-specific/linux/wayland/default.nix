@@ -370,35 +370,6 @@ in {
 
   services.swayidle = let
     command = "chayang -d 10 && gtklock";
-    # command = with pkgs.rice; ''
-    #   chayang -d 10 && swaylock \
-    #     --image ${wallpaperBlurred} \
-    #     --font "${uiFont}" \
-    #     -n \
-    #     --line-color "${base00}" \
-    #     --inside-color "${base00}" \
-    #     --text-color "${base05}" \
-    #     --text-clear-color "${base00}" \
-    #     --text-caps-lock-color "${base00}" \
-    #     --text-ver-color "${base00}" \
-    #     --text-wrong-color "${base00}" \
-    #     --inside-clear-color "${base0F}" \
-    #     --inside-caps-lock-color "${base08}" \
-    #     --inside-ver-color "${base0F}" \
-    #     --inside-wrong-color "${base08}" \
-    #     --key-hl-color "${base0F}"
-    #     --bs-hl-color "${base08}" \
-    #     --ring-color "${base00}" \
-    #     --ring-caps-lock-color "${base00}" \
-    #     --ring-ver-color "${base00}" \
-    #     --ring-wrong-color "${base00}" \
-    #     --separator-color "${base00}" \
-    #     --indicator \
-    #     --grace 5 \
-    #     --clock \
-    #     --timestr "%H:%M:%S" \
-    #     --datestr "%A %d %B"
-    # '';
   in {
     enable = true;
     systemdTarget = "sway-session.target";
@@ -450,6 +421,10 @@ in {
           k = {
             desc = "Password manager";
             cmd = "keepassxc";
+          };
+          e = {
+            desc = "Emacs";
+            cmd = "emacs";
           };
         };
       };

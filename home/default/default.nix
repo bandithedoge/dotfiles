@@ -17,7 +17,6 @@ in {
     stateVersion = "23.05";
     sessionPath = ["$HOME/.pub-cache/bin"];
     sessionVariables = {
-      EDITOR = "nvim";
       MANROFFOPT = "-c";
       MANPAGER = "sh -c 'col -bx | ${pkgs.lib.getExe pkgs.bat} -l man -p'";
     };
@@ -469,7 +468,6 @@ in {
     zellij = {
       # {{{
       enable = true;
-      enableFishIntegration = true;
     }; # }}}
 
     tealdeer = {

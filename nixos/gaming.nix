@@ -12,6 +12,8 @@
         extraPkgs = pkgs: with pkgs; [xz];
       };
     };
+
+    honkers-railway-launcher.enable = true;
   };
 
   chaotic.steam.extraCompatPackages = with pkgs; [luxtorpeda proton-ge-custom steamtinkerlaunch];
