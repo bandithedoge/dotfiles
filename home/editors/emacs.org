@@ -59,14 +59,6 @@
 #+end_src
 * Emacs
 #+begin_src emacs-lisp
-  (use-package gcmh
-    :custom
-    (gcmh-idle-delay 'auto)
-    (gcmh-auto-idle-delay-factor 10)
-    (gchm-high-cons-threshold (* 32 1024 1024))
-    :config
-    (gcmh-mode 1))
-
   (use-package emacs
     :init
     (set-face-attribute 'default nil
@@ -278,6 +270,8 @@
       :config
       (evil-better-visual-line-on))
     (use-package evil-collection
+      :custom
+      (evil-collection-key-blacklist '("SPC" "<backspace>"))
       :config
       (evil-collection-init)))
 
@@ -524,7 +518,9 @@
     (use-package treemacs-projectile
       :after projectile)
     (use-package lsp-treemacs
-      :after lsp-mode)
+      :after lsp-mode
+      :config
+      (lsp-treemacs-sync-mode 1))
     (use-package treemacs-magit
       :after magit)
     (doom-themes-treemacs-config)
@@ -681,17 +677,21 @@
     :after tempel
     :bind (:map evil-motion-state-map
                 ("K" . lsp-ui-doc-glance))
-    :bind (:map lsp-mode-map
-                :prefix "<localleader>ls"
-                :prefix-map +server
-                ("q" ("Shutdown" . lsp-workspace-shutdown))
-                ("r" ("Restart" . lsp-workspace-restart)))
+    :bind
+    (:map lsp-mode-map
+          :prefix "<localleader>ls"
+          :prefix-map +server
+          ("q" ("Shutdown" . lsp-workspace-shutdown))
+          ("r" ("Restart" . lsp-workspace-restart)))
+    (:map lsp-mode-map
+          ("<localleader>lr" ("Rename" . lsp-rename)))
     :custom
+    (lsp-auto-execute-action nil)
     (lsp-completion-provider :none)
     (lsp-diagnostics-provider :flymake)
     (lsp-enable-folding nil)
     (lsp-enable-on-type-formatting nil)
-    (lsp-enable-semantic-highlighting t)
+    (lsp-enable-suggest-server-download nil)
     (lsp-headerline-breadcrumb-enable nil)
     (lsp-inlay-hint-enable t)
     (lsp-keep-workspace-alive nil)
@@ -726,12 +726,13 @@
   (use-package lsp-ltex
     :after lsp-mode
     :custom
-    (lsp-ltex-completion-enabled t))
+    (lsp-ltex-completion-enabled t)
+    (lsp-ltex-mother-tongue "pl-PL"))
 
-  (use-package treesit-auto
-    :config
-    (treesit-auto-add-to-auto-mode-alist 'all)
-    (global-treesit-auto-mode))
+  ;; (use-package treesit-auto
+  ;;   :config
+  ;;   (treesit-auto-add-to-auto-mode-alist 'all)
+  ;;   (global-treesit-auto-mode))
 #+end_src
 ** Parinfer
 #+begin_src emacs-lisp
@@ -790,6 +791,18 @@
       :custom
       (flymake-popon-posframe-border-width 0)))
 #+end_src
+** Tree-sitter
+#+begin_src emacs-lisp
+  (use-package tree-sitter
+    :hook
+    (prog-mode text-mode . tree-sitter-mode)
+    (tree-sitter-after-first-parse . tree-sitter-hl-mode)
+    :init
+    (use-package tree-sitter-langs)
+    :config
+    (use-package tree-sitter-indent
+      :hook (tree-sitter-after-on . tree-sitter-indent-mode)))
+#+end_src
 * Language-specific
 ** C
 #+begin_src emacs-lisp
@@ -797,6 +810,10 @@
     :hook ((c-ts-mode c++-ts-mode) . lsp-deferred)
     :custom
     (c-ts-mode-indent-offset 4))
+
+  (use-package meson-mode
+    :hook (meson-mode . (lambda ()
+                          (add-to-list 'completion-at-point-functions #'meson-completion-at-point-function))))
 #+end_src
 ** Configuration
 #+begin_src emacs-lisp
