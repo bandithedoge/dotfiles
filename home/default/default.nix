@@ -22,27 +22,22 @@ in {
     };
     packages = with pkgs; [
       # {{{
-      age
       aria
       broot
       comma
       fd
       ffmpeg
       file
-      gh
-      git
       hactool
       imagemagick
       innoextract
       jq
       killall
       librespeed-cli
-      manix
       neofetch
       niv
       nix-prefetch
       oi
-      ouch
       pandoc
       rclone
       ripgrep
@@ -391,80 +386,6 @@ in {
 
     lazygit.enable = true;
 
-    gitui = {
-      # {{{
-      enable = false;
-      keyConfig =
-        # {{{
-        # copied from https://github.com/extrawurst/gitui/blob/master/vim_style_key_config.ron
-        ''
-          (
-            open_help: Some(( code: F(1), modifiers: ( bits: 0,),)),
-
-            move_left: Some(( code: Char('h'), modifiers: ( bits: 0,),)),
-            move_right: Some(( code: Char('l'), modifiers: ( bits: 0,),)),
-            move_up: Some(( code: Char('k'), modifiers: ( bits: 0,),)),
-            move_down: Some(( code: Char('j'), modifiers: ( bits: 0,),)),
-
-            popup_up: Some(( code: Char('p'), modifiers: ( bits: 2,),)),
-            popup_down: Some(( code: Char('n'), modifiers: ( bits: 2,),)),
-            page_up: Some(( code: Char('b'), modifiers: ( bits: 2,),)),
-            page_down: Some(( code: Char('f'), modifiers: ( bits: 2,),)),
-            home: Some(( code: Char('g'), modifiers: ( bits: 0,),)),
-            end: Some(( code: Char('G'), modifiers: ( bits: 1,),)),
-            shift_up: Some(( code: Char('K'), modifiers: ( bits: 1,),)),
-            shift_down: Some(( code: Char('J'), modifiers: ( bits: 1,),)),
-
-            edit_file: Some(( code: Char('I'), modifiers: ( bits: 1,),)),
-
-            status_reset_item: Some(( code: Char('U'), modifiers: ( bits: 1,),)),
-
-            diff_reset_lines: Some(( code: Char('u'), modifiers: ( bits: 0,),)),
-            diff_stage_lines: Some(( code: Char('s'), modifiers: ( bits: 0,),)),
-
-            stashing_save: Some(( code: Char('w'), modifiers: ( bits: 0,),)),
-            stashing_toggle_index: Some(( code: Char('m'), modifiers: ( bits: 0,),)),
-
-            stash_open: Some(( code: Char('l'), modifiers: ( bits: 0,),)),
-
-            abort_merge: Some(( code: Char('M'), modifiers: ( bits: 1,),)),
-          )
-        '';
-      # }}}
-      theme = let
-        color = c: "Some(Rgb(${pkgs.colors.conversions.hexToRGBString "," (pkgs.lib.removePrefix "#" c)}))";
-      in
-        with pkgs.rice;
-        # {{{
-          ''
-            (
-              selected_tab: ${color base0F},
-              command_fg: ${color base05},
-              selection_bg: ${color base0F},
-              selection_fg: ${color base00},
-              cmdbar_bg: ${color base02},
-              cmdbar_extra_lines_bg: ${color base01},
-              disabled_fg: ${color base03},
-              diff_line_add: ${color base0B},
-              diff_line_delete: ${color base08},
-              diff_file_added: ${color base14},
-              diff_file_removed: ${color base12},
-              diff_file_moved: ${color base17},
-              diff_file_modified: ${color base13},
-              commit_hash: ${color base0E},
-              commit_time: ${color base15},
-              commit_author: ${color base0B},
-              danger_fg: ${color base08},
-              push_gauge_bg: ${color base02},
-              push_gauge_fg: ${color base04},
-              tag_fg: ${color base17},
-              branch_fg: ${color base13},
-            )
-          '';
-      # }}}
-    };
-    # }}}
-
     zellij = {
       # {{{
       enable = true;
@@ -503,8 +424,19 @@ in {
       nix-direnv.enable = true;
     };
 
-    nix-index.enable = true;
+    git = {
+      enable = true;
+      package = pkgs.gitAndTools.gitFull;
+      userName = "bandithedoge";
+      userEmail = "bandithedoge@protonmail.com";
+      ignores = ["*~"];
+      lfs.enable = true;
+      delta.enable = true;
+    };
+
     dircolors.enable = true;
+    gh.enable = true;
     info.enable = true;
+    nix-index.enable = true;
   }; # }}}
 }

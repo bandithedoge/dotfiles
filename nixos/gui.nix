@@ -35,6 +35,7 @@
     };
     ns-usbloader.enable = true;
     system-config-printer.enable = true;
+    hyprland.enable = false;
   };
 
   services = {

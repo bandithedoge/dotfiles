@@ -70,6 +70,7 @@
     ninja
     pkg-config
     qt6.qtdeclarative
+    qt6.qttools
 
     # nim
     bandithedoge.nimlangserver
@@ -92,10 +93,14 @@
     # writing
     ltex-ls
     marksman
-    python3Packages.grip
+    typst
 
     # faust
     faust
+
+    # zig
+    zig
+    zls
   ];
   # }}}
 

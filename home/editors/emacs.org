@@ -2,6 +2,7 @@
 
 * Initial optimization
 #+begin_src emacs-lisp :tangle "early-init.el"
+  ;; TODO: fix occasional hangups
   (setq auto-mode-case-fold nil
         bidi-inhibit-bpa t
         custom-file (make-temp-file "custom-" nil ".el")
@@ -54,6 +55,7 @@
                              ("nongnu" . "https://elpa.nongnu.org/nongnu/")
                              ("melpa" . "https://melpa.org/packages/"))))
 
+  ;; TODO: move to leaf?
   (require 'use-package)
   (setq use-package-always-defer t)
 #+end_src
@@ -150,6 +152,7 @@
 #+end_src
 * Theme
 #+begin_src emacs-lisp :tangle "doom-rice-theme.el"
+  ;; TODO: evil-ex prompt
   (require 'doom-themes)
 
   (def-doom-theme doom-rice
@@ -285,6 +288,7 @@
     :config
     (evil-traces-mode))
 
+  ;; TODO: weird folds
   (use-package vimish-fold
     :hook ((text-mode prog-mode) . (lambda ()
                                      (evil-vimish-fold-mode)
@@ -388,6 +392,7 @@
 * Completion
 ** At point
 #+begin_src emacs-lisp
+  ;; TODO: fix graphical glitching, elisp completions in other modes, weird manual completion behavior
   (use-package corfu
     :hook ((prog-mode text-mode) . corfu-mode)
     :after evil
@@ -425,6 +430,7 @@
 #+end_src
 ** Minibuffer
 #+begin_src emacs-lisp
+  ;; TODO: find-file
   (use-package vertico
     :bind
     (:map vertico-map
@@ -495,6 +501,7 @@
 #+end_src
 ** File tree
 #+begin_src emacs-lisp
+  ;; TODO: missing icons, prettier indent guides
   (use-package treemacs
     :after doom-themes
     :bind* ("<leader>t" ("File tree" . treemacs))
@@ -528,6 +535,7 @@
 #+end_src
 ** Git
 #+begin_src emacs-lisp
+  ;; TODO: ugly visuals
   (use-package diff-hl
     :hook
     (find-file . diff-hl-mode)
@@ -603,6 +611,7 @@
 #+end_src
 ** Modeline
 #+begin_src emacs-lisp
+  ;; TODO: less confusing background colors
   (use-package doom-modeline
     :hook (after-init . doom-modeline-mode)
     :custom
@@ -621,6 +630,7 @@
         :config
         (global-anzu-mode +1))))
 
+  ;; TODO: more modes
   (use-package hide-mode-line
     :hook ((completion-list-mode Man-mode) . hide-mode-line-mode))
 #+end_src
@@ -659,6 +669,7 @@
 * Editing
 ** LSP
 #+begin_src emacs-lisp
+  ;; TODO: better code action suggestions
   ;;;###autoload
   (defun +format (&optional arg)
     (interactive "P")
@@ -793,6 +804,7 @@
 #+end_src
 ** Tree-sitter
 #+begin_src emacs-lisp
+  ;; TODO: migrate everything, more automatic highlighting
   (use-package tree-sitter
     :hook
     (prog-mode text-mode . tree-sitter-mode)

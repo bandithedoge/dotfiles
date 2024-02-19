@@ -1,18 +1,20 @@
 {...}: {
-  services.pipewire = {
-    enable = true;
-    audio.enable = true;
-    pulse.enable = true;
-    jack.enable = true;
-    alsa = {
+  services = {
+    pipewire = {
       enable = true;
-      support32Bit = true;
+      audio.enable = true;
+      pulse.enable = true;
+      jack.enable = true;
+      alsa = {
+        enable = true;
+        support32Bit = true;
+      };
     };
   };
 
   environment.etc = let
     rate = 48000;
-    bufsize = 256;
+    bufsize = 512;
   in {
     "pipewire/pipewire.conf.d/99-ll.conf".text = builtins.toJSON {
       "context.properties" = {
@@ -28,5 +30,8 @@
     };
   };
 
-  musnix.enable = true;
+  musnix = {
+    enable = true;
+    das_watchdog.enable = true;
+  };
 }

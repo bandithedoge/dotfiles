@@ -27,10 +27,11 @@
   };
 
   programs = {
-    dconf.enable = true;
-    udevil.enable = true;
-    ccache.enable = true;
     adb.enable = true;
+    ccache.enable = true;
+    dconf.enable = true;
+    nix-ld.enable = true;
+    udevil.enable = true;
   };
 
   security = {

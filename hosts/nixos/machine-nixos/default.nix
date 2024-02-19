@@ -6,6 +6,7 @@
       kernelModules = [];
     };
     kernelModules = ["kvm-intel"];
+    kernelParams = ["threadirqs"];
     extraModulePackages = [];
     loader = {
       systemd-boot.enable = true;
@@ -14,6 +15,8 @@
   };
 
   powerManagement.cpuFreqGovernor = "performance";
+
+  services.irqbalance.enable = true;
 
   networking = {
     hostName = "machine-nixos";
@@ -73,6 +76,4 @@
     WINEFSYNC = "1";
     ROC_ENABLE_PRE_VEGA = "1";
   };
-
-  hardware.opengl.extraPackages = with pkgs; [mesa.opencl];
 }

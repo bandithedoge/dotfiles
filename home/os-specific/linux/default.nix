@@ -13,21 +13,15 @@ in {
 
   home = {
     packages = with pkgs; [
-      (blender.withPackages (p: [(bandithedoge.pythonPackages.py-slvs.override {pythonPkgs = p;})]))
       appimage-run
-      bandithedoge.basiliskii-bin
       bandithedoge.deemix-gui-bin
-      bandithedoge.sheepshaver-bin
+      bleachbit
+      blender
       bottles
       caprine-bin
-      cutter
       d-spy
-      deluge
       discord
-      freecad
       gnome.zenity
-      gparted
-      imhex
       inkscape
       keepassxc
       krita
@@ -39,20 +33,17 @@ in {
       pciutils
       qbittorrent
       rclone
-      telegram-desktop
+      telegram-desktop_git
       tor-browser-bundle-bin
       vesktop
       wine-tkg
-      xd
       xdragon
-      zoom-us
     ];
     pointerCursor = {
       inherit (pkgs.rice.gtk.cursorTheme) package name size;
       x11.enable = true;
       gtk.enable = true;
     };
-    sessionVariables.WINELOADER = pkgs.lib.getExe pkgs.wine-tkg;
   };
 
   # gtk {{{
@@ -84,6 +75,7 @@ in {
   # }}}
 
   # qt {{{
+  # TODO: customized qt
   qt = {
     enable = true;
     platformTheme = "gtk3";
@@ -569,7 +561,7 @@ in {
       TimeoutStopSec = 10;
     };
   };
+  # }}}
 
   fonts.fontconfig.enable = true;
-  # }}}
 }

@@ -9,6 +9,7 @@
   data = config.xdg.dataHome;
   state = config.xdg.stateHome;
 in {
+  # TODO: more stuff from xdg-ninja
   xdg = {
     enable = true;
     configFile = {
@@ -25,7 +26,7 @@ in {
   home = {
     sessionVariables = {
       # android
-      ANDROID_HOME = "${data}/android";
+      ANDROID_USER_HOME = "${data}/android";
 
       # bash
       HISTFILE = "${state}/bash/history";

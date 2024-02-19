@@ -6,6 +6,8 @@
   programs = {
     gamemode.enable = true;
 
+    gamescope.enable = true;
+
     steam = {
       enable = true;
       package = pkgs.steam.override {

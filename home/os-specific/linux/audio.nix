@@ -14,8 +14,11 @@
     strawberry
 
     # plugins
+    ChowCentaur
     ChowKick
+    ChowPhaser
     bandithedoge.distrho-ports
+    bandithedoge.geonkick
     bandithedoge.ildaeil
     bandithedoge.octasine
     bandithedoge.tal.bassline-101
@@ -34,7 +37,6 @@
     delayarchitect
     dragonfly-reverb
     eq10q
-    geonkick
     lsp-plugins
     yabridge
     yabridgectl
@@ -47,10 +49,10 @@
 
   xdg.configFile."yabridgectl/config.toml".text = ''
     plugin_dirs = [
-      '/mnt/soft/Bottles/plugins/drive_c/Program Files/Common Files/VST3',
-      '/mnt/soft/Bottles/plugins/drive_c/Program Files/Common Files/CLAP',
-      '/mnt/soft/Bottles/plugins/drive_c/Program Files/VstPlugins',
-      '/mnt/soft/Bottles/plugins/drive_c/Program Files/Steinberg/VSTPlugins'
+      '/mnt/soft/Bottles/plugins_bottles/drive_c/Program Files/Common Files/VST3',
+      '/mnt/soft/Bottles/plugins_bottles/drive_c/Program Files/Common Files/CLAP',
+      '/mnt/soft/Bottles/plugins_bottles/drive_c/Program Files/VstPlugins',
+      '/mnt/soft/Bottles/plugins_bottles/drive_c/Program Files/Steinberg/VSTPlugins'
     ]
   '';
 

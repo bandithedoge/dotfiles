@@ -4,7 +4,7 @@
   ...
 }: {
   programs.kitty = {
-    # {{{
+    # TODO {{{
     enable = true;
     package =
       if pkgs.stdenv.isDarwin
@@ -264,7 +264,6 @@
     openasar = {
       setup = true;
       cmdPreset = "battery";
-      quickstart = true;
     };
   };
 }

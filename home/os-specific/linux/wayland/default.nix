@@ -17,8 +17,10 @@ in {
       wl-clipboard
       wlr-which-key
     ];
+    # TODO: import variables into graphical session
     sessionVariables = {
       GDK_BACKEND = "wayland,x11";
+      NIXOS_OZONE_WL = "1";
       QT_QPA_PLATFORM = "wayland;xcb";
       SDL_VIDEODRIVER = "wayland";
       _JAVA_AWT_WM_NONREPARENTING = "1";
@@ -195,15 +197,48 @@ in {
       blur enable
       blur_xray enable
       shadows enable
+      shadows_on_csd enable
 
       titlebar_separator disable
       titlebar_border_thickness 2
     '';
   }; # }}}
 
+  wayland.windowManager.hyprland = {
+    # TODO {{{
+    enable = false;
+    plugins = with pkgs.hyprlandPlugins; [
+      split-monitor-workspaces
+    ];
+    extraConfig = ''
+      ${pkgs.rice.def.hypr}
+
+      ${builtins.readFile ./hyprland.conf}
+
+      ${builtins.concatStringsSep "\n" (map (x: let
+        x' = toString x;
+      in ''
+        bind = $mod, ${x'}, split-workspace, ${x'}
+        bind = $mod SHIFT, ${x'}, split-movetoworkspacesilent, ${x'}
+      '') (pkgs.lib.range 1 9))}
+
+      ${builtins.concatStringsSep "\n" (map (x: "windowrulev2 = opacity 0.95 0.85, class:(${x})") [
+        "foot"
+      ])}
+
+      bind = , Print, exec, ${pkgs.writeShellScript "screenshot" (with pkgs; ''
+        ${lib.getExe wayshot} -o $(hyprctl activeworkspace -j | ${lib.getExe jq} .monitor -r) --stdout | satty -f -
+      '')}
+
+      bind = $mod CTRL, p, exec, ${rofi-stuff}/bin/keepass
+    '';
+  };
+  # }}}
+
   programs.waybar = {
     # {{{
     enable = true;
+    # TODO: fix bar startup
     systemd = {
       enable = config.hostname != "thonkpad";
       target = "sway-session.target";
@@ -372,6 +407,7 @@ in {
     command = "chayang -d 10 && gtklock";
   in {
     enable = true;
+    # TODO: fix idle
     systemdTarget = "sway-session.target";
     timeouts = [
       {
@@ -404,7 +440,7 @@ in {
         menu = {
           d = {
             desc = "Discord";
-            cmd = "vencorddesktop";
+            cmd = "vesktop";
           };
           p = {
             desc = "Music player";

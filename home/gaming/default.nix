@@ -1,35 +1,35 @@
 {pkgs, ...}: {
-  home.packages = with pkgs; [
-    (lutris.override {
-      extraPkgs = pkgs':
-        with pkgs'; [
-          gamescope
-          gamemode
-        ];
-      extraLibraries = pkgs':
-        with pkgs'; [
-          nspr
-          xorg.libXScrnSaver
-          xorg.libXdamage
-          xorg.libXfixes
-          xorg.libXft
-          libadwaita
-          pango
-          gtk4
-        ];
-    })
-    bandithedoge.raze
-    bastet
-    gamescope
-    gzdoom
-    nethack
-    openmw
-    opentyrian
-    prismlauncher
-    unnethack
-    vitetris
-    vulkanPackages_latest.vulkan-tools
-  ];
+  home = {
+    packages = with pkgs; [
+      (pkgs.lutris.override {
+        extraPkgs = pkgs':
+          with pkgs'; [
+            gamemode
+          ];
+        extraLibraries = pkgs':
+          with pkgs'; [
+            nspr
+            xorg.libXScrnSaver
+            xorg.libXdamage
+            xorg.libXfixes
+            xorg.libXft
+            libadwaita
+            pango
+            gtk4
+          ];
+      })
+      bandithedoge.raze
+      bastet
+      gzdoom
+      nethack
+      openmw
+      opentyrian
+      prismlauncher
+      unnethack
+      vitetris
+      vulkanPackages_latest.vulkan-tools
+    ];
+  };
 
   programs.mangohud = {
     enable = true;

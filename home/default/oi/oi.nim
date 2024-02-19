@@ -37,6 +37,7 @@ when isMainModule:
     path = args["--path"]
     showTrace = args["--show-trace"]
     isDarwin = detectOs MacOSX
+    isLinux = detectOs Linux
     # detectOs(NixOS) doesn't detect NixOS properly
     isNixOS = if isDarwin: false else: readFile(
         "/etc/os-release").contains "NAME=NixOS"
@@ -80,6 +81,8 @@ when isMainModule:
     if inputs.len() == 0:
       exec &"nix flake update {path}"
       exec (if isNixOS: "sudo " else: "") & "nix-channel --update"
+      if isLinux:
+        exec "flatpak update"
     else:
       for input in inputs:
         exec &"nix flake lock {path} --update-input {input}"

@@ -13,7 +13,11 @@
     nur-bandithedoge.url = "github:bandithedoge/nur-packages";
     # nur-bandithedoge.url = "path:/home/bandithedoge/git/nur-packages";
 
+    aagl.url = "github:ezKEa/aagl-gtk-on-nix";
     emacs.url = "github:nix-community/emacs-overlay";
+    hyprland-split-monitor-workspaces.inputs.hyprland.follows = "hyprland";
+    hyprland-split-monitor-workspaces.url = "github:Duckonaut/split-monitor-workspaces";
+    hyprland.url = "github:hyprwm/Hyprland";
     mozilla.url = "github:mozilla/nixpkgs-mozilla";
     neorg.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
     neovim.url = "github:nix-community/neovim-nightly-overlay";
@@ -43,10 +47,10 @@
           defaults = rec {
             overlays = with inputs; [
               emacs.overlays.default
+              hyprland.overlays.default
               mozilla.overlays.firefox
               neorg.overlays.default
               neovim.overlay
-              # nil.overlays.default
               nix-alien.overlays.default
               nix-gaming.overlays.default
               nixmox.overlay
@@ -64,9 +68,10 @@
                 hyprlandPlugins = {
                   split-monitor-workspaces = hyprland-split-monitor-workspaces.packages.${prev.system}.default;
                 };
-                inherit (nix-gaming.packages.${prev.system}) wine-tkg;
+                inherit (nix-gaming.packages.${prev.system}) wine-ge wine-tkg;
                 inherit (prismlauncher.packages.${prev.system}) prismlauncher prismlauncher-unwrapped;
                 inherit (emacs.packages.${prev.system}) emacs-unstable-pgtk;
+                inherit (aagl.packages.${prev.system}) honkers-railway-launcher;
               })
               (import ./overlay.nix)
             ];
@@ -79,11 +84,14 @@
             };
             imports = {
               nixos = with inputs; [
+                "${kmonad}/nix/nixos-module.nix"
+                aagl.nixosModules.default
                 home-manager.nixosModules.home-manager
+                hyprland.nixosModules.default
                 musnix.nixosModules.musnix
+                nix-gaming.nixosModules.pipewireLowLatency
                 nyx.nixosModules.default
                 self.nixosModules.default
-                "${kmonad}/nix/nixos-module.nix"
                 self.nixosModules.home-manager
                 ./users/bandithedoge.nix
                 ./nix.nix
@@ -157,6 +165,7 @@
           imports = with inputs; [
             ./nix.nix
             nix-index-database.hmModules.nix-index
+            hyprland.homeManagerModules.default
           ];
         };
       };
