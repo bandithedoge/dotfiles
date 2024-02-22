@@ -70,7 +70,7 @@
                 };
                 inherit (nix-gaming.packages.${prev.system}) wine-ge wine-tkg;
                 inherit (prismlauncher.packages.${prev.system}) prismlauncher prismlauncher-unwrapped;
-                inherit (emacs.packages.${prev.system}) emacs-unstable-pgtk;
+                inherit (emacs.packages.${prev.system}) emacs-unstable-pgtk commercial-emacs;
                 inherit (aagl.packages.${prev.system}) honkers-railway-launcher;
               })
               (import ./overlay.nix)

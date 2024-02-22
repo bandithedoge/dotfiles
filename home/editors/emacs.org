@@ -702,6 +702,7 @@
     (lsp-diagnostics-provider :flymake)
     (lsp-enable-folding nil)
     (lsp-enable-on-type-formatting nil)
+    (lsp-enable-semantic-highlighting t)
     (lsp-enable-suggest-server-download nil)
     (lsp-headerline-breadcrumb-enable nil)
     (lsp-inlay-hint-enable t)
@@ -739,11 +740,6 @@
     :custom
     (lsp-ltex-completion-enabled t)
     (lsp-ltex-mother-tongue "pl-PL"))
-
-  ;; (use-package treesit-auto
-  ;;   :config
-  ;;   (treesit-auto-add-to-auto-mode-alist 'all)
-  ;;   (global-treesit-auto-mode))
 #+end_src
 ** Parinfer
 #+begin_src emacs-lisp
@@ -804,16 +800,25 @@
 #+end_src
 ** Tree-sitter
 #+begin_src emacs-lisp
-  ;; TODO: migrate everything, more automatic highlighting
-  (use-package tree-sitter
-    :hook
-    (prog-mode text-mode . tree-sitter-mode)
-    (tree-sitter-after-first-parse . tree-sitter-hl-mode)
-    :init
-    (use-package tree-sitter-langs)
+  ;; ;;;###autoload
+  ;; (defun +tree-sitter ()
+  ;;   (when (assoc major-mode tree-sitter-major-mode-language-alist)
+  ;;     (turn-on-tree-sitter-mode)
+  ;;     (tree-sitter-hl-mode)))
+  ;;
+  ;; ;; TODO: migrate everything, more automatic highlighting
+  ;; (use-package tree-sitter
+  ;;   :hook ((prog-mode text-mode) . +tree-sitter)
+  ;;   :init
+  ;;   (use-package tree-sitter-langs)
+  ;;   :config
+  ;;   (use-package tree-sitter-indent
+  ;;     :hook (tree-sitter-mode . tree-sitter-indent-mode)))
+
+  (use-package treesit-auto
     :config
-    (use-package tree-sitter-indent
-      :hook (tree-sitter-after-on . tree-sitter-indent-mode)))
+    (treesit-auto-add-to-auto-mode-alist 'all)
+    (global-treesit-auto-mode))
 #+end_src
 * Language-specific
 ** C
@@ -1032,6 +1037,7 @@
     :bind* (:map nix-mode-map
                  ("<localleader>r" ("REPL" . nix-repl-show)))
     :custom
+    (nix-indent-offest 2)
     (lsp-nix-nil-formatter ["alejandra"]))
 #+end_src
 ** Org
