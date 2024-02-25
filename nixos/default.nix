@@ -27,6 +27,12 @@
   };
 
   programs = {
+    java = {
+      enable = true;
+      package = pkgs.temurin-jre-bin;
+      binfmt = true;
+    };
+
     adb.enable = true;
     ccache.enable = true;
     dconf.enable = true;
@@ -71,4 +77,6 @@
     ]);
     useXkbConfig = true;
   };
+
+  documentation.man.enable = true;
 }

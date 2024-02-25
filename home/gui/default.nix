@@ -134,14 +134,9 @@
     enable = config.hostname == "machine-nixos";
     package =
       if !pkgs.stdenv.isDarwin
-      then
-        pkgs.firefox_nightly.override
-        {
-          cfg = {
-            nativeMessagingHosts = with pkgs; [tridactyl-native];
-          };
-        }
+      then pkgs.firefox_nightly
       else pkgs.dummy;
+    nativeMessagingHosts = with pkgs; [tridactyl-native];
     profiles = {
       default = {
         name = "default";

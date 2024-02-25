@@ -53,16 +53,9 @@
     connman.enable = true;
   };
 
-  hardware = {
-    firmware = with pkgs; [
-      linux-firmware
-    ];
-    opengl = {
-      enable = true;
-      driSupport = true;
-      driSupport32Bit = true;
-    };
-  };
+  hardware.firmware = with pkgs; [
+    linux-firmware
+  ];
 
   # drives {{{
   fileSystems = {

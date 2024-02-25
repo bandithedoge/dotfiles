@@ -8,7 +8,6 @@
 
   # common packages {{{
   home.packages = with pkgs; [
-    act
     checkmake
     editorconfig-checker
 

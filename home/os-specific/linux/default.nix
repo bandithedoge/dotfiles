@@ -46,6 +46,8 @@ in {
     };
   };
 
+  systemd.user.sessionVariables = config.home.sessionVariables;
+
   # gtk {{{
   gtk = rec {
     enable = true;
@@ -506,7 +508,11 @@ in {
 
     obs-studio = {
       enable = true;
-      plugins = with pkgs.obs-studio-plugins; [wlrobs];
+      plugins = with pkgs.obs-studio-plugins; [
+        wlrobs
+        obs-gstreamer
+        looking-glass-obs
+      ];
     };
   };
 

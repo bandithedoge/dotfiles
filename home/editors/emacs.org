@@ -346,6 +346,8 @@
     (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
     :config
     (use-package magit-todos
+      :bind* (:map magit-todos-item-section-map
+                   ("k" . evil-previous-line))
       :custom
       (magit-todos-keyword-suffix "\\(?:([^)]+)\\)?:?")
       :config
@@ -800,21 +802,6 @@
 #+end_src
 ** Tree-sitter
 #+begin_src emacs-lisp
-  ;; ;;;###autoload
-  ;; (defun +tree-sitter ()
-  ;;   (when (assoc major-mode tree-sitter-major-mode-language-alist)
-  ;;     (turn-on-tree-sitter-mode)
-  ;;     (tree-sitter-hl-mode)))
-  ;;
-  ;; ;; TODO: migrate everything, more automatic highlighting
-  ;; (use-package tree-sitter
-  ;;   :hook ((prog-mode text-mode) . +tree-sitter)
-  ;;   :init
-  ;;   (use-package tree-sitter-langs)
-  ;;   :config
-  ;;   (use-package tree-sitter-indent
-  ;;     :hook (tree-sitter-mode . tree-sitter-indent-mode)))
-
   (use-package treesit-auto
     :config
     (treesit-auto-add-to-auto-mode-alist 'all)

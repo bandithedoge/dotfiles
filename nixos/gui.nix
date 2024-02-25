@@ -3,17 +3,16 @@
   config,
   ...
 }: {
-  environment.systemPackages = with pkgs;
-    [
-      greetd.greetd
-      qt5.qtwayland
-      qt6.qtwayland
-      rice.gtk.cursorTheme.package
-      rice.gtk.iconTheme.package
-      rice.gtk.theme.package
-      winetricks
-      xorg.setxkbmap
-    ];
+  environment.systemPackages = with pkgs; [
+    greetd.greetd
+    qt5.qtwayland
+    qt6.qtwayland
+    rice.gtk.cursorTheme.package
+    rice.gtk.iconTheme.package
+    rice.gtk.theme.package
+    winetricks
+    xorg.setxkbmap
+  ];
 
   programs = {
     regreet = {
@@ -33,9 +32,10 @@
         };
       };
     };
+    gnome-disks.enable = true;
+    hyprland.enable = false;
     ns-usbloader.enable = true;
     system-config-printer.enable = true;
-    hyprland.enable = false;
   };
 
   services = {
@@ -47,9 +47,9 @@
 
   xdg.portal = {
     enable = true;
+    wlr.enable = true;
     config.sway.default = ["wlr" "gtk"];
     extraPortals = with pkgs; [
-      xdg-desktop-portal-wlr
       xdg-desktop-portal-gtk
     ];
   };
@@ -63,12 +63,17 @@
       bandithedoge.symbols-nerd-font
       emojione
       roboto
+      roboto-slab
+      twemoji-color-font
     ];
     fontconfig = {
       enable = true;
-      defaultFonts = {
-        monospace = [pkgs.rice.monoFont];
-        sansSerif = [pkgs.rice.uiFont];
+      hinting.autohint = true;
+      defaultFonts = with pkgs.rice; {
+        monospace = [monoFont];
+        sansSerif = [uiFont];
+        serif = [serifFont];
+        emoji = [emojiFont];
       };
     };
   };
@@ -81,6 +86,9 @@
   boot = {
     extraModulePackages = with config.boot.kernelPackages; [v4l2loopback];
     kernelModules = ["v4l2loopback"];
+    extraModprobeConfig = ''
+      options v4l2loopback devices=1 video_nr=1 card_label="OBS Cam" exclusive_caps=1
+    '';
     kernel.sysctl = {
       "vm.mmap_min_addr" = 0;
     };
@@ -96,5 +104,12 @@
         value = "524288";
       }
     ];
+  };
+
+  hardware.opengl = {
+    enable = true;
+    driSupport = true;
+    driSupport32Bit = true;
+    setLdLibraryPath = true;
   };
 }

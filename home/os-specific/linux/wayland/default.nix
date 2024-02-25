@@ -17,7 +17,6 @@ in {
       wl-clipboard
       wlr-which-key
     ];
-    # TODO: import variables into graphical session
     sessionVariables = {
       GDK_BACKEND = "wayland,x11";
       NIXOS_OZONE_WL = "1";
@@ -143,6 +142,7 @@ in {
           Print = "exec ${pkgs.writeShellScript "screenshot" (with pkgs; ''
             ${lib.getExe wayshot} -o $(swaymsg -t get_outputs | ${lib.getExe jq} 'map(select(.focused)).[0].name' -r) --stdout | satty -f - --output-filename ~/Pictures/$(date "+%F-%T").png
           '')}";
+          "Control+Print" = "replay-sorcery save";
 
           "${mod}+w" = "kill";
           "${mod}+f" = "fullscreen toggle";
@@ -461,6 +461,14 @@ in {
           e = {
             desc = "Emacs";
             cmd = "emacs";
+          };
+          v = pkgs.lib.optionalAttrs (config.hostname == "machine-nixos") {
+            desc = "Virtual machines";
+            cmd = "virt-manager";
+          };
+          l = pkgs.lib.optionalAttrs (config.hostname == "machine-nixos") {
+            desc = "Looking Glass Client";
+            cmd = "looking-glass-client";
           };
         };
       };

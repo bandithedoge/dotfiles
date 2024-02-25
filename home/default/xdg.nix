@@ -9,7 +9,6 @@
   data = config.xdg.dataHome;
   state = config.xdg.stateHome;
 in {
-  # TODO: more stuff from xdg-ninja
   xdg = {
     enable = true;
     configFile = {
@@ -49,6 +48,15 @@ in {
 
       # npm
       NPM_CONFIG_USERCONFIG = "${conf}/npm/npmrc";
+
+      # cargo
+      CARGO_HOME = "${data}/cargo";
+
+      # cinelerra
+      CIN_CONFIG="${conf}/bcast5";
+
+      # nim
+      NIMBLE_DIR="${data}/nimble";
     };
 
     shellAliases = {
@@ -57,6 +65,12 @@ in {
 
       # yarn
       yarn = "yarn --use-yarnrc ${conf}/yarn/config";
+
+      # adb
+      adb = "HOME='${data}'/android adb";
     };
   };
+
+  # gtk
+  gtk.gtk2.configLocation = "${conf}/gtk-2.0/gtkrc";
 }

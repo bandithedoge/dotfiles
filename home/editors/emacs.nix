@@ -36,14 +36,13 @@ in {
     };
   };
 
-  home = {
-    sessionVariables.EDITOR = "emacs";
-    file = {
-      ".emacs.d/doom-rice-theme.el".text = ''
-        ${pkgs.rice.def.elisp}
-        ${builtins.readFile "${configDir}/doom-rice-theme.el"}
-      '';
-      ".emacs.d/early-init.el".source = "${configDir}/early-init.el";
-    };
+  xdg.configFile = {
+    "emacs/doom-rice-theme.el".text = ''
+      ${pkgs.rice.def.elisp}
+      ${builtins.readFile "${configDir}/doom-rice-theme.el"}
+    '';
+    "emacs/early-init.el".source = "${configDir}/early-init.el";
   };
+
+  home.sessionVariables.EDITOR = "emacs";
 }

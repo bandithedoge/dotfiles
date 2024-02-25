@@ -1,13 +1,9 @@
 {pkgs, ...}: {
+  imports = [./virt.nix];
+
   boot = {
     kernelPackages = pkgs.linuxPackages_cachyos;
-    initrd = {
-      availableKernelModules = ["xhci_pci" "ehci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod"];
-      kernelModules = [];
-    };
-    kernelModules = ["kvm-intel"];
     kernelParams = ["threadirqs"];
-    extraModulePackages = [];
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
@@ -38,6 +34,17 @@
     package = pkgs.ananicy-cpp;
     rulesProvider = pkgs.ananicy-cpp-rules;
   };
+
+  # services.replay-sorcery = {
+  #   enable = true;
+  #   enableSysAdminCapability = true;
+  #   autoStart = true;
+  #   settings = {
+  #     videoInput = "hwaccel";
+  #     videoFramerate = 60;
+  #     controller = "command";
+  #   };
+  # };
 
   # drives {{{
   fileSystems = {
