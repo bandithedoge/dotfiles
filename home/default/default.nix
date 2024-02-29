@@ -434,6 +434,13 @@ in {
       delta.enable = true;
     };
 
+    xplr = {
+      enable = true;
+      plugins =
+        pkgs.lib.genAttrs [
+        ] (name: pkgs.bandithedoge.xplrPlugins.${name});
+    };
+
     dircolors.enable = true;
     gh.enable = true;
     info.enable = true;

@@ -328,6 +328,7 @@
     (vc-git-diff-switches '("--histogram"))
     (vc-follow-symlinks t))
 
+  ;; TODO: gracefully kill buffers on exit
   (use-package magit
     :bind* ("<leader>g" ("Git" . magit))
     :bind
@@ -348,10 +349,9 @@
     (use-package magit-todos
       :bind* (:map magit-todos-item-section-map
                    ("k" . evil-previous-line))
+      :hook (magit-mode . magit-todos-mode)
       :custom
-      (magit-todos-keyword-suffix "\\(?:([^)]+)\\)?:?")
-      :config
-      (magit-todos-mode)))
+      (magit-todos-keyword-suffix "\\(?:([^)]+)\\)?:?")))
 #+end_src
 ** PDF
 #+begin_src emacs-lisp
@@ -683,7 +683,7 @@
 
   (use-package apheleia
     :bind* (:prefix "<localleader>l"
-                    :prefix-map +lsp
+                    :prefix-map +lang
                     ("f" ("Format" . +format))))
 
   (use-package lsp-mode
@@ -697,7 +697,8 @@
           ("q" ("Shutdown" . lsp-workspace-shutdown))
           ("r" ("Restart" . lsp-workspace-restart)))
     (:map lsp-mode-map
-          ("<localleader>lr" ("Rename" . lsp-rename)))
+          ("<localleader>lr" ("Rename" . lsp-rename))
+          ("<localleader>la" ("Code action" . lsp-execute-code-action)))
     :custom
     (lsp-auto-execute-action nil)
     (lsp-completion-provider :none)
@@ -722,17 +723,12 @@
             ("j" . lsp-ui-peek--select-next)
             ("k" . lsp-ui-peek--select-prev)
             ("l" . lsp-ui-peek--select-next-file))
-      (:map lsp-mode-map
-            ("<localleader>la" ("Code action" . lsp-ui-sideline-apply-code-actions)))
       :custom
       (lsp-ui-delay 0.5)
       (lsp-ui-doc-max-height 8)
       (lsp-ui-doc-max-width 72)
       (lsp-ui-doc-position 'at-point)
-      (lsp-ui-doc-show-with-mouse nil)
-      (lsp-ui-sideline-show-code-actions t)
-      (lsp-ui-sideline-show-diagnostics nil)
-      (lsp-ui-sideline-show-symbol nil))
+      (lsp-ui-doc-show-with-mouse nil))
     (use-package consult-lsp
       :bind (:map lsp-mode-map
                   ([remap xref-find-apropos] . consult-lsp-symbols))))
@@ -794,6 +790,7 @@
 #+begin_src emacs-lisp
   (use-package flymake
     :hook ((prog-mode text-mode) . flymake-mode)
+    :bind* ("<localleader>ld" ("Diagnostics" . consult-flymake))
     :config
     (use-package flymake-popon
       :hook (flymake-mode . flymake-popon-mode)

@@ -36,6 +36,7 @@
     bandithedoge.tal.vocoder
     delayarchitect
     dragonfly-reverb
+    drumgizmo
     eq10q
     lsp-plugins
     yabridge

@@ -437,40 +437,43 @@ in {
         anchor = "bottom-right";
         margin_bottom = 5;
         margin_right = 5;
-        menu = {
-          d = {
-            desc = "Discord";
-            cmd = "vesktop";
+        menu =
+          {
+            d = {
+              desc = "Discord";
+              cmd = "vesktop";
+            };
+            p = {
+              desc = "Music player";
+              cmd = "strawberry";
+            };
+            b = {
+              desc = "Web browser";
+              cmd = "$BROWSER";
+            };
+            g = {
+              desc = "Game launcher";
+              cmd = "lutris";
+            };
+            k = {
+              desc = "Password manager";
+              cmd = "keepassxc";
+            };
+            e = {
+              desc = "Emacs";
+              cmd = "emacs";
+            };
+          }
+          // pkgs.lib.optionalAttrs (config.hostname == "machine-nixos") {
+            v = {
+              desc = "Virtual machines";
+              cmd = "virt-manager";
+            };
+            l = {
+              desc = "Looking Glass Client";
+              cmd = "looking-glass-client";
+            };
           };
-          p = {
-            desc = "Music player";
-            cmd = "strawberry";
-          };
-          b = {
-            desc = "Web browser";
-            cmd = "$BROWSER";
-          };
-          g = {
-            desc = "Game launcher";
-            cmd = "lutris";
-          };
-          k = {
-            desc = "Password manager";
-            cmd = "keepassxc";
-          };
-          e = {
-            desc = "Emacs";
-            cmd = "emacs";
-          };
-          v = pkgs.lib.optionalAttrs (config.hostname == "machine-nixos") {
-            desc = "Virtual machines";
-            cmd = "virt-manager";
-          };
-          l = pkgs.lib.optionalAttrs (config.hostname == "machine-nixos") {
-            desc = "Looking Glass Client";
-            cmd = "looking-glass-client";
-          };
-        };
       };
   };
 }
