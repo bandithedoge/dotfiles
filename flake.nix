@@ -47,7 +47,7 @@
           defaults = rec {
             overlays = with inputs; [
               emacs.overlays.default
-              hyprland.overlays.default
+              # hyprland.overlays.default
               mozilla.overlays.firefox
               neorg.overlays.default
               neovim.overlay
@@ -87,7 +87,7 @@
                 "${kmonad}/nix/nixos-module.nix"
                 aagl.nixosModules.default
                 home-manager.nixosModules.home-manager
-                hyprland.nixosModules.default
+                # hyprland.nixosModules.default
                 musnix.nixosModules.musnix
                 nix-gaming.nixosModules.pipewireLowLatency
                 nyx.nixosModules.default
@@ -163,7 +163,7 @@
           imports = with inputs; [
             ./nix.nix
             nix-index-database.hmModules.nix-index
-            hyprland.homeManagerModules.default
+            # hyprland.homeManagerModules.default
           ];
         };
       };

@@ -11,11 +11,16 @@
     steam = {
       enable = true;
       package = pkgs.steam.override {
-        extraPkgs = pkgs: with pkgs; [xz];
+        extraLibraries = pkgs:
+          with pkgs; [
+            xz
+            openssl
+          ];
       };
     };
 
     honkers-railway-launcher.enable = true;
+    anime-game-launcher.enable = true;
   };
 
   chaotic.steam.extraCompatPackages = with pkgs; [luxtorpeda proton-ge-custom steamtinkerlaunch];

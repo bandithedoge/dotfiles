@@ -39,7 +39,9 @@
   };
 
   services = {
-    xserver.displayManager.sessionPackages = with pkgs; [swayfx];
+    xserver.displayManager.sessionPackages = with pkgs; [
+      swayfx
+    ];
     greetd.enable = true;
     accounts-daemon.enable = true;
     flatpak.enable = true;

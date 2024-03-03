@@ -31,7 +31,9 @@ in {
     enable = true;
     package = pkgs.swayfx;
     config = {
-      bars = [];
+      bars = [
+        {command = "waybar";}
+      ];
       inherit terminal menu;
       colors = {
         background = base00;
@@ -88,17 +90,14 @@ in {
       };
       startup = [
         {
+          command = "systemctl --user import-environment";
+          always = true;
+        }
+        {
           command = "swaysome init 1";
           always = true;
         }
         {command = "autotiling-rs";}
-        {
-          command =
-            if config.hostname == "thonkpad"
-            then "killall -r 'waybar*'; waybar"
-            else "systemctl --user restart waybar";
-          always = true;
-        }
       ];
       input = {
         "*" = {
@@ -238,11 +237,6 @@ in {
   programs.waybar = {
     # {{{
     enable = true;
-    # TODO: fix bar startup
-    systemd = {
-      enable = config.hostname != "thonkpad";
-      target = "sway-session.target";
-    };
     settings = with pkgs.rice; let
       red = s: "<span foreground=\"${base08}\">${s}</span>";
       icon = i: "<span font=\"${monoFont} 11\">${i}<tt> </tt></span>";

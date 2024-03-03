@@ -218,10 +218,12 @@
                    ((line-number-current-line &override) :foreground accent :weight 'bold :slant 'normal)
                    (vertico-current :background bg)
                    (flymake-popon :background base4)
-                   (pulsar-generic :background accent)
-                   (highlight-indent-guides-character-face :foreground base4)
+                   (highlight-indent-guides-character-face :foreground base3)
                    (prescient-primary-highlight :foreground accent :weight 'bold)
-                   (prescient-secondary-highlight :foreground accent)))
+                   (prescient-secondary-highlight :foreground accent)
+                   (origami-fold-header-face :background base4 :foreground grey)
+                   (lsp-ui-doc-background :background base4)
+                   (lsp-ui-doc-header :background accent :foreground bg)))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -287,19 +289,6 @@
     :after evil-ex
     :config
     (evil-traces-mode))
-
-  ;; TODO: weird folds
-  (use-package vimish-fold
-    :hook ((text-mode prog-mode) . (lambda ()
-                                     (evil-vimish-fold-mode)
-                                     (evil-close-folds)))
-    :bind (:map evil-motion-state-map
-                ("TAB" . evil-toggle-fold)
-                ([remap evil-toggle-fold] . vimish-fold-toggle))
-    :custom
-    (vimish-fold-indication-mode 'right-fringe)
-    :init
-    (use-package evil-vimish-fold))
 
   (use-package evil-visualstar
     :commands (evil-visualstar/begin-search evil-visualstar/begin-search-forward evil-visualstar/begin-search-backward)
@@ -535,6 +524,27 @@
     (doom-themes-treemacs-config)
     (treemacs-load-theme "nerd-icons"))
 #+end_src
+** Folding
+#+begin_src emacs-lisp
+  (use-package origami
+    :after evil
+    :hook ((prog-mode) . (lambda ()
+                           (setq-local origami-fold-style 'triple-braces)
+                           (origami-mode)
+                           (origami-close-all-nodes (current-buffer))))
+    :bind (:map evil-motion-state-map
+                ("TAB" . evil-toggle-fold)
+                ("<backtab>" . origami-toggle-all-nodes)
+                ([remap evil-toggle-fold] . origami-recursively-toggle-node)
+                ([remap evil-open-fold] . origami-open-node)
+                ([remap evil-open-folds] . origami-open-all-nodes)
+                ([remap evil-close-fold] . origami-close-node)
+                ([remap evil-close-folds] . origami-close-all-nodes)
+                ([remap evil-open-fold-rec] . origami-open-node-recursively))
+    :custom
+    (origami-show-fold-header t)
+    (origami-fold-replacement (nerd-icons-mdicon "nf-md-dots_horizontal")))
+#+end_src
 ** Git
 #+begin_src emacs-lisp
   ;; TODO: ugly visuals
@@ -577,6 +587,11 @@
     :custom
     (highlight-indent-guides-method 'character)
     (highlight-indent-guides-auto-enabled nil))
+#+end_src
+** Info
+#+begin_src emacs-lisp
+  (use-package info-colors
+    :hook (Info-selection . info-colors-fontify-mode))
 #+end_src
 ** Keybindings
 #+begin_src emacs-lisp
@@ -688,8 +703,6 @@
 
   (use-package lsp-mode
     :after tempel
-    :bind (:map evil-motion-state-map
-                ("K" . lsp-ui-doc-glance))
     :bind
     (:map lsp-mode-map
           :prefix "<localleader>ls"
@@ -703,6 +716,7 @@
     (lsp-auto-execute-action nil)
     (lsp-completion-provider :none)
     (lsp-diagnostics-provider :flymake)
+    (lsp-eldoc-enable-hover nil)
     (lsp-enable-folding nil)
     (lsp-enable-on-type-formatting nil)
     (lsp-enable-semantic-highlighting t)
@@ -716,8 +730,11 @@
     :init
     (setq-default read-process-output-max (* 1024 1024))
     :config
+    ;; TODO: better hover doc
     (use-package lsp-ui
       :bind
+      (:map evil-motion-state-map
+            ("K" . lsp-ui-doc-glance))
       (:map lsp-ui-peek-mode-map
             ("h" . lsp-ui-peek--select-prev-file)
             ("j" . lsp-ui-peek--select-next)
@@ -811,6 +828,10 @@
     :hook ((c-ts-mode c++-ts-mode) . lsp-deferred)
     :custom
     (c-ts-mode-indent-offset 4))
+
+  (use-package cmake-ts-mode
+    :mode "\\.cmake\\'"
+    :mode "CMakeLists.txt")
 
   (use-package meson-mode
     :hook (meson-mode . (lambda ()
@@ -959,6 +980,34 @@
     :hook (json-ts-mode . lsp-deferred)
     :custom
     (json-ts-mode-indent-offset 4))
+#+end_src
+** Julia
+#+begin_src emacs-lisp
+  (use-package julia-ts-mode
+    :mode "\\.jl$")
+
+  (use-package julia-snail
+    :hook (julia-ts-mode . julia-snail-mode)
+    :bind
+    (:map julia-snail-mode-map
+          ("<localleader>'" ("Snail" . julia-snail))
+          ("<localleader>a" ("Activate package" . julia-snail-package-activate))
+          ("<localleader>d" ("Documentation at point" . julia-snail-doc-lookup))
+          ("<localleader>r" ("Update module cache" . julia-snail-update-module-cache))
+          (:prefix "<localleader>e"
+                   :prefix-map +eval
+                   ("b" ("Buffer" . julia-snail-send-buffer-file))
+                   ("l" ("Line" . julia-snail-send-line))
+                   ("r" ("Region" . julia-snail-send-region))))
+    (:map julia-snail-repl-mode-map
+          ("<localleader>a" ("Activate package" . julia-snail-package-activate))
+          ("<localleader>d" ("Documentation at point" . julia-snail-doc-lookup))
+          ("<localleader>m" ("Go back" . julia-snail-repl-go-back))
+          ("<localleader>r" ("Update module cache" . julia-snail-update-module-cache))))
+
+  (use-package lsp-julia
+    :after lsp-mode
+    :hook (julia-ts-mode . lsp-deferred))
 #+end_src
 ** Lua
 #+begin_src emacs-lisp
@@ -1123,7 +1172,9 @@
                                     nil
                                     t)))
       :custom
-      (org-appear-trigger 'manual)))
+      (org-appear-trigger 'manual))
+    (use-package org-fragtog
+      :hook (org-mode . org-fragtog-mode)))
 #+end_src
 ** Python
 #+begin_src emacs-lisp

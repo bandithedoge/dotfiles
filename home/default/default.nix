@@ -29,6 +29,7 @@ in {
       ffmpeg
       file
       hactool
+      hyperfine
       imagemagick
       innoextract
       jq
@@ -431,14 +432,12 @@ in {
       userEmail = "bandithedoge@protonmail.com";
       ignores = ["*~"];
       lfs.enable = true;
-      delta.enable = true;
-    };
-
-    xplr = {
-      enable = true;
-      plugins =
-        pkgs.lib.genAttrs [
-        ] (name: pkgs.bandithedoge.xplrPlugins.${name});
+      delta = {
+        enable = true;
+        options = {
+          theme = "base16";
+        };
+      };
     };
 
     dircolors.enable = true;

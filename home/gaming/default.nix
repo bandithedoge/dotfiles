@@ -24,6 +24,7 @@
       nethack
       openmw
       opentyrian
+      ppsspp
       prismlauncher
       unnethack
       vitetris
@@ -71,7 +72,9 @@
       exec_name = true;
       vulkan_driver = true;
       wine = true;
+      winesync = true;
       fsr = true;
+      arch = true;
       gamemode = true;
       show_fps_limit = true;
       resolution = true;
