@@ -387,11 +387,6 @@ in {
 
     lazygit.enable = true;
 
-    zellij = {
-      # {{{
-      enable = true;
-    }; # }}}
-
     tealdeer = {
       enable = true;
       settings.display.compact = true;
@@ -444,5 +439,6 @@ in {
     gh.enable = true;
     info.enable = true;
     nix-index.enable = true;
+    zellij.enable = true;
   }; # }}}
 }

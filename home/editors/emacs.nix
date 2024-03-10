@@ -16,6 +16,13 @@
     cp *.el $out
   '';
 in {
+  home = {
+    packages = with pkgs; [
+      emacs-lsp-booster
+    ];
+    sessionVariables.EDITOR = "emacs";
+  };
+
   programs.emacs = {
     enable = true;
     package = pkgs.emacsWithPackagesFromUsePackage {
@@ -32,6 +39,9 @@ in {
 
       override = final: prev: {
         smartparens-mode = prev.smartparens;
+        lsp-mode = prev.lsp-mode.overrideAttrs (_: {
+          LSP_USE_PLISTS = "true";
+        });
       };
     };
   };
@@ -43,6 +53,4 @@ in {
     '';
     "emacs/early-init.el".source = "${configDir}/early-init.el";
   };
-
-  home.sessionVariables.EDITOR = "emacs";
 }

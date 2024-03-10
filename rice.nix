@@ -3,7 +3,7 @@
 in
   rice
   // (with rice; rec {
-    terminal = "alacritty";
+    terminal = "kitty";
     wm = "river";
     menu = "rofi -show drun";
 

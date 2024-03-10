@@ -39,8 +39,8 @@
     drumgizmo
     eq10q
     lsp-plugins
-    yabridge
-    yabridgectl
+    # yabridge
+    # yabridgectl
   ];
 
   services.easyeffects = {

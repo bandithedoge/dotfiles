@@ -2,7 +2,9 @@
 
 * Initial optimization
 #+begin_src emacs-lisp :tangle "early-init.el"
-  ;; TODO: fix occasional hangups
+  ;; TODO: fix occasional hangups and random crashes
+  (setenv "LSP_USE_PLISTS" "true")
+
   (setq auto-mode-case-fold nil
         bidi-inhibit-bpa t
         custom-file (make-temp-file "custom-" nil ".el")
@@ -278,7 +280,11 @@
       :custom
       (evil-collection-key-blacklist '("SPC" "<backspace>"))
       :config
-      (evil-collection-init)))
+      (evil-collection-init))
+    (use-package evil-goggles
+      :config
+      (evil-goggles-mode)
+      (evil-goggles-use-diff-faces)))
 
   (use-package evil-nerd-commenter
     :commands (evilnc-comment-operator evilnc-inner-comment evilnc-outer-commenter)
@@ -528,10 +534,10 @@
 #+begin_src emacs-lisp
   (use-package origami
     :after evil
-    :hook ((prog-mode) . (lambda ()
-                           (setq-local origami-fold-style 'triple-braces)
-                           (origami-mode)
-                           (origami-close-all-nodes (current-buffer))))
+    :hook ((prog-mode text-mode) . (lambda ()
+                                     (setq-local origami-fold-style 'triple-braces)
+                                     (origami-mode)
+                                     (origami-close-all-nodes (current-buffer))))
     :bind (:map evil-motion-state-map
                 ("TAB" . evil-toggle-fold)
                 ("<backtab>" . origami-toggle-all-nodes)
@@ -688,6 +694,27 @@
 #+begin_src emacs-lisp
   ;; TODO: better code action suggestions
   ;;;###autoload
+  (defun lsp-booster--advice-json-parse (old-fn &rest args)
+    "Try to parse bytecode instead of json."
+    (or
+     (when (equal (following-char) ?#)
+       (let ((bytecode (read (current-buffer))))
+         (when (byte-code-function-p bytecode)
+           (funcall bytecode))))
+     (apply old-fn args)))
+  (defun lsp-booster--advice-final-command (old-fn cmd &optional test?)
+    "Prepend emacs-lsp-booster command to lsp CMD."
+    (let ((orig-result (funcall old-fn cmd test?)))
+      (if (and (not test?)                             ;; for check lsp-server-present?
+               (not (file-remote-p default-directory)) ;; see lsp-resolve-final-command, it would add extra shell wrapper
+               lsp-use-plists
+               (not (functionp 'json-rpc-connection))  ;; native json-rpc
+               (executable-find "emacs-lsp-booster"))
+          (progn
+            (message "Using emacs-lsp-booster for %s!" orig-result)
+            (cons "emacs-lsp-booster" orig-result))
+        orig-result)))
+
   (defun +format (&optional arg)
     (interactive "P")
     (call-interactively
@@ -728,6 +755,13 @@
     :custom-face
     (lsp-inlay-hint-face ((t (:height 0.8 :inherit 'font-lock-comment-face))))
     :init
+    (advice-add (if (progn (require 'json)
+                           (fboundp 'json-parse-buffer))
+                    'json-parse-buffer
+                  'json-read)
+                :around
+                #'lsp-booster--advice-json-parse)
+    (advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
     (setq-default read-process-output-max (* 1024 1024))
     :config
     ;; TODO: better hover doc
@@ -879,7 +913,11 @@
       (advice-add #'describe-function-1 :after #'elisp-demos-advice-describe-function-1)
       (advice-add #'helpful-update :after #'elisp-demos-advice-helpful-update))
     (use-package highlight-quoted
-      :hook (emacs-lisp-mode . highlight-quoted-mode)))
+      :hook (emacs-lisp-mode . highlight-quoted-mode))
+    (use-package highlight-defined
+      :hook (emacs-lisp-mode . highlight-defined-mode))
+    (use-package easy-escape
+      :hook (emacs-lisp-mode . easy-escape-minor-mode)))
 #+end_src
 ** Faust
 #+begin_src emacs-lisp
@@ -1082,6 +1120,7 @@
           ([remap evil-save] . org-edit-src-save))
     :bind*
     (:map org-mode-map
+          ([remap origami-toggle-all-nodes] . org-shifttab)
           ("<localleader>s" ("Sort" . org-sort))
           ("<localleader>g" ("Goto" . consult-org-heading))
           ("<localleader>'" ("Edit block" . org-edit-special))

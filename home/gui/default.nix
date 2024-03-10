@@ -4,7 +4,7 @@
   ...
 }: {
   programs.kitty = {
-    # TODO {{{
+    # {{{
     enable = true;
     package =
       if pkgs.stdenv.isDarwin
@@ -30,7 +30,7 @@
       adjust_column_width = -1;
       tab_bar_style = "powerline";
       confirm_os_window_close = 0;
-      shell = "${pkgs.fish}/bin/fish";
+      shell = "zellij";
       sync_to_monitor = false;
       macos_titlebar_color = "background";
       text_composition_strategy = "legacy";
@@ -191,6 +191,9 @@
           "devtools.chrome.enabled" = true;
           "devtools.debugger.ui.editor-wrapping" = true;
           "extensions.update.enabled" = false;
+          "font.name.monospace.x-western" = pkgs.rice.monoFont;
+          "font.name.sans-serif.x-western" = pkgs.rice.uiFont;
+          "font.name.serif.x-western" = pkgs.rice.serifFont;
           "general.autoScroll" = true;
           "gfx.webrender.all" = true;
           "gfx.webrender.quality.force-subpixel-aa-where-possible" = true;
