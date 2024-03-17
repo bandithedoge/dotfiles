@@ -1,0 +1,35 @@
+@use "sass:color";
+
+@function col($c) {
+    @return color.red($c), color.green($c), color.blue($c);
+}
+
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/DiscordRecolor/DiscordRecolor.css);
+
+:root {
+    --settingsicons: 1;
+    --font: #{$uiFont};
+    --accentcolor: #{col($base0F)};
+    --accentcolor2: #{col($base17)};
+    --linkcolor: #{col($base0F)};
+    --mentioncolor: #{col($base0F)};
+    --successcolor: #{col($base0B)};
+    --warningcolor: #{col($base0A)};
+    --dangercolor: #{col($base08)};
+
+    --textbrightest: #{col($base07)};
+    --textbrighter: #{col($base07)};
+    --textbright: #{col($base06)};
+    --textdark: #{col($base03)};
+    --textdarker: #{col($base03)};
+    --textdarkest: #{col($base03)};
+
+    --backgroundaccent: #{col($base02)};
+    --backgroundprimary: #{col($base00)};
+    --backgroundsecondary: #{col($base10)};
+    --backgroundsecondaryalt: #{col($base10)};
+    --backgroundtertiary: #{col($base10)};
+    --backgroundfloating: #{col($base02)};
+
+    --font-code: #{$monoFont};
+}

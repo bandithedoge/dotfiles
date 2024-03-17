@@ -3,10 +3,7 @@
     ardour
     bandithedoge.cardinal
     bandithedoge.zrythm
-    bespokesynth
     carla
-    furnace
-    giada
     picard
     playerctl
     pwvucontrol
@@ -14,33 +11,21 @@
     strawberry
 
     # plugins
-    ChowCentaur
     ChowKick
-    ChowPhaser
     bandithedoge.distrho-ports
     bandithedoge.geonkick
     bandithedoge.ildaeil
-    bandithedoge.octasine
-    bandithedoge.tal.bassline-101
     bandithedoge.tal.chorus-lx
-    bandithedoge.tal.dac
     bandithedoge.tal.drum
-    bandithedoge.tal.dub-x
-    bandithedoge.tal.filter-2
     bandithedoge.tal.j-8
     bandithedoge.tal.mod
     bandithedoge.tal.noisemaker
     bandithedoge.tal.reverb-4
     bandithedoge.tal.sampler
     bandithedoge.tal.u-no-lx
-    bandithedoge.tal.vocoder
-    delayarchitect
     dragonfly-reverb
-    drumgizmo
     eq10q
     lsp-plugins
-    # yabridge
-    # yabridgectl
   ];
 
   services.easyeffects = {

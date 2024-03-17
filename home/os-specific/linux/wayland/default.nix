@@ -86,6 +86,11 @@ in {
             command = "floating disable";
             criteria.title = "(Guitar Pro 8)|(DaVinci Resolve Studio)";
           }
+          # https://github.com/flameshot-org/flameshot/issues/2970#issuecomment-1321117462
+          {
+            command = "floating enable, fullscreen disable, move absolute position 0 0, border pixel 0";
+            criteria.app_id = "flameshot";
+          }
         ];
       };
       startup = [
@@ -138,9 +143,7 @@ in {
           "${mod}+Control+space" = "exec dunstctl close";
           "${mod}+backspace" = "exec wlr-which-key";
           "${mod}+Control+p" = "exec ${rofi-stuff}/bin/keepass";
-          Print = "exec ${pkgs.writeShellScript "screenshot" (with pkgs; ''
-            ${lib.getExe wayshot} -o $(swaymsg -t get_outputs | ${lib.getExe jq} 'map(select(.focused)).[0].name' -r) --stdout | satty -f - --output-filename ~/Pictures/$(date "+%F-%T").png
-          '')}";
+          Print = "exec flameshot gui";
           "Control+Print" = "replay-sorcery save";
 
           "${mod}+w" = "kill";
@@ -203,40 +206,138 @@ in {
     '';
   }; # }}}
 
+  # TODO https://github.com/Duckonaut/split-monitor-workspaces/issues/53
   wayland.windowManager.hyprland = {
-    # TODO {{{
-    enable = false;
+    # {{{
+    enable = true;
+    systemd.variables = ["--all"];
     plugins = with pkgs.hyprlandPlugins; [
       split-monitor-workspaces
     ];
-    extraConfig = ''
-      ${pkgs.rice.def.hypr}
+    settings = let
+      color = c: "rgb(${pkgs.lib.removePrefix "#" c})";
+      mod = "SUPER";
+    in
+      with pkgs.rice; {
+        general = {
+          border_size = 2;
+          gaps_in = 5;
+          gaps_out = 10;
+          "col.inactive_border" = color base00;
+          "col.active_border" = color base0F;
+          layout = "master";
+          resize_on_border = true;
+        };
+        decoration = {
+          shadow_range = 8;
+          shadow_render_power = 1;
+          "col.shadow" = "0x80000000";
+          blur = {
+            new_optimizations = true;
+            xray = true;
+          };
+        };
+        animations = {
+          first_launch_animation = false;
+        };
+        input = {
+          kb_layout = "pl";
+          repeat_delay = 300;
+          accel_profile = "flat";
+          touchpad = {
+            disable_while_typing = false;
+            tap-to-click = false;
+            clickfinger_behavior = true;
+          };
+        };
+        misc = {
+          disable_hyprland_logo = true;
+          disable_splash_rendering = true;
+          force_default_wallpaper = -1;
+          mouse_move_enables_dpms = true;
+          key_press_enables_dpms = true;
+          allow_session_lock_restore = true;
+          vrr = 1;
+          enable_swallow = true;
+          swallow_regex = terminal;
+        };
+        xwayland.force_zero_scaling = true;
+        opengl.force_introspection = 1;
+        monitor = [
+          ", preferred, auto, 1"
+          "HDMI-A-2, preferred, 1920x50, 1"
+          "DVI-D-1, preferred, 0x0, 1"
+        ];
+        exec = ["swaybg -i ${wallpaper} -m fill"];
+        bind =
+          [
+            "${mod}, return, exec, ${terminal}"
+            "${mod}, space, exec, ${menu}"
+            "${mod} CTRL, space, exec, dunstctl close"
+            "${mod}, backspace, exec, wlr-which-key"
+            "${mod} CTRL, p, exec, ${rofi-stuff}/bin/keepass"
+            ", Print, exec, flameshot gui"
 
-      ${builtins.readFile ./hyprland.conf}
-
-      ${builtins.concatStringsSep "\n" (map (x: let
-        x' = toString x;
-      in ''
-        bind = $mod, ${x'}, split-workspace, ${x'}
-        bind = $mod SHIFT, ${x'}, split-movetoworkspacesilent, ${x'}
-      '') (pkgs.lib.range 1 9))}
-
-      ${builtins.concatStringsSep "\n" (map (x: "windowrulev2 = opacity 0.95 0.85, class:(${x})") [
-        "foot"
-      ])}
-
-      bind = , Print, exec, ${pkgs.writeShellScript "screenshot" (with pkgs; ''
-        ${lib.getExe wayshot} -o $(hyprctl activeworkspace -j | ${lib.getExe jq} .monitor -r) --stdout | satty -f -
-      '')}
-
-      bind = $mod CTRL, p, exec, ${rofi-stuff}/bin/keepass
-    '';
+            "${mod}, w, killactive"
+            "${mod}, t, togglefloating"
+            "${mod}, f, fullscreen"
+            "${mod} SHIFT, f, fakefullscreen"
+            "${mod} CTRL, q, exit"
+            "${mod} CTRL, r, exec, hyprctl reload"
+          ]
+          ++ pkgs.lib.flatten (map (x: let
+            x' = toString x;
+          in [
+            "${mod}, ${x'}, split-workspace, ${x'}"
+            "${mod} SHIFT, ${x'}, split-movetoworkspacesilent, ${x'}"
+          ]) (pkgs.lib.range 1 9));
+        binde = [
+          "${mod}, j, layoutmsg, cyclenext"
+          "${mod}, k, layoutmsg, cycleprev"
+          "${mod} SHIFT, j, layoutmsg, swapnext"
+          "${mod} SHIFT, k, layoutmsg, swapprev"
+          "${mod}, h, focusmonitor, -1"
+          "${mod}, l, focusmonitor, +1"
+          "${mod} SHIFT, h, split-changemonitorsilent, -1"
+          "${mod} SHIFT, l, split-changemonitorsilent, +1"
+          "${mod} CTRL, h, layoutmsg, mfact -0.05"
+          "${mod} CTRL, l, layoutmsg, mfact +0.05"
+          ", XF86AudioMute, exec, amixer set Master toggle"
+          ", XF86AudioRaiseVolume, exec, amixer set Master '5%+'"
+          ", XF86AudioLowerVolume, exec, amixer set Master '5%-'"
+          ", XF86AudioPlay, exec, playerctl -p strawberry play-pause"
+          ", XF86AudioPrev, exec, playerctl -p strawberry previous"
+          ", XF86AudioNext, exec, playerctl -p strawberry next"
+        ];
+        bindm = [
+          "${mod}, mouse:272, movewindow"
+          "${mod}, mouse:273, resizewindow"
+        ];
+        bezier = "easeOutExpo, 0.16, 1, 0.3, 1";
+        animation = [
+          "global, 1, 2, easeOutExpo"
+          "windows, 0"
+          "workspaces, 1, 2, easeOutExpo, slidefade"
+        ];
+        windowrulev2 =
+          [
+            "tile, title:(Adobe Photoshop 2021)|(Adobe Illustrator 2021)|(Guitar Pro 8)|(DaVinci Resolve Studio)"
+          ]
+          ++ map (x: "opacity 0.95 0.85, class:(${x})") [
+            terminal
+            "emacs"
+          ];
+      };
   };
   # }}}
 
   programs.waybar = {
     # {{{
     enable = true;
+    systemd = {
+      enable = true;
+      target = "hyprland-session.target";
+    };
     settings = with pkgs.rice; let
       red = s: "<span foreground=\"${base08}\">${s}</span>";
       icon = i: "<span font=\"${monoFont} 11\">${i}<tt> </tt></span>";

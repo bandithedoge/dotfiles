@@ -71,7 +71,7 @@
 
   programs.alacritty = {
     # {{{
-    enable = true;
+    enable = false;
     settings = {
       shell = "zellij";
       window = {
@@ -256,12 +256,31 @@
 
   programs.librewolf.enable = config.hostname == "machine-nixos";
 
-  xdg.configFile."discord/settings.json".text = builtins.toJSON {
-    SKIP_HOST_UPDATE = true;
-    enableHardwareAcceleration = false;
-    openasar = {
-      setup = true;
-      cmdPreset = "battery";
+  xdg.configFile = {
+    "discord/settings.json".text = builtins.toJSON {
+      SKIP_HOST_UPDATE = true;
+      enableHardwareAcceleration = false;
+      openasar = {
+        setup = true;
+        cmdPreset = "battery";
+      };
     };
+
+    "vesktop/settings.json".text = let
+      color = c: "rgb(${pkgs.colors.conversions.hexToRGBString ", " (pkgs.lib.removePrefix "#" c)})";
+    in
+      with pkgs.rice;
+        builtins.toJSON {
+          minimizeToTray = "on";
+          discordBranch = "stable";
+          arRPC = "on";
+          splashColor = color base05;
+          splashBackground = color base00;
+          splashTheming = true;
+          enableMenu = true;
+          hardwareAcceleration = false;
+        };
+
+    "vesktop/settings/quickCss.css".source = pkgs.rice.compileSCSS ./discord.scss;
   };
 }

@@ -33,7 +33,7 @@
       };
     };
     gnome-disks.enable = true;
-    hyprland.enable = false;
+    hyprland.enable = true;
     ns-usbloader.enable = true;
     system-config-printer.enable = true;
   };
@@ -50,7 +50,10 @@
   xdg.portal = {
     enable = true;
     wlr.enable = true;
-    config.sway.default = ["wlr" "gtk"];
+    config = {
+      sway.default = ["wlr" "gtk"];
+      hyprland.default = ["hyprland" "wlr" "gtk"];
+    };
     extraPortals = with pkgs; [
       xdg-desktop-portal-gtk
     ];

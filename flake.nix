@@ -16,8 +16,8 @@
     aagl.url = "github:ezKEa/aagl-gtk-on-nix";
     emacs.url = "github:nix-community/emacs-overlay";
     hyprland-split-monitor-workspaces.inputs.hyprland.follows = "hyprland";
-    hyprland-split-monitor-workspaces.url = "github:Duckonaut/split-monitor-workspaces";
-    hyprland.url = "github:hyprwm/Hyprland";
+    hyprland-split-monitor-workspaces.url = "github:Duckonaut/split-monitor-workspaces"; # https://github.com/Duckonaut/split-monitor-workspaces/issues/53
+    hyprland.url = "github:hyprwm/Hyprland/v0.36.0"; # https://github.com/Duckonaut/split-monitor-workspaces/issues/58
     mozilla.url = "github:mozilla/nixpkgs-mozilla";
     neorg.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
     neovim.url = "github:nix-community/neovim-nightly-overlay";
@@ -33,8 +33,6 @@
 
     colors.url = "github:Misterio77/nix-colors";
     musnix.url = "github:musnix/musnix";
-    kmonad.url = "github:kmonad/kmonad?dir=nix";
-    kmonad.flake = false;
     nixmox.url = "github:Sorixelle/nixmox";
   };
 
@@ -84,10 +82,9 @@
             };
             imports = {
               nixos = with inputs; [
-                "${kmonad}/nix/nixos-module.nix"
                 aagl.nixosModules.default
                 home-manager.nixosModules.home-manager
-                # hyprland.nixosModules.default
+                hyprland.nixosModules.default
                 musnix.nixosModules.musnix
                 nix-gaming.nixosModules.pipewireLowLatency
                 nyx.nixosModules.default

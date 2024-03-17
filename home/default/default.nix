@@ -385,13 +385,6 @@ in {
     };
     # }}}
 
-    lazygit.enable = true;
-
-    tealdeer = {
-      enable = true;
-      settings.display.compact = true;
-    };
-
     bat = {
       enable = true;
       config.theme = "base16";

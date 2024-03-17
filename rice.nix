@@ -178,6 +178,6 @@ in
       '';
     in
       pkgs.runCommand "output.css" {} ''
-        ${pkgs.sassc}/bin/sassc ${input} > $out
+        ${pkgs.dart-sass}/bin/sass ${input} > $out
       '';
   })

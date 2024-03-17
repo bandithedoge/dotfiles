@@ -7,7 +7,6 @@
 in {
   imports = [
     ./audio.nix
-    # ./x
     ./wayland
   ];
 
@@ -21,6 +20,7 @@ in {
       caprine-bin
       d-spy
       discord
+      flameshot
       gnome.zenity
       inkscape
       keepassxc
@@ -73,6 +73,23 @@ in {
   in {
     "gtk-4.0/gtk.css".source = css;
     "gtk-3.0/gtk.css".source = css;
+
+    "flameshot/flameshot.ini".source = (pkgs.formats.ini {}).generate "flameshot.ini" {
+      General = with pkgs.rice; {
+        autoCloseIdleDaemon = true;
+        buttons = "@Variant(\\0\\0\\0\\x7f\\0\\0\\0\\vQList<int>\\0\\0\\0\\0\\a\\0\\0\\0\\0\\0\\0\\0\\x12\\0\\0\\0\\xf\\0\\0\\0\\n\\0\\0\\0\\v\\0\\0\\0\\r\\0\\0\\0\\f)";
+        contrastUiColor = base0F;
+        copyAndCloseAfterUpload = true;
+        copyOnDoubleClick = true;
+        drawColor = base0F;
+        filenamePattern = "%F_%H:%M:&S";
+        saveAfterCopy = true;
+        showMagnifier = true;
+        startupLaunch = false;
+        uiColor = base0F;
+        userColors = "picker, ${base0F}, ${base08}, ${base0B}, ${base09}, ${base0D}, ${base0E}, ${base0C}";
+      };
+    };
   };
   # }}}
 
@@ -88,8 +105,7 @@ in {
   programs = {
     qutebrowser = {
       # {{{
-      enable = true;
-      # package = pkgs.qutebrowser-qt6;
+      enable = config.hostname == "thonkpad";
       searchEngines = {
         DEFAULT = "https://www.startpage.com/sp/search?query={}";
         g = "https://www.google.com/search?q={}";
@@ -397,7 +413,9 @@ in {
       enable = true;
       package = pkgs.rofi-wayland;
       font = "${pkgs.rice.uiFont} 12";
-      plugins = with pkgs; [rofi-calc];
+      plugins = with pkgs; [
+        (rofi-calc.override {rofi-unwrapped = pkgs.rofi-wayland-unwrapped;})
+      ];
       extraConfig = {
         modi = "power:${rofi-stuff}/bin/power,drun,run,calc";
 

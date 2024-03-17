@@ -22,9 +22,7 @@
       plugins = with pkgs; [networkmanager-openvpn];
     };
 
-    wireguard = {
-      enable = true;
-    };
+    wireguard.enable = true;
   };
 
   programs.openvpn3.enable = true;
@@ -35,6 +33,7 @@
     rulesProvider = pkgs.ananicy-cpp-rules;
   };
 
+  # TODO
   # services.replay-sorcery = {
   #   enable = true;
   #   enableSysAdminCapability = true;

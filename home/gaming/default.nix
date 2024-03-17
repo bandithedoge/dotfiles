@@ -8,25 +8,20 @@
           ];
         extraLibraries = pkgs':
           with pkgs'; [
+            gtk4
+            libadwaita
+            libgudev
+            libvdpau
             nspr
+            pango
+            speex
             xorg.libXScrnSaver
             xorg.libXdamage
             xorg.libXfixes
             xorg.libXft
-            libadwaita
-            pango
-            gtk4
           ];
       })
-      bandithedoge.raze
-      bastet
-      gzdoom
-      nethack
-      openmw
-      opentyrian
-      ppsspp
       prismlauncher
-      unnethack
       vitetris
       vulkanPackages_latest.vulkan-tools
     ];

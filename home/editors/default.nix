@@ -105,7 +105,7 @@
 
   # neovim {{{
   programs.neovim = {
-    enable = true;
+    enable = false;
     plugins = with pkgs.bandithedoge.vimPlugins; [
       hibiscus-nvim
       tangerine-nvim
@@ -255,12 +255,12 @@
       require("config")
     '';
   };
-  xdg.configFile."nvim" = {
-    source = ./nvim;
-    recursive = true;
-    onChange = ''
-      ${pkgs.lib.getExe config.programs.neovim.finalPackage} -E -c ":FnlCompile!" -c q
-    '';
-  };
+  # xdg.configFile."nvim" = {
+  #   source = ./nvim;
+  #   recursive = true;
+  #   onChange = ''
+  #     ${pkgs.lib.getExe config.programs.neovim.finalPackage} -E -c ":FnlCompile!" -c q
+  #   '';
+  # };
   # }}}
 }

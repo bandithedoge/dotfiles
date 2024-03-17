@@ -26,7 +26,7 @@
     powertop.enable = true;
   };
   services = {
-    kmonad = {
+    kanata = {
       # {{{
       enable = true;
       package = pkgs.bandithedoge.haskellPackages.kmonad;
