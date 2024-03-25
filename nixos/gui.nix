@@ -52,7 +52,7 @@
     wlr.enable = true;
     config = {
       sway.default = ["wlr" "gtk"];
-      hyprland.default = ["hyprland" "wlr" "gtk"];
+      hyprland.default = ["hyprland" "gtk"];
     };
     extraPortals = with pkgs; [
       xdg-desktop-portal-gtk
@@ -100,13 +100,25 @@
   };
 
   security.pam = {
-    services.swaylock = {};
+    services.hyprlock = {};
     loginLimits = [
       {
-        domain = "bandithedoge";
+        domain = "*";
         type = "hard";
         item = "nofile";
-        value = "524288";
+        value = "2097152";
+      }
+      {
+        domain = "@realtime";
+        type = "-";
+        item = "rtprio";
+        value = "99";
+      }
+      {
+        domain = "@realtime";
+        type = "-";
+        item = "memlock";
+        value = "unlimited";
       }
     ];
   };

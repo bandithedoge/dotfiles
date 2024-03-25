@@ -8,8 +8,7 @@ in {
   home = {
     packages = with pkgs; [
       autotiling-rs
-      chayang
-      gtklock
+      grimblast
       satty
       swaybg
       swaysome
@@ -206,7 +205,6 @@ in {
     '';
   }; # }}}
 
-  # TODO https://github.com/Duckonaut/split-monitor-workspaces/issues/53
   wayland.windowManager.hyprland = {
     # {{{
     enable = true;
@@ -261,6 +259,9 @@ in {
           enable_swallow = true;
           swallow_regex = terminal;
         };
+        master = {
+          mfact = 0.5;
+        };
         xwayland.force_zero_scaling = true;
         opengl.force_introspection = 1;
         monitor = [
@@ -268,7 +269,10 @@ in {
           "HDMI-A-2, preferred, 1920x50, 1"
           "DVI-D-1, preferred, 0x0, 1"
         ];
-        exec = ["swaybg -i ${wallpaper} -m fill"];
+        exec = [
+          "swaybg -i ${wallpaper} -m fill"
+          "systemctl --user restart waybar"
+        ];
         bind =
           [
             "${mod}, return, exec, ${terminal}"
@@ -276,7 +280,7 @@ in {
             "${mod} CTRL, space, exec, dunstctl close"
             "${mod}, backspace, exec, wlr-which-key"
             "${mod} CTRL, p, exec, ${rofi-stuff}/bin/keepass"
-            ", Print, exec, flameshot gui"
+            ", Print, exec, ${pkgs.writeShellScript "screenshot" "grimblast --freeze save area - | satty -f -"}"
 
             "${mod}, w, killactive"
             "${mod}, t, togglefloating"
@@ -300,10 +304,10 @@ in {
           "${mod}, l, focusmonitor, +1"
           "${mod} SHIFT, h, split-changemonitorsilent, -1"
           "${mod} SHIFT, l, split-changemonitorsilent, +1"
-          "${mod} CTRL, h, layoutmsg, mfact -0.05"
-          "${mod} CTRL, l, layoutmsg, mfact +0.05"
+          "${mod} CTRL, h, splitratio, -0.05"
+          "${mod} CTRL, l, splitratio, +0.05"
           ", XF86AudioMute, exec, amixer set Master toggle"
-          ", XF86AudioRaiseVolume, exec, amixer set Master '5%+'"
+          ", XF86AudioRaiseVolume, exec, amixer set Master '5%+'"
           ", XF86AudioLowerVolume, exec, amixer set Master '5%-'"
           ", XF86AudioPlay, exec, playerctl -p strawberry play-pause"
           ", XF86AudioPrev, exec, playerctl -p strawberry previous"
@@ -322,6 +326,7 @@ in {
         windowrulev2 =
           [
             "tile, title:(Adobe Photoshop 2021)|(Adobe Illustrator 2021)|(Guitar Pro 8)|(DaVinci Resolve Studio)"
+            "float, move onscreen 0 0, stayfocused, class:(flameshot)"
           ]
           ++ map (x: "opacity 0.95 0.85, class:(${x})") [
             terminal
@@ -349,8 +354,8 @@ in {
         position = "top";
         height = 27;
         modules-left = [
-          "sway/workspaces"
-          "sway/window"
+          "hyprland/workspaces"
+          "hyprland/window"
         ];
         modules-right = [
           "tray"
@@ -370,7 +375,7 @@ in {
           "wireplumber"
           "clock"
         ];
-        "sway/window" = {
+        "hyprland/window" = {
           max-length = 64;
           separate-outputs = true;
         };
@@ -498,27 +503,121 @@ in {
     style = pkgs.rice.compileSCSS ./waybar.scss;
   }; # }}}
 
-  services.swayidle = let
-    command = "chayang -d 10 && gtklock";
-  in {
+  programs.foot = {
     enable = true;
-    # TODO: fix idle
-    systemdTarget = "sway-session.target";
-    timeouts = [
+    server.enable = true;
+    settings = let
+      color = pkgs.lib.removePrefix "#";
+    in
+      with pkgs.rice; {
+        main = {
+          shell = "zellij";
+          font = "${monoFont}:size=11.5";
+          pad = "5x5 center";
+        };
+        bell.urgent = "yes";
+        url.osc8-underline = "always";
+        cursor = {
+          style = "beam";
+          blink = "yes";
+          color = "${color base00} ${color base0F}";
+        };
+        mouse.hide-when-typing = "yes";
+        colors = {
+          foreground = color base05;
+          background = color base00;
+          urls = color base0F;
+          flash = color base08;
+
+          regular0 = color base01;
+          regular1 = color base08;
+          regular2 = color base0B;
+          regular3 = color base09;
+          regular4 = color base0D;
+          regular5 = color base0E;
+          regular6 = color base0C;
+          regular7 = color base06;
+
+          bright0 = color base02;
+          bright1 = color base12;
+          bright2 = color base14;
+          bright3 = color base13;
+          bright4 = color base16;
+          bright5 = color base17;
+          bright6 = color base15;
+          bright7 = color base0F;
+        };
+      };
+  };
+
+  programs.hyprlock = let
+    color = c: "rgb(${pkgs.lib.removePrefix "#" c})";
+  in
+    with pkgs.rice; {
+      enable = true;
+      backgrounds = [{path = builtins.toString wallpaperBlurred;}];
+      input-fields = [
+        {
+          bothlock_color = color base0E;
+          capslock_color = color base0E;
+          check_color = color base0A;
+          dots_size = 0.2;
+          fade_timeout = 300;
+          fail_color = color base08;
+          fail_text = "$FAIL";
+          font_color = color base05;
+          inner_color = color base02;
+          numlock_color = color base0E;
+          outer_color = color base02;
+          outline_thickness = 2;
+          placeholder_text = "";
+          shadow_passes = 1;
+        }
+      ];
+      labels = [
+        {
+          color = color base05;
+          font_family = uiFont;
+          shadow_passes = 1;
+          text = "$TIME";
+        }
+      ];
+    };
+
+  services.hypridle = {
+    enable = true;
+    lockCmd = "pidof hyprlock || hyprlock";
+    beforeSleepCmd = "loginctl lock-session";
+    afterSleepCmd = "hyprctl dispatch dpms on";
+    listeners = [
       {
-        timeout = 180;
-        inherit command;
+        timeout = 300;
+        onTimeout = "loginctl lock-session";
       }
-    ];
-    events = [
       {
-        event = "before-sleep";
-        inherit command;
+        timeout = 360;
+        onTimeout = "hyprctl dispatch dpms off";
+        onResume = "hyprctl dispatch dpms on";
       }
     ];
   };
 
   xdg.configFile = {
+    "satty/config.toml".source = (pkgs.formats.toml {}).generate "satty.toml" {
+      general = {
+        copy-command = "wl-copy";
+        save-after-copy = true;
+        output-filename = "/home/bandithedoge/Pictures/%F_%H:%M:%S.png";
+      };
+      color-palette = with pkgs.rice; {
+        first = base0F;
+        second = base08;
+        third = base0B;
+        fourth = base09;
+        fifth = base0D;
+      };
+    };
+
     "wlr-which-key/config.yaml".text = with pkgs.rice;
       builtins.toJSON {
         font = uiFont;

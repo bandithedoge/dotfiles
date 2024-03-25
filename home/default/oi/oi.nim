@@ -5,13 +5,22 @@ import std/[
   strformat,
   strutils,
   terminal,
+  strtabs,
 ]
 import docopt
 
 proc exec(cmd: string) =
   styledEcho(styleBright, " ", cmd)
 
-  let command = execCmd cmd
+  let githubToken =
+    if existsEnv("GITHUB_TOKEN"):
+        getEnv("GITHUB_TOKEN", "")
+    else:
+      execProcess("gh auth token")
+
+  putEnv("NIX_CONFIG", &"access-tokens = github.com={githubToken}")
+
+  let command = execCmd(cmd)
 
   if command != 0:
     styledEcho(fgRed, styleBright, $command, "  ", cmd)
@@ -42,9 +51,6 @@ when isMainModule:
     isNixOS = if isDarwin: false else: readFile(
         "/etc/os-release").contains "NAME=NixOS"
     username = getEnv "USER"
-
-  if getEnv("GITHUB_TOKEN", "") != "":
-    putEnv("NIX_CONFIG", "access-tokens = github.com=$GITHUB_TOKEN")
 
   if args["rebuild"] or args["r"]:
     let cmd =

@@ -82,4 +82,23 @@
     WINEFSYNC = "1";
     ROC_ENABLE_PRE_VEGA = "1";
   };
+
+  chaotic = {
+    mesa-git = {
+      enable = true;
+      extraPackages = with pkgs; [
+        mesa_git.opencl
+        rocmPackages.clr
+        rocmPackages.clr.icd
+      ];
+      extraPackages32 = with pkgs.pkgsi686Linux; [
+        mesa_git.opencl
+      ];
+    };
+
+    scx = {
+      enable = true;
+      scheduler = "scx_rusty";
+    };
+  };
 }

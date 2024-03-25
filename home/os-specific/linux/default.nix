@@ -67,6 +67,7 @@ in {
   };
 
   dconf.settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
+  # }}}
 
   xdg.configFile = let
     css = pkgs.rice.compileSCSS ./gtk.scss;
@@ -82,7 +83,7 @@ in {
         copyAndCloseAfterUpload = true;
         copyOnDoubleClick = true;
         drawColor = base0F;
-        filenamePattern = "%F_%H:%M:&S";
+        filenamePattern = "%F_%H:%M:%S";
         saveAfterCopy = true;
         showMagnifier = true;
         startupLaunch = false;
@@ -91,7 +92,6 @@ in {
       };
     };
   };
-  # }}}
 
   # qt {{{
   # TODO: customized qt
@@ -535,8 +535,6 @@ in {
   };
 
   services = {
-    syncthing.enable = true;
-
     dunst = with pkgs.rice; {
       enable = true;
       inherit (gtk) iconTheme;
@@ -562,6 +560,9 @@ in {
         };
       };
     };
+
+    syncthing.enable = true;
+    systembus-notify.enable = true;
   };
 
   # polkit {{{

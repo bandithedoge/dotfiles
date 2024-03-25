@@ -1,7 +1,8 @@
 {
   pkgs,
-  lib,
+  config,
   inputs,
+  lib,
   ...
 }: let
   oi = pkgs.callPackage ./oi {};
@@ -68,7 +69,6 @@ in {
   }; # }}}
 
   xdg.configFile = {
-    # {{{
     "rice.json".text = builtins.toJSON (pkgs.lib.filterAttrsRecursive (_: v: !builtins.isFunction v) pkgs.rice);
 
     # zellij {{{
@@ -257,9 +257,8 @@ in {
           execution = ":toggle_hidden";
         }
       ];
-    };
-  }; #}}}
-  # }}}
+    }; #}}}
+  };
 
   programs = {
     # {{{
@@ -271,6 +270,17 @@ in {
     fish = {
       # {{{
       enable = true;
+      plugins =
+        builtins.map (x: {
+          name = x.pname;
+          inherit (x) src;
+        }) (with pkgs.fishPlugins; [
+          puffer
+          forgit
+          autopair
+          fzf-fish
+          colored-man-pages
+        ]);
       functions = {
         br = {
           body = ''
@@ -322,6 +332,8 @@ in {
         fish_vi_key_bindings
 
         set fish_greeting
+
+        set -Ux fifc_editor $EDITOR
       '';
     };
     # }}}
@@ -392,20 +404,25 @@ in {
 
     eza = {
       enable = true;
-      enableAliases = true;
       icons = true;
       git = true;
     };
 
     skim = {
       enable = true;
-      enableFishIntegration = true;
+      enableFishIntegration = false;
       defaultOptions = with pkgs.rice; [
         "--prompt='❯ '"
         "--color=bg+:${base02},bg:${base00},spinner:${base0F},hl:${base0F},fg:${base04},header:${base0F},info:${base0A},pointer:${base0F},marker:${base0C},fg+:${base06},prompt:${base0F},hl+:${base0D}"
         "--tabstop=4"
         "--bind=ctrl-d:half-page-down,ctrl-u:half-page-up"
       ];
+    };
+
+    fzf = {
+      enable = true;
+      enableFishIntegration = false;
+      inherit (config.programs.skim) defaultOptions;
     };
 
     direnv = {

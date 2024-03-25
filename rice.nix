@@ -3,13 +3,14 @@
 in
   rice
   // (with rice; rec {
-    terminal = "kitty";
+    terminal = "footclient";
     wm = "river";
     menu = "rofi -show drun";
 
     wallpaper = ./wallpaper.jpg;
     wallpaperBlurred = pkgs.runCommand "blur" {} ''
-      ${pkgs.imagemagick}/bin/magick ${wallpaper} -gaussian-blur 0x12 -format png $out
+      ${pkgs.imagemagick}/bin/magick ${wallpaper} -gaussian-blur 0x12 -format png blur.png
+      mv blur.png $out
     '';
 
     gtk = {

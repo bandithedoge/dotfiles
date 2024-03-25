@@ -303,6 +303,23 @@
                 ("#" . evil-visualstar/begin-search-backward)))
 #+end_src
 * Utilities
+** Debugger
+#+begin_src emacs-lisp
+  (use-package dap-mode
+    :after lsp-mode
+    :hook
+    (dap-mode . dap-tooltip-mode)
+    (dap-stopped . (lambda (arg) (call-interactively #'dap-hydra)))
+    :bind* ("<localleader>ld" ("Debug" . dap-hydra))
+    :config
+    (dap-mode 1)
+    (with-eval-after-load 'c-ts-mode
+      (require 'dap-gdb-lldb))
+    ;; TODO: fix dap-python
+    (with-eval-after-load 'python-mode
+      (require 'dap-python)
+      (setq dap-python-debugger 'debugpy)))
+#+end_src
 ** Direnv
 #+begin_src emacs-lisp
   (use-package envrc
@@ -346,7 +363,11 @@
                    ("k" . evil-previous-line))
       :hook (magit-mode . magit-todos-mode)
       :custom
-      (magit-todos-keyword-suffix "\\(?:([^)]+)\\)?:?")))
+      (magit-todos-keyword-suffix "\\(?:([^)]+)\\)?:?"))
+    (use-package magit-lfs))
+
+  (use-package gitignore-templates
+    :commands (gitignore-templates-insert gitignore-templates-new-file))
 #+end_src
 ** PDF
 #+begin_src emacs-lisp
@@ -615,6 +636,21 @@
     (which-key-setup-side-window-bottom)
     (which-key-mode))
 #+end_src
+** Keywords
+#+begin_src emacs-lisp
+  (use-package hl-todo
+    :hook (prog-mode . hl-todo-mode)
+    :custom
+    (hl-todo-highlight-punctuation ":")
+    (hl-todo-keyword-faces '(("TODO" warning bold)
+                             ("FIXME" error bold)
+                             ("REVIEW" font-lock-keyword-face bold)
+                             ("HACK" font-lock-constant-face bold)
+                             ("DEPRECATED" font-lock-doc-face bold)
+                             ("NOTE" success bold)
+                             ("BUG" error bold)
+                             ("XXX" font-lock-constant-face bold))))
+#+end_src
 ** Ligatures
 #+begin_src emacs-lisp
   (use-package ligature
@@ -663,21 +699,6 @@
     :hook (prog-mode . rainbow-delimiters-mode)
     :custom
     (rainbow-delimiters-max-face-count 4))
-#+end_src
-** TODOs
-#+begin_src emacs-lisp
-  (use-package hl-todo
-    :hook (prog-mode . hl-todo-mode)
-    :custom
-    (hl-todo-highlight-punctuation ":")
-    (hl-todo-keyword-faces '(("TODO" warning bold)
-                             ("FIXME" error bold)
-                             ("REVIEW" font-lock-keyword-face bold)
-                             ("HACK" font-lock-constant-face bold)
-                             ("DEPRECATED" font-lock-doc-face bold)
-                             ("NOTE" success bold)
-                             ("BUG" error bold)
-                             ("XXX" font-lock-constant-face bold))))
 #+end_src
 ** Window switcher
 #+begin_src emacs-lisp
@@ -841,7 +862,7 @@
 #+begin_src emacs-lisp
   (use-package flymake
     :hook ((prog-mode text-mode) . flymake-mode)
-    :bind* ("<localleader>ld" ("Diagnostics" . consult-flymake))
+    :bind* ("<localleader>lD" ("Diagnostics" . consult-flymake))
     :config
     (use-package flymake-popon
       :hook (flymake-mode . flymake-popon-mode)
@@ -944,6 +965,10 @@
                           ("c" ("Continue" . gdscript-debug-continue))
                           ("n" ("Next" . gdscript-debug-next))
                           ("s" ("Step" . gdscript-debug-step)))))
+#+end_src
+** Git
+#+begin_src emacs-lisp
+  (use-package git-modes)
 #+end_src
 ** Haskell
 #+begin_src emacs-lisp

@@ -41,6 +41,7 @@
     nodePackages.typescript
     nodePackages.typescript-language-server
     nodePackages.vscode-langservers-extracted
+    nodejs
     yarn
 
     # nix
@@ -57,7 +58,7 @@
     sumneko-lua-language-server
 
     # c
-    bandithedoge.swift-mesonlsp-bin
+    bandithedoge.mesonlsp-bin
     clang
     clang-tools
     clazy

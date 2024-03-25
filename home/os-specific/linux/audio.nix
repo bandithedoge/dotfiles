@@ -6,7 +6,7 @@
     carla
     picard
     playerctl
-    pwvucontrol
+    # pwvucontrol # HACK: https://github.com/NixOS/nixpkgs/issues/297574
     reaper
     strawberry
 

@@ -34,6 +34,8 @@
       sync_to_monitor = false;
       macos_titlebar_color = "background";
       text_composition_strategy = "legacy";
+      # TODO: fix kitty on wayland
+      linux_display_server = "x11";
 
       background = base00;
       foreground = base05;
@@ -71,7 +73,7 @@
 
   programs.alacritty = {
     # {{{
-    enable = false;
+    enable = true;
     settings = {
       shell = "zellij";
       window = {
