@@ -32,8 +32,21 @@
         };
       };
     };
+
+    sway = {
+      enable = true;
+      package = null;
+      extraPackages = [];
+    };
+
+    river = {
+      enable = true;
+      package = null;
+      extraPackages = [];
+    };
+
     gnome-disks.enable = true;
-    hyprland.enable = true;
+    hyprland.enable = false;
     ns-usbloader.enable = true;
     system-config-printer.enable = true;
   };
@@ -41,19 +54,18 @@
   services = {
     xserver.displayManager.sessionPackages = with pkgs; [
       swayfx
+      river
     ];
-    greetd.enable = true;
+
     accounts-daemon.enable = true;
     flatpak.enable = true;
+    gnome.gnome-keyring.enable = true;
+    greetd.enable = true;
   };
 
   xdg.portal = {
     enable = true;
     wlr.enable = true;
-    config = {
-      sway.default = ["wlr" "gtk"];
-      hyprland.default = ["hyprland" "gtk"];
-    };
     extraPortals = with pkgs; [
       xdg-desktop-portal-gtk
     ];
@@ -100,7 +112,7 @@
   };
 
   security.pam = {
-    services.hyprlock = {};
+    services.waylock = {};
     loginLimits = [
       {
         domain = "*";

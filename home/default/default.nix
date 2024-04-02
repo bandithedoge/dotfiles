@@ -7,20 +7,16 @@
 }: let
   oi = pkgs.callPackage ./oi {};
 in {
-  imports = [./xdg.nix];
-
-  inherit (import ../../nix.nix {inherit pkgs;}) nix nixpkgs;
-
-  manual.manpages.enable = false;
+  imports = [
+    ./xdg.nix
+  ];
 
   home = {
     # {{{
     stateVersion = "23.05";
-    sessionPath = ["$HOME/.pub-cache/bin"];
-    sessionVariables = {
-      MANROFFOPT = "-c";
-      MANPAGER = "sh -c 'col -bx | ${pkgs.lib.getExe pkgs.bat} -l man -p'";
-    };
+    activation.setupEtc = config.lib.dag.entryAfter ["writeBoundary"] ''
+      /run/current-system/sw/bin/systemctl start --user sops-nix
+    '';
     packages = with pkgs; [
       # {{{
       aria
@@ -447,8 +443,11 @@ in {
 
     dircolors.enable = true;
     gh.enable = true;
+    git-credential-oauth.enable = true;
     info.enable = true;
     nix-index.enable = true;
     zellij.enable = true;
   }; # }}}
+
+  manual.manpages.enable = false;
 }

@@ -5,6 +5,12 @@
   ;; TODO: fix occasional hangups and random crashes
   (setenv "LSP_USE_PLISTS" "true")
 
+  (setq gc-cons-threshold most-positive-fixnum)
+
+  (run-with-idle-timer 10 nil (lambda ()
+                                (setq gc-cons-threshold 100000000)
+                                (message "gc-cons-threshold restored to %S" gc-cons-threshold)))
+
   (setq auto-mode-case-fold nil
         bidi-inhibit-bpa t
         custom-file (make-temp-file "custom-" nil ".el")
@@ -29,11 +35,11 @@
   (advice-add #'display-startup-echo-area-message :override #'ignore)
   (advice-add #'display-startup-screen :override #'ignore)
 
-  (define-advice load-file (:override (file) silence)
-    (load file nil 'nomessage))
+  ;; (define-advice load-file (:override (file) silence)
+  ;;   (load file nil 'nomessage))
 
-  (define-advice startup--load-user-init-file (:before (&rest _) undo-silence)
-    (advice-remove #'load-file #'load-file@silence))
+  ;; (define-advice startup--load-user-init-file (:before (&rest _) undo-silence)
+  ;;   (advice-remove #'load-file #'load-file@silence))
 
   (put 'mode-line-format 'initial-value (default-toplevel-value 'mode-line-format))
   (dolist (buf (buffer-list))
@@ -44,6 +50,7 @@
   (push '(menu-bar-lines . 0) default-frame-alist)
   (push '(tool-bar-lines . 0) default-frame-alist)
   (push '(vertical-scroll-bars) default-frame-alist)
+  (push '(horizontal-scroll-bars) default-frame-alist)
   (setq menu-bar-mode nil
         tool-bar-mode nil
         scroll-bar-mode nil)
@@ -58,8 +65,12 @@
                              ("melpa" . "https://melpa.org/packages/"))))
 
   ;; TODO: move to leaf?
-  (require 'use-package)
-  (setq use-package-always-defer t)
+  (eval-when-compile
+    (require 'use-package))
+  
+  (setq use-package-always-defer t
+        use-package-always-ensure t
+        use-package-compute-statistics t)
 #+end_src
 * Emacs
 #+begin_src emacs-lisp
@@ -124,6 +135,7 @@
     (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode))
 
   (use-package savehist
+    :ensure nil
     :custom
     (savehist-save-minibuffer-history t)
     (savehist-autosave-interval nil)
@@ -138,19 +150,29 @@
   (add-hook 'text-mode-hook #'display-line-numbers-mode)
 
   (use-package hl-line
+    :ensure nil
     :config
     (global-hl-line-mode))
 
   (use-package paren
+    :ensure nil
     :custom
     (show-paren-delay 0.1)
     (show-paren-highlight-openparen t)
     (show-paren-when-point-in-periphery t)
     (show-paren-when-point-inside-paren t))
 
+  ;; (use-package auto-compile
+  ;;   :demand t
+  ;;   :config
+  ;;   (auto-compile-on-load-mode)
+  ;;   (auto-compile-on-save-mode))
+
   (use-package better-defaults)
 
-  (use-package esup)
+  ;; (use-package benchmark-init
+  ;;   :config
+  ;;   (add-hook 'after-init-hook 'benchmark-init/deactivate))
 #+end_src
 * Theme
 #+begin_src emacs-lisp :tangle "doom-rice-theme.el"
@@ -245,17 +267,17 @@
       (push '(treemacs-hl-line-face . solaire-hl-line-face) solaire-mode-remap-alist)
       (solaire-global-mode +1)))
 #+end_src
-* Evil
+* Keybindings
 #+begin_src emacs-lisp
+  (use-package general
+    :demand t)
+
   (use-package evil
     :demand t
     :init
-    (setq evil-want-keybinding nil)
+    (general-setq evil-want-keybinding nil)
     (use-package undo-fu)
     (use-package goto-chg)
-    :bind*
-    ("<leader>w" ("Kill buffer" . kill-this-buffer))
-    ("<leader>W" ("Close window" . evil-window-delete))
     :custom
     (evil-echo-state nil)
     (evil-ex-interactive-search-highlight 'selected-window)
@@ -286,10 +308,33 @@
       (evil-goggles-mode)
       (evil-goggles-use-diff-faces)))
 
+  (general-auto-unbind-keys)
+  (general-evil-setup t)
+
+  (general-create-definer +leader-def
+    :states 'm
+    :keymaps 'override
+    :prefix "SPC")
+
+  (general-create-definer +localleader-def
+    :states 'm
+    :keymaps 'override
+    :prefix "<backspace>")
+
+  (+leader-def
+    "h" '(:ignore t :wk "+help")
+    "w" '("Kill buffer" . kill-this-buffer)
+    "W" '("Close window" . evil-window-delete))
+
+  (+localleader-def
+    :keymaps 'override
+    "l" '(:ignore t :wk "+lang"))
+
   (use-package evil-nerd-commenter
     :commands (evilnc-comment-operator evilnc-inner-comment evilnc-outer-commenter)
-    :bind (:map evil-motion-state-map
-                ("gc" . evilnc-comment-operator)))
+    :general
+    (:states 'm
+             "gc" 'evilnc-comment-operator))
 
   (use-package evil-traces
     :after evil-ex
@@ -298,27 +343,30 @@
 
   (use-package evil-visualstar
     :commands (evil-visualstar/begin-search evil-visualstar/begin-search-forward evil-visualstar/begin-search-backward)
-    :bind (:map evil-visual-state-map
-                ("*" . evil-visualstar/begin-search-forward)
-                ("#" . evil-visualstar/begin-search-backward)))
+    :general
+    (:states 'v
+             "*" 'evil-visualstar/begin-search-forward
+             "#" 'evil-visualstar/begin-search-backward))
 #+end_src
 * Utilities
 ** Debugger
 #+begin_src emacs-lisp
   (use-package dap-mode
     :after lsp-mode
-    :hook
-    (dap-mode . dap-tooltip-mode)
-    (dap-stopped . (lambda (arg) (call-interactively #'dap-hydra)))
-    :bind* ("<localleader>ld" ("Debug" . dap-hydra))
+    :gfhook
+    #'dap-tooltip-mode
+    ('dap-stopped-hook (lambda (arg) (call-interactively #'dap-hydra)))
+    :general
+    (+localleader-def
+      "ld" '("Debug" . dap-hydra))
     :config
     (dap-mode 1)
-    (with-eval-after-load 'c-ts-mode
+    (general-after 'c-ts-mode
       (require 'dap-gdb-lldb))
     ;; TODO: fix dap-python
-    (with-eval-after-load 'python-mode
+    (general-after 'python-mode
       (require 'dap-python)
-      (setq dap-python-debugger 'debugpy)))
+      (general-setq dap-python-debugger 'debugpy)))
 #+end_src
 ** Direnv
 #+begin_src emacs-lisp
@@ -336,19 +384,22 @@
 ** Git
 #+begin_src emacs-lisp
   (use-package vc
+    :ensure nil
     :custom
     (vc-git-diff-switches '("--histogram"))
     (vc-follow-symlinks t))
 
   ;; TODO: gracefully kill buffers on exit
   (use-package magit
-    :bind* ("<leader>g" ("Git" . magit))
-    :bind
-    (:map transient-map
-          ([escape] . transient-quit-one))
-    (:map magit-mode-map
-          ("SPC" . nil))
-    :hook (magin-process-mode . goto-address-mode)
+    :general
+    (+leader-def
+      "g" '("Git" . magit))
+    :general-config
+    (:keymaps 'transient-map
+              [escape] 'transient-quit-one)
+    (:keymaps 'magit-mode-map
+              "SPC" nil)
+    :gfhook ('magit-process-mode-hook #'goto-address-mode)
     :custom
     (magit-diff-refine-hunk t)
     (magit-save-repository-buffers nil)
@@ -359,9 +410,10 @@
     (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
     :config
     (use-package magit-todos
-      :bind* (:map magit-todos-item-section-map
-                   ("k" . evil-previous-line))
-      :hook (magit-mode . magit-todos-mode)
+      :general-config
+      (:keymaps 'magit-todos-item-section-map
+                "k" 'evil-previous-line)
+      :ghook 'magit-mode-hook
       :custom
       (magit-todos-keyword-suffix "\\(?:([^)]+)\\)?:?"))
     (use-package magit-lfs))
@@ -392,18 +444,20 @@
 ** Snippets
 #+begin_src emacs-lisp
   (use-package tempel
-    :hook ((prog-mode text-mode lsp-completion-mode) . (lambda ()
-                                                         (setq-local completion-at-point-functions
-                                                                     (cons #'tempel-complete
-                                                                           completion-at-point-functions))))
+    :ghook ('(prog-mode-hook text-mode-hook lsp-completion-mode-hook)
+            (lambda ()
+              (setq-local completion-at-point-functions
+                          (cons #'tempel-complete
+                                completion-at-point-functions))))
     :config
     (use-package tempel-collection))
 #+end_src
 ** Terminal emulator
 #+begin_src emacs-lisp
   (use-package vterm
-    :bind*
-    ("<leader>T" ("Terminal" . vterm))
+    :general
+    (+leader-def
+      "T" '("Terminal" . vterm))
     :custom
     (vterm-kill-buffer-on-exit t))
 #+end_src
@@ -412,13 +466,14 @@
 #+begin_src emacs-lisp
   ;; TODO: fix graphical glitching, elisp completions in other modes, weird manual completion behavior
   (use-package corfu
-    :hook ((prog-mode text-mode) . corfu-mode)
+    :ghook 'prog-mode-hook 'text-mode-hook
     :after evil
-    :bind (:map corfu-popupinfo-map
-                ("C-h" . corfu-popupinfo-scroll-up)
-                ("C-l" . corfu-popupinfo-scroll-down))
-    :bind (:map evil-insert-state-map
-                ("C-SPC" . completion-at-point))
+    :general-config
+    (:states 'i
+             "C-SPC" 'completion-at-point)
+    (:keymaps 'corfu-popupinfo-map
+              "C-h" 'corfu-popupinfo-scroll-up
+              "C-l" 'corfu-popupinfo-scroll-down)
     :custom
     (corfu-auto t)
     (corfu-auto-prefix 2)
@@ -450,16 +505,16 @@
 #+begin_src emacs-lisp
   ;; TODO: find-file
   (use-package vertico
-    :bind
-    (:map vertico-map
-          ("C-j" . vertico-next)
-          ("C-M-j" . vertico-next-group)
-          ("C-k" . vertico-previous)
-          ("C-M-j" . vertico-next-group)
-          ("C-u" . vertico-scroll-down)
-          ("C-d" . vertico-scroll-up)
-          ("RET" . vertico-directory-enter)
-          ("DEL" . vertico-directory-delete-char))
+    :general-config
+    (:keymaps 'vertico-map
+              "C-j" 'vertico-next
+              "C-M-j" 'vertico-next-group
+              "C-k" 'vertico-previous
+              "C-M-j" 'vertico-next-group
+              "C-u" 'vertico-scroll-down
+              "C-d" 'vertico-scroll-up
+              "RET" 'vertico-directory-enter
+              "DEL" 'vertico-directory-delete-char)
     :custom
     (vertico-count 17)
     (vertico-cycle t)
@@ -468,31 +523,33 @@
                                                 #'consult-completion-in-region
                                               #'completion--in-region)
                                             args)))
-    :init
-    (vertico-mode)
-    (vertico-mouse-mode)
+    :gfhook #'vertico-mouse-mode
     :config
+    (vertico-mode)
     (use-package vertico-prescient
       :config
       (vertico-prescient-mode))
     (use-package marginalia
-      :bind (:map minibuffer-local-map
-                  ("C-h" . marginalia-cycle))
+      :general-config
+      (:keymaps 'minibuffer-local-map
+                "C-h" 'marginalia-cycle)
       :init
       (marginalia-mode))
     (use-package nerd-icons-completion
-      :hook (marginalia-mode . nerd-icons-completion-marginalia-setup)
+      :ghook ('marginalia-mode-hook #'nerd-icons-completion-marginalia-setup)
       :config
       (nerd-icons-completion-mode)))
 
   (use-package consult
-    :bind*
-    ("<leader>SPC" ("Execute command" . execute-extended-command))
-    ("<leader>b" ("Switch buffer" . consult-buffer))
-    ("<leader>f" ("Find file" . find-file)))
+    :general
+    (+leader-def
+      "SPC" '("Execute command" . execute-extended-command)
+      "b" '("Switch buffer" . consult-buffer)
+      "f" '("Find file" . find-file)))
 
   (use-package consult-dir
-    :bind ([remap list-directory] . consult-dir))
+    :general
+    ([remap list-directory] 'consult-dir))
 #+end_src
 ** Style
 #+begin_src emacs-lisp
@@ -522,10 +579,13 @@
   ;; TODO: missing icons, prettier indent guides
   (use-package treemacs
     :after doom-themes
-    :bind* ("<leader>t" ("File tree" . treemacs))
-    :bind (:map evil-treemacs-state-map
-                ("o v" . treemacs-visit-node-horizontal-split)
-                ("o s" . treemacs-visit-node-vertical-split))
+    :general
+    (+leader-def
+      "t" '("File tree" . treemacs))
+    :general-config
+    (:keymaps 'evil-treemacs-state-map
+              "o v" 'treemacs-visit-node-horizontal-split
+              "o s" 'treemacs-visit-node-vertical-split)
     :custom
     (treemacs-eldoc-display 'detailed)
     (treemacs-follow-after-init t)
@@ -555,19 +615,21 @@
 #+begin_src emacs-lisp
   (use-package origami
     :after evil
-    :hook ((prog-mode text-mode) . (lambda ()
-                                     (setq-local origami-fold-style 'triple-braces)
-                                     (origami-mode)
-                                     (origami-close-all-nodes (current-buffer))))
-    :bind (:map evil-motion-state-map
-                ("TAB" . evil-toggle-fold)
-                ("<backtab>" . origami-toggle-all-nodes)
-                ([remap evil-toggle-fold] . origami-recursively-toggle-node)
-                ([remap evil-open-fold] . origami-open-node)
-                ([remap evil-open-folds] . origami-open-all-nodes)
-                ([remap evil-close-fold] . origami-close-node)
-                ([remap evil-close-folds] . origami-close-all-nodes)
-                ([remap evil-open-fold-rec] . origami-open-node-recursively))
+    :ghook ('(prog-mode-hook text-mode-hook)
+            (lambda ()
+              (setq-local origami-fold-style 'triple-braces)
+              (origami-mode)
+              (origami-close-all-nodes (current-buffer))))
+    :general-config
+    (:states 'm
+             "TAB" 'evil-toggle-fold
+             "<backtab>" 'origami-toggle-all-nodes
+             [remap evil-toggle-fold] 'origami-recursively-toggle-node
+             [remap evil-open-fold] 'origami-open-node
+             [remap evil-open-folds] 'origami-open-all-nodes
+             [remap evil-close-fold] 'origami-close-node
+             [remap evil-close-folds] 'origami-close-all-nodes
+             [remap evil-open-fold-rec] 'origami-open-node-recursively)
     :custom
     (origami-show-fold-header t)
     (origami-fold-replacement (nerd-icons-mdicon "nf-md-dots_horizontal")))
@@ -576,11 +638,11 @@
 #+begin_src emacs-lisp
   ;; TODO: ugly visuals
   (use-package diff-hl
-    :hook
-    (find-file . diff-hl-mode)
-    (diff-hl-mode . diff-hl-margin-mode)
-    (magit-pre-refresh . diff-hl-magit-pre-refresh)
-    (magit-post-refresh . diff-hl-magit-post-refresh)
+    :ghook
+    'find-file-hook
+    ('magit-pre-refresh-hook #'diff-hl-magit-pre-refresh)
+    ('magit-post-refresh-hook #'diff-hl-magit-post-refresh)
+    :gfhook #'diff-hl-margin-mode
     :custom
     (diff-hl-flydiff-delay 0.5)
     (diff-hl-show-staged-changes nil))
@@ -588,29 +650,28 @@
 ** Help buffer
 #+begin_src emacs-lisp
   (use-package helpful
-    :bind*
-    (:prefix "<leader>h"
-             :prefix-map +help
-             ("C" ("Command" . helpful-command))
-             ("F" ("Face" . describe-face))
-             ("M" ("Manpage" . woman))
-             ("P" ("Package" . describe-package))
-             ("c" ("Callable" . helpful-callable))
-             ("g" ("Customize group" . customize-group))
-             ("k" ("Key" . helpful-key))
-             ("m" ("Manual" . info-display-manual))
-             ("p" ("Thing at point" . helpful-at-point))
-             ("v" ("Variable" . helpful-variable))))
+    :general
+    (+leader-def
+      "hC" '("Command" . helpful-command)
+      "hF" '("Face" . describe-face)
+      "hM" '("Manpage" . woman)
+      "hP" '("Package" . describe-package)
+      "hc" '("Callable" . helpful-callable)
+      "hg" '("Customize group" . customize-group)
+      "hk" '("Key" . helpful-key)
+      "hm" '("Manual" . info-display-manual)
+      "hp" '("Thing at point" . helpful-at-point)
+      "hv" '("Variable" . helpful-variable)))
 #+end_src
 ** Indent guides
 #+begin_src emacs-lisp
   (use-package highlight-indent-guides
-    :hook
-    (prog-mode . highlight-indent-guides-mode)
-    (org-mode-local-vars . (lambda ()
-                             (and highlight-indent-guides-mode
-                                  (bound-and-true-p org-indent-mode)
-                                  (highlight-indent-guides-mode -1))))
+    :ghook
+    'prog-mode-hook
+    ('org-mode-local-vars-hook (lambda ()
+                                 (and highlight-indent-guides-mode
+                                      (bound-and-true-p org-indent-mode)
+                                      (highlight-indent-guides-mode -1))))
     :custom
     (highlight-indent-guides-method 'character)
     (highlight-indent-guides-auto-enabled nil))
@@ -618,7 +679,7 @@
 ** Info
 #+begin_src emacs-lisp
   (use-package info-colors
-    :hook (Info-selection . info-colors-fontify-mode))
+    :ghook ('Info-selection-hook #'info-colors-fontify-mode))
 #+end_src
 ** Keybindings
 #+begin_src emacs-lisp
@@ -639,7 +700,7 @@
 ** Keywords
 #+begin_src emacs-lisp
   (use-package hl-todo
-    :hook (prog-mode . hl-todo-mode)
+    :ghook 'prog-mode-hook
     :custom
     (hl-todo-highlight-punctuation ":")
     (hl-todo-keyword-faces '(("TODO" warning bold)
@@ -672,7 +733,7 @@
 #+begin_src emacs-lisp
   ;; TODO: less confusing background colors
   (use-package doom-modeline
-    :hook (after-init . doom-modeline-mode)
+    :ghook 'after-init-hook
     :custom
     (doom-modeline-buffer-encoding 'nondefault)
     (doom-modeline-enable-word-count t)
@@ -691,21 +752,21 @@
 
   ;; TODO: more modes
   (use-package hide-mode-line
-    :hook ((completion-list-mode Man-mode) . hide-mode-line-mode))
+    :ghook 'completion-list-mode-hook 'Man-mode-hook)
 #+end_src
 ** Rainbow delimiters
 #+begin_src emacs-lisp
   (use-package rainbow-delimiters
-    :hook (prog-mode . rainbow-delimiters-mode)
+    :ghook 'prog-mode-hook
     :custom
     (rainbow-delimiters-max-face-count 4))
 #+end_src
 ** Window switcher
 #+begin_src emacs-lisp
   (use-package ace-window
-    :bind
-    ([remap other-window] . ace-window)
-    ([remap evil-window-next] . ace-window)
+    :general
+    ([remap other-window] 'ace-window
+     [remap evil-window-next] 'ace-window)
     :custom
     (aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
     (aw-scope 'frame))
@@ -745,21 +806,22 @@
        #'apheleia-format-buffer)))
 
   (use-package apheleia
-    :bind* (:prefix "<localleader>l"
-                    :prefix-map +lang
-                    ("f" ("Format" . +format))))
+    :general
+    (+localleader-def
+      "lf" '("Format" . +format)))
 
+  ;; TODO: more lsp servers
   (use-package lsp-mode
     :after tempel
-    :bind
-    (:map lsp-mode-map
-          :prefix "<localleader>ls"
-          :prefix-map +server
-          ("q" ("Shutdown" . lsp-workspace-shutdown))
-          ("r" ("Restart" . lsp-workspace-restart)))
-    (:map lsp-mode-map
-          ("<localleader>lr" ("Rename" . lsp-rename))
-          ("<localleader>la" ("Code action" . lsp-execute-code-action)))
+    :gfhook #'evil-normalize-keymaps
+    :general-config
+    (+localleader-def
+      :keymaps 'lsp-mode-map
+      "la" '("Code action" . lsp-execute-code-action)
+      "lr" '("Rename" . lsp-rename)
+      "ls" '(:ignore t :wk "+server")
+      "lsq" '("Shutdown" . lsp-workspace-shutdown)
+      "lsr" '("Restart" . lsp-workspace-restart))
     :custom
     (lsp-auto-execute-action nil)
     (lsp-completion-provider :none)
@@ -787,14 +849,14 @@
     :config
     ;; TODO: better hover doc
     (use-package lsp-ui
-      :bind
-      (:map evil-motion-state-map
-            ("K" . lsp-ui-doc-glance))
-      (:map lsp-ui-peek-mode-map
-            ("h" . lsp-ui-peek--select-prev-file)
-            ("j" . lsp-ui-peek--select-next)
-            ("k" . lsp-ui-peek--select-prev)
-            ("l" . lsp-ui-peek--select-next-file))
+      :general-config
+      (:states 'm
+               "K" 'lsp-ui-doc-glance)
+      (:keymaps 'lsp-ui-peek-mode-map
+                "h" 'lsp-ui-peek--select-prev-file
+                "j" 'lsp-ui-peek--select-next
+                "k" 'lsp-ui-peek--select-prev
+                "l" 'lsp-ui-peek--select-next-file)
       :custom
       (lsp-ui-delay 0.5)
       (lsp-ui-doc-max-height 8)
@@ -802,10 +864,12 @@
       (lsp-ui-doc-position 'at-point)
       (lsp-ui-doc-show-with-mouse nil))
     (use-package consult-lsp
-      :bind (:map lsp-mode-map
-                  ([remap xref-find-apropos] . consult-lsp-symbols))))
+      :general
+      (:keymaps 'lsp-mode-map
+                [remap xref-find-apropos] 'consult-lsp-symbols)))
 
   (use-package lsp-ltex
+    :defer t
     :after lsp-mode
     :custom
     (lsp-ltex-completion-enabled t)
@@ -814,7 +878,7 @@
 ** Parinfer
 #+begin_src emacs-lisp
   (use-package parinfer-rust-mode
-    :hook ((emacs-lisp-mode lisp-mode fennel-mode) . parinfer-rust-mode)
+    :ghook 'emacs-lisp-mode-hook 'lisp-mode-hook 'fennel-mode-hook
     :custom
     (parinfer-rust-auto-download t)
     (parinfer-rust-troublesome-modes 'nil))
@@ -822,7 +886,7 @@
 ** Smart parentheses
 #+begin_src emacs-lisp
   (use-package smartparens
-    :hook ((prog-mode text-mode) . smartparens-mode)
+    :ghook 'prog-mode-hook 'text-mode-hook
     :custom
     (sp-cancel-autoskip-on-backward-movement nil)
     (sp-highlight-pair-overlay nil)
@@ -836,7 +900,7 @@
     (sp-show-pair-from-inside t)
     :init
     (use-package evil-smartparens
-      :hook smartparens-enabled-hook)
+      :ghook 'smartparens-enabled-hook)
     :config
     (require 'smartparens-config)
 
@@ -861,11 +925,13 @@
 ** Syntax checking
 #+begin_src emacs-lisp
   (use-package flymake
-    :hook ((prog-mode text-mode) . flymake-mode)
-    :bind* ("<localleader>lD" ("Diagnostics" . consult-flymake))
+    :ghook 'prog-mode-hook 'text-mode-hook
+    :general-config
+    (+localleader-def
+      "lD" '("Diagnostics" . consult-flymake))
     :config
     (use-package flymake-popon
-      :hook (flymake-mode . flymake-popon-mode)
+      :ghook 'flymake-mode-hook
       :custom
       (flymake-popon-posframe-border-width 0)))
 #+end_src
@@ -880,30 +946,34 @@
 ** C
 #+begin_src emacs-lisp
   (use-package c-ts-mode
-    :hook ((c-ts-mode c++-ts-mode) . lsp-deferred)
+    :ensure nil
+    :ghook ('(c-ts-mode-hook c++-ts-mode-hook) #'lsp-deferred)
     :custom
     (c-ts-mode-indent-offset 4))
 
   (use-package cmake-ts-mode
+    :ensure nil
     :mode "\\.cmake\\'"
     :mode "CMakeLists.txt")
 
   (use-package meson-mode
-    :hook (meson-mode . (lambda ()
-                          (add-to-list 'completion-at-point-functions #'meson-completion-at-point-function))))
+    :gfhook #'(lambda ()
+                (add-to-list 'completion-at-point-functions #'meson-completion-at-point-function)))
 #+end_src
 ** Configuration
 #+begin_src emacs-lisp
   (use-package conf-mode
-    :hook (conf-mode . (lambda () (run-hooks 'prog-mode-hook))))
+    :ensure nil
+    :gfhook #'(lambda () (run-hooks 'prog-mode-hook)))
 #+end_src
 ** CSS
 #+begin_src emacs-lisp
   (use-package css-mode
-    :hook ((css-mode scss-mode less-mode) . lsp-deferred))
+    :ensure nil
+    :gfhook ('(css-mode-hook scss-mode-hook less-mode-hook) #'lsp-deferred))
 
   (use-package sass-mode
-    :hook (sass-mode . lsp-deferred))
+    :gfhook #'lsp-deferred)
 #+end_src
 ** Dart
 #+begin_src emacs-lisp
@@ -911,60 +981,64 @@
     :after lsp-mode
     :config
     (use-package flutter
-      :bind* (:map dart-mode-map
-                   ("<localleader>r" ("Run" . flutter-run))
-                   ("<localleader>q" ("Quit" . flutter-quit))
-                   ("<localleader>r" ("Hot reload" . flutter-hot-reload))
-                   ("<localleader>R" ("Hot restart" . flutter-hot-restart)))))
+      :general-config
+      (+localleader-def
+        :keymaps 'dart-mode-map
+        "r" '("Run" . flutter-run)
+        "q" '("Quit" . flutter-quit)
+        "r" '("Hot reload" . flutter-hot-reload)
+        "R" '("Hot restart" . flutter-hot-restart))))
 
   (use-package lsp-dart
-    :hook (dart-mode . lsp-deferred))
+    :ghook ('dart-mode-hook #'lsp-deferred))
 #+end_src
 ** Emacs Lisp
 #+begin_src emacs-lisp
   (use-package elisp-mode
-    :bind* (:map emacs-lisp-mode-map
-                 ("<localleader>e" ("Eval buffer" . eval-buffer)))
+    :ensure nil
+    :general-config
+    (+localleader-def
+      :keymaps 'emacs-lisp-mode-map
+      "e" '("Eval buffer" . eval-buffer))
     :config
     (use-package macrostep
-      :bind* (:map emacs-lisp-mode-map
-                   ("<localleader>m" ("Expand macro" . macrostep-expand))))
+      :general
+      (+localleader-def
+       :keymaps 'emacs-lisp-mode-map
+                "m" '("Expand macro" . macrostep-expand)))
     (use-package elisp-demos
       :init
       (advice-add #'describe-function-1 :after #'elisp-demos-advice-describe-function-1)
       (advice-add #'helpful-update :after #'elisp-demos-advice-helpful-update))
     (use-package highlight-quoted
-      :hook (emacs-lisp-mode . highlight-quoted-mode))
+      :ghook 'emacs-lisp-mode-hook)
     (use-package highlight-defined
-      :hook (emacs-lisp-mode . highlight-defined-mode))
+      :ghook 'emacs-lisp-mode-hook)
     (use-package easy-escape
-      :hook (emacs-lisp-mode . easy-escape-minor-mode)))
+      :ghook ('emacs-lisp-mode-hook #'easy-escape-minor-mode)))
 #+end_src
 ** Faust
 #+begin_src emacs-lisp
-    (use-package faustine
-      :mode ("\\.dsp\\'" . faustine-mode)
-      :bind* (:map faustine-mode-map
-                   ("<localleader>c" ("Check syntax" . faustine-syntax-check))
-                   ("<localleader>d" ("Diagram" . faustine-diagram))
-                   ("<localleader>s" ("Source code" . faustine-source-code)))
-      :config
-      (defvar ac-modes nil)
-      (defvar ac-sources nil))
+  (use-package faustine
+    :mode ("\\.dsp\\'" . faustine-mode)
+    :general-config
+    (+localleader-def
+      :keymaps 'faustine-mode-map
+      "c" '("Check syntax" . faustine-syntax-check)
+      "d" '("Diagram" . faustine-diagram)
+      "s" '("Source code" . faustine-source-code))
+    :config
+    (defvar ac-modes nil)
+    (defvar ac-sources nil))
 #+end_src
 ** GDScript
 #+begin_src emacs-lisp
   (use-package gdscript-mode
-    :hook (gdscript-mode . lsp-deferred)
-    :bind* (:map gdscript-mode-map
-                 ("<localleader>o" ("Open project in Godot" . gdscript-godot-open-project-in-editor))
-                 (:prefix "<localleader>d"
-                          :prefix-map +debug
-                          ("a" ("Add breakpoint" . gdscript-debug-add-breakpoint))
-                          ("d" ("Remove breakpoint" . gdscript-debug-remove-breakpoint))
-                          ("c" ("Continue" . gdscript-debug-continue))
-                          ("n" ("Next" . gdscript-debug-next))
-                          ("s" ("Step" . gdscript-debug-step)))))
+    :gfhook #'lsp-deferred
+    :general-config
+    (+localleader-def
+     :keymaps 'gdscript-mode-map
+     "o" '("Open project in Godot" . gdscript-godot-open-project-in-editor)))
 #+end_src
 ** Git
 #+begin_src emacs-lisp
@@ -974,11 +1048,11 @@
 #+begin_src emacs-lisp
   (use-package haskell-mode
     :init
-    (with-eval-after-load 'projectile
+    (general-after 'projectile
       (add-to-list 'projectile-project-root-files "stack.yaml")))
 
   (use-package lsp-haskell
-    :hook ((haskell-mode-local-vars haskell-literate-mode-local-vars) . lsp-deferred)
+    :gfhook ('(haskell-mode-local-vars-hook haskell-literate-mode-local-vars-hook) #'lsp-deferred)
     :after lsp-mode
     :custom
     (lsp-haskell-formatting-provider "fourmolu"))
@@ -1002,12 +1076,13 @@
     :mode "\\.eco\\'"
     :mode "wp-content/themes/.+/.+\\.php\\'"
     :mode "templates/.+\\.php\\'"
-    :hook (web-mode . lsp-deferred)
-    :hook (web-mode . (lambda ()
-                        (when (member web-mode-content-type '("javascript" "jsx"))
-                          (setq-local comment-start "//")
-                          (setq-local comment-end "")
-                          (setq-local comment-start-skip "// *"))))
+    :gfhook
+    #'lsp-deferred
+    #'(lambda ()
+        (when (member web-mode-content-type '("javascript" "jsx"))
+          (setq-local comment-start "//")
+          (setq-local comment-end "")
+          (setq-local comment-start-skip "// *")))
     :custom
     (lsp-emmet-ls-command '("emmet-language-server" "--stdio"))
     (web-mode-enable-html-entities-fontification t)
@@ -1023,24 +1098,27 @@
 ** JavaScript
 #+begin_src emacs-lisp
   (use-package js
-    :hook (js-ts-mode . lsp-deferred))
+    :ensure nil
+    :gfhook ('js-ts-mode-hook #'lsp-deferred))
 
   (use-package typescript-ts-mode
-    :hook (typescript-ts-mode . lsp-deferred)
+    :ensure nil
+    :gfhook #'lsp-deferred
     :custom
     (typescript-ts-mode-indent-offset 4))
 
-  (setq lsp-clients-typescript-prefer-use-project-ts-server t
-        lsp-javascript-display-parameter-type-hints t
-        lsp-javascript-display-property-declaration-type-hints t
-        lsp-javascript-display-return-type-hints t
-        lsp-javascript-display-variable-type-hints t
-        lsp-eslint-server-command '("vscode-eslint-language-server" "--stdio"))
+  (general-setq lsp-clients-typescript-prefer-use-project-ts-server t
+                lsp-javascript-display-parameter-type-hints t
+                lsp-javascript-display-property-declaration-type-hints t
+                lsp-javascript-display-return-type-hints t
+                lsp-javascript-display-variable-type-hints t
+                lsp-eslint-server-command '("vscode-eslint-language-server" "--stdio"))
 #+end_src
 ** JSON
 #+begin_src emacs-lisp
   (use-package json-ts-mode
-    :hook (json-ts-mode . lsp-deferred)
+    :ensure nil
+    :gfhook #'lsp-deferred
     :custom
     (json-ts-mode-indent-offset 4))
 #+end_src
@@ -1050,62 +1128,66 @@
     :mode "\\.jl$")
 
   (use-package julia-snail
-    :hook (julia-ts-mode . julia-snail-mode)
-    :bind
-    (:map julia-snail-mode-map
-          ("<localleader>'" ("Snail" . julia-snail))
-          ("<localleader>a" ("Activate package" . julia-snail-package-activate))
-          ("<localleader>d" ("Documentation at point" . julia-snail-doc-lookup))
-          ("<localleader>r" ("Update module cache" . julia-snail-update-module-cache))
-          (:prefix "<localleader>e"
-                   :prefix-map +eval
-                   ("b" ("Buffer" . julia-snail-send-buffer-file))
-                   ("l" ("Line" . julia-snail-send-line))
-                   ("r" ("Region" . julia-snail-send-region))))
-    (:map julia-snail-repl-mode-map
-          ("<localleader>a" ("Activate package" . julia-snail-package-activate))
-          ("<localleader>d" ("Documentation at point" . julia-snail-doc-lookup))
-          ("<localleader>m" ("Go back" . julia-snail-repl-go-back))
-          ("<localleader>r" ("Update module cache" . julia-snail-update-module-cache))))
+    :ghook 'julia-ts-mode-hook
+    :general-config
+    (+localleader-def
+      :keymaps 'julia-snail-mode-map
+      "'" '("Snail" . julia-snail)
+      "a" '("Activate package" . julia-snail-package-activate)
+      "d" '("Documentation at point" . julia-snail-doc-lookup)
+      "r" '("Update module cache" . julia-snail-update-module-cache)
+      "e" '("Eval" . nil)
+      "eb" '("Buffer" . julia-snail-send-buffer-file)
+      "el" '("Line" . julia-snail-send-line)
+      "er" '("Region" . julia-snail-send-region))
+    (+localleader-def
+      :keymaps 'julia-snail-repl-mode-map
+      "a" '("Activate package" . julia-snail-package-activate)
+      "d" '("Documentation at point" . julia-snail-doc-lookup)
+      "m" '("Go back" . julia-snail-repl-go-back)
+      "r" '("Update module cache" . julia-snail-update-module-cache)))
 
   (use-package lsp-julia
     :after lsp-mode
-    :hook (julia-ts-mode . lsp-deferred))
+    :ghook ('julia-ts-mode-hook #'lsp-deferred))
 #+end_src
 ** Lua
 #+begin_src emacs-lisp
   (use-package lua-mode
-    :hook (lua-mode . lsp-deferred)
+    :gfhook #'lsp-deferred
     :custom
     (lua-indent-level 4))
 
   (use-package fennel-mode
     :mode "\\.fnl"
-    :hook (lua-mode . antifennel-mode)
-    :bind*
-    (:map fennel-mode-map
-          ("<localleader>r" ("REPL" . fennel-repl))
-          ("<localleader>c" ("Compile buffer" . fennel-view-compilation))
-          ("<localleader>f" ("Format buffer" . fennel-format))
-          ("<localleader>m" ("Expand macro" . fennel-macroexpand)))
+    :ghook ('lua-mode-hook #'antifennel-mode)
+    :general-config
+    (+localleader-def
+      :keymaps 'fennel-mode-map
+      "r" '("REPL" . fennel-repl)
+      "c" '("Compile buffer" . fennel-view-compilation)
+      "f" '("Format buffer" . fennel-format)
+      "m" '("Expand macro" . fennel-macroexpand))
     :config
-    (with-eval-after-load 'apheleia
+    (general-after 'apheleia
       (push '(fnlfmt . ("fnlfmt" "-"))
             apheleia-formatters)
       (push '(fennel-mode . fnlfmt)
             apheleia-mode-alist))
     (use-package flymake-fennel
-      :hook (fennel-mode . flymake-fennel-setup)))
+      :ghook ('fennel-mode-hook #'flymake-fennel-setup)))
 
-  (setq lsp-clients-lua-language-server-command '("lua-language-server"))
+  (general-setq lsp-clients-lua-language-server-command '("lua-language-server"))
 #+end_src
 ** Markdown
 #+begin_src emacs-lisp
   (use-package markdown-mode
-    :hook (markdown-mode . lsp-deferred)
+    :gfhook #'lsp-deferred
     :mode ("/README\\(?:\\.md\\)?\\'" . gfm-mode)
-    :bind* (:map markdown-mode-map
-                 ("<localleader>'" ("Edit block" . markdown-edit-code-block)))
+    :general-config
+    (+localleader-def
+      :keymaps 'markdown-mode-map
+      "'" '("Edit block" . markdown-edit-code-block))
     :custom
     (markdown-enable-math t)
     (markdown-enable-wiki-links t)
@@ -1115,23 +1197,27 @@
     (markdown-fontify-whole-heading-line t)
     :config
     (use-package grip-mode
-      :bind* (:map markdown-mode-map
-                   ("<localleader>p" ("Preview" . grip-mode)))))
+      :general
+      (+localleader-def
+        :keymaps 'markdown-mode-map
+        "p" '("Preview" . grip-mode))))
 #+end_src
 ** Nim
 #+begin_src emacs-lisp
   (use-package nim-mode
-    :hook (nim-mode . (lambda ()
-                        (setq-local tab-width 2)
-                        (lsp-deferred))))
+    :gfhook #'(lambda ()
+                (setq-local tab-width 2)
+                (lsp-deferred)))
 #+end_src
 ** Nix
 #+begin_src emacs-lisp
   (use-package nix-mode
     :mode "\\.nix"
-    :hook (nix-mode . lsp-deferred)
-    :bind* (:map nix-mode-map
-                 ("<localleader>r" ("REPL" . nix-repl-show)))
+    :gfhook #'lsp-deferred
+    :general-config
+    (+localleader-def
+      :keymaps 'nix-mode-map
+      "r" '("REPL" . nix-repl-show))
     :custom
     (nix-indent-offest 2)
     (lsp-nix-nil-formatter ["alejandra"]))
@@ -1139,22 +1225,21 @@
 ** Org
 #+begin_src emacs-lisp
   (use-package org
-    :hook (org-mode . lsp-deferred)
-    :bind
-    (:map org-src-mode-map
-          ([remap evil-save] . org-edit-src-save))
-    :bind*
-    (:map org-mode-map
-          ([remap origami-toggle-all-nodes] . org-shifttab)
-          ("<localleader>s" ("Sort" . org-sort))
-          ("<localleader>g" ("Goto" . consult-org-heading))
-          ("<localleader>'" ("Edit block" . org-edit-special))
-          ("<localleader>t" ("TODO" . org-todo))
-          ("<localleader>x" ("Checkbox" . org-toggle-checkbox))
-          (:prefix "<localleader>e"
-                   :prefix-map +export
-                   ("h" ("HTML" . org-html-export-to-html))
-                   ("o" ("ODT" . org-odt-export-to-odt))))
+    :gfhook #'lsp-deferred
+    :general-config
+    (:keymaps 'org-src-mode-map
+              [remap evil-save] 'org-edit-src-save)
+    (+localleader-def
+      :keymaps 'org-mode-map
+      [remap origami-toggle-all-nodes] 'org-shifttab
+      "s" '("Sort" . org-sort)
+      "g" '("Goto" . consult-org-heading)
+      "'" '("Edit block" . org-edit-special)
+      "t" '("TODO" . org-todo)
+      "x" '("Checkbox" . org-toggle-checkbox)
+      "e" '(:ignore t :wk "+export")
+      "eh" '("HTML" . org-html-export-to-html)
+      "eo" '("ODT" . org-odt-export-to-odt))
     :custom
     (org-cycle-emulate-tab nil)
     (org-eldoc-breadcrumb-separator (concat " " (nerd-icons-mdicon "nf-md-chevron_right") " "))
@@ -1177,7 +1262,7 @@
     (add-to-list 'org-file-apps '(directory . emacs))
     (add-to-list 'org-file-apps '(remote . emacs))
     (use-package evil-org
-      :hook (org-mode . evil-org-mode))
+      :ghook 'org-mode-hook)
     (use-package org-contrib)
     (use-package org-cliplink)
     (use-package org-download)
@@ -1185,71 +1270,72 @@
     (use-package org-superstar)
     (use-package ob-async)
     (use-package ox-pandoc
-      :bind (:map org-mode-map
-                  :prefix "<localleader>e"
-                  :prefix-map +export
-                  ("d" ("DOCX" . org-pandoc-export-to-docx))))
+      :general
+      (+localleader-def
+        :keymaps 'org-mode-map
+        "ed" '("DOCX" . org-pandoc-export-to-docx)))
     (use-package org-variable-pitch
-      :hook (org-mode . org-variable-pitch-minor-mode)
+      :ghook ('org-mode-hook #'org-variable-pitch-minor-mode)
       :custom
       (org-variable-pitch-fontify-headline-prefix t)
       :config
       (set-face-attribute 'org-variable-pitch-fixed-face nil
                           :family mono-font
                           :height 110)
-      (setq org-variable-pitch-fixed-faces (append org-variable-pitch-fixed-faces
-                                                   '(line-number
-                                                     line-number-current-line
-                                                     corfu-default
-                                                     highlight-indent-guides-character-face
-                                                     lsp-ui-sideline-global
-                                                     lsp-ui-sideline-code-action
-                                                     org-modern-block-name
-                                                     org-modern-date-active
-                                                     org-modern-date-inactive
-                                                     org-modern-done
-                                                     org-modern-horizontal-rule
-                                                     org-modern-internal-target
-                                                     org-modern-label
-                                                     org-modern-priority
-                                                     org-modern-radio-target
-                                                     org-modern-statistics
-                                                     org-modern-symbol
-                                                     org-modern-tag
-                                                     org-modern-time-active
-                                                     org-modern-time-inactive
-                                                     org-modern-todo))))
+      (general-setq org-variable-pitch-fixed-faces (append org-variable-pitch-fixed-faces
+                                                           '(line-number
+                                                             line-number-current-line
+                                                             corfu-default
+                                                             highlight-indent-guides-character-face
+                                                             lsp-ui-sideline-global
+                                                             lsp-ui-sideline-code-action
+                                                             org-modern-block-name
+                                                             org-modern-date-active
+                                                             org-modern-date-inactive
+                                                             org-modern-done
+                                                             org-modern-horizontal-rule
+                                                             org-modern-internal-target
+                                                             org-modern-label
+                                                             org-modern-priority
+                                                             org-modern-radio-target
+                                                             org-modern-statistics
+                                                             org-modern-symbol
+                                                             org-modern-tag
+                                                             org-modern-time-active
+                                                             org-modern-time-inactive
+                                                             org-modern-todo))))
     (use-package org-modern
-      :hook (org-mode . org-modern-mode)
+      :ghook 'org-mode-hook
       :custom
       (org-modern-block-name `(,(concat (nerd-icons-mdicon "nf-md-chevron_double_right") " ") . ,(concat (nerd-icons-mdicon "nf-md-chevron_double_left") " ")))
       (org-modern-keyword (concat (nerd-icons-mdicon "nf-md-wrench") " "))
       (org-modern-star '("✯" "✵" "✺" "✼" "❁" "❃" "❆")))
     (use-package org-appear
-      :hook (org-mode . (lambda ()
-                          (add-hook 'evil-insert-state-entry-hook
-                                    #'org-appear-manual-start
-                                    nil
-                                    t)
-                          (add-hook 'evil-insert-state-exit-hook
-                                    #'org-appear-manual-stop
-                                    nil
-                                    t)))
+      :ghook ('org-mode-hook #'(lambda ()
+                                 (general-add-hook 'evil-insert-state-entry-hook
+                                                   #'org-appear-manual-start
+                                                   nil
+                                                   t)
+                                 (general-add-hook 'evil-insert-state-exit-hook
+                                                   #'org-appear-manual-stop
+                                                   nil
+                                                   t)))
       :custom
       (org-appear-trigger 'manual))
     (use-package org-fragtog
-      :hook (org-mode . org-fragtog-mode)))
+      :ghook 'org-mode-hook))
 #+end_src
 ** Python
 #+begin_src emacs-lisp
-  (use-package python-ts-mode
-    :hook (python-ts-mode . lsp-deferred)
+  (use-package python
+    :ensure nil
+    :gfhook #'lsp-deferred
     :custom
     (python-indent-guess-indent-offset-verbose nil)
     :config
     (when (and (executable-find "python3")
                (string= python-shell-interpreter "python"))
-      (setq python-shell-interpreter "python3")))
+      (general-setq python-shell-interpreter "python3")))
 #+end_src
 ** QML
 #+begin_src emacs-lisp
@@ -1259,25 +1345,28 @@
 ** Rust
 #+begin_src emacs-lisp
   (use-package rust-ts-mode
-    :hook (rust-ts-mode . lsp-deferred))
+    :ensure nil
+    :gfhook #'lsp-deferred)
 #+end_src
 ** Shell
 #+begin_src emacs-lisp
   (use-package sh-script
-    :hook (sh-script . lsp-deferred))
+    :ensure nil
+    :gfhook #'lsp-deferred)
 
   (use-package fish-mode)
 #+end_src
 ** YAML
 #+begin_src emacs-lisp
+  ;; TODO: schema picker keybinding
   (use-package yaml-ts-mode
-    :hook (yaml-ts-mode . lsp-deferred))
+    :ensure nil
+    :gfhook #'lsp-deferred)
 #+end_src
 ** Zig
 #+begin_src emacs-lisp
   (use-package zig-mode
-    :hook (zig-mode . lsp-deferred)
+    :gfhook #'lsp-deferred
     :custom
     (zig-format-on-save nil))
 #+end_src
-

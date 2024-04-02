@@ -49,3 +49,8 @@ $colors: (
 window.background {
     border-radius: 0;
 }
+
+headerbar.titlebar.default-decoration {
+    margin-bottom: 50px;
+    margin-top: -100px;
+}

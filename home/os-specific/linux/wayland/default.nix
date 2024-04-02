@@ -9,12 +9,15 @@ in {
     packages = with pkgs; [
       autotiling-rs
       grimblast
+      sway-contrib.grimshot
       satty
       swaybg
       swaysome
       wev
       wl-clipboard
       wlr-which-key
+      waylock
+      wlopm
     ];
     sessionVariables = {
       GDK_BACKEND = "wayland,x11";
@@ -27,7 +30,7 @@ in {
 
   wayland.windowManager.sway = with pkgs.rice; {
     # {{{
-    enable = true;
+    enable = false;
     package = pkgs.swayfx;
     config = {
       bars = [
@@ -207,7 +210,7 @@ in {
 
   wayland.windowManager.hyprland = {
     # {{{
-    enable = true;
+    enable = false;
     systemd.variables = ["--all"];
     plugins = with pkgs.hyprlandPlugins; [
       split-monitor-workspaces
@@ -336,12 +339,98 @@ in {
   };
   # }}}
 
+  wayland.windowManager.river = let
+    # {{{
+    color = c: "0x${pkgs.lib.removePrefix "#" c}";
+    mod = "Super";
+  in {
+    enable = true;
+    systemd.variables = ["--all"];
+    extraSessionVariables = config.home.sessionVariables;
+    settings = with pkgs.rice; {
+      background-color = color base00;
+      border-color-focused = color base0F;
+      border-color-unfocused = color base00;
+      border-color-urgent = color base08;
+      border-width = 2;
+      default-layout = "rivertile";
+      focus-follows-cursor = "normal";
+      set-cursor-warp = "on-output-change";
+      set-repeat = "50 300";
+
+      spawn = [
+        "'swaybg -i ${wallpaper} -m fill'"
+        "'systemctl --user restart waybar'"
+      ];
+
+      keyboard-layout = "pl";
+      input = {
+        "pointer-1133-49284-Logitech_G102_Prodigy_Gaming_Mouse" = {
+          accel-profile = "flat";
+          disable-while-typing = false;
+          tap = false;
+        };
+      };
+
+      map.normal = {
+        "${mod} Return" = "spawn '${terminal}'";
+        "${mod} Space" = "spawn '${menu}'";
+        "${mod}+Control Space" = "spawn 'dunstctl close'";
+        "${mod} BackSpace" = "spawn 'wlr-which-key'";
+        "${mod}+Control P" = "spawn '${rofi-stuff}/bin/keepass'";
+        "None Print" = "spawn 'grimshot save area - | satty -f -'";
+
+        "${mod} W" = "close";
+        "${mod} T" = "toggle-float";
+        "${mod} F" = "toggle-fullscreen";
+        "${mod}+Control Q" = "spawn 'loginctl terminate-session $XDG_SESSION_ID'";
+        "${mod}+Control R" = "spawn '~/.config/river/init'";
+
+        "${mod} J" = "focus-view next";
+        "${mod} K" = "focus-view previous";
+        "${mod}+Shift J" = "swap next";
+        "${mod}+Shift K" = "swap previous";
+
+        "${mod} H" = "focus-output previous";
+        "${mod} L" = "focus-output next";
+        "${mod}+Shift H" = "send-to-output previous";
+        "${mod}+Shift L" = "send-to-output next";
+
+        "${mod}+Control H" = "send-layout-cmd rivertile 'main-ratio -0.05'";
+        "${mod}+Control L" = "send-layout-cmd rivertile 'main-ratio +0.05'";
+        "${mod}+Control J" = "send-layout-cmd rivertile 'main-count -1'";
+        "${mod}+Control K" = "send-layout-cmd rivertile 'main-count +1'";
+
+        "None XF86AudioMute" = "spawn 'amixer set Master toggle'";
+        "None XF86AudioRaiseVolume" = "spawn 'amixer set Master 5%+'";
+        "None XF86AudioLowerVolume" = "spawn 'amixer set Master 5%-'";
+        "None XF86AudioPlay" = "spawn 'playerctl -p strawberry play-pause'";
+        "None XF86AudioPrev" = "spawn 'playerctl -p strawberry previous'";
+        "None XF86AudioNext" = "spawn 'playerctl -p strawberry next'";
+      };
+      map-pointer.normal = {
+        "${mod} BTN_LEFT" = "move-view";
+        "${mod} BTN_RIGHT" = "resize-view";
+      };
+    };
+    extraConfig = ''
+      for i in $(seq 1 9); do
+        tags=$((1 << ($i - 1)))
+        riverctl map normal ${mod} $i set-focused-tags $tags
+        riverctl map normal ${mod}+Shift $i set-view-tags $tags
+      done
+
+      rivertile -view-padding 5 -outer-padding 5 -main-ratio 0.5 &
+    '';
+  };
+  # }}}
+
   programs.waybar = {
     # {{{
     enable = true;
     systemd = {
       enable = true;
-      target = "hyprland-session.target";
+      target = "river-session.target";
     };
     settings = with pkgs.rice; let
       red = s: "<span foreground=\"${base08}\">${s}</span>";
@@ -354,8 +443,8 @@ in {
         position = "top";
         height = 27;
         modules-left = [
-          "hyprland/workspaces"
-          "hyprland/window"
+          "river/tags"
+          "river/window"
         ];
         modules-right = [
           "tray"
@@ -375,7 +464,7 @@ in {
           "wireplumber"
           "clock"
         ];
-        "hyprland/window" = {
+        "sway/window" = {
           max-length = 64;
           separate-outputs = true;
         };
@@ -584,11 +673,29 @@ in {
       ];
     };
 
+  services.kanshi = {
+    enable = true;
+    systemdTarget = "river-session.target";
+    profiles.default.outputs = [
+      {
+        criteria = "HDMI-A-2";
+        position = "1920,50";
+      }
+      {
+        criteria = "DVI-D-1";
+        position = "0,0";
+      }
+    ];
+  };
+
+  # TODO: random system freezes
   services.hypridle = {
     enable = true;
-    lockCmd = "pidof hyprlock || hyprlock";
+    lockCmd = let
+      color = c: "0x${pkgs.lib.removePrefix "#" c}";
+    in
+      with pkgs.rice; "pidof waylock || waylock -ignore-empty-password -fork-on-lock -init-color ${color base00} -input-color ${color base02} -fail-color ${color base08}";
     beforeSleepCmd = "loginctl lock-session";
-    afterSleepCmd = "hyprctl dispatch dpms on";
     listeners = [
       {
         timeout = 300;
@@ -596,8 +703,22 @@ in {
       }
       {
         timeout = 360;
-        onTimeout = "hyprctl dispatch dpms off";
-        onResume = "hyprctl dispatch dpms on";
+        onTimeout =
+          builtins.toString
+          (pkgs.writeShellScript "displays-off" ''
+            for output in $(wlopm -j | jq '.[].output' -r)
+            do
+              wlopm --off $output
+            done
+          '');
+        onResume =
+          builtins.toString
+          (pkgs.writeShellScript "displays-on" ''
+            for output in $(wlopm -j | jq '.[].output' -r)
+            do
+              wlopm --on $output
+            done
+          '');
       }
     ];
   };

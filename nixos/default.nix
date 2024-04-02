@@ -106,5 +106,8 @@
     "net.ipv4.tcp_timestamps" = false;
     "vm.dirty_writeback_centisecs" = 1500;
     "vm.page-cluster" = 1;
+    "vm.swappiness" = pkgs.lib.mkForce 40;
   };
+
+  zramSwap.enable = true;
 }

@@ -23,7 +23,6 @@
     mozilla.url = "github:mozilla/nixpkgs-mozilla";
     neorg.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
     neovim.url = "github:nix-community/neovim-nightly-overlay";
-    nil.url = "github:oxalica/nil";
     nix-alien.url = "github:thiagokokada/nix-alien";
     nix-gaming.url = "github:fufexan/nix-gaming";
     nix-index-database.url = "github:Mic92/nix-index-database";
@@ -31,11 +30,11 @@
     nyx.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
     poetry2nix.url = "github:nix-community/poetry2nix";
     prismlauncher.url = "github:PrismLauncher/PrismLauncher";
+    sops-nix.url = "github:Mic92/sops-nix";
     zjstatus.url = "github:dj95/zjstatus";
 
     colors.url = "github:Misterio77/nix-colors";
     musnix.url = "github:musnix/musnix";
-    nixmox.url = "github:Sorixelle/nixmox";
   };
 
   outputs = inputs @ {self, ...}:
@@ -47,18 +46,15 @@
           defaults = rec {
             overlays = with inputs; [
               emacs.overlays.default
-              # hypridle.overlays.default
-              # hyprland.overlays.default
-              # hyprlock.overlays.default
               mozilla.overlays.firefox
               neorg.overlays.default
               neovim.overlay
               nix-alien.overlays.default
               nix-gaming.overlays.default
-              nixmox.overlay
               nur.overlay
               poetry2nix.overlays.default
               prismlauncher.overlays.default
+
               (_: prev: {
                 bandithedoge = import nur-bandithedoge {
                   pkgs = import nur-bandithedoge.inputs.nixpkgs {
@@ -92,11 +88,14 @@
                 musnix.nixosModules.musnix
                 nix-gaming.nixosModules.pipewireLowLatency
                 nyx.nixosModules.default
-                self.nixosModules.default
-                self.nixosModules.home-manager
-                ./users/bandithedoge.nix
+                sops-nix.nixosModules.default
+
                 ./nix.nix
                 ./nixos
+                ./sops.nix
+                ./users/bandithedoge.nix
+                self.nixosModules.default
+                self.nixosModules.home-manager
               ];
             };
           };
@@ -163,10 +162,12 @@
           options.hostname = pkgs.lib.mkOption {type = pkgs.lib.types.str;};
           imports = with inputs; [
             ./nix.nix
+            ./sops.nix
             hypridle.homeManagerModules.default
             hyprland.homeManagerModules.default
             hyprlock.homeManagerModules.default
             nix-index-database.hmModules.nix-index
+            sops-nix.homeManagerModule
           ];
         };
       };

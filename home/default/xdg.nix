@@ -49,9 +49,6 @@ in {
       # npm
       NPM_CONFIG_USERCONFIG = "${conf}/npm/npmrc";
 
-      # cargo
-      CARGO_HOME = "${data}/cargo";
-
       # cinelerra
       CIN_CONFIG="${conf}/bcast5";
 

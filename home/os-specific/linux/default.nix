@@ -21,6 +21,7 @@ in {
       d-spy
       discord
       flameshot
+      fractal
       gnome.zenity
       inkscape
       keepassxc
@@ -61,7 +62,7 @@ in {
       gtk-enable-primary-paste = false;
       gtk-can-change-accels = 1;
       gtk-toolbar-style = "";
-      gtk-decoration-layout = "menu";
+      gtk-decoration-layout = "";
     };
     gtk4 = gtk3;
   };
@@ -563,6 +564,7 @@ in {
 
     syncthing.enable = true;
     systembus-notify.enable = true;
+    gnome-keyring.enable = true;
   };
 
   # polkit {{{
