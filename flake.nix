@@ -17,8 +17,8 @@
     emacs.url = "github:nix-community/emacs-overlay";
     hypridle.url = "github:hyprwm/hypridle";
     hyprland-split-monitor-workspaces.inputs.hyprland.follows = "hyprland";
-    hyprland-split-monitor-workspaces.url = "github:Duckonaut/split-monitor-workspaces"; # HACK: https://github.com/Duckonaut/split-monitor-workspaces/issues/53
-    hyprland.url = "github:hyprwm/Hyprland/v0.36.0"; # HACK: https://github.com/Duckonaut/split-monitor-workspaces/issues/58
+    hyprland-split-monitor-workspaces.url = "github:nlintn/split-monitor-workspaces"; # HACK: https://github.com/Duckonaut/split-monitor-workspaces/issues/53
+    hyprland.url = "github:hyprwm/Hyprland";
     hyprlock.url = "github:hyprwm/hyprlock";
     mozilla.url = "github:mozilla/nixpkgs-mozilla";
     neorg.url = "github:nvim-neorg/nixpkgs-neorg-overlay";

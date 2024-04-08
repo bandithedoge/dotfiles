@@ -1,9 +1,4 @@
-{
-  pkgs,
-  home-manager,
-  config,
-  ...
-}: let
+{config, ...}: let
   cache = config.xdg.cacheHome;
   conf = config.xdg.configHome;
   data = config.xdg.dataHome;
@@ -30,30 +25,23 @@ in {
       # bash
       HISTFILE = "${state}/bash/history";
 
-      # cabal
-      CABAL_CONFIG = "${conf}/cabal/config";
-      CABAL_DIR = "${data}/cabal";
-
-      # go
-      GOPATH = "${data}/go";
-
       # x
       XCOMPOSECACHE = "${cache}/X11/xcompose";
 
       # java
       _JAVA_OPTIONS = "-Djava.util.prefs.userRoot=${conf}/java";
 
-      # stack
-      STACK_ROOT = "${data}/stack";
-
       # npm
       NPM_CONFIG_USERCONFIG = "${conf}/npm/npmrc";
 
       # cinelerra
-      CIN_CONFIG="${conf}/bcast5";
+      CIN_CONFIG = "${conf}/bcast5";
 
-      # nim
-      NIMBLE_DIR="${data}/nimble";
+      # cargo
+      CARGO_HOME = "${data}/cargo";
+
+      # nimble
+      NIMBLE_DIR = "${data}/nimble";
     };
 
     shellAliases = {

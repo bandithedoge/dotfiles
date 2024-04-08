@@ -32,6 +32,7 @@
       ];
       trusted-users = ["root" "@wheel" "bandithedoge"];
       auto-optimise-store = true;
+      use-xdg-base-directories = true;
     };
     extraOptions = ''
       extra-experimental-features = nix-command flakes

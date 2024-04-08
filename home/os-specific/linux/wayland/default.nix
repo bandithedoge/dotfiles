@@ -210,7 +210,9 @@ in {
 
   wayland.windowManager.hyprland = {
     # {{{
-    enable = false;
+    # TODO: fix some apps maximizing
+    # TODO: fix logging out
+    enable = true;
     systemd.variables = ["--all"];
     plugins = with pkgs.hyprlandPlugins; [
       split-monitor-workspaces
@@ -273,8 +275,10 @@ in {
           "DVI-D-1, preferred, 0x0, 1"
         ];
         exec = [
-          "swaybg -i ${wallpaper} -m fill"
           "systemctl --user restart waybar"
+        ];
+        exec-once = [
+          "swaybg -i ${wallpaper} -m fill"
         ];
         bind =
           [
@@ -289,7 +293,7 @@ in {
             "${mod}, t, togglefloating"
             "${mod}, f, fullscreen"
             "${mod} SHIFT, f, fakefullscreen"
-            "${mod} CTRL, q, exit"
+            "${mod} CTRL, q, exec, loginctl kill-session $XDG_SESSION_ID"
             "${mod} CTRL, r, exec, hyprctl reload"
           ]
           ++ pkgs.lib.flatten (map (x: let
@@ -344,7 +348,7 @@ in {
     color = c: "0x${pkgs.lib.removePrefix "#" c}";
     mod = "Super";
   in {
-    enable = true;
+    enable = false;
     systemd.variables = ["--all"];
     extraSessionVariables = config.home.sessionVariables;
     settings = with pkgs.rice; {
@@ -430,7 +434,7 @@ in {
     enable = true;
     systemd = {
       enable = true;
-      target = "river-session.target";
+      target = "hyprland-session.target";
     };
     settings = with pkgs.rice; let
       red = s: "<span foreground=\"${base08}\">${s}</span>";
@@ -443,8 +447,8 @@ in {
         position = "top";
         height = 27;
         modules-left = [
-          "river/tags"
-          "river/window"
+          "hyprland/workspaces"
+          "hyprland/window"
         ];
         modules-right = [
           "tray"
@@ -673,22 +677,6 @@ in {
       ];
     };
 
-  services.kanshi = {
-    enable = true;
-    systemdTarget = "river-session.target";
-    profiles.default.outputs = [
-      {
-        criteria = "HDMI-A-2";
-        position = "1920,50";
-      }
-      {
-        criteria = "DVI-D-1";
-        position = "0,0";
-      }
-    ];
-  };
-
-  # TODO: random system freezes
   services.hypridle = {
     enable = true;
     lockCmd = let
@@ -703,22 +691,8 @@ in {
       }
       {
         timeout = 360;
-        onTimeout =
-          builtins.toString
-          (pkgs.writeShellScript "displays-off" ''
-            for output in $(wlopm -j | jq '.[].output' -r)
-            do
-              wlopm --off $output
-            done
-          '');
-        onResume =
-          builtins.toString
-          (pkgs.writeShellScript "displays-on" ''
-            for output in $(wlopm -j | jq '.[].output' -r)
-            do
-              wlopm --on $output
-            done
-          '');
+        onTimeout = "hyprctl dispatch dpms off";
+        onResume = "hyprctl dispatch dpms on";
       }
     ];
   };

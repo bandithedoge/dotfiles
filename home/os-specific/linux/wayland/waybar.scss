@@ -9,7 +9,7 @@ window#waybar {
     font-size: small;
 }
 
-#tags {
+#workspaces {
     font-family: $monoFont;
 
     button {
@@ -22,11 +22,11 @@ window#waybar {
         transition: none;
     }
 
-    button.occupied {
+    button.visible {
         color: $base0F;
     }
 
-    button.focused {
+    button.active {
         background-color: $base0F;
         color: $base00;
     }

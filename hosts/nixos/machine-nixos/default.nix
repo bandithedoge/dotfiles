@@ -50,6 +50,9 @@
     "/" = {
       device = "/dev/disk/by-label/nixos";
       fsType = "btrfs";
+      options = [
+        "compress=zstd"
+      ];
     };
     "/boot" = {
       device = "/dev/disk/by-label/boot";

@@ -17,14 +17,17 @@ in {
       bleachbit
       blender
       bottles
+      boxbuddy
       caprine-bin
       d-spy
       discord
+      distrobox
       flameshot
       fractal
       gnome.zenity
       inkscape
       keepassxc
+      kicad
       krita
       libnotify
       libreoffice-fresh
@@ -32,6 +35,7 @@ in {
       nim
       nix-alien
       pciutils
+      pwvucontrol
       qbittorrent
       rclone
       telegram-desktop_git
@@ -47,6 +51,7 @@ in {
     };
   };
 
+  # HACK: https://github.com/nix-community/home-manager/issues/2659
   systemd.user.sessionVariables = config.home.sessionVariables;
 
   # gtk {{{

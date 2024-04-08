@@ -78,10 +78,11 @@ when isMainModule:
       newSystemPath = expandSymlink "/run/current-system/sw"
       newHomePath = expandSymlink &"/etc/static/profiles/per-user/{username}"
 
-    if isNixOS:
+    if isNixOS and newSystemPath != oldSystemPath:
       exec &"nvd diff {oldSystemPath} {newSystemPath}"
 
-    exec &"nvd diff {oldHomePath} {newHomePath}"
+    if newHomePath != oldHomePath:
+      exec &"nvd diff {oldHomePath} {newHomePath}"
 
   if args["update"] or args["u"]:
     if inputs.len() == 0:

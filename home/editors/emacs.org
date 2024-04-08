@@ -1,15 +1,12 @@
 #+property: header-args :tangle "init.el"
 
+# TODO: fix occasional hangups and random crashes
+# TODO: gcmh
+# TODO: https://github.com/emacs-magus/once
+# TODO: https://github.com/ajgrf/on.el
 * Initial optimization
 #+begin_src emacs-lisp :tangle "early-init.el"
-  ;; TODO: fix occasional hangups and random crashes
   (setenv "LSP_USE_PLISTS" "true")
-
-  (setq gc-cons-threshold most-positive-fixnum)
-
-  (run-with-idle-timer 10 nil (lambda ()
-                                (setq gc-cons-threshold 100000000)
-                                (message "gc-cons-threshold restored to %S" gc-cons-threshold)))
 
   (setq auto-mode-case-fold nil
         bidi-inhibit-bpa t
@@ -55,7 +52,11 @@
         tool-bar-mode nil
         scroll-bar-mode nil)
 
-  (provide 'early-init)
+  (defvar +init-file-loaded-p nil)
+
+  (when (not +init-file-loaded-p)
+    (load (expand-file-name "init.el" user-emacs-directory) nil 'nomessage 'nosuffix)
+    (setq +init-file-loaded-p t))
 #+end_src
 * Package setup
 #+begin_src emacs-lisp
@@ -74,6 +75,15 @@
 #+end_src
 * Emacs
 #+begin_src emacs-lisp
+  (use-package gcmh
+    :demand t
+    :custom
+    (gcmh-idle-delay 'auto)
+    (gcmh-auto-idle-delay-factor 10)
+    (gcmh-high-cons-threshold (* 100 1024 1024))
+    :config
+    (gcmh-mode))
+
   (use-package emacs
     :init
     (set-face-attribute 'default nil
@@ -85,12 +95,14 @@
     (global-visual-line-mode)
     :custom
     (ad-redefinition-action 'accept)
-    (auto-save-default t)
+    (adaptive-fill-mode nil)
+    (auto-save-default nil)
     (auto-save-include-big-deletions t)
     (auto-window-vscroll nil)
     (backup-by-copying t)
     (confirm-nonexistent-file-or-buffer nil)
     (create-lockfiles nil)
+    (custom-search-field nil)
     (debug-on-error init-file-debug)
     (delete-old-versions t)
     (echo-keystrokes 0.02)
@@ -113,12 +125,14 @@
     (mouse-yank-at-point t)
     (require-final-newline t)
     (resize-mini-windows 'grow-only)
+    (ring-bell-function #'ignore)
     (scroll-conservatively 10)
     (scroll-margin 0)
     (scroll-preserve-screen-position t)
     (sentence-end-double-space nil)
     (split-height-threshold nil)
     (split-width-threshold 160)
+    (suggest-key-bindings 0)
     (truncate-partial-width-windows nil)
     (use-dialog-box nil)
     (use-short-answers t)
@@ -132,47 +146,41 @@
                   truncate-lines t
                   word-wrap t)
     (tooltip-mode -1)
-    (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode))
-
-  (use-package savehist
-    :ensure nil
-    :custom
-    (savehist-save-minibuffer-history t)
-    (savehist-autosave-interval nil)
-    (savehist-additional-variables '(kill-ring register-alist mark-ring global-mark-ring search-ring regexp-search-ring))
-    :config
-    (savehist-mode))
-
-  (setq display-line-numbers-type 'relative
-        display-line-numbers-width 3
-        display-line-numbers-grow-only t)
-  (add-hook 'prog-mode-hook #'display-line-numbers-mode)
-  (add-hook 'text-mode-hook #'display-line-numbers-mode)
-
-  (use-package hl-line
-    :ensure nil
-    :config
-    (global-hl-line-mode))
-
-  (use-package paren
-    :ensure nil
-    :custom
-    (show-paren-delay 0.1)
-    (show-paren-highlight-openparen t)
-    (show-paren-when-point-in-periphery t)
-    (show-paren-when-point-inside-paren t))
-
-  ;; (use-package auto-compile
-  ;;   :demand t
-  ;;   :config
-  ;;   (auto-compile-on-load-mode)
-  ;;   (auto-compile-on-save-mode))
+    (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+    (use-package savehist
+      :ensure nil
+      :custom
+      (savehist-save-minibuffer-history t)
+      (savehist-autosave-interval nil)
+      (savehist-additional-variables '(kill-ring register-alist mark-ring global-mark-ring search-ring regexp-search-ring))
+      :config
+      (savehist-mode))
+    (use-package display-line-numbers
+      :ensure nil
+      :custom
+      (display-line-numbers-type 'relative)
+      (display-line-numbers-width 3)
+      (display-line-numbers-grow-only t)
+      :hook ((prog-mode text-mode) . display-line-numbers-mode))
+    (use-package hl-line
+      :ensure nil
+      :config
+      (global-hl-line-mode))
+    (use-package paren
+      :ensure nil
+      :custom
+      (show-paren-delay 0.1)
+      (show-paren-highlight-openparen t)
+      (show-paren-when-point-in-periphery t)
+      (show-paren-when-point-inside-paren t))
+    (use-package subword
+      :ensure nil
+      :config
+      (global-subword-mode)))
 
   (use-package better-defaults)
 
-  ;; (use-package benchmark-init
-  ;;   :config
-  ;;   (add-hook 'after-init-hook 'benchmark-init/deactivate))
+  (use-package no-littering)
 #+end_src
 * Theme
 #+begin_src emacs-lisp :tangle "doom-rice-theme.el"
@@ -240,6 +248,7 @@
                    (modeline-bg-alt bg-alt))
                   (((line-number &override) :foreground grey :slant 'normal)
                    ((line-number-current-line &override) :foreground accent :weight 'bold :slant 'normal)
+                   (tooltip :background base4 :foreground fg)
                    (vertico-current :background bg)
                    (flymake-popon :background base4)
                    (highlight-indent-guides-character-face :foreground base3)
@@ -247,7 +256,8 @@
                    (prescient-secondary-highlight :foreground accent)
                    (origami-fold-header-face :background base4 :foreground grey)
                    (lsp-ui-doc-background :background base4)
-                   (lsp-ui-doc-header :background accent :foreground bg)))
+                   (lsp-ui-doc-header :background accent :foreground bg)
+                   (company-tooltip-selection :background accent :foreground bg)))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -387,7 +397,8 @@
     :ensure nil
     :custom
     (vc-git-diff-switches '("--histogram"))
-    (vc-follow-symlinks t))
+    (vc-follow-symlinks t)
+    (vc-handled-backends nil))
 
   ;; TODO: gracefully kill buffers on exit
   (use-package magit
@@ -401,14 +412,18 @@
               "SPC" nil)
     :gfhook ('magit-process-mode-hook #'goto-address-mode)
     :custom
-    (magit-diff-refine-hunk t)
-    (magit-save-repository-buffers nil)
-    (magit-revision-insert-related-refs nil)
-    (transient-display-buffer-action '(display-buffer-below-selected))
-    (transient-default-level 5)
     (magit-bury-buffer-function #'magit-mode-quit-window)
+    (magit-diff-refine-hunk t)
     (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
+    (magit-revision-insert-related-refs nil)
+    (magit-save-repository-buffers nil)
+    (transient-default-level 5)
+    (transient-display-buffer-action '(display-buffer-below-selected))
     :config
+    (let* ((xdg-config-home (or (getenv "XDG_CONFIG_HOME")
+                                (expand-file-name "~/.config/")))
+           (socket (expand-file-name "git/credential/socket" xdg-config-home)))
+      (setq magit-credential-cache-daemon-socket socket))
     (use-package magit-todos
       :general-config
       (:keymaps 'magit-todos-item-section-map
@@ -420,6 +435,9 @@
 
   (use-package gitignore-templates
     :commands (gitignore-templates-insert gitignore-templates-new-file))
+
+  (use-package bug-reference-github
+    :ghook ('prog-mode-hook #'bug-reference-github-set-url-format))
 #+end_src
 ** PDF
 #+begin_src emacs-lisp
@@ -462,6 +480,14 @@
     (vterm-kill-buffer-on-exit t))
 #+end_src
 * Completion
+#+begin_src emacs-lisp
+  (use-package prescient
+    :config
+    (prescient-persist-mode)
+    :custom
+    (prescient-history-length 1000)
+    (prescient-sort-full-matches-first t))
+#+end_src
 ** At point
 #+begin_src emacs-lisp
   ;; TODO: fix graphical glitching, elisp completions in other modes, weird manual completion behavior
@@ -477,10 +503,11 @@
     :custom
     (corfu-auto t)
     (corfu-auto-prefix 2)
-    (corfu-count 10)
+    (corfu-count 16)
     (corfu-cycle t)
     (corfu-left-margin-width 1)
     (corfu-margin-formatters '(nerd-icons-corfu-formatter))
+    (corfu-max-width 120)
     (corfu-on-exact-match 'show)
     (corfu-popupinfo-delay '(0.5 . 0.25))
     (corfu-popupinfo-max-height 20)
@@ -498,8 +525,79 @@
 
   (use-package cape
     :init
-    (add-to-list 'completion-at-point-functions #'cape-file)
-    (add-to-list 'completion-at-point-functions #'cape-elisp-symbol))
+    (general-add-hook 'completion-at-point-functions #'cape-file))
+
+  ;; (use-package company
+  ;;   :ghook 'prog-mode-hook 'text-mode-hook
+  ;;   :gfhook #'evil-normalize-keymaps
+  ;;   :after evil
+  ;;   :general-config
+  ;;   (:states 'i
+  ;;            "C-SPC" 'company-complete)
+  ;;   :custom
+  ;;   (company-auto-commit nil)
+  ;;   (company-backends '(company-capf))
+  ;;   (company-dabbrev-downcase nil)
+  ;;   (company-dabbrev-ignore-case nil)
+  ;;   (company-dabbrev-other-buffers nil)
+  ;;   (company-frontends '(company-pseudo-tooltip-frontend))
+  ;;   (company-minimum-prefix-length 2)
+  ;;   (company-require-match 'never)
+  ;;   (company-selection-wrap-around t)
+  ;;   (company-tooltip-align-annotations t)
+  ;;   (company-tooltip-limit 14)
+  ;;   :config
+  ;;   (use-package company-box
+  ;;     :ghook 'company-mode-hook
+  ;;     :custom
+  ;;     (company-box-backends-colors nil)
+  ;;     (company-box-icons-alist 'company-box-icons-nerd-icons)
+  ;;     (company-box-tooltip-limit 50)
+  ;;     (x-gtk-resize-child-frames 'resize-mode)
+  ;;     :config
+  ;;     (setq company-box-icons-functions (cons #'+company-box-icons--elisp-fn
+  ;;                                             (delq 'company-box-icons--elisp
+  ;;                                                   company-box-icons-functions)))
+  ;;     (defun +company-box-icons--elisp-fn (candidate)
+  ;;       (when (derived-mode-p 'emacs-lisp-mode)
+  ;;         (let ((sym (intern candidate)))
+  ;;           (cond ((fboundp sym)  'ElispFunction)
+  ;;                 ((boundp sym)   'ElispVariable)
+  ;;                 ((featurep sym) 'ElispFeature)
+  ;;                 ((facep sym)    'ElispFace)))))
+  ;;     (setq company-box-icons-nerd-icons
+  ;;           `((Unknown        . ,(nerd-icons-codicon  "nf-cod-code"                :face  'font-lock-warning-face))
+  ;;             (Text           . ,(nerd-icons-codicon  "nf-cod-text_size"           :face  'font-lock-doc-face))
+  ;;             (Method         . ,(nerd-icons-codicon  "nf-cod-symbol_method"       :face  'font-lock-function-name-face))
+  ;;             (Function       . ,(nerd-icons-codicon  "nf-cod-symbol_method"       :face  'font-lock-function-name-face))
+  ;;             (Constructor    . ,(nerd-icons-codicon  "nf-cod-triangle_right"      :face  'font-lock-function-name-face))
+  ;;             (Field          . ,(nerd-icons-codicon  "nf-cod-symbol_field"        :face  'font-lock-variable-name-face))
+  ;;             (Variable       . ,(nerd-icons-codicon  "nf-cod-symbol_variable"     :face  'font-lock-variable-name-face))
+  ;;             (Class          . ,(nerd-icons-codicon  "nf-cod-symbol_class"        :face  'font-lock-type-face))
+  ;;             (Interface      . ,(nerd-icons-codicon  "nf-cod-symbol_interface"    :face  'font-lock-type-face))
+  ;;             (Module         . ,(nerd-icons-codicon  "nf-cod-file_submodule"      :face  'font-lock-preprocessor-face))
+  ;;             (Property       . ,(nerd-icons-codicon  "nf-cod-symbol_property"     :face  'font-lock-variable-name-face))
+  ;;             (Unit           . ,(nerd-icons-codicon  "nf-cod-symbol_ruler"        :face  'font-lock-constant-face))
+  ;;             (Value          . ,(nerd-icons-codicon  "nf-cod-symbol_field"        :face  'font-lock-builtin-face))
+  ;;             (Enum           . ,(nerd-icons-codicon  "nf-cod-symbol_enum"         :face  'font-lock-builtin-face))
+  ;;             (Keyword        . ,(nerd-icons-codicon  "nf-cod-symbol_keyword"      :face  'font-lock-keyword-face))
+  ;;             (Snippet        . ,(nerd-icons-codicon  "nf-cod-symbol_snippet"      :face  'font-lock-string-face))
+  ;;             (Color          . ,(nerd-icons-codicon  "nf-cod-symbol_color"        :face  'success))
+  ;;             (File           . ,(nerd-icons-codicon  "nf-cod-symbol_file"         :face  'font-lock-string-face))
+  ;;             (Reference      . ,(nerd-icons-codicon  "nf-cod-references"          :face  'font-lock-variable-name-face))
+  ;;             (Folder         . ,(nerd-icons-codicon  "nf-cod-folder"              :face  'font-lock-variable-name-face))
+  ;;             (EnumMember     . ,(nerd-icons-codicon  "nf-cod-symbol_enum_member"  :face  'font-lock-builtin-face))
+  ;;             (Constant       . ,(nerd-icons-codicon  "nf-cod-symbol_constant"     :face  'font-lock-constant-face))
+  ;;             (Struct         . ,(nerd-icons-codicon  "nf-cod-symbol_structure"    :face  'font-lock-variable-name-face))
+  ;;             (Event          . ,(nerd-icons-codicon  "nf-cod-symbol_event"        :face  'font-lock-warning-face))
+  ;;             (Operator       . ,(nerd-icons-codicon  "nf-cod-symbol_operator"     :face  'font-lock-comment-delimiter-face))
+  ;;             (TypeParameter  . ,(nerd-icons-codicon  "nf-cod-list_unordered"      :face  'font-lock-type-face))
+  ;;             (Template       . ,(nerd-icons-codicon  "nf-cod-symbol_snippet"      :face  'font-lock-string-face))
+  ;;             (ElispFunction  . ,(nerd-icons-codicon  "nf-cod-symbol_method"       :face  'font-lock-function-name-face))
+  ;;             (ElispVariable  . ,(nerd-icons-codicon  "nf-cod-symbol_variable"     :face  'font-lock-variable-name-face))
+  ;;             (ElispFeature   . ,(nerd-icons-codicon  "nf-cod-globe"               :face  'font-lock-builtin-face))
+  ;;             (ElispFace      . ,(nerd-icons-codicon  "nf-cod-symbol_color"        :face  'success))))
+  ;;     (add-to-list 'company-box-frame-parameters '(tab-bar-lines . 0))))
 #+end_src
 ** Minibuffer
 #+begin_src emacs-lisp
@@ -518,12 +616,16 @@
     :custom
     (vertico-count 17)
     (vertico-cycle t)
-    (completion-in-region-function (lambda (&rest args)
-                                     (apply (if vertico-mode
-                                                #'consult-completion-in-region
-                                              #'completion--in-region)
-                                            args)))
-    :gfhook #'vertico-mouse-mode
+    (vertico-multiform-categories '((buffer (vertico-sort-function . copy-sequence))))
+    (read-file-name-completion-ignore-case t)
+    (read-buffer-completion-ignore-case t)
+    (completion-ignore-case t)
+    (completion-in-region-function (lambda (&rest args))
+         (apply (if vertico-mode
+                    #'consult-completion-in-region
+                  #'completion--in-region)
+                args))
+    :gfhook #'vertico-mouse-mode #'vertico-multiform-mode
     :config
     (vertico-mode)
     (use-package vertico-prescient
@@ -550,14 +652,6 @@
   (use-package consult-dir
     :general
     ([remap list-directory] 'consult-dir))
-#+end_src
-** Style
-#+begin_src emacs-lisp
-  (use-package prescient
-    :config
-    (prescient-persist-mode)
-    :custom
-    (prescient-sort-full-matches-first t))
 #+end_src
 * UI
 ** Dashboard
@@ -636,7 +730,7 @@
 #+end_src
 ** Git
 #+begin_src emacs-lisp
-  ;; TODO: ugly visuals
+  ;; TODO: replace with indent-bars
   (use-package diff-hl
     :ghook
     'find-file-hook
@@ -812,7 +906,7 @@
 
   ;; TODO: more lsp servers
   (use-package lsp-mode
-    :after tempel
+    :after (cape tempel)
     :gfhook #'evil-normalize-keymaps
     :general-config
     (+localleader-def
@@ -832,9 +926,11 @@
     (lsp-enable-semantic-highlighting t)
     (lsp-enable-suggest-server-download nil)
     (lsp-headerline-breadcrumb-enable nil)
+    (lsp-idle-delay 0.25)
     (lsp-inlay-hint-enable t)
     (lsp-keep-workspace-alive nil)
     (lsp-pwsh-folding-enable nil)
+    (lsp-response-timeout 1) ; HACK: https://github.com/emacs-lsp/lsp-mode/issues/3555
     :custom-face
     (lsp-inlay-hint-face ((t (:height 0.8 :inherit 'font-lock-comment-face))))
     :init
@@ -845,6 +941,8 @@
                 :around
                 #'lsp-booster--advice-json-parse)
     (advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
+    ;; HACK: https://github.com/minad/corfu/issues/227#issuecomment-1236373720
+    (advice-add #'lsp-completion-at-point :around #'cape-wrap-noninterruptible)
     (setq-default read-process-output-max (* 1024 1024))
     :config
     ;; TODO: better hover doc

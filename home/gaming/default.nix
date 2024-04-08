@@ -21,6 +21,7 @@
             xorg.libXft
           ];
       })
+      bandithedoge.sgdboop-bin
       prismlauncher
       vitetris
       vulkanPackages_latest.vulkan-tools
