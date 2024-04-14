@@ -73,7 +73,6 @@
         micDefault = "allow";
         periodSize = 512;
       };
-      wayland.warpSupport = false;
     };
   };
 }

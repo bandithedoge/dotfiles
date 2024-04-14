@@ -4,7 +4,7 @@
       (pkgs.lutris.override {
         extraPkgs = pkgs':
           with pkgs'; [
-            gamemode
+            gamescope
           ];
         extraLibraries = pkgs':
           with pkgs'; [

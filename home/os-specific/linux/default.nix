@@ -21,9 +21,10 @@ in {
       caprine-bin
       d-spy
       discord
-      distrobox
+      distrobox_git
       flameshot
       fractal
+      gnome.devhelp
       gnome.zenity
       inkscape
       keepassxc

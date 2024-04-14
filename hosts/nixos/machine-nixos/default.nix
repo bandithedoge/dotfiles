@@ -2,7 +2,7 @@
   imports = [./virt.nix];
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_cachyos;
+    kernelPackages = pkgs.linuxPackages_cachyos-lto;
     kernelParams = ["threadirqs"];
     loader = {
       systemd-boot.enable = true;
