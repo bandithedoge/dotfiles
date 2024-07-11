@@ -4,16 +4,15 @@
       (pkgs.lutris.override {
         extraPkgs = pkgs':
           with pkgs'; [
-            gamescope
+            gamescope_git
           ];
         extraLibraries = pkgs':
           with pkgs'; [
-            gtk4
-            libadwaita
+            dconf
+            fribidi
             libgudev
             libvdpau
             nspr
-            pango
             speex
             xorg.libXScrnSaver
             xorg.libXdamage
@@ -26,6 +25,7 @@
       vitetris
       vulkanPackages_latest.vulkan-tools
     ];
+    sessionVariables.PROTONPATH = pkgs.proton-ge-custom + "/bin";
   };
 
   programs.mangohud = {
@@ -76,4 +76,6 @@
       resolution = true;
     };
   };
+
+  # xdg.dataFile."Steam/compatibilitytools.d/proton-ge-custom".source = pkgs.proton-ge-custom + "/bin";
 }

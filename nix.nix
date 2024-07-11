@@ -2,6 +2,11 @@
   nix = {
     enable = true;
     settings = {
+      auto-optimise-store = true;
+      max-call-depth = 100000;
+      trusted-users = ["root" "@wheel" "bandithedoge"];
+      use-xdg-base-directories = true;
+
       substituters = [
         "https://bandithedoge.cachix.org"
         "https://berberman.cachix.org"
@@ -30,9 +35,6 @@
         "nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4="
         "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
       ];
-      trusted-users = ["root" "@wheel" "bandithedoge"];
-      auto-optimise-store = true;
-      use-xdg-base-directories = true;
     };
     extraOptions = ''
       extra-experimental-features = nix-command flakes

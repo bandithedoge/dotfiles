@@ -3,6 +3,8 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
     flake-parts.url = "github:hercules-ci/flake-parts";
+    lix.inputs.nixpkgs.follows = "nixpkgs";
+    lix.url = "https://git.lix.systems/lix-project/nixos-module/archive/2.90.0-rc1.tar.gz";
     nixos-flake.url = "github:srid/nixos-flake";
 
     nixos-hardware.url = "github:nixos/nixos-hardware";
@@ -14,14 +16,18 @@
     # nur-bandithedoge.url = "path:/home/bandithedoge/git/nur-packages";
 
     aagl.url = "github:ezKEa/aagl-gtk-on-nix";
+    colors.url = "github:Misterio77/nix-colors";
     emacs.url = "github:nix-community/emacs-overlay";
+    flatpak.url = "github:gmodena/nix-flatpak";
     hypridle.url = "github:hyprwm/hypridle";
-    hyprland-split-monitor-workspaces.inputs.hyprland.follows = "hyprland";
-    hyprland-split-monitor-workspaces.url = "github:Duckonaut/split-monitor-workspaces";
-    hyprland.url = "github:hyprwm/Hyprland";
+    hyprland.url = "github:hyprwm/hyprland/v0.39.1";
     hyprlock.url = "github:hyprwm/hyprlock";
+    hyprsplit.inputs.hyprland.follows = "hyprland";
+    hyprsplit.url = "github:shezdy/hyprsplit/v0.39.1";
     mozilla.url = "github:mozilla/nixpkgs-mozilla";
+    musnix.url = "github:musnix/musnix";
     neorg.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
+    neovim-plugins.url = "github:m15a/flake-awesome-neovim-plugins";
     neovim.url = "github:nix-community/neovim-nightly-overlay";
     nix-alien.url = "github:thiagokokada/nix-alien";
     nix-gaming.url = "github:fufexan/nix-gaming";
@@ -32,9 +38,6 @@
     prismlauncher.url = "github:PrismLauncher/PrismLauncher";
     sops-nix.url = "github:Mic92/sops-nix";
     zjstatus.url = "github:dj95/zjstatus";
-
-    colors.url = "github:Misterio77/nix-colors";
-    musnix.url = "github:musnix/musnix";
   };
 
   outputs = inputs @ {self, ...}:
@@ -46,9 +49,11 @@
           defaults = rec {
             overlays = with inputs; [
               emacs.overlays.default
+              lix.overlays.default
               mozilla.overlays.firefox
               neorg.overlays.default
-              neovim.overlay
+              neovim-plugins.overlays.default
+              neovim.overlays.default
               nix-alien.overlays.default
               nix-gaming.overlays.default
               nur.overlay
@@ -64,12 +69,12 @@
                 };
                 colors = colors.lib-core;
                 hyprlandPlugins = {
-                  split-monitor-workspaces = hyprland-split-monitor-workspaces.packages.${prev.system}.default;
+                  hyprsplit = hyprsplit.packages.${prev.system}.default;
                 };
+                inherit (aagl.packages.${prev.system}) honkers-railway-launcher anime-game-launcher;
+                inherit (emacs.packages.${prev.system}) emacs-unstable-pgtk commercial-emacs;
                 inherit (nix-gaming.packages.${prev.system}) wine-ge wine-tkg;
                 inherit (prismlauncher.packages.${prev.system}) prismlauncher prismlauncher-unwrapped;
-                inherit (emacs.packages.${prev.system}) emacs-unstable-pgtk commercial-emacs;
-                inherit (aagl.packages.${prev.system}) honkers-railway-launcher;
               })
               (import ./overlay.nix)
             ];
@@ -83,8 +88,10 @@
             imports = {
               nixos = with inputs; [
                 aagl.nixosModules.default
+                flatpak.nixosModules.nix-flatpak
                 home-manager.nixosModules.home-manager
-                hyprland.nixosModules.default
+                # hyprland.nixosModules.default
+                lix.nixosModules.default
                 musnix.nixosModules.musnix
                 nix-gaming.nixosModules.pipewireLowLatency
                 nyx.nixosModules.default
@@ -126,7 +133,12 @@
           };
 
           machine-nixos = self.nixos-flake.lib.mkLinuxSystem {
-            nixpkgs = defaults.nixpkgs // {hostPlatform = "x86_64-linux";};
+            nixpkgs =
+              defaults.nixpkgs
+              // {
+                hostPlatform = "x86_64-linux";
+                config.rocmSupport = true;
+              };
             imports = with inputs.nixos-hardware.nixosModules;
               defaults.imports.nixos
               ++ [
@@ -163,9 +175,8 @@
           imports = with inputs; [
             ./nix.nix
             ./sops.nix
-            hypridle.homeManagerModules.default
-            hyprland.homeManagerModules.default
-            hyprlock.homeManagerModules.default
+            flatpak.homeManagerModules.nix-flatpak
+            # hyprland.homeManagerModules.default
             nix-index-database.hmModules.nix-index
             sops-nix.homeManagerModule
           ];

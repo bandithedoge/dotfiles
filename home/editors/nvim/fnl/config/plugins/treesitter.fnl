@@ -1,7 +1,11 @@
-(require-macros :hibiscus.vim)
+(import-macros {: g!} :hibiscus.vim)
 
 [(_G.use :nvim-treesitter/nvim-treesitter
-         {:dependencies [(_G.use :HiPhish/rainbow-delimiters.nvim
+         {:dependencies [(_G.use :windwp/nvim-ts-autotag)
+                         (_G.use :JoosepAlviste/nvim-ts-context-commentstring
+                                 {:opts {:enable_autocmd false}})
+                         (_G.use :nvim-treesitter/playground)
+                         (_G.use :HiPhish/rainbow-delimiters.nvim
                                  {:config #(let [rainbow-delimiters (require :rainbow-delimiters)]
                                              (g! :rainbow_delimiters
                                                  {:strategy {"" rainbow-delimiters.strategy.global}
@@ -11,17 +15,12 @@
                                                               :rainbowcol4
                                                               :rainbowcol5
                                                               :rainbowcol6
-                                                              :rainbowcol7]}))})
-                         (_G.use :windwp/nvim-ts-autotag)
-                         (_G.use :JoosepAlviste/nvim-ts-context-commentstring
-                                 {:init #(g! skip_ts_context_commentstring_module
-                                             true)
-                                  :config true})
-                         (_G.use :nvim-treesitter/playground)]
+                                                              :rainbowcol7]}))})]
           :build (when (not _G.USING_NIX) ":TSUpdate")
-          :event [:BufReadPost :BufNewFile]
+          :event :LazyFile
           :opts {:auto_install (not _G.USING_NIX)
-                 :highlight {:enable true}
+                 :highlight {:enable true
+                             :additional_vim_regex_highlighting [:org]}
                  :indent {:enable true}
                  :playground {:enable true}
                  :autotag {:enable true :filetypes [:html :xml]}}
@@ -34,3 +33,4 @@
                            :install_info {:url "https://github.com/luckasRanarison/tree-sitter-hypr"
                                           :files [:src/parser.c]
                                           :branch :master}}))})]
+

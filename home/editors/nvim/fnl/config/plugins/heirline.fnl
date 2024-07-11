@@ -1,5 +1,4 @@
-(require-macros :hibiscus.core)
-(require-macros :hibiscus.vim)
+(import-macros {: merge!} :hibiscus.core)
 
 (lambda pad [content]
   (.. " " content " "))
@@ -13,7 +12,6 @@
 (fn config []
   (let [heirline (require :heirline)
         conditions (require :heirline.conditions)
-        utils (require :heirline.utils)
         icons (require :nvim-web-devicons)]
     (local components
            {; mode {{{
@@ -190,6 +188,7 @@
                                              (padr (.. " " count))))
                            :hl {:fg _G.base08}}])
             ; }}}
+            :ruler {:provider (padr "%l/%L:%c %P")}
             :navic {:condition conditions.lsp_attached
                     :init #(set $1.bar
                                 (let [winbar (require :lspsaga.symbol.winbar)]
@@ -234,9 +233,9 @@
                                            components.indent
                                            components.fileformat
                                            components.spacer
-                                           components.diagnostics
                                            components.lsp
-                                           components.git]])
+                                           components.git
+                                           components.ruler]])
                      :winbar (merge! {:fallthrough false :hl {:bg _G.base00}}
                                      [(merge! {:condition #(not (conditions.is_active))
                                                :hl #{:fg (if vim.bo.modified
@@ -268,8 +267,9 @@
                                                                                        :Trouble
                                                                                        :lazy
                                                                                        :saga_codeaction]}
-                                                                           $1.buf)}})
-    (set! showtabline 2)))
+                                                                           $1.buf)}})))
 
 [(_G.use :rebelot/heirline.nvim {:dependencies [(_G.use :nvim-tree/nvim-web-devicons)]
+                                 :event :VeryLazy
                                  : config})]
+

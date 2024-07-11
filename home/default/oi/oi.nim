@@ -69,9 +69,9 @@ when isMainModule:
       # we need to use bash since sh doesn't support the "|&" syntax
       # "&>" doesn't work on Alpine for some reason
       (if isNixOS: "sudo " else: "") &
-      &"bash -c \"{cmd} switch --impure " &
+      &"bash -c \"{cmd} switch --impure --log-format internal-json " &
       (if showTrace: "--show-trace " else: "") &
-      "|& nom\""
+      "|& nom --json\""
     )
 
     let
@@ -86,13 +86,13 @@ when isMainModule:
 
   if args["update"] or args["u"]:
     if inputs.len() == 0:
-      exec &"nix flake update {path}"
+      exec &"nix flake update --flake {path}"
       exec (if isNixOS: "sudo " else: "") & "nix-channel --update"
       if isLinux:
         exec "flatpak update"
     else:
       for input in inputs:
-        exec &"nix flake lock {path} --update-input {input}"
+        exec &"nix flake lock {input} --flake {path}"
 
   if args["cleanup"] or args["c"]:
     exec "home-manager expire-generations '-3 days'"

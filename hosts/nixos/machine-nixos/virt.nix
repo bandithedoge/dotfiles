@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  config,
+  ...
+}: {
   programs.virt-manager.enable = true;
 
   virtualisation = {
@@ -12,6 +16,7 @@
         vhostUserPackages = with pkgs; [virtiofsd];
       };
     };
+    # waydroid.enable = true;
   };
 
   users.users."qemu-libvirtd" = {
@@ -58,21 +63,39 @@
 
   home-manager.users.bandithedoge.programs.looking-glass-client = {
     enable = true;
+    package = pkgs.looking-glass-client.overrideAttrs (_: {
+      version = "B6";
+      src = pkgs.fetchFromGitHub {
+        owner = "gnif";
+        repo = "LookingGlass";
+        rev = "B6";
+        sha256 = "sha256-6vYbNmNJBCoU23nVculac24tHqH7F4AZVftIjL93WJU=";
+        fetchSubmodules = true;
+      };
+      patches = [];
+    });
     settings = {
       win = {
         inherit (pkgs.rice) uiFont;
         uiSize = 16;
         fullScreen = true;
         quickSplash = true;
-        jitRender = true;
+        # jitRender = true;
       };
-      input = {
-        escapeKey = 135; # menu key
-      };
+      # input = {
+      #   escapeKey = "KEY_HOME";
+      # };
       audio = {
         micDefault = "allow";
         periodSize = 512;
       };
     };
   };
+
+  networking.firewall.allowedUDPPortRanges = [
+    {
+      from = 60000;
+      to = 61000;
+    }
+  ];
 }

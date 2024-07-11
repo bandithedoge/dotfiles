@@ -1,8 +1,36 @@
-(require-macros :hibiscus.vim)
-
-[(_G.use :lukas-reineke/indent-blankline.nvim
-         {:dependencies [(_G.use :nvim-treesitter/nvim-treesitter)]
-          :event [:BufReadPre :BufNewFile]
+[(_G.use :sindrets/diffview.nvim {:cmd [:DiffviewOpen]})
+ ;;
+ (_G.use :folke/edgy.nvim
+         {:event :VeryLazy
+          :opts {:wo {:winbar false}
+                 :animate {:enabled false}
+                 :bottom [:Trouble :dap-repl :dapui_console]
+                 :left [:NvimTree]
+                 :right [:dapui_scopes
+                         :dapui_breakpoints
+                         :dapui_stacks
+                         :dapui_watches]}})
+ ;;
+ (_G.use :numToStr/FTerm.nvim
+         {:keys [(_G.key :<leader>T
+                         #(let [fterm (require :FTerm)] (fterm.toggle))
+                         {:desc :Terminal})]
+          :opts {:hl :NormalFloat :border :solid}})
+ ;;
+ (_G.use :lewis6991/gitsigns.nvim
+         {:event :LazyFile
+          :opts {:signs {:add {:text "▎"}
+                         :change {:text "▎"}
+                         :delete {:text ""}
+                         :topdelete {:text ""}
+                         :changedelete {:text "▎"}
+                         :untracked {:text "▎"}}
+                 :diff_opts {:internal true}}})
+ ;;
+ (_G.use :lukas-reineke/indent-blankline.nvim
+         {:dependencies [(_G.use :nvim-treesitter/nvim-treesitter)
+                         (_G.use :HiPhish/rainbow-delimiters.nvim)]
+          :event :LazyFile
           :opts {:scope {:show_start false
                          :show_end false
                          :highlight [:rainbowcol1
@@ -18,7 +46,7 @@
                                        :lazy
                                        :mason
                                        :trouble]
-                           :buftypes [:terminal]}
+                           :buftypes [:terminal :prompt]}
                  :indent {:char "│"}}
           :config #(let [ibl (require :ibl)
                          hooks (require :ibl.hooks)]
@@ -26,90 +54,43 @@
                      (hooks.register hooks.type.SCOPE_HIGHLIGHT
                                      hooks.builtin.scope_highlight_from_extmark))})
  ;;
- (_G.use :lewis6991/gitsigns.nvim
-         {:event [:BufReadPre :BufNewFile] :opts {:diff_opts {:internal true}}})
+ (_G.use :NeogitOrg/neogit
+         {:dependencies [(_G.use :nvim-lua/plenary.nvim)
+                         (_G.use :nvim-telescope/telescope.nvim)]
+          :cmd :Neogit
+          :keys [(_G.key :<leader>g :<cmd>Neogit<cr> {:desc :Git})]
+          :opts {:graph_style :unicode
+                 :signs {:hunk ["" ""]
+                         :item ["󰅂" "󰅀"]
+                         :section ["󰅂" "󰅀"]}
+                 :integrations {:diffview true}}})
  ;;
- (_G.use :numToStr/FTerm.nvim
-         {:keys [(_G.key :<leader>T
-                         #(let [fterm (require :FTerm)] (fterm.toggle))
-                         {:desc :Terminal})]
-          :opts {:hl :NormalFloat :border :solid}})
+ (_G.use :brenoprata10/nvim-highlight-colors
+         {:event :LazyFile :opts {:enable_tailwind true}})
  ;;
- (_G.use :is0n/fm-nvim
-         {:keys [(_G.key :<leader>g :<cmd>Lazygit<cr> {:desc :Git})]
-          :opts {:ui {:float {:border :solid :float_hl :Normal}}}})
+ (_G.use :kevinhwang91/nvim-hlslens {:event :CmdlineEnter :config true})
  ;;
- (_G.use :kevinhwang91/nvim-hlslens
-         {:event [:BufReadPre :BufNewFile] :config true})
- ;;
- (_G.use :anuvyklack/pretty-fold.nvim
-         {:event [:BufReadPre :BufNewFile]
-          :opts {:fill_char " "
-                 :process_comment_signs false
-                 :sections {:left [:content] :right [:number_of_folded_lines]}}})
+ (_G.use :rachartier/tiny-devicons-auto-colors.nvim
+         {:dependencies [(_G.use :nvim-tree/nvim-web-devicons)]
+          :event :VeryLazy
+          :opts {:colors [_G.base08
+                          _G.base09
+                          _G.base0A
+                          _G.base0B
+                          _G.base0C
+                          _G.base0D
+                          _G.base0E]}})
  ;;
  (_G.use :folke/todo-comments.nvim
-         {:dependencies [(_G.use :nvim-lua/plenary.nvim)]
-          :event [:BufReadPre :BufNewFile]
+         {:dependencies [(_G.use :nvim-lua/plenary.nvim)
+                         (_G.use :folke/trouble.nvim)]
+          :cmd [:TodoTrouble :TodoTelescope]
+          :event :LazyFile
           :opts {:signs false}})
  ;;
  (_G.use :folke/trouble.nvim
          {:cmd [:TroubleToggle :Trouble]
-          :keys [(_G.key :<localleader>t :<cmd>TroubleToggle<cr>
+          :keys [(_G.key :<localleader>t "<cmd>Trouble diagnostics toggle<cr>"
                          {:desc :Diagnostics})]
-          :opts {:auto_preview false :use_diagnostic_signs true}})
- ;;
- (_G.use nil
-         {:url "https://git.sr.ht/~whynothugo/lsp_lines.nvim"
-          :event [:BufReadPre :BufNewFile]
-          :config #(let [lsp-lines (require :lsp_lines)]
-                     (lsp-lines.setup)
-                     (vim.diagnostic.config {:virtual_text false
-                                             :virtual_lines {:highlight_whole_line false
-                                                             :only_current_line true}}))}
-         :/lsp_lines.nvim)
- (_G.use :akinsho/bufferline.nvim
-         {:lazy false
-          :keys [(_G.key :<leader><tab> :<cmd>BufferLineCycleNext<cr>
-                         {:desc "Next buffer"})
-                 (_G.key :<leader><s-tab> :<cmd>BufferLineCyclePrev<cr>
-                         {:desc "Previous buffer"})]
-          :opts #(let [bufferline (require :bufferline)]
-                   {:options {:close_command #(let [bufremove (require :mini.bufremove)]
-                                                (bufremove.delete $1))
-                              :buffer_close_icon "󰅖"
-                              :modified_icon "󰆓"
-                              :close_icon "󰅖"
-                              :left_trunc_marker "󰅁"
-                              :right_trunc_marker "󰅂"
-                              :separator_style [" " " "]
-                              :style_preset bufferline.style_preset.no_italic
-                              :always_show_bufferline false}
-                    :highlights {:fill {:bg _G.base10}
-                                 :background {:bg _G.base00}
-                                 :tab {:bg _G.base00}
-                                 :separator {:bg _G.base10}
-                                 :separator_visible {:bg _G.base10}
-                                 :separator_selected {:bg _G.base10}
-                                 :buffer_visible {:fg _G.base04 :bg _G.base02}
-                                 :buffer_selected {:fg _G.base0F
-                                                   :bg _G.base02
-                                                   :bold true}
-                                 :modified {:fg _G.base08 :bg _G.base00}
-                                 :modified_visible {:fg _G.base08
-                                                    :bg _G.base02}
-                                 :modified_selected {:fg _G.base08
-                                                     :bg _G.base02}
-                                 :close_button {:bg _G.base00}
-                                 :close_button_visible {:bg _G.base02}
-                                 :close_button_selected {:bg _G.base02}
-                                 :indicator_visible {:bg _G.base02
-                                                     :fg _G.base03}
-                                 :indicator_selected {:bg _G.base02
-                                                      :fg _G.base0F}
-                                 :duplicate {:bg _G.base00 :fg _G.base03}
-                                 :duplicate_visible {:bg _G.base02
-                                                     :fg _G.base03}
-                                 :duplicate_selected {:bg _G.base02
-                                                      :fg _G.base0F}}})})]
+          :opts {:auto_preview false :use_diagnostic_signs true :padding false}})]
 

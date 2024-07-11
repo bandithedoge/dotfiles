@@ -1,5 +1,5 @@
-(require-macros :hibiscus.core)
-(require-macros :hibiscus.vim)
+(import-macros {: merge!} :hibiscus.core)
+(import-macros {: set! : set+ : g! : map!} :hibiscus.vim)
 
 (require :config.colors)
 
@@ -40,10 +40,11 @@
 
 (g! mapleader " ")
 (g! maplocalleader "\\")
+(g! editorconfig true)
 
 (map! [n] :j :gj)
 (map! [n] :k :gk)
-(map! [n] :<c-cr> ":noh<cr>")
+(map! [n] :<cr> ":noh<cr>")
 
 (when vim.g.neovide
   (let [padding 10]
@@ -65,7 +66,10 @@
 (lambda _G.key [lhs ?rhs ?opts]
   (merge! [lhs ?rhs] (or ?opts {})))
 
-(let [lazy (require :lazy)]
+(let [lazy (require :lazy)
+      event (require :lazy.core.handler.event)]
+  (set event.mappings.LazyFile {:id :LazyFile :event [:BufReadPost :BufNewFile :BufReadPre]})
+  (tset event :mappings "User LazyFile" event.mappings.LazyFile)
   (lazy.setup [(require :config.dap)
                (require :config.keybindings)
                (require :config.languages)
@@ -88,3 +92,4 @@
                :readme {:enabled false}}))
 
 (set! loadplugins true)
+

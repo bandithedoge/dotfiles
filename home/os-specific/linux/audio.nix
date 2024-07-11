@@ -2,19 +2,24 @@
   home.packages = with pkgs; [
     ardour
     bandithedoge.cardinal
+    bandithedoge.clap-info
+    bandithedoge.vgmtrans
     bandithedoge.zrythm
     carla
+    furnace
+    helvum
     picard
     playerctl
-    # pwvucontrol # HACK: https://github.com/NixOS/nixpkgs/issues/297574
+    pwvucontrol
     reaper
-    strawberry
+    strawberry-qt6
 
     # plugins
-    ChowKick
-    bandithedoge.distrho-ports
+    bandithedoge.airwindows-consolidated
+    bandithedoge.digits-bin
     bandithedoge.geonkick
     bandithedoge.ildaeil
+    bandithedoge.lamb
     bandithedoge.tal.chorus-lx
     bandithedoge.tal.drum
     bandithedoge.tal.j-8
@@ -23,9 +28,10 @@
     bandithedoge.tal.reverb-4
     bandithedoge.tal.sampler
     bandithedoge.tal.u-no-lx
-    dragonfly-reverb
-    eq10q
+    distrho
     lsp-plugins
+    plugdata
+    surge-XT
   ];
 
   services.easyeffects = {

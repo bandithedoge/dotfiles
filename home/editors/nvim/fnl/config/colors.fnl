@@ -63,8 +63,14 @@
                                 :Search {:bg :sel1 :fg :bg1}
                                 :Cursor {:bg :sel1 :fg :bg1}
                                 :TermCursor {:link :Cursor}
-                                :VertSplit {:bg _G.base10 :fg _G.base02}
-                                :StatusLine {:bg _G.base01 :fg _G.base05}
+                                :WinSeparator {:bg :bg0 :fg :bg0}
+                                :rainbowcol1 {:fg _G.base0E}
+                                :rainbowcol2 {:fg _G.base0D}
+                                :rainbowcol3 {:fg _G.base0C}
+                                :rainbowcol4 {:fg _G.base0B}
+                                :rainbowcol5 {:fg _G.base0A}
+                                :rainbowcol6 {:fg _G.base09}
+                                :rainbowcol7 {:fg :pink}
                                 :Hlargs {:fg _G.base0F}
                                 :WhichKeyFloat {:link :FloatBorder}
                                 :LspFloatWinNormal {:link :FloatBorder}
@@ -112,6 +118,8 @@
                                 :FidgetTitle {:fg :sel1 :bg :bg3}
                                 :FidgetTask {:fg :fg1 :bg :bg3}
                                 :TroubleNormal {:bg :bg0}
+                                :TroubleNormalNC {:link :TroubleNormal}
+                                :TroubleText {:link :TroubleNormal}
                                 :NotifierTitle {:bg :bg3
                                                 :fg :sel1
                                                 :style :bold}
@@ -140,7 +148,36 @@
                                 :CybuAdjacent {:bg _G.base02 :fg _G.base03}
                                 :CybuBorder {:bg _G.base02}
                                 :CybuBackground {:bg _G.base02}
-                                :NavicSeparator {:fg _G.base03}}}})
+                                :NavicSeparator {:fg _G.base03}
+                                :DapStoppedLine {:link :Visual}
+                                :NeogitSectionHeader {:fg _G.base0F
+                                                      :style :bold}
+                                :NeogitChangeModified {:link :DiffChanged}
+                                :NeogitChangeAdded {:link :DiffAdded}
+                                :NeogitChangeDeleted {:link :DiffRemoved}
+                                :NeogitChangeRenamed {:link :DiffChanged}
+                                :NeogitChangeUpdated {:link :DiffChanged}
+                                :NeogitChangeCopied {:link :DiffFile}
+                                :NeogitChangeBothModified {:link :DiffChanged}
+                                :NeogitChangeNewFile {:link :DiffNewFile}
+                                "@org.headline.level1" {:link :rainbowcol1
+                                                        :style :bold}
+                                "@org.headline.level2" {:link :rainbowcol2
+                                                        :style :bold}
+                                "@org.headline.level3" {:link :rainbowcol3
+                                                        :style :bold}
+                                "@org.headline.level4" {:link :rainbowcol4
+                                                        :style :bold}
+                                "@org.headline.level5" {:link :rainbowcol5
+                                                        :style :bold}
+                                "@org.headline.level6" {:link :rainbowcol6
+                                                        :style :bold}
+                                "@org.headline.level7" {:link :rainbowcol7
+                                                        :style :bold}
+                                "@org.headline.level8" {:link :rainbowcol1
+                                                        :style :bold}
+                                :EdgyNormal {:link :NormalNC}}}})
 
 (nightfox.compile)
 (vim.cmd.colorscheme :nightfox)
+

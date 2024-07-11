@@ -1,13 +1,8 @@
 #+property: header-args :tangle "init.el"
 
 # TODO: fix occasional hangups and random crashes
-# TODO: gcmh
-# TODO: https://github.com/emacs-magus/once
-# TODO: https://github.com/ajgrf/on.el
 * Initial optimization
 #+begin_src emacs-lisp :tangle "early-init.el"
-  (setenv "LSP_USE_PLISTS" "true")
-
   (setq auto-mode-case-fold nil
         bidi-inhibit-bpa t
         custom-file (make-temp-file "custom-" nil ".el")
@@ -61,14 +56,14 @@
 * Package setup
 #+begin_src emacs-lisp
   (with-eval-after-load 'package
-    (setq package-archives '(("gnu" . "https://elpa.gnu.org/")
+    (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                              ("nongnu" . "https://elpa.nongnu.org/nongnu/")
                              ("melpa" . "https://melpa.org/packages/"))))
 
   ;; TODO: move to leaf?
   (eval-when-compile
     (require 'use-package))
-  
+
   (setq use-package-always-defer t
         use-package-always-ensure t
         use-package-compute-statistics t)
@@ -182,6 +177,14 @@
 
   (use-package no-littering)
 #+end_src
+* Helpers
+#+begin_src emacs-lisp
+  (defmacro +eglot-config! (server plist)
+    "Set LSP configuration options for SERVER to PLIST."
+    `(general-after 'eglot
+       (setq-default eglot-workspace-configuration
+                     (plist-put eglot-workspace-configuration ,server ,plist))))
+#+end_src
 * Theme
 #+begin_src emacs-lisp :tangle "doom-rice-theme.el"
   ;; TODO: evil-ex prompt
@@ -207,16 +210,22 @@
 
                    (grey `(,base03))
                    (red `(,base08))
+                   (light-red `(,base12))
                    (orange `(,base09))
                    (yellow `(,base0A))
+                   (light-yellow `(,base13))
                    (green `(,base0B))
+                   (light-green `(,base14))
                    (cyan `(,base0C))
+                   (light-cyan `(,base15))
                    (blue `(,base0D))
+                   (light-blue `(,base16))
                    (magenta `(,base0E))
+                   (light-magenta `(,base17))
 
-                   (violet `(,base17))
+                   (violet light-magenta)
                    (dark-blue (doom-darken blue 0.2))
-                   (teal `(,base14))
+                   (teal light-green)
                    (dark-cyan (doom-darken cyan 0.2))
 
                    (highlight accent)
@@ -242,22 +251,29 @@
                    (vc-added green)
                    (vc-deleted red)
 
-                   (modeline-fg)
+                   (modeline-fg fg)
                    (modeline-fg-alt grey)
                    (modeline-bg base4)
                    (modeline-bg-alt bg-alt))
+
                   (((line-number &override) :foreground grey :slant 'normal)
                    ((line-number-current-line &override) :foreground accent :weight 'bold :slant 'normal)
-                   (tooltip :background base4 :foreground fg)
-                   (vertico-current :background bg)
+                   (eldoc-box-border :background accent)
                    (flymake-popon :background base4)
-                   (highlight-indent-guides-character-face :foreground base3)
+                   (origami-fold-header-face :background base4 :foreground grey)
+                   (outline-1 :foreground magenta :weight 'bold)
+                   (outline-2 :foreground blue :weight 'bold)
+                   (outline-3 :foreground cyan :weight 'bold)
+                   (outline-4 :foreground green :weight 'bold)
+                   (outline-5 :foreground yellow :weight 'bold)
+                   (outline-6 :foreground orange :weight 'bold)
+                   (outline-7 :foreground light-magenta :weight 'bold)
+                   (outline-8 :foreground light-blue :weight 'bold)
                    (prescient-primary-highlight :foreground accent :weight 'bold)
                    (prescient-secondary-highlight :foreground accent)
-                   (origami-fold-header-face :background base4 :foreground grey)
-                   (lsp-ui-doc-background :background base4)
-                   (lsp-ui-doc-header :background accent :foreground bg)
-                   (company-tooltip-selection :background accent :foreground bg)))
+                   (tooltip :background base4 :foreground fg)
+                   (vertico-current :background bg)
+                   (eglot-inlay-hint-face :foreground grey :height 0.8)))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -280,7 +296,16 @@
 * Keybindings
 #+begin_src emacs-lisp
   (use-package general
-    :demand t)
+    :demand t
+    :custom
+    (general-override-states '(insert
+                               emacs
+                               hybrid
+                               normal
+                               visual
+                               motion
+                               operator
+                               replace)))
 
   (use-package evil
     :demand t
@@ -298,6 +323,7 @@
     (evil-symbol-word-search t)
     (evil-undo-system 'undo-fu)
     (evil-visual-state-cursor 'hollow)
+    (evil-visual-update-x-selection-p nil)
     (evil-want-C-g-bindings t)
     (evil-want-C-u-scroll t)
     (evil-want-Y-yank-to-eol t)
@@ -305,6 +331,9 @@
     (evil-mode 1)
     (evil-set-leader 'motion (kbd "SPC"))
     (evil-set-leader 'motion (kbd "<backspace>") t)
+    (general-add-hook 'after-change-major-mode-hook
+                      (lambda ()
+                        (setq-local evil-shift-width tab-width)))
     (use-package evil-better-visual-line
       :config
       (evil-better-visual-line-on))
@@ -312,6 +341,7 @@
       :custom
       (evil-collection-key-blacklist '("SPC" "<backspace>"))
       :config
+      (setq evil-collection-mode-list (delq 'eglot evil-collection-mode-list))
       (evil-collection-init))
     (use-package evil-goggles
       :config
@@ -331,6 +361,11 @@
     :keymaps 'override
     :prefix "<backspace>")
 
+  (general-create-definer +lang-def
+    :states 'm
+    :keymaps 'override
+    :prefix "<backspace><backspace>")
+
   (+leader-def
     "h" '(:ignore t :wk "+help")
     "w" '("Kill buffer" . kill-this-buffer)
@@ -338,7 +373,7 @@
 
   (+localleader-def
     :keymaps 'override
-    "l" '(:ignore t :wk "+lang"))
+    "<backspace>" '(:ignore t :wk "+lang"))
 
   (use-package evil-nerd-commenter
     :commands (evilnc-comment-operator evilnc-inner-comment evilnc-outer-commenter)
@@ -359,24 +394,45 @@
              "#" 'evil-visualstar/begin-search-backward))
 #+end_src
 * Utilities
+** Compiler explorer
+#+begin_src emacs-lisp
+  (use-package rmsbolt)
+#+end_src
 ** Debugger
 #+begin_src emacs-lisp
-  (use-package dap-mode
-    :after lsp-mode
+  ;; (use-package dap-mode
+  ;;   :after lsp-mode
+  ;;   :gfhook
+  ;;   #'dap-tooltip-mode
+  ;;   ('dap-stopped-hook (lambda (arg) (call-interactively #'dap-hydra)))
+  ;;   :general
+  ;;   (+localleader-def
+  ;;     "ld" '("Debug" . dap-hydra))
+  ;;   :custom
+  ;;   (dap-auto-configure-features '(sessions locals breakpoints expressions))
+  ;;   :config
+  ;;   (general-after 'c-ts-mode
+  ;;     (require 'dap-gdb-lldb)
+  ;;     (dap-gdb-lldb-setup))
+  ;;   ;; TODO: fix dap-python
+  ;;   (general-after 'python-mode
+  ;;     (require 'dap-python)
+  ;;     (general-setq dap-python-debugger 'debugpy)))
+
+  (use-package dape
+    :after projectile eglot
+    :ghook
+    ('kill-emacs-hook #'dape-breakpoint-save)
+    ('after-init-hook #'dape-breakpoint-load)
     :gfhook
-    #'dap-tooltip-mode
-    ('dap-stopped-hook (lambda (arg) (call-interactively #'dap-hydra)))
-    :general
-    (+localleader-def
-      "ld" '("Debug" . dap-hydra))
+    ('dape-compile-compile-hooks #'kill-buffer)
+    ('dape-on-start-hooks (lambda () (save-some-buffers t t)))
+    ('dape-on-stopped-hooks (list #'dape-info #'dape-repl))
+    :custom
+    (dape-buffer-window-arrangement 'right)
+    (dape-cwd-fn #'projectile-project-root)
     :config
-    (dap-mode 1)
-    (general-after 'c-ts-mode
-      (require 'dap-gdb-lldb))
-    ;; TODO: fix dap-python
-    (general-after 'python-mode
-      (require 'dap-python)
-      (general-setq dap-python-debugger 'debugpy)))
+    (dape-breakpoint-global-mode))
 #+end_src
 ** Direnv
 #+begin_src emacs-lisp
@@ -462,7 +518,7 @@
 ** Snippets
 #+begin_src emacs-lisp
   (use-package tempel
-    :ghook ('(prog-mode-hook text-mode-hook lsp-completion-mode-hook)
+    :ghook ('(prog-mode-hook text-mode-hook)
             (lambda ()
               (setq-local completion-at-point-functions
                           (cons #'tempel-complete
@@ -668,6 +724,19 @@
     :config
     (dashboard-setup-startup-hook))
 #+end_src
+** ElDoc
+#+begin_src emacs-lisp
+  (use-package eldoc
+    :custom
+    (eldoc-idle-delay 0.1)
+    :config
+    (use-package eldoc-box
+      :general
+      (mmap
+       "K" 'eldoc-box-help-at-point)
+      :custom-face
+      (eldoc-box-body ((t (:family ui-font))))))
+#+end_src
 ** File tree
 #+begin_src emacs-lisp
   ;; TODO: missing icons, prettier indent guides
@@ -696,10 +765,6 @@
       :after evil)
     (use-package treemacs-projectile
       :after projectile)
-    (use-package lsp-treemacs
-      :after lsp-mode
-      :config
-      (lsp-treemacs-sync-mode 1))
     (use-package treemacs-magit
       :after magit)
     (doom-themes-treemacs-config)
@@ -730,13 +795,12 @@
 #+end_src
 ** Git
 #+begin_src emacs-lisp
-  ;; TODO: replace with indent-bars
   (use-package diff-hl
     :ghook
     'find-file-hook
     ('magit-pre-refresh-hook #'diff-hl-magit-pre-refresh)
     ('magit-post-refresh-hook #'diff-hl-magit-post-refresh)
-    :gfhook #'diff-hl-margin-mode
+    :gfhook #'diff-hl-flydiff-mode
     :custom
     (diff-hl-flydiff-delay 0.5)
     (diff-hl-show-staged-changes nil))
@@ -759,16 +823,26 @@
 #+end_src
 ** Indent guides
 #+begin_src emacs-lisp
-  (use-package highlight-indent-guides
-    :ghook
-    'prog-mode-hook
-    ('org-mode-local-vars-hook (lambda ()
-                                 (and highlight-indent-guides-mode
-                                      (bound-and-true-p org-indent-mode)
-                                      (highlight-indent-guides-mode -1))))
+  ;; (use-package highlight-indent-guides
+  ;;   :ghook
+  ;;   'prog-mode-hook
+  ;;   ('org-mode-local-vars-hook (lambda ()
+  ;;                                (and highlight-indent-guides-mode
+  ;;                                     (bound-and-true-p org-indent-mode)
+  ;;                                     (highlight-indent-guides-mode -1))))
+  ;;   :custom
+  ;;   (highlight-indent-guides-method 'character)
+  ;;   (highlight-indent-guides-auto-enabled nil))
+  (use-package indent-bars
+    :init
+    (add-hook 'prog-mode-hook #'indent-bars-mode 100)
     :custom
-    (highlight-indent-guides-method 'character)
-    (highlight-indent-guides-auto-enabled nil))
+    (indent-bars-color '(highlight :face-bg t :blend 0.15))
+    (indent-bars-color-by-depth '(:regexp "outline-\\([0-9]+\\)" :blend 1))
+    (indent-bars-highlight-current-depth '(:blend 0.5))
+    (indent-bars-pattern ".")
+    (indent-bars-width-frac 0.1)
+    (indent-bars-prefer-character t))
 #+end_src
 ** Info
 #+begin_src emacs-lisp
@@ -830,6 +904,7 @@
     :ghook 'after-init-hook
     :custom
     (doom-modeline-buffer-encoding 'nondefault)
+    (doom-modeline-buffer-file-name-style 'relative-from-project)
     (doom-modeline-enable-word-count t)
     (doom-modeline-height 30)
     (doom-modeline-indent-info t)
@@ -852,8 +927,17 @@
 #+begin_src emacs-lisp
   (use-package rainbow-delimiters
     :ghook 'prog-mode-hook
+    :custom-face
+    (rainbow-delimiters-depth-1-face ((t (:inherit 'outline-1 :weight normal))))
+    (rainbow-delimiters-depth-2-face ((t (:inherit 'outline-2 :weight normal))))
+    (rainbow-delimiters-depth-3-face ((t (:inherit 'outline-3 :weight normal))))
+    (rainbow-delimiters-depth-4-face ((t (:inherit 'outline-4 :weight normal))))
+    (rainbow-delimiters-depth-5-face ((t (:inherit 'outline-5 :weight normal))))
+    (rainbow-delimiters-depth-6-face ((t (:inherit 'outline-6 :weight normal))))
+    (rainbow-delimiters-depth-7-face ((t (:inherit 'outline-7 :weight normal))))
+    (rainbow-delimiters-depth-8-face ((t (:inherit 'outline-8 :weight normal))))
     :custom
-    (rainbow-delimiters-max-face-count 4))
+    (rainbow-delimiters-max-face-count 8))
 #+end_src
 ** Window switcher
 #+begin_src emacs-lisp
@@ -868,115 +952,74 @@
 * Editing
 ** LSP
 #+begin_src emacs-lisp
-  ;; TODO: better code action suggestions
-  ;;;###autoload
-  (defun lsp-booster--advice-json-parse (old-fn &rest args)
-    "Try to parse bytecode instead of json."
-    (or
-     (when (equal (following-char) ?#)
-       (let ((bytecode (read (current-buffer))))
-         (when (byte-code-function-p bytecode)
-           (funcall bytecode))))
-     (apply old-fn args)))
-  (defun lsp-booster--advice-final-command (old-fn cmd &optional test?)
-    "Prepend emacs-lsp-booster command to lsp CMD."
-    (let ((orig-result (funcall old-fn cmd test?)))
-      (if (and (not test?)                             ;; for check lsp-server-present?
-               (not (file-remote-p default-directory)) ;; see lsp-resolve-final-command, it would add extra shell wrapper
-               lsp-use-plists
-               (not (functionp 'json-rpc-connection))  ;; native json-rpc
-               (executable-find "emacs-lsp-booster"))
-          (progn
-            (message "Using emacs-lsp-booster for %s!" orig-result)
-            (cons "emacs-lsp-booster" orig-result))
-        orig-result)))
-
   (defun +format (&optional arg)
     (interactive "P")
     (call-interactively
-     (if (and (bound-and-true-p lsp-mode)
-              (lsp-feature? "textDocument/formatting"))
-         #'lsp-format-buffer
+     (if (and (bound-and-true-p eglot--managed-mode)
+              (eglot--server-capable :documentFormattingProvider))
+         #'eglot-format-buffer
        #'apheleia-format-buffer)))
 
   (use-package apheleia
     :general
-    (+localleader-def
-      "lf" '("Format" . +format)))
+    (+lang-def
+      "f" '("Format" . +format)))
 
-  ;; TODO: more lsp servers
-  (use-package lsp-mode
-    :after (cape tempel)
-    :gfhook #'evil-normalize-keymaps
+  (use-package eglot
+    :commands eglot eglot-ensure
+    :gfhook ('eglot-managed-mode-hook #'evil-normalize-keymaps)
     :general-config
-    (+localleader-def
-      :keymaps 'lsp-mode-map
-      "la" '("Code action" . lsp-execute-code-action)
-      "lr" '("Rename" . lsp-rename)
-      "ls" '(:ignore t :wk "+server")
-      "lsq" '("Shutdown" . lsp-workspace-shutdown)
-      "lsr" '("Restart" . lsp-workspace-restart))
+    (+lang-def
+      :keymaps 'eglot-mode-map
+      "a" '("Code action" . eglot-code-actions)
+      "r" '("Rename" . eglot-rename)
+      "s" '(:ignore t :wk "+server")
+      "sq" '("Shutdown" . eglot-shutdown)
+      "sr" '("Reconnect" . eglot-reconnect))
     :custom
-    (lsp-auto-execute-action nil)
-    (lsp-completion-provider :none)
-    (lsp-diagnostics-provider :flymake)
-    (lsp-eldoc-enable-hover nil)
-    (lsp-enable-folding nil)
-    (lsp-enable-on-type-formatting nil)
-    (lsp-enable-semantic-highlighting t)
-    (lsp-enable-suggest-server-download nil)
-    (lsp-headerline-breadcrumb-enable nil)
-    (lsp-idle-delay 0.25)
-    (lsp-inlay-hint-enable t)
-    (lsp-keep-workspace-alive nil)
-    (lsp-pwsh-folding-enable nil)
-    (lsp-response-timeout 1) ; HACK: https://github.com/emacs-lsp/lsp-mode/issues/3555
-    :custom-face
-    (lsp-inlay-hint-face ((t (:height 0.8 :inherit 'font-lock-comment-face))))
-    :init
-    (advice-add (if (progn (require 'json)
-                           (fboundp 'json-parse-buffer))
-                    'json-parse-buffer
-                  'json-read)
-                :around
-                #'lsp-booster--advice-json-parse)
-    (advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
-    ;; HACK: https://github.com/minad/corfu/issues/227#issuecomment-1236373720
-    (advice-add #'lsp-completion-at-point :around #'cape-wrap-noninterruptible)
-    (setq-default read-process-output-max (* 1024 1024))
+    (eglot-autoshutdown t)
+    (eglot-sync-connect 1)
+    (eglot-events-buffer-size 0)
     :config
-    ;; TODO: better hover doc
-    (use-package lsp-ui
-      :general-config
-      (:states 'm
-               "K" 'lsp-ui-doc-glance)
-      (:keymaps 'lsp-ui-peek-mode-map
-                "h" 'lsp-ui-peek--select-prev-file
-                "j" 'lsp-ui-peek--select-next
-                "k" 'lsp-ui-peek--select-prev
-                "l" 'lsp-ui-peek--select-next-file)
-      :custom
-      (lsp-ui-delay 0.5)
-      (lsp-ui-doc-max-height 8)
-      (lsp-ui-doc-max-width 72)
-      (lsp-ui-doc-position 'at-point)
-      (lsp-ui-doc-show-with-mouse nil))
-    (use-package consult-lsp
+    (use-package eglot-booster
+      :config
+      (eglot-booster-mode))
+    (use-package eglot-tempel
+      :ghook 'eglot-managed-mode-hook)
+    (use-package eglot-signature-eldoc-talkative
+      :ghook ('eglot-managed-mode-hook (lambda ()
+                                         (setq-local eldoc-documentation-functions
+                                                     (list
+                                                      #'eglot-signature-eldoc-talkative
+                                                      #'eglot-hover-eldoc-function
+                                                      t
+                                                      #'flymake-eldoc-function)))))
+    (use-package consult-eglot
       :general
-      (:keymaps 'lsp-mode-map
-                [remap xref-find-apropos] 'consult-lsp-symbols)))
+      (:keymaps 'eglot-mode-map
+                [remap xref-find-apropos] 'consult-eglot-symbols)))
 
-  (use-package lsp-ltex
-    :defer t
-    :after lsp-mode
+  (use-package eglot-ltex
+    :ghook ('text-mode-hook (lambda ()
+                              (require 'eglot-ltex)
+                              (eglot-ensure)))
     :custom
-    (lsp-ltex-completion-enabled t)
-    (lsp-ltex-mother-tongue "pl-PL"))
+    (eglot-ltex-communication-channel 'stdio)
+    (eglot-ltex-active-modes '((org-mode :language-id "org")
+                               (git-commit-elisp-text-mode :language-id "gitcommit")
+                               (bibtex-mode :language-id "bibtex")
+                               (context-mode :language-id "context")
+                               (latex-mode :language-id "latex")
+                               (markdown-mode :language-id "markdown")
+                               (rst-mode :language-id "restructuredtext")))
+    :init
+    (general-add-advice #'eglot-ltex--server-entry
+                        :override (lambda () "ltex-ls")))
 #+end_src
 ** Parinfer
 #+begin_src emacs-lisp
   (use-package parinfer-rust-mode
-    :ghook 'emacs-lisp-mode-hook 'lisp-mode-hook 'fennel-mode-hook
+    :ghook 'emacs-lisp-mode-hook 'lisp-mode-hook 'fennel-mode-hook 'yuck-mode-hook
     :custom
     (parinfer-rust-auto-download t)
     (parinfer-rust-troublesome-modes 'nil))
@@ -1025,8 +1068,10 @@
   (use-package flymake
     :ghook 'prog-mode-hook 'text-mode-hook
     :general-config
-    (+localleader-def
-      "lD" '("Diagnostics" . consult-flymake))
+    (+lang-def
+      "D" '("Diagnostics" . consult-flymake))
+    :custom
+    (flymake-fringe-indicator-position 'right-fringe)
     :config
     (use-package flymake-popon
       :ghook 'flymake-mode-hook
@@ -1045,18 +1090,28 @@
 #+begin_src emacs-lisp
   (use-package c-ts-mode
     :ensure nil
-    :ghook ('(c-ts-mode-hook c++-ts-mode-hook) #'lsp-deferred)
+    :gfhook ('(c-ts-mode-hook c++-ts-mode-hook) #'eglot-ensure)
     :custom
-    (c-ts-mode-indent-offset 4))
+    (c-ts-mode-indent-offset 4)
+    :config
+    (use-package clangd-inactive-regions
+      :ghook 'eglot-managed-mode-hook))
 
   (use-package cmake-ts-mode
     :ensure nil
-    :mode "\\.cmake\\'"
-    :mode "CMakeLists.txt")
+    :mode "\\.cmake\\'" "CMakeLists.txt"
+    :gfhook #'eglot-ensure
+    :init
+    (general-after 'eglot
+      (add-to-list 'eglot-server-programs
+                   '(cmake-ts-mode . ("neocmakelsp" "--stdio")))))
 
   (use-package meson-mode
-    :gfhook #'(lambda ()
-                (add-to-list 'completion-at-point-functions #'meson-completion-at-point-function)))
+    :gfhook #'eglot-ensure
+    :init
+    (general-after 'eglot
+      (add-to-list 'eglot-server-programs
+                   '(meson-mode . ("mesonlsp" "--lsp")))))
 #+end_src
 ** Configuration
 #+begin_src emacs-lisp
@@ -1068,15 +1123,21 @@
 #+begin_src emacs-lisp
   (use-package css-mode
     :ensure nil
-    :gfhook ('(css-mode-hook scss-mode-hook less-mode-hook) #'lsp-deferred))
+    :gfhook ('(css-mode-hook scss-mode-hook less-mode-hook) #'eglot-ensure)
+    :init
+    (general-after 'eglot
+      (add-to-list 'eglot-server-programs
+                   '((scss-mode less-mode sass-mode) . ,(eglot-alternatives
+                                                         '(("vscode-css-language-server" "--stdio")
+                                                           ("css-languageserver" "--stdio")))))))
 
   (use-package sass-mode
-    :gfhook #'lsp-deferred)
+    :gfhook #'eglot-ensure)
 #+end_src
 ** Dart
 #+begin_src emacs-lisp
   (use-package dart-mode
-    :after lsp-mode
+    :ghook #'eglot-ensure
     :config
     (use-package flutter
       :general-config
@@ -1086,9 +1147,6 @@
         "q" '("Quit" . flutter-quit)
         "r" '("Hot reload" . flutter-hot-reload)
         "R" '("Hot restart" . flutter-hot-restart))))
-
-  (use-package lsp-dart
-    :ghook ('dart-mode-hook #'lsp-deferred))
 #+end_src
 ** Emacs Lisp
 #+begin_src emacs-lisp
@@ -1111,9 +1169,7 @@
     (use-package highlight-quoted
       :ghook 'emacs-lisp-mode-hook)
     (use-package highlight-defined
-      :ghook 'emacs-lisp-mode-hook)
-    (use-package easy-escape
-      :ghook ('emacs-lisp-mode-hook #'easy-escape-minor-mode)))
+      :ghook 'emacs-lisp-mode-hook))
 #+end_src
 ** Faust
 #+begin_src emacs-lisp
@@ -1132,7 +1188,7 @@
 ** GDScript
 #+begin_src emacs-lisp
   (use-package gdscript-mode
-    :gfhook #'lsp-deferred
+    :gfhook #'eglot-ensure
     :general-config
     (+localleader-def
      :keymaps 'gdscript-mode-map
@@ -1142,18 +1198,19 @@
 #+begin_src emacs-lisp
   (use-package git-modes)
 #+end_src
+** Go
+#+begin_src emacs-lisp
+  (use-package go-ts-mode
+    :ensure nil
+    :gfhook #'eglot-ensure)
+#+end_src
 ** Haskell
 #+begin_src emacs-lisp
   (use-package haskell-mode
+    :gfhook #'eglot-ensure
     :init
     (general-after 'projectile
       (add-to-list 'projectile-project-root-files "stack.yaml")))
-
-  (use-package lsp-haskell
-    :gfhook ('(haskell-mode-local-vars-hook haskell-literate-mode-local-vars-hook) #'lsp-deferred)
-    :after lsp-mode
-    :custom
-    (lsp-haskell-formatting-provider "fourmolu"))
 #+end_src
 ** HTML
 #+begin_src emacs-lisp
@@ -1172,20 +1229,25 @@
     :mode "\\.twig\\'"
     :mode "\\.jinja2?\\'"
     :mode "\\.eco\\'"
+    :mode "\\.njk\\'"
     :mode "wp-content/themes/.+/.+\\.php\\'"
     :mode "templates/.+\\.php\\'"
     :gfhook
-    #'lsp-deferred
+    #'eglot-ensure
     #'(lambda ()
         (when (member web-mode-content-type '("javascript" "jsx"))
           (setq-local comment-start "//")
           (setq-local comment-end "")
           (setq-local comment-start-skip "// *")))
     :custom
-    (lsp-emmet-ls-command '("emmet-language-server" "--stdio"))
     (web-mode-enable-html-entities-fontification t)
     (web-mode-auto-close-style 1)
     (web-mode-enable-auto-quoting nil)
+    :init
+    (general-after 'eglot
+      (add-to-list 'eglot-server-programs
+                   '(web-mode . ,(eglot-alternatives '(("vscode-html-language-server" "--stdio")
+                                                       ("html-languageserver" "--stdio"))))))
     :config
     (sp-local-pair 'web-mode "<" ">" :unless '(:add (lambda (_id action _context)
                                                       (and (eq action 'insert)
@@ -1197,26 +1259,19 @@
 #+begin_src emacs-lisp
   (use-package js
     :ensure nil
-    :gfhook ('js-ts-mode-hook #'lsp-deferred))
+    :gfhook ('js-ts-mode-hook #'eglot-ensure))
 
   (use-package typescript-ts-mode
     :ensure nil
-    :gfhook #'lsp-deferred
+    :gfhook #'eglot-ensure
     :custom
     (typescript-ts-mode-indent-offset 4))
-
-  (general-setq lsp-clients-typescript-prefer-use-project-ts-server t
-                lsp-javascript-display-parameter-type-hints t
-                lsp-javascript-display-property-declaration-type-hints t
-                lsp-javascript-display-return-type-hints t
-                lsp-javascript-display-variable-type-hints t
-                lsp-eslint-server-command '("vscode-eslint-language-server" "--stdio"))
 #+end_src
 ** JSON
 #+begin_src emacs-lisp
   (use-package json-ts-mode
     :ensure nil
-    :gfhook #'lsp-deferred
+    :gfhook #'eglot-ensure
     :custom
     (json-ts-mode-indent-offset 4))
 #+end_src
@@ -1245,14 +1300,14 @@
       "m" '("Go back" . julia-snail-repl-go-back)
       "r" '("Update module cache" . julia-snail-update-module-cache)))
 
-  (use-package lsp-julia
-    :after lsp-mode
-    :ghook ('julia-ts-mode-hook #'lsp-deferred))
+  (use-package eglot-jl
+    :after eglot
+    :ghook ('julia-ts-mode-hook (list #'eglot-jl-init #'eglot-ensure)))
 #+end_src
 ** Lua
 #+begin_src emacs-lisp
   (use-package lua-mode
-    :gfhook #'lsp-deferred
+    :gfhook #'eglot-ensure
     :custom
     (lua-indent-level 4))
 
@@ -1274,13 +1329,11 @@
             apheleia-mode-alist))
     (use-package flymake-fennel
       :ghook ('fennel-mode-hook #'flymake-fennel-setup)))
-
-  (general-setq lsp-clients-lua-language-server-command '("lua-language-server"))
 #+end_src
 ** Markdown
 #+begin_src emacs-lisp
   (use-package markdown-mode
-    :gfhook #'lsp-deferred
+    :gfhook #'eglot-ensure
     :mode ("/README\\(?:\\.md\\)?\\'" . gfm-mode)
     :general-config
     (+localleader-def
@@ -1305,25 +1358,35 @@
   (use-package nim-mode
     :gfhook #'(lambda ()
                 (setq-local tab-width 2)
-                (lsp-deferred)))
+                (eglot-ensure))
+    :init
+    (general-after 'eglot
+      (add-to-list 'eglot-server-programs
+                   '((nim-mode nimscript-mode) . ("nimlangserver"))))
+    :config
+    (general-after 'apheleia
+      (push '(nimpretty . ("nimpretty" filepath))
+            apheleia-formatters)
+      (push '(nim-mode . nimpretty)
+            apheleia-mode-alist)))
 #+end_src
 ** Nix
 #+begin_src emacs-lisp
   (use-package nix-mode
     :mode "\\.nix"
-    :gfhook #'lsp-deferred
+    :gfhook #'eglot-ensure
     :general-config
     (+localleader-def
       :keymaps 'nix-mode-map
       "r" '("REPL" . nix-repl-show))
     :custom
     (nix-indent-offest 2)
-    (lsp-nix-nil-formatter ["alejandra"]))
+    :init
+    (+eglot-config! :nil '(:formatting (:command ["alejandra"]))))
 #+end_src
 ** Org
 #+begin_src emacs-lisp
   (use-package org
-    :gfhook #'lsp-deferred
     :general-config
     (:keymaps 'org-src-mode-map
               [remap evil-save] 'org-edit-src-save)
@@ -1385,8 +1448,6 @@
                                                              line-number-current-line
                                                              corfu-default
                                                              highlight-indent-guides-character-face
-                                                             lsp-ui-sideline-global
-                                                             lsp-ui-sideline-code-action
                                                              org-modern-block-name
                                                              org-modern-date-active
                                                              org-modern-date-inactive
@@ -1427,9 +1488,19 @@
 #+begin_src emacs-lisp
   (use-package python
     :ensure nil
-    :gfhook #'lsp-deferred
+    :gfhook #'eglot-ensure
     :custom
     (python-indent-guess-indent-offset-verbose nil)
+    :init
+    (+eglot-config! :pylsp '(:plugins (
+                                       :ruff (:enabled t)
+                                       :autopep8 (:enabled :json-false)
+                                       :flake8 (:enabled :json-false)
+                                       :mccabe (:enabled :json-false)
+                                       :pycodestyle (:enabled :json-false)
+                                       :pydocstyle (:enabled :json-false)
+                                       :yapf (:enabled :json-false))))
+  
     :config
     (when (and (executable-find "python3")
                (string= python-shell-interpreter "python"))
@@ -1444,13 +1515,13 @@
 #+begin_src emacs-lisp
   (use-package rust-ts-mode
     :ensure nil
-    :gfhook #'lsp-deferred)
+    :gfhook #'eglot-ensure)
 #+end_src
 ** Shell
 #+begin_src emacs-lisp
   (use-package sh-script
     :ensure nil
-    :gfhook #'lsp-deferred)
+    :gfhook ('bash-ts-mode-hook #'eglot-ensure))
 
   (use-package fish-mode)
 #+end_src
@@ -1458,13 +1529,26 @@
 #+begin_src emacs-lisp
   ;; TODO: schema picker keybinding
   (use-package yaml-ts-mode
+    :mode ".clangd\\'"
+    :mode ".clang-format\\'"
     :ensure nil
-    :gfhook #'lsp-deferred)
+    :gfhook #'eglot-ensure
+    :config
+    (use-package eglot-yaml
+      :general
+      (+localleader-def
+        :keymaps 'yaml-ts-mode-map
+        "s" '("Select schema" . eglot-yaml-schema-for-buffer))))
+#+end_src
+** Yuck
+#+begin_src emacs-lisp
+  (use-package yuck-mode)
 #+end_src
 ** Zig
 #+begin_src emacs-lisp
   (use-package zig-mode
-    :gfhook #'lsp-deferred
+    :gfhook #'eglot-ensure
     :custom
     (zig-format-on-save nil))
 #+end_src
+

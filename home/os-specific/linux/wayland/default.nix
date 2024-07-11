@@ -7,31 +7,31 @@
 in {
   home = {
     packages = with pkgs; [
-      autotiling-rs
-      grimblast
-      sway-contrib.grimshot
+      autotiling
+      chayang
       satty
+      sway-contrib.grimshot
       swaybg
       swaysome
+      waylock
       wev
       wl-clipboard
       wlr-which-key
-      waylock
-      wlopm
+      gtklock
     ];
     sessionVariables = {
       GDK_BACKEND = "wayland,x11";
       NIXOS_OZONE_WL = "1";
       QT_QPA_PLATFORM = "wayland;xcb";
-      SDL_VIDEODRIVER = "wayland";
       _JAVA_AWT_WM_NONREPARENTING = "1";
     };
   };
 
   wayland.windowManager.sway = with pkgs.rice; {
     # {{{
-    enable = false;
+    enable = true;
     package = pkgs.swayfx;
+    checkConfig = false; # swayfx fails to create a renderer when rebuilding
     config = {
       bars = [
         {command = "waybar";}
@@ -88,10 +88,9 @@ in {
             command = "floating disable";
             criteria.title = "(Guitar Pro 8)|(DaVinci Resolve Studio)";
           }
-          # https://github.com/flameshot-org/flameshot/issues/2970#issuecomment-1321117462
           {
-            command = "floating enable, fullscreen disable, move absolute position 0 0, border pixel 0";
-            criteria.app_id = "flameshot";
+            command = "inhibit_idle open";
+            criteria.app_id = "virt-manager";
           }
         ];
       };
@@ -104,7 +103,10 @@ in {
           command = "swaysome init 1";
           always = true;
         }
-        {command = "autotiling-rs";}
+        {
+          command = "autotiling";
+          always = true;
+        }
       ];
       input = {
         "*" = {
@@ -121,8 +123,8 @@ in {
         "*" = with pkgs.rice; {
           bg = "${wallpaper} fill ${base00}";
         };
-        "HDMI-A-2".pos = "1920 50";
-        "DVI-D-1".pos = "0 0";
+        "DP-1".pos = "0 0";
+        "DP-4".pos = "1920 50";
       };
       modifier = "Mod4";
       keybindings = let
@@ -145,7 +147,7 @@ in {
           "${mod}+Control+space" = "exec dunstctl close";
           "${mod}+backspace" = "exec wlr-which-key";
           "${mod}+Control+p" = "exec ${rofi-stuff}/bin/keepass";
-          Print = "exec flameshot gui";
+          Print = "exec 'grimshot save anything - | satty -f -'";
           "Control+Print" = "replay-sorcery save";
 
           "${mod}+w" = "kill";
@@ -208,234 +210,10 @@ in {
     '';
   }; # }}}
 
-  wayland.windowManager.hyprland = {
-    # {{{
-    # TODO: fix some apps maximizing
-    # TODO: fix logging out
-    enable = true;
-    systemd.variables = ["--all"];
-    plugins = with pkgs.hyprlandPlugins; [
-      split-monitor-workspaces
-    ];
-    settings = let
-      color = c: "rgb(${pkgs.lib.removePrefix "#" c})";
-      mod = "SUPER";
-    in
-      with pkgs.rice; {
-        general = {
-          border_size = 2;
-          gaps_in = 5;
-          gaps_out = 10;
-          "col.inactive_border" = color base00;
-          "col.active_border" = color base0F;
-          layout = "master";
-          resize_on_border = true;
-        };
-        decoration = {
-          shadow_range = 8;
-          shadow_render_power = 1;
-          "col.shadow" = "0x80000000";
-          blur = {
-            new_optimizations = true;
-            xray = true;
-          };
-        };
-        animations = {
-          first_launch_animation = false;
-        };
-        input = {
-          kb_layout = "pl";
-          repeat_delay = 300;
-          accel_profile = "flat";
-          touchpad = {
-            disable_while_typing = false;
-            tap-to-click = false;
-            clickfinger_behavior = true;
-          };
-        };
-        misc = {
-          disable_hyprland_logo = true;
-          disable_splash_rendering = true;
-          force_default_wallpaper = -1;
-          mouse_move_enables_dpms = true;
-          key_press_enables_dpms = true;
-          allow_session_lock_restore = true;
-          vrr = 1;
-          enable_swallow = true;
-          swallow_regex = terminal;
-        };
-        master = {
-          mfact = 0.5;
-        };
-        xwayland.force_zero_scaling = true;
-        opengl.force_introspection = 1;
-        monitor = [
-          ", preferred, auto, 1"
-          "HDMI-A-2, preferred, 1920x50, 1"
-          "DVI-D-1, preferred, 0x0, 1"
-        ];
-        exec = [
-          "systemctl --user restart waybar"
-        ];
-        exec-once = [
-          "swaybg -i ${wallpaper} -m fill"
-        ];
-        bind =
-          [
-            "${mod}, return, exec, ${terminal}"
-            "${mod}, space, exec, ${menu}"
-            "${mod} CTRL, space, exec, dunstctl close"
-            "${mod}, backspace, exec, wlr-which-key"
-            "${mod} CTRL, p, exec, ${rofi-stuff}/bin/keepass"
-            ", Print, exec, ${pkgs.writeShellScript "screenshot" "grimblast --freeze save area - | satty -f -"}"
-
-            "${mod}, w, killactive"
-            "${mod}, t, togglefloating"
-            "${mod}, f, fullscreen"
-            "${mod} SHIFT, f, fakefullscreen"
-            "${mod} CTRL, q, exec, loginctl kill-session $XDG_SESSION_ID"
-            "${mod} CTRL, r, exec, hyprctl reload"
-          ]
-          ++ pkgs.lib.flatten (map (x: let
-            x' = toString x;
-          in [
-            "${mod}, ${x'}, split-workspace, ${x'}"
-            "${mod} SHIFT, ${x'}, split-movetoworkspacesilent, ${x'}"
-          ]) (pkgs.lib.range 1 9));
-        binde = [
-          "${mod}, j, layoutmsg, cyclenext"
-          "${mod}, k, layoutmsg, cycleprev"
-          "${mod} SHIFT, j, layoutmsg, swapnext"
-          "${mod} SHIFT, k, layoutmsg, swapprev"
-          "${mod}, h, focusmonitor, -1"
-          "${mod}, l, focusmonitor, +1"
-          "${mod} SHIFT, h, split-changemonitorsilent, -1"
-          "${mod} SHIFT, l, split-changemonitorsilent, +1"
-          "${mod} CTRL, h, splitratio, -0.05"
-          "${mod} CTRL, l, splitratio, +0.05"
-          ", XF86AudioMute, exec, amixer set Master toggle"
-          ", XF86AudioRaiseVolume, exec, amixer set Master '5%+'"
-          ", XF86AudioLowerVolume, exec, amixer set Master '5%-'"
-          ", XF86AudioPlay, exec, playerctl -p strawberry play-pause"
-          ", XF86AudioPrev, exec, playerctl -p strawberry previous"
-          ", XF86AudioNext, exec, playerctl -p strawberry next"
-        ];
-        bindm = [
-          "${mod}, mouse:272, movewindow"
-          "${mod}, mouse:273, resizewindow"
-        ];
-        bezier = "easeOutExpo, 0.16, 1, 0.3, 1";
-        animation = [
-          "global, 1, 2, easeOutExpo"
-          "windows, 0"
-          "workspaces, 1, 2, easeOutExpo, slidefade"
-        ];
-        windowrulev2 =
-          [
-            "tile, title:(Adobe Photoshop 2021)|(Adobe Illustrator 2021)|(Guitar Pro 8)|(DaVinci Resolve Studio)"
-            "float, move onscreen 0 0, stayfocused, class:(flameshot)"
-          ]
-          ++ map (x: "opacity 0.95 0.85, class:(${x})") [
-            terminal
-            "emacs"
-          ];
-      };
-  };
-  # }}}
-
-  wayland.windowManager.river = let
-    # {{{
-    color = c: "0x${pkgs.lib.removePrefix "#" c}";
-    mod = "Super";
-  in {
-    enable = false;
-    systemd.variables = ["--all"];
-    extraSessionVariables = config.home.sessionVariables;
-    settings = with pkgs.rice; {
-      background-color = color base00;
-      border-color-focused = color base0F;
-      border-color-unfocused = color base00;
-      border-color-urgent = color base08;
-      border-width = 2;
-      default-layout = "rivertile";
-      focus-follows-cursor = "normal";
-      set-cursor-warp = "on-output-change";
-      set-repeat = "50 300";
-
-      spawn = [
-        "'swaybg -i ${wallpaper} -m fill'"
-        "'systemctl --user restart waybar'"
-      ];
-
-      keyboard-layout = "pl";
-      input = {
-        "pointer-1133-49284-Logitech_G102_Prodigy_Gaming_Mouse" = {
-          accel-profile = "flat";
-          disable-while-typing = false;
-          tap = false;
-        };
-      };
-
-      map.normal = {
-        "${mod} Return" = "spawn '${terminal}'";
-        "${mod} Space" = "spawn '${menu}'";
-        "${mod}+Control Space" = "spawn 'dunstctl close'";
-        "${mod} BackSpace" = "spawn 'wlr-which-key'";
-        "${mod}+Control P" = "spawn '${rofi-stuff}/bin/keepass'";
-        "None Print" = "spawn 'grimshot save area - | satty -f -'";
-
-        "${mod} W" = "close";
-        "${mod} T" = "toggle-float";
-        "${mod} F" = "toggle-fullscreen";
-        "${mod}+Control Q" = "spawn 'loginctl terminate-session $XDG_SESSION_ID'";
-        "${mod}+Control R" = "spawn '~/.config/river/init'";
-
-        "${mod} J" = "focus-view next";
-        "${mod} K" = "focus-view previous";
-        "${mod}+Shift J" = "swap next";
-        "${mod}+Shift K" = "swap previous";
-
-        "${mod} H" = "focus-output previous";
-        "${mod} L" = "focus-output next";
-        "${mod}+Shift H" = "send-to-output previous";
-        "${mod}+Shift L" = "send-to-output next";
-
-        "${mod}+Control H" = "send-layout-cmd rivertile 'main-ratio -0.05'";
-        "${mod}+Control L" = "send-layout-cmd rivertile 'main-ratio +0.05'";
-        "${mod}+Control J" = "send-layout-cmd rivertile 'main-count -1'";
-        "${mod}+Control K" = "send-layout-cmd rivertile 'main-count +1'";
-
-        "None XF86AudioMute" = "spawn 'amixer set Master toggle'";
-        "None XF86AudioRaiseVolume" = "spawn 'amixer set Master 5%+'";
-        "None XF86AudioLowerVolume" = "spawn 'amixer set Master 5%-'";
-        "None XF86AudioPlay" = "spawn 'playerctl -p strawberry play-pause'";
-        "None XF86AudioPrev" = "spawn 'playerctl -p strawberry previous'";
-        "None XF86AudioNext" = "spawn 'playerctl -p strawberry next'";
-      };
-      map-pointer.normal = {
-        "${mod} BTN_LEFT" = "move-view";
-        "${mod} BTN_RIGHT" = "resize-view";
-      };
-    };
-    extraConfig = ''
-      for i in $(seq 1 9); do
-        tags=$((1 << ($i - 1)))
-        riverctl map normal ${mod} $i set-focused-tags $tags
-        riverctl map normal ${mod}+Shift $i set-view-tags $tags
-      done
-
-      rivertile -view-padding 5 -outer-padding 5 -main-ratio 0.5 &
-    '';
-  };
-  # }}}
-
   programs.waybar = {
     # {{{
+    # TODO: window title overflowing
     enable = true;
-    systemd = {
-      enable = true;
-      target = "hyprland-session.target";
-    };
     settings = with pkgs.rice; let
       red = s: "<span foreground=\"${base08}\">${s}</span>";
       icon = i: "<span font=\"${monoFont} 11\">${i}<tt> </tt></span>";
@@ -447,8 +225,8 @@ in {
         position = "top";
         height = 27;
         modules-left = [
-          "hyprland/workspaces"
-          "hyprland/window"
+          "sway/workspaces"
+          "sway/window"
         ];
         modules-right = [
           "tray"
@@ -597,8 +375,8 @@ in {
   }; # }}}
 
   programs.foot = {
-    enable = true;
-    server.enable = true;
+    enable = false;
+    server.enable = false;
     settings = let
       color = pkgs.lib.removePrefix "#";
     in
@@ -643,61 +421,48 @@ in {
       };
   };
 
-  programs.hyprlock = let
-    color = c: "rgb(${pkgs.lib.removePrefix "#" c})";
-  in
-    with pkgs.rice; {
-      enable = true;
-      backgrounds = [{path = builtins.toString wallpaperBlurred;}];
-      input-fields = [
+  services.hypridle = {
+    enable = true;
+    settings = let
+      color = c: "0x${pkgs.lib.removePrefix "#" c}";
+    in {
+      general = {
+        lock_cmd = "pidof waylock || (chayang -d 10; gtklock)";
+        before_sleep_cmd = "loginctl lock-session";
+      };
+      listener = [
         {
-          bothlock_color = color base0E;
-          capslock_color = color base0E;
-          check_color = color base0A;
-          dots_size = 0.2;
-          fade_timeout = 300;
-          fail_color = color base08;
-          fail_text = "$FAIL";
-          font_color = color base05;
-          inner_color = color base02;
-          numlock_color = color base0E;
-          outer_color = color base02;
-          outline_thickness = 2;
-          placeholder_text = "";
-          shadow_passes = 1;
+          timeout = 300;
+          on-timeout = "loginctl lock-session";
         }
-      ];
-      labels = [
         {
-          color = color base05;
-          font_family = uiFont;
-          shadow_passes = 1;
-          text = "$TIME";
+          timeout = 360;
+          on-timeout = "swaymsg output '*' power off";
+          on-resume = "swaymsg output '*' power on";
         }
       ];
     };
-
-  services.hypridle = {
-    enable = true;
-    lockCmd = let
-      color = c: "0x${pkgs.lib.removePrefix "#" c}";
-    in
-      with pkgs.rice; "pidof waylock || waylock -ignore-empty-password -fork-on-lock -init-color ${color base00} -input-color ${color base02} -fail-color ${color base08}";
-    beforeSleepCmd = "loginctl lock-session";
-    listeners = [
-      {
-        timeout = 300;
-        onTimeout = "loginctl lock-session";
-      }
-      {
-        timeout = 360;
-        onTimeout = "hyprctl dispatch dpms off";
-        onResume = "hyprctl dispatch dpms on";
-      }
-    ];
   };
 
   xdg.configFile = {
+    "gtklock/config.ini".source = (pkgs.formats.ini {}).generate "gtklock.ini" {
+      main = {
+        gtk-theme = pkgs.rice.gtk.theme.name;
+        modules = pkgs.lib.concatStringsSep ";" [
+          "${pkgs.gtklock-playerctl-module}/lib/gtklock/playerctl-module.so"
+          "${pkgs.gtklock-powerbar-module}/lib/gtklock/powerbar-module.so"
+        ];
+      };
+      powerbar = {
+        suspend-command =
+          if config.hostname == "thonkpad"
+          then "systemctl suspend"
+          else "";
+        show-labels = true;
+        linked-buttons = true;
+      };
+    };
+
     "satty/config.toml".source = (pkgs.formats.toml {}).generate "satty.toml" {
       general = {
         copy-command = "wl-copy";
@@ -751,6 +516,10 @@ in {
             e = {
               desc = "Emacs";
               cmd = "emacs";
+            };
+            f = {
+              desc = "Ferdium";
+              cmd = "ferdium";
             };
           }
           // pkgs.lib.optionalAttrs (config.hostname == "machine-nixos") {

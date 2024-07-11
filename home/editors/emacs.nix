@@ -18,7 +18,6 @@
 in {
   home = {
     packages = with pkgs; [
-      emacs-lsp-booster
       (pkgs.emacsWithPackagesFromUsePackage {
         package = emacsPackage;
         config = "${configDir}/init.el";
@@ -32,13 +31,18 @@ in {
           ];
 
         override = final: prev: {
-          smartparens-mode = prev.smartparens;
-          lsp-mode = prev.lsp-mode.overrideAttrs (_: {
-            LSP_USE_PLISTS = "true";
-          });
-          explain-pause-mode = pkgs.bandithedoge.emacsPackages.explain-pause-mode;
+          inherit (pkgs.bandithedoge.emacsPackages)
+            clangd-inactive-regions
+            eglot-booster
+            eglot-ltex
+            eglot-yaml
+            indent-bars
+            once
+            smartparens;
         };
       })
+
+      emacs-lsp-booster
     ];
     sessionVariables.EDITOR = "emacs";
   };

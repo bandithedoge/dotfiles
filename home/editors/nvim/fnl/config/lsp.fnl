@@ -1,5 +1,4 @@
-(require-macros :hibiscus.vim)
-(require-macros :hibiscus.core)
+(import-macros {: merge!} :hibiscus.core)
 
 (vim.fn.sign_define [{:name :DiagnosticSignError
                       :text ""
@@ -14,149 +13,76 @@
                       :text "󰌵"
                       :texthl :DiagnosticSignHint}])
 
-[(_G.use :neovim/nvim-lspconfig
-         {:event [:BufReadPre :BufNewFile]
-          :dependencies [(_G.use :williamboman/mason.nvim)
-                         (_G.use :folke/neodev.nvim {:config true})
-                         (_G.use :akinsho/flutter-tools.nvim
-                                 {:opts {:ui {:border [" "
-                                                       " "
-                                                       " "
-                                                       " "
-                                                       " "
-                                                       " "
-                                                       " "
-                                                       " "]}}})
-                         (_G.use :MrcJkb/haskell-tools.nvim
-                                 {:dependencies [(_G.use :nvim-telescope/telescope.nvim)]
-                                  :ft [:haskell :lhaskell :cabal :cabalproject]
-                                  :init #(set vim.g.haskell_tools
-                                              {:tools {:hover {:disable true}}
-                                               :hls {:default_settings {:haskell {:formattingProvider :fourmolu}}}})})
-                         (_G.use :jose-elias-alvarez/typescript.nvim)
-                         (_G.use :vuki656/package-info.nvim
-                                 {:opts {:colors {:up_to_date _G.base0B
-                                                  :outdated _G.base08}
-                                         :package_manager :pnpm}})
-                         (_G.use :Saecki/crates.nvim
-                                 {:opts {:null_ls {:enabled true}}})
-                         (_G.use :hrsh7th/nvim-cmp)
-                         (_G.use :b0o/SchemaStore.nvim)
-                         (_G.use :mrshmllow/document-color.nvim)
-                         (_G.use :someone-stole-my-name/yaml-companion.nvim)]
-          :opts #(let [cmp-nvim-lsp (require :cmp_nvim_lsp)]
-                   {:capabilities (merge! (cmp-nvim-lsp.default_capabilities)
-                                          {:textDocument {:completion {:completionItem {:snippetSupport true}}}}
-                                          :workspace
-                                          {:didChangeWatchedFiles {:dynamicRegistration true}})}
-                   :single_file_support
-                   true)
-          :config #(let [lsp (require :lspconfig)]
-                     (lsp.bashls.setup $2)
-                     (lsp.clangd.setup $2)
-                     (lsp.cssls.setup $2)
-                     (lsp.dartls.setup $2)
-                     (lsp.emmet_language_server.setup $2)
-                     (lsp.eslint.setup (merge! $2
-                                               {:filetypes [:coffee
-                                                            :javascript
-                                                            :javascript.jsx
-                                                            :javascriptreact
-                                                            :pug
-                                                            :typescript
-                                                            :typescript.tsx
-                                                            :typescriptreact
-                                                            :vue]
-                                                :settings {:packageManager :pnpm}}))
-                     (lsp.html.setup $2)
-                     (lsp.jsonls.setup (merge! $2
-                                               (let [schemastore (require :schemastore)]
-                                                 {:settings {:json {:schemas (schemastore.json.schemas)
-                                                                    :validate {:enable true}}}})))
-                     (lsp.lua_ls.setup $2)
-                     (lsp.marksman.setup $2)
-                     (lsp.neocmake.setup $2)
-                     (lsp.nil_ls.setup (merge! $2
-                                               {:autostart true
-                                                :settings {:nil {:formatting {:command [:alejandra]}
-                                                                 :flake {:autoEvalInputs true}}}}))
-                     (lsp.nimls.setup $2)
-                     (lsp.pylsp.setup (merge! $2
-                                              {:settings {:pylsp {:plugins {:autopep8 {:enabled false}
-                                                                            :black {:enabled true
-                                                                                    :line_length 120}
-                                                                            :flake8 {:enabled true
-                                                                                     :maxLineLength 120}
-                                                                            :pycodestyle {:maxLineLength 120}
-                                                                            :jedi_completion {:fuzzy true
-                                                                                              :eager true}
-                                                                            :pydocstyle {:enabled true
-                                                                                         :convention :pep257}
-                                                                            :pylint {:enabled true}
-                                                                            :yapf {:enabled false}}}}}))
-                     (lsp.qmlls.setup $2)
-                     (lsp.rust_analyzer.setup $2)
-                     (lsp.swift_mesonls.setup $2)
-                     (lsp.tailwindcss.setup (merge! $2
-                                                    (let [document-color (require :document-color)]
-                                                      {:capabilities {:textDocument {:colorProvider {:dynamicRegistration true}}}
-                                                       :on_attach document-color.buf_attach})))
-                     (lsp.yamlls.setup (let [yaml (require :yaml-companion)]
-                                         (yaml.setup $2)))
-                     (lsp.zls.setup $2)
-                     (let [typescript (require :typescript)]
-                       (typescript.setup {:server {:on_attach #(map! [n
-                                                                      :buffer]
-                                                                     :<localleader>ld
-                                                                     :TypescriptGoToSourceDefinition
-                                                                     "Go to source definition")}})))})
- ;;
- (_G.use :nvimtools/none-ls.nvim
-         {:dependencies [(_G.use :neovim/nvim-lspconfig)
-                         (_G.use :jose-elias-alvarez/typescript.nvim)]
-          :event [:BufReadPre :BufNewFile]
-          :config #(let [null-ls (require :null-ls)
-                         b null-ls.builtins
-                         f b.formatting
-                         d b.diagnostics
-                         a b.code_actions]
-                     (null-ls.setup)
-                     (null-ls.register [f.black
-                                        f.cabal_fmt
-                                        f.fish_indent
-                                        f.fixjson
-                                        f.fnlfmt
-                                        f.isort
-                                        f.nimpretty
-                                        f.shellharden
-                                        f.shfmt
-                                        f.stylelint
-                                        f.stylua
-                                        (f.prettierd.with {:extra_args (lambda [params]
-                                                                         (and params.options
-                                                                              params.options.tabSize
-                                                                              [:--tab-width
-                                                                               params.options.tabSize]))
-                                                           :extra_filetypes [:toml
-                                                                             :coffee
-                                                                             :pug]})
-                                        (d.markdownlint.with {:command :markdownlint-cli2})
-                                        d.actionlint
-                                        d.checkmake
-                                        d.clazy
-                                        d.cmake_lint
-                                        d.fish
-                                        d.shellcheck
-                                        a.shellcheck
-                                        (require :typescript.extensions.null-ls.code-actions)]))})
+[(_G.use :aznhe21/actions-preview.nvim
+         {:dependencies [(_G.use :MunifTanjim/nui.nvim)]
+          :keys [(_G.key :<localleader>a
+                         #(let [actions-preview (require :actions-preview)]
+                            (actions-preview.code_actions))
+                         {:desc "Code actions"})]
+          :opts {:backend [:nui]
+                 :nui {:layout {:relative :cursor :position 0}
+                       :preview {:border {:style :solid}}
+                       :select {:border {:style :solid}}}}})
+ (_G.use :stevearc/conform.nvim
+         {:keys [(_G.key :<localleader>f
+                         #(let [conform (require :conform)]
+                            (conform.format {:lsp_format :prefer}))
+                         {:desc :Format})]
+          :cmd [:ConformInfo]
+          :opts {:formatters_by_ft {:css [:prettierd :stylelint]
+                                    :fennel [:fnlfmt]
+                                    :fish [:fish_indent]
+                                    :graphql [:prettierd]
+                                    :handlebars [:prettierd]
+                                    :html [:prettierd]
+                                    :javascript [:prettierd :eslint_d]
+                                    :javascriptreact [:prettierd :eslint_d]
+                                    :json [:prettierd]
+                                    :jsonc [:prettierd]
+                                    :less [:prettierd :stylelint]
+                                    :lua [:stylua]
+                                    :markdown [:prettierd]
+                                    :markdown.mdx [:prettierd]
+                                    :nim [:nimpretty]
+                                    :scss [:prettierd :stylelint]
+                                    :sh [:shfmt]
+                                    :typescript [:prettierd :eslint_d]
+                                    :typescriptreact [:prettierd :eslint_d]
+                                    :vue [:prettierd :eslint_d]
+                                    :yaml [:prettierd]}}})
  ;;
  (_G.use :j-hui/fidget.nvim
-         {:opts {:progress {:suppress_on_insert true
+         {:event :LazyFile
+          :opts {:progress {:suppress_on_insert true
                             :ignore_done_already true
                             :display {:done_style :diffAdded
                                       :progress_style :Comment
                                       :group_style :FloatTitle
                                       :icon_style :Normal}}}})
+ ;;
+ (_G.use :DNLHC/glance.nvim
+         {:dependencies [(_G.use :neovim/nvim-lspconfig)]
+          :keys [(_G.key :<localleader>D "<cmd>Glance definitions<cr>"
+                         {:desc :Definitions})]
+          :opts {:border {:enable true :top_char "" :bottom_char ""}}})
+ ;;
+ (_G.use :lewis6991/hover.nvim
+         {:keys [(_G.key :K #(let [hover (require :hover)] (hover.hover)))]
+          :opts {:init #(do
+                          (require :hover.providers.lsp)
+                          (require :hover.providers.dap))
+                 :preview_opts {:border :solid}
+                 :title false}})
+ ;;
+ (_G.use nil
+         {:url "https://git.sr.ht/~whynothugo/lsp_lines.nvim"
+          :event :LazyFile
+          :config #(let [lsp-lines (require :lsp_lines)]
+                     (lsp-lines.setup)
+                     (vim.diagnostic.config {:virtual_text false
+                                             :virtual_lines {:highlight_whole_line false
+                                                             :only_current_line true}}))}
+         :/lsp_lines.nvim)
  ;;
  (_G.use :ray-x/lsp_signature.nvim
          {:event [:LspAttach]
@@ -166,19 +92,116 @@
                  :floating_window false
                  :floating_window_above_cur_line true}})
  ;;
- (_G.use :DNLHC/glance.nvim
-         {:dependencies [(_G.use :neovim/nvim-lspconfig)]
-          :keys [(_G.key :<localleader>D "<cmd>Glance definitions<cr>"
-                         {:desc :Definitions})]
-          :opts {:border {:enable true :top_char "" :bottom_char ""}}})
+ (_G.use :icholy/lsplinks.nvim {:lazy true :config true})
  ;;
  (_G.use :nvimdev/lspsaga.nvim
          {:dependencies [(_G.use :nvim-tree/nvim-web-devicons)]
           :event :LspAttach
-          :keys [(_G.key :<localleader>a "<cmd>Lspsaga code_action<cr>"
-                         {:desc "Code actions"})
-                 (_G.key :K "<cmd>Lspsaga hover_doc<cr>")]
           :opts {:ui {:code_action " 󰌵" :border :solid :title false}
                  :code_action {:num_shortcut false :show_server_name true}
                  :lightbulb {:sign false}
-                 :symbol_in_winbar {:enable false :show_file false}}})]
+                 :symbol_in_winbar {:enable false :show_file false}}})
+ ;;
+ (_G.use :mfussenegger/nvim-lint
+         {:event :LazyFile
+          :opts {:css [:stylelint]
+                 :fish [:fish]
+                 :less [:stylelint]
+                 :make [:checkmake]
+                 :nix [:statix]
+                 :scss [:stylelint]
+                 :yaml [:actionlint]}
+          :config #(let [lint (require :lint)]
+                     (set lint.linters_by_ft $2)
+                     (vim.api.nvim_create_autocmd [:BufWritePost
+                                                   :BufReadPost
+                                                   :InsertLeave]
+                                                  {:callback #(lint.try_lint)}))})
+ ;;
+ (_G.use :neovim/nvim-lspconfig
+         {:event :LazyFile
+          :dependencies [(_G.use :folke/neoconf.nvim
+                                 {:cmd :Neoconf :lazy true :config true})
+                         (_G.use :AstroNvim/AstroLSP
+                                 {:opts {:features {:autoformat false
+                                                    :inlay_hints true}
+                                         :formatting {:format_on_save {:enabled false}}
+                                         :handlers {1 #(let [lsp (require :lspconfig)]
+                                                         ((. lsp $1 :setup) $2))
+                                                    :clangd #(let [lsp (require :lspconfig)
+                                                                   clangd (require :clangd_extensions)]
+                                                               (lsp.clangd.setup $2)
+                                                               (clangd.setup {}))
+                                                    :dartls #(let [flutter-tools (require :flutter-tools)]
+                                                               (flutter-tools.setup {:ui {:border :solid}
+                                                                                     :lsp {:color {:enabled true
+                                                                                                   :virtual_text false
+                                                                                                   :background true}}}))
+                                                    :hls false
+                                                    :jsonls #(let [lsp (require :lspconfig)
+                                                                   schemastore (require :schemastore)]
+                                                               (lsp.jsonls.setup (merge! $2
+                                                                                         {:settings {:json {:schemas (schemastore.json.schemas)
+                                                                                                            :validate {:enable true}}}})))
+                                                    :lua_ls #(let [lsp (require :lspconfig)
+                                                                   neodev (require :neodev)]
+                                                               (neodev.setup {:setup_jsonls false})
+                                                               (lsp.lua_ls.setup $2))
+                                                    :yamlls #(let [lsp (require :lspconfig)
+                                                                   schemastore (require :schemastore)]
+                                                               (lsp.yamlls.setup (merge! $2
+                                                                                         {:settings {:yaml {:schemaStore {:enable false
+                                                                                                                          :url ""}
+                                                                                                            :schemas (schemastore.yaml.schemas)}}})))}
+                                         :capabilities (merge! (vim.lsp.protocol.make_client_capabilities)
+                                                               {:textDocument {:completion {:completionItem {:snippetSupport true}}}})
+                                         :mappings {:n {:gx {1 #(let [lsplinks (require :lsplinks)]
+                                                                  (lsplinks.gx))
+                                                             :cond :textDocument/documentLink}}}
+                                         :servers [:bashls
+                                                   :clangd
+                                                   :cssls
+                                                   :dartls
+                                                   :emmet_language_server
+                                                   :eslint
+                                                   :fennel_language_server
+                                                   :gopls
+                                                   :hls
+                                                   :html
+                                                   :jsonls
+                                                   :julials
+                                                   :ltex
+                                                   :lua_ls
+                                                   :marksman
+                                                   :mesonlsp
+                                                   :neocmake
+                                                   :nil_ls
+                                                   :nim_langserver
+                                                   :pylsp
+                                                   :rust_analyzer
+                                                   :tailwindcss
+                                                   :tsserver
+                                                   :yamlls
+                                                   :zls]
+                                         :config {:clangd {:capabilities {:offsetEncoding :utf-8}}
+                                                  :cssls {:init_options {:provideFormatter false}}
+                                                  :eslint {:settings {:packageManager :pnpm}}
+                                                  :fennel_language_server {:settings {:fennel {:workspace {:library (vim.api.nvim_list_runtime_paths)}
+                                                                                               :diagnostics {:globals [:vim
+                                                                                                                       :case]}}}}
+                                                  :html {:init_options {:provideFormatter false}}
+                                                  :ltex {:settings {:ltex {:completionEnabled true
+                                                                           :additionalRules {:enablePickyRules true
+                                                                                             :motherTongue :pl-PL}}}}
+                                                  :nil_ls {:settings {:nil {:formatting {:command [:alejandra]}}}}
+                                                  :pylsp {:settings {:pylsp {:plugins {:ruff {:enabled true
+                                                                                              :formatEnabled true}
+                                                                                       :pydocstyle {:enabled false}}}}}}}})
+                         (_G.use :williamboman/mason-lspconfig.nvim
+                                 {:cond (not _G.USING_NIX)
+                                  :dependencies [(_G.use :williamboman/mason.nvim)]
+                                  :opts {:handlers [#(let [astrolsp (require :astrolsp)]
+                                                       (astrolsp.lsp_setup $1))]}})]
+          :config #(let [astrolsp (require :astrolsp)]
+                     (vim.tbl_map astrolsp.lsp_setup astrolsp.config.servers))})]
+

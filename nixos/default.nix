@@ -116,4 +116,9 @@
     dockerCompat = true;
     defaultNetwork.settings.dns_enabled = true;
   };
+
+  systemd.coredump.extraConfig = ''
+    Storage=none
+    ProcessSizeMax=0
+  '';
 }

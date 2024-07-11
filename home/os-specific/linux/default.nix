@@ -12,18 +12,21 @@ in {
 
   home = {
     packages = with pkgs; [
+      (cutter.withPlugins (p: with p; [rz-ghidra jsdec sigdb]))
+      (ghidra.withExtensions (p: with p; [machinelearning]))
       appimage-run
       bandithedoge.deemix-gui-bin
+      bandithedoge.propertree
       bleachbit
-      blender
       bottles
       boxbuddy
-      caprine-bin
       d-spy
       discord
       distrobox_git
+      ferdium
       flameshot
       fractal
+      furmark
       gnome.devhelp
       gnome.zenity
       inkscape
@@ -36,7 +39,6 @@ in {
       nim
       nix-alien
       pciutils
-      pwvucontrol
       qbittorrent
       rclone
       telegram-desktop_git
@@ -45,11 +47,51 @@ in {
       wine-tkg
       xdragon
     ];
+
     pointerCursor = {
       inherit (pkgs.rice.gtk.cursorTheme) package name size;
-      x11.enable = true;
       gtk.enable = true;
     };
+  };
+
+  services.flatpak = {
+    enable = true;
+    uninstallUnmanaged = true;
+    remotes = [
+      {
+        name = "flathub";
+        location = "https://dl.flathub.org/repo/flathub.flatpakrepo";
+      }
+      {
+        name = "flathub-beta";
+        location = "https://flathub.org/beta-repo/flathub-beta.flatpakrepo";
+      }
+      {
+        name = "gnome-nightly";
+        location = "https://nightly.gnome.org/gnome-nightly.flatpakrepo";
+      }
+    ];
+    overrides = {
+      global = {
+        Environment = {
+          XCURSOR_PATH = "/run/host/user-share/icons:/run/host/share/icons";
+        };
+        Context.filesystems = [
+          "/etc/profiles/per-user/bandithedoge/bin:ro"
+          "/nix/store:ro"
+          "/run/current-system/sw/bin:ro"
+          "xdg-config/MangoHud:ro"
+          "xdg-config/gtk-3.0:ro"
+          "xdg-config/gtk-4.0:ro"
+        ];
+      };
+    };
+    packages = [
+      "com.github.tchx84.Flatseal"
+      "de.bforartists.Bforartists"
+      "org.gtk.Gtk3theme.adw-gtk3-dark"
+      "org.jdownloader.JDownloader"
+    ];
   };
 
   # HACK: https://github.com/nix-community/home-manager/issues/2659
@@ -65,10 +107,11 @@ in {
     inherit (pkgs.rice.gtk) theme iconTheme;
     gtk3.extraConfig = {
       gtk-application-prefer-dark-theme = true;
-      gtk-enable-primary-paste = false;
       gtk-can-change-accels = 1;
-      gtk-toolbar-style = "";
       gtk-decoration-layout = "";
+      gtk-dialogs-use-header = false;
+      gtk-enable-primary-paste = false;
+      gtk-toolbar-style = "";
     };
     gtk4 = gtk3;
   };
@@ -104,10 +147,20 @@ in {
   # TODO: customized qt
   qt = {
     enable = true;
-    platformTheme = "gtk3";
+    platformTheme.name = "adwaita";
     style.name = "adwaita-dark";
   };
   # }}}
+
+  xdg.portal = {
+    enable = true;
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-gtk
+      xdg-desktop-portal-hyprland
+      xdg-desktop-portal-wlr
+    ];
+    config.hyprland.default = ["hyprland" "gtk"];
+  };
 
   programs = {
     qutebrowser = {
@@ -374,7 +427,24 @@ in {
         hwdec = "auto-safe";
         ao = "pipewire";
       };
-      scriptOpts.uosc.timeline_style = "bar";
+      scriptOpts.uosc = {
+        timeline_style = "bar";
+        top_bar = "always";
+        scale_fullscreen = 1;
+        time_precision = 1;
+        color = let
+          color = pkgs.lib.removePrefix "#";
+        in
+          with pkgs.rice;
+            pkgs.lib.concatStringsSep "," [
+              "background=${color base00}"
+              "background_text=${color base05}"
+              "error=${color base08}"
+              "foreground=${color base0F}"
+              "foreground_text=${color base00}"
+              "success=${color base0B}"
+            ];
+      };
     };
     # }}}
 

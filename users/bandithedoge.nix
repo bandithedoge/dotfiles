@@ -18,6 +18,7 @@
           "plugdev"
           "vboxusers"
           "wheel"
+          "kvm"
         ];
         isNormalUser = true;
       }

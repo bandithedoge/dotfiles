@@ -18,6 +18,8 @@ in {
   };
 
   home = {
+    preferXdgDirectories = true;
+
     sessionVariables = {
       # android
       ANDROID_USER_HOME = "${data}/android";
@@ -50,9 +52,6 @@ in {
 
       # yarn
       yarn = "yarn --use-yarnrc ${conf}/yarn/config";
-
-      # adb
-      adb = "HOME='${data}'/android adb";
     };
   };
 

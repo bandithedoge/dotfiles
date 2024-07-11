@@ -17,6 +17,7 @@
     gamescope = {
       enable = true;
       # capSysNice = true;
+      package = pkgs.gamescope_git;
     };
 
     anime-game-launcher.enable = true;

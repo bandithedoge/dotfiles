@@ -1,8 +1,9 @@
-(require-macros :hibiscus.vim)
+(import-macros {: g!} :hibiscus.vim)
 
 [(_G.use :nvim-tree/nvim-tree.lua
          {:dependencies [(_G.use :nvim-tree/nvim-web-devicons)
-                         (_G.use :nvim-telescope/telescope.nvim)]
+                         (_G.use :nvim-telescope/telescope.nvim)
+                         (_G.use :antosha417/nvim-lsp-file-operations {:config true})]
           :keys [(_G.key :<leader>t :<cmd>NvimTreeToggle<cr>
                          {:desc "File tree"})]
           :init #(do
@@ -56,3 +57,4 @@
                                :show_on_open_dirs false}
                  :modified {:enable true :show_on_open_dirs false}
                  :filters {:git_ignored false}}})]
+

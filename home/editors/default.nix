@@ -2,112 +2,121 @@
   pkgs,
   config,
   ...
-}:
-{
-  imports = [./emacs.nix];
+}: {
+  # imports = [./emacs.nix];
 
-  # common packages {{{
-  home.packages = with pkgs; [
-    checkmake
-    editorconfig-checker
+  home = {
+    sessionVariables.EDITOR = "nvim";
+    packages = with pkgs; [
+      # {{{
+      checkmake
+      editorconfig-checker
 
-    # rust
-    rust-analyzer
-    rustfmt
+      # rust
+      rust-analyzer
+      rustfmt
 
-    # python
-    poetry
-    python3
-    python3Packages.debugpy
-    python3Packages.python-lsp-server
-    ruff-lsp
+      # python
+      poetry
+      python3
+      python3Packages.debugpy
+      python3Packages.python-lsp-ruff
+      python3Packages.python-lsp-server
+      ruff
 
-    # shell
-    nodePackages.bash-language-server
-    shellcheck
-    shellharden
-    shfmt
+      # shell
+      nodePackages.bash-language-server
+      shellcheck
+      shfmt
 
-    # web
-    bandithedoge.nodePackages.emmet-language-server
-    bandithedoge.nodePackages.tailwindcss-language-server
-    nodePackages.eslint
-    nodePackages.fixjson
-    nodePackages.markdownlint-cli2
-    nodePackages.pnpm
-    nodePackages.prettier
-    nodePackages.prettier-plugin-toml
-    nodePackages.stylelint
-    nodePackages.typescript
-    nodePackages.typescript-language-server
-    nodePackages.vscode-langservers-extracted
-    nodejs
-    yarn
+      # web
+      bandithedoge.nodePackages.emmet-language-server
+      bandithedoge.nodePackages.tailwindcss-language-server
+      eslint_d
+      nodePackages.pnpm
+      nodePackages.stylelint
+      nodePackages.typescript
+      nodePackages.typescript-language-server
+      nodePackages.vscode-langservers-extracted
+      nodejs
+      prettierd
+      yarn
 
-    # nix
-    alejandra
-    nil
+      # nix
+      alejandra
+      manix
+      nil
+      statix
 
-    # lua
-    fennel
-    fnlfmt
-    luajit
-    luajitPackages.luacheck
-    selene
-    stylua
-    sumneko-lua-language-server
+      # lua
+      bandithedoge.fennel-language-server
+      fennel
+      fnlfmt
+      luajit
+      luajitPackages.luacheck
+      selene
+      stylua
+      sumneko-lua-language-server
 
-    # c
-    bandithedoge.mesonlsp-bin
-    clang
-    clang-tools
-    clazy
-    cmake
-    cmake-format
-    gdb
-    lldb
-    neocmakelsp
-    ninja
-    pkg-config
-    qt6.qtdeclarative
-    qt6.qttools
+      # c
+      bandithedoge.mesonlsp-bin
+      clang
+      clang-tools
+      clazy
+      cmake
+      cmake-format
+      gdb
+      lldb
+      neocmakelsp
+      ninja
+      pkg-config
+      qt6.qtdeclarative
+      qt6.qttools
+      vscode-extensions.vadimcn.vscode-lldb.adapter
 
-    # nim
-    bandithedoge.nimlangserver
+      # nim
+      bandithedoge.nimlangserver
 
-    # haskell
-    cabal2nix
-    ghc
-    haskell-language-server
-    haskellPackages.cabal-fmt
-    haskellPackages.cabal-install
-    haskellPackages.stack
+      # haskell
+      cabal2nix
+      ghc
+      haskell-language-server
+      haskellPackages.cabal-fmt
+      haskellPackages.cabal-install
+      haskellPackages.haskell-debug-adapter
+      haskellPackages.hoogle
+      haskellPackages.stack
 
-    # yaml
-    nodePackages.yaml-language-server
-    actionlint
+      # yaml
+      nodePackages.yaml-language-server
+      actionlint
 
-    # dart
-    flutter
+      # dart
+      flutter
 
-    # writing
-    ltex-ls
-    marksman
-    typst
+      # writing
+      ltex-ls
+      marksman
+      typst
 
-    # faust
-    faust
+      # faust
+      faust
 
-    # zig
-    zig
-    zls
-  ];
-  # }}}
+      # zig
+      zig
+      zls
+
+      # go
+      go
+      gopls
+    ];
+    # }}}
+  };
 
   # neovim {{{
   programs.neovim = {
-    enable = false;
-    plugins = with pkgs.bandithedoge.vimPlugins; [
+    enable = true;
+    plugins = with pkgs.vimPlugins; [
       hibiscus-nvim
       tangerine-nvim
       nightfox-nvim
@@ -115,6 +124,7 @@
     ];
 
     extraConfig = "set runtimepath^=${./nvim}";
+    extraLuaPackages = ps: with ps; [fennel];
     extraLuaConfig = with pkgs.rice; let
       lazyPlugins =
         pkgs.linkFarm "lazy-plugins"
@@ -122,8 +132,110 @@
             name = drv.pname or drv.name;
             path = drv;
           })
-          (with pkgs.bandithedoge.vimPlugins; [
+          (with pkgs.vimPlugins; [
+            lua-utils-nvim
+            nui-nvim
+            nvim-nio
+            nvim-web-devicons
+            pathlib-nvim
+            plenary-nvim
+            popup-nvim
+            sqlite-lua
+
+            # dap
+            nvim-dap
+            nvim-dap-ui
+            nvim-dap-virtual-text
+
+            which-key-nvim
+
+            # language-specific
+            clangd_extensions-nvim
+            dhall-vim
+            faust-nvim
+            flutter-tools-nvim
+            haskell-tools-nvim
+            neodev-nvim
+            nvim-luaref
+            nvim-parinfer
+            org-bullets-nvim
+            orgmode
+            purescript-vim
+            rasi-vim
+            SchemaStore-nvim
+            telescope-manix
+            tree-sitter-hypr
+            vim-coffee-script
+            vim-faust
+            yuck-vim
+
+            # lsp
+            actions-preview-nvim
+            AstroLSP
+            conform-nvim
+            fidget-nvim
+            glance-nvim
+            hover-nvim
+            lsp_lines-nvim
+            lsp_signature-nvim
+            lsplinks-nvim
+            lspsaga-nvim
+            neoconf-nvim
+            nvim-lint
+            nvim-lspconfig
+
+            # ui
+            diffview-nvim
+            edgy-nvim
+            FTerm-nvim
+            gitsigns-nvim
+            indent-blankline-nvim
+            neogit
+            nvim-highlight-colors
+            nvim-hlslens
+            tiny-devicons-auto-colors-nvim
+            todo-comments-nvim
+            trouble-nvim
+
+            # utilities
+            bigfile-nvim
+            direnv-vim
+            fold-cycle-nvim
+            mkdir-nvim
+            neogen
+            nvim-expand-expr
+            remember-nvim
+            sort-nvim
+            yanky-nvim
+
+            # cmp
+            cmp-cmdline
+            cmp-nvim-lsp
+            cmp-path
+            cmp-under-comparator
+            cmp_luasnip
+            lspkind-nvim
+            nvim-cmp
+
+            heirline-nvim
+
+            # luasnip
+            friendly-snippets
+            LuaSnip
+
             mini-nvim
+
+            neorg
+
+            # nvim-tree
+            nvim-lsp-file-operations
+            nvim-tree-lua
+
+            # telescope
+            dressing-nvim
+            icon-picker-nvim
+            telescope-nvim
+            telescope-zf-native-nvim
 
             # treesitter
             (pkgs.symlinkJoin {
@@ -136,103 +248,7 @@
             nvim-ts-autotag
             nvim-ts-context-commentstring
             playground
-
-            # libraries
-            nui-nvim
-            nvim-web-devicons
-            plenary-nvim
-            popup-nvim
-            sqlite-lua
-
-            # utilities
-            direnv-vim
-            editorconfig-nvim
-            fold-cycle-nvim
-            icon-picker-nvim
-            mkdir-nvim
-            neogen
-            nvim-expand-expr
-            remember-nvim
-            sort-nvim
-            yanky-nvim
-
-            # ui
-            bufferline-nvim
-            cybu-nvim
-            dressing-nvim
-            fm-nvim
-            foldsigns-nvim
-            FTerm-nvim
-            gitsigns-nvim
-            heirline-nvim
-            hover-nvim
-            indent-blankline-nvim
-            nvim-colorizer-lua
-            nvim-hlslens
-            nvim-tree-lua
-            pretty-fold-nvim
             rainbow-delimiters-nvim
-            todo-comments-nvim
-            trouble-nvim
-
-            # keybindings
-            which-key-nvim
-
-            # lsp
-            document-color-nvim
-            fidget-nvim
-            glance-nvim
-            lsp_lines-nvim
-            lsp_signature-nvim
-            lspkind-nvim
-            lspsaga-nvim
-            none-ls-nvim
-            nvim-lspconfig
-            SchemaStore-nvim
-
-            # completion
-            cmp-cmdline
-            cmp-nvim-lsp
-            cmp-nvim-lsp-document-symbol
-            cmp-nvim-lua
-            cmp-path
-            cmp-under-comparator
-            cmp_luasnip
-            nvim-cmp
-
-            # dap
-            nvim-dap
-            nvim-dap-ui
-
-            # writing
-            pkgs.vimPlugins.neorg
-
-            # language-specific
-            crates-nvim
-            dhall-vim
-            faust-nvim
-            flutter-tools-nvim
-            haskell-tools-nvim
-            neodev-nvim
-            nvim-luaref
-            nvim-parinfer
-            package-info-nvim
-            purescript-vim
-            rasi-vim
-            tree-sitter-hypr
-            typescript-nvim
-            vim-coffee-script
-            vim-faust
-            yaml-companion-nvim
-            yuck-vim
-
-            # telescope
-            telescope-nvim
-            telescope-zf-native-nvim
-
-            # snippets
-            friendly-snippets
-            LuaSnip
           ]));
     in ''
       ${def.lua}
@@ -256,12 +272,12 @@
       require("config")
     '';
   };
-  # xdg.configFile."nvim" = {
-  #   source = ./nvim;
-  #   recursive = true;
-  #   onChange = ''
-  #     ${pkgs.lib.getExe config.programs.neovim.finalPackage} -E -c ":FnlCompile!" -c q
-  #   '';
-  # };
+  xdg.configFile."nvim" = {
+    source = ./nvim;
+    recursive = true;
+    onChange = ''
+      ${pkgs.lib.getExe config.programs.neovim.finalPackage} -E -c ":FnlCompile!" -c q
+    '';
+  };
   # }}}
 }

@@ -24,16 +24,19 @@ in {
       comma
       fd
       ffmpeg
+      fh
       file
+      geekbench
       hactool
       hyperfine
-      imagemagick
+      imagemagickBig
       innoextract
       jq
       killall
       librespeed-cli
       neofetch
       niv
+      nix-output-monitor
       nix-prefetch
       oi
       pandoc
@@ -62,6 +65,7 @@ in {
         bs = "brew search";
         bq = "brew list";
       };
+    file.".face".source = ../../face.png;
   }; # }}}
 
   xdg.configFile = {
@@ -278,19 +282,20 @@ in {
           colored-man-pages
         ]);
       functions = {
-        br = {
-          body = ''
-            set f (mktemp)
-            broot --outcmd $f $argv
-            if test $status -ne 0
-              rm -f "$f"
-              return "$code"
-            end
-            set d (cat "$f")
+        br.body = ''
+          set f (mktemp)
+          broot --outcmd $f $argv
+          if test $status -ne 0
             rm -f "$f"
-            eval "$d"
-          '';
-        };
+            return "$code"
+          end
+          set d (cat "$f")
+          rm -f "$f"
+          eval "$d"
+        '';
+        nb.body = ''
+          nix build $argv --log-format internal-json -v &| nom --json
+        '';
       };
       interactiveShellInit = with pkgs.rice; ''
         set fish_color_autosuggestion '${base03}'
@@ -434,11 +439,30 @@ in {
       ignores = ["*~"];
       lfs.enable = true;
       delta = {
-        enable = true;
+        # enable = true;
         options = {
           theme = "base16";
         };
       };
+    };
+
+    xplr = {
+      enable = true;
+      extraConfig = builtins.readFile (pkgs.runCommand "xplr/init.lua" {
+          nativeBuildInputs = with pkgs; [fennel];
+        } ''
+          fennel --globals xplr -c ${./xplr.fnl} > $out
+        '');
+      plugins = pkgs.lib.genAttrs [
+        "tree-view"
+        "fzf"
+        "map"
+        "web-devicons"
+        "wl-clipboard"
+        "dragon"
+        "ouch"
+        "command-mode"
+      ] (name: pkgs.bandithedoge.xplrPlugins.${name});
     };
 
     dircolors.enable = true;
@@ -447,7 +471,11 @@ in {
     info.enable = true;
     nix-index.enable = true;
     zellij.enable = true;
-  }; # }}}
+    # }}}
+  };
 
-  manual.manpages.enable = false;
+  manual = {
+    manpages.enable = false;
+    html.enable = true;
+  };
 }

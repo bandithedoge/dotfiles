@@ -3,22 +3,24 @@
   config,
   ...
 }: {
-  environment.systemPackages = with pkgs; [
-    greetd.greetd
-    qt5.qtwayland
-    qt6.qtwayland
-    rice.gtk.cursorTheme.package
-    rice.gtk.iconTheme.package
-    rice.gtk.theme.package
-    winetricks
-    xorg.setxkbmap
-  ];
+  environment = {
+    systemPackages = with pkgs; [
+      greetd.greetd
+      qt5.qtwayland
+      qt6.qtwayland
+      rice.gtk.cursorTheme.package
+      rice.gtk.iconTheme.package
+      rice.gtk.theme.package
+      winetricks
+      xorg.setxkbmap
+    ];
+    etc."greetd/regreet.css".source = pkgs.lib.mkForce (pkgs.rice.compileSCSS ../home/os-specific/linux/gtk.scss);
+  };
 
   programs = {
     regreet = {
       enable = true;
       cageArgs = ["-s" "-d" "-m" "last"];
-      extraCss = builtins.readFile (pkgs.rice.compileSCSS ../home/os-specific/linux/gtk.scss);
       settings = with pkgs.rice; {
         background = {
           path = wallpaperBlurred;
@@ -34,18 +36,6 @@
       };
     };
 
-    sway = {
-      enable = false;
-      package = null;
-      extraPackages = [];
-    };
-
-    river = {
-      enable = false;
-      package = null;
-      extraPackages = [];
-    };
-
     gnome-disks.enable = true;
     hyprland.enable = true;
     ns-usbloader.enable = true;
@@ -53,7 +43,7 @@
   };
 
   services = {
-    xserver.displayManager.sessionPackages = let
+    displayManager.sessionPackages = let
       waylandSession = let
         sessionItem = pkgs.makeDesktopItem {
           name = "wayland";
@@ -74,15 +64,17 @@
     in [
       waylandSession
     ];
+
     accounts-daemon.enable = true;
-    flatpak.enable = true;
     gnome.gnome-keyring.enable = true;
     greetd.enable = true;
+    flatpak.enable = true;
   };
 
   xdg.portal = {
     enable = true;
     wlr.enable = true;
+    config.sway.default = ["wlr" "gtk"];
     extraPortals = with pkgs; [
       xdg-desktop-portal-gtk
     ];
@@ -112,11 +104,6 @@
     };
   };
 
-  qt = {
-    enable = true;
-    style = "adwaita-dark";
-  };
-
   boot = {
     extraModulePackages = with config.boot.kernelPackages; [v4l2loopback];
     kernelModules = ["v4l2loopback"];
@@ -129,7 +116,10 @@
   };
 
   security.pam = {
-    services.waylock = {};
+    services = {
+      waylock = {};
+      gtklock = {};
+    };
     loginLimits = [
       {
         domain = "*";
@@ -152,10 +142,8 @@
     ];
   };
 
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
-    driSupport = true;
-    driSupport32Bit = true;
-    setLdLibraryPath = true;
+    enable32Bit = true;
   };
 }

@@ -1,23 +1,21 @@
 [(_G.use :hrsh7th/nvim-cmp
          {:dependencies [(_G.use :hrsh7th/cmp-cmdline)
                          (_G.use :hrsh7th/cmp-nvim-lsp)
-                         (_G.use :hrsh7th/cmp-nvim-lsp-document-symbol)
-                         (_G.use :hrsh7th/cmp-nvim-lua)
                          (_G.use :hrsh7th/cmp-path)
+                         (_G.use :lukas-reineke/cmp-under-comparator)
                          (_G.use :saadparwaiz1/cmp_luasnip
                                  {:dependencies [(_G.use :L3MON4D3/LuaSnip)]})
                          (_G.use :onsails/lspkind.nvim
                                  {:opts {:mode :symbol_text :preset :codicons}
                                   :config #(let [lspkind (require :lspkind)]
-                                             (lspkind.init $1))})
-                         (_G.use :lukas-reineke/cmp-under-comparator)]
+                                             (lspkind.init $1))})]
           :event [:InsertEnter :CmdlineEnter]
           :opts #(let [cmp (require :cmp)
                        luasnip (require :luasnip)
                        lspkind (require :lspkind)
-                       cmp-under-comparator (require :cmp-under-comparator)]
-                   {:snippet {:expand (lambda [args]
-                                        (luasnip.lsp_expand args.body))}
+                       cmp-under-comparator (require :cmp-under-comparator)
+                       clangd (require :clangd_extensions.cmp_scores)]
+                   {:snippet {:expand #(luasnip.lsp_expand $1.body)}
                     :completion {:completeopt "menu,menuone,preview,noinsert,noselect"}
                     :preselect cmp.PreselectMode.None
                     :mapping {:<C-Space> (cmp.mapping.complete)
@@ -29,17 +27,16 @@
                               :<M-Tab> (cmp.mapping #(luasnip.expand_or_jump))
                               :<M-S-Tab> #(luasnip.jump -1)}
                     :formatting {:format (lspkind.cmp_format)}
-                    :experimental {:ghost_text {:hl_group :Comment}}
-                    :sources [{:name :crates}
-                              {:name :luasnip}
+                    :sources [{:name :luasnip}
                               {:name :neorg}
+                              {:name :orgmode}
                               {:name :nvim_lsp}
-                              {:name :nvim_lua}
                               {:name :path}]
                     :sorting {:comparators [cmp.config.compare.exact
                                             cmp.config.compare.offset
                                             cmp.config.compare.score
                                             cmp-under-comparator.under
+                                            clangd
                                             cmp.config.compare.kind
                                             cmp.config.compare.sort_text
                                             cmp.config.compare.length
@@ -52,3 +49,4 @@
                      (cmp.setup.cmdline "/"
                                         [{:name :buffer}
                                          {:name :nvim_lsp_document_symbol}]))})]
+

@@ -3,8 +3,8 @@
 in
   rice
   // (with rice; rec {
-    terminal = "footclient";
-    wm = "Hyprland";
+    terminal = "kitty";
+    wm = "sway";
     menu = "rofi -show drun";
 
     wallpaper = ./wallpaper.jpg;
@@ -23,8 +23,8 @@ in
         package = pkgs.papirus-icon-theme;
       };
       cursorTheme = {
-        name = "phinger-cursors";
-        package = pkgs.phinger-cursors;
+        name = "capitaine-cursors";
+        package = pkgs.capitaine-cursors;
         size = 16;
       };
     };
