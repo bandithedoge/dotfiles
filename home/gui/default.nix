@@ -196,6 +196,18 @@
     }; # }}}
 
     librewolf.enable = config.hostname == "machine-nixos";
+
+    wezterm = {
+      enable = true;
+      extraConfig =
+        pkgs.rice.def.lua
+        + builtins.readFile
+        (pkgs.runCommand "wezterm.fnl" {
+            nativeBuildInputs = with pkgs; [fennel];
+          } ''
+            fennel -c ${./wezterm.fnl} > $out
+          '');
+    };
   };
   xdg = {
     configFile = {

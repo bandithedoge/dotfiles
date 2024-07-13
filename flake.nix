@@ -4,7 +4,7 @@
 
     flake-parts.url = "github:hercules-ci/flake-parts";
     lix.inputs.nixpkgs.follows = "nixpkgs";
-    lix.url = "https://git.lix.systems/lix-project/nixos-module/archive/2.90.0-rc1.tar.gz";
+    lix.url = "https://git.lix.systems/lix-project/nixos-module/archive/2.90.0.tar.gz";
     nixos-flake.url = "github:srid/nixos-flake";
 
     nixos-hardware.url = "github:nixos/nixos-hardware";

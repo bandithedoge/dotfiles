@@ -8,7 +8,7 @@
     carla
     furnace
     helvum
-    picard
+    # picard
     playerctl
     pwvucontrol
     reaper

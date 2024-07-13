@@ -16,43 +16,43 @@
     cp *.el $out
   '';
 in {
-  home = {
-    packages = with pkgs; [
-      (pkgs.emacsWithPackagesFromUsePackage {
-        package = emacsPackage;
-        config = "${configDir}/init.el";
-
-        defaultInitFile = true;
-        alwaysEnsure = true;
-
-        extraEmacsPackages = epkgs:
-          with epkgs; [
-            treesit-grammars.with-all-grammars
-          ];
-
-        override = final: prev: {
-          inherit (pkgs.bandithedoge.emacsPackages)
-            clangd-inactive-regions
-            eglot-booster
-            eglot-ltex
-            eglot-yaml
-            indent-bars
-            once
-            smartparens;
-        };
-      })
-
-      emacs-lsp-booster
-    ];
-    sessionVariables.EDITOR = "emacs";
-  };
-
-  xdg.configFile = {
-    "emacs/init.el".source = "${configDir}/init.el";
-    "emacs/doom-rice-theme.el".text = ''
-      ${pkgs.rice.def.elisp}
-      ${builtins.readFile "${configDir}/doom-rice-theme.el"}
-    '';
-    "emacs/early-init.el".source = "${configDir}/early-init.el";
-  };
+  # home = {
+  #   packages = with pkgs; [
+  #     (pkgs.emacsWithPackagesFromUsePackage {
+  #       package = emacsPackage;
+  #       config = "${configDir}/init.el";
+  #
+  #       defaultInitFile = true;
+  #       alwaysEnsure = true;
+  #
+  #       extraEmacsPackages = epkgs:
+  #         with epkgs; [
+  #           treesit-grammars.with-all-grammars
+  #         ];
+  #
+  #       override = final: prev: {
+  #         inherit (pkgs.bandithedoge.emacsPackages)
+  #           clangd-inactive-regions
+  #           eglot-booster
+  #           eglot-ltex
+  #           eglot-yaml
+  #           indent-bars
+  #           once
+  #           smartparens;
+  #       };
+  #     })
+  #
+  #     emacs-lsp-booster
+  #   ];
+  #   sessionVariables.EDITOR = "emacs";
+  # };
+  #
+  # xdg.configFile = {
+  #   "emacs/init.el".source = "${configDir}/init.el";
+  #   "emacs/doom-rice-theme.el".text = ''
+  #     ${pkgs.rice.def.elisp}
+  #     ${builtins.readFile "${configDir}/doom-rice-theme.el"}
+  #   '';
+  #   "emacs/early-init.el".source = "${configDir}/early-init.el";
+  # };
 }

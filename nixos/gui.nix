@@ -87,7 +87,7 @@
     packages = with pkgs; [
       (nerdfonts.override {fonts = ["JetBrainsMono"];})
       bandithedoge.symbols-nerd-font
-      emojione
+      # emojione
       roboto
       roboto-slab
       twemoji-color-font
@@ -99,7 +99,7 @@
         monospace = [monoFont];
         sansSerif = [uiFont];
         serif = [serifFont];
-        emoji = [emojiFont];
+        # emoji = [emojiFont];
       };
     };
   };

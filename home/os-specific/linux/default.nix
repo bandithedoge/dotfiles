@@ -31,7 +31,6 @@ in {
       gnome.zenity
       inkscape
       keepassxc
-      kicad
       krita
       libnotify
       libreoffice-fresh
@@ -40,6 +39,7 @@ in {
       nix-alien
       pciutils
       qbittorrent
+      qview
       rclone
       telegram-desktop_git
       tor-browser-bundle-bin

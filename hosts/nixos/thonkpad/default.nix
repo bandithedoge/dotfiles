@@ -29,19 +29,13 @@
     kanata = {
       # {{{
       enable = true;
-      package = pkgs.bandithedoge.haskellPackages.kmonad;
       keyboards.internal = {
-        name = "laptop-internal";
-        device = "/dev/input/by-path/platform-i8042-serio-0-event-kbd";
-        defcfg = {
-          enable = true;
-          fallthrough = true;
-        };
+        devices = ["/dev/input/by-path/platform-i8042-serio-0-event-kbd"];
         config = builtins.readFile ./kmonad.kbd;
       };
     }; # }}}
 
-    xserver.libinput = {
+    libinput = {
       enable = true;
       touchpad.tapping = false;
     };

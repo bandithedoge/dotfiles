@@ -1,8 +1,6 @@
 {
   pkgs,
   config,
-  inputs,
-  lib,
   ...
 }: let
   oi = pkgs.callPackage ./oi {};
@@ -45,7 +43,6 @@ in {
       sox
       unar
       unzip
-      vimiv-qt
       wgcf
       wget
       xdg-ninja
@@ -72,87 +69,87 @@ in {
     "rice.json".text = builtins.toJSON (pkgs.lib.filterAttrsRecursive (_: v: !builtins.isFunction v) pkgs.rice);
 
     # zellij {{{
-    "zellij/config.kdl".text = ''
-      on_force_close "quit"
-      pane_frames false
-      session_serialization false
-
-      ui {
-        pane_frames {
-          hide_session_name true
-        }
-      }
-
-      keybinds clear-defaults=true {
-        normal {
-          bind "Ctrl t" { SwitchToMode "Tab"; }
-        }
-        tab {
-          bind "h" { MoveFocus "Left"; }
-          bind "j" { MoveFocus "Down"; }
-          bind "k" { MoveFocus "Up"; }
-          bind "l" { MoveFocus "Right"; }
-          bind "u" { HalfPageScrollUp; }
-          bind "d" { HalfPageScrollDown; }
-          bind "Tab" { GoToNextTab; SwitchToMode "Normal"; }
-          bind "w" { CloseFocus; SwitchToMode "Normal"; }
-          bind "n" { NewTab; SwitchToMode "Normal"; }
-          bind "v" { NewPane "Right"; SwitchToMode "Normal"; }
-          bind "s" { NewPane "Down"; SwitchToMode "Normal"; }
-          bind "/" { SwitchToMode "EnterSearch"; SearchInput 0; }
-          bind "e" { EditScrollback; SwitchToMode "Normal"; }
-        }
-        search {
-          bind "n" { Search "down"; }
-          bind "p" { Search "up"; }
-          bind "c" { SearchToggleOption "CaseSensitivity"; }
-          bind "w" { SearchToggleOption "Wrap"; }
-          bind "o" { SearchToggleOption "WholeWord"; }
-        }
-        entersearch {
-          bind "Ctrl c" "Esc" { SwitchToMode "Scroll"; }
-          bind "Enter" { SwitchToMode "Search"; }
-        }
-        shared_except "normal" {
-          bind "Ctrl t" { SwitchToMode "Normal"; }
-          bind "Esc" { SwitchToMode "Normal"; }
-        }
-      }
-    '';
-    "zellij/layouts/default.kdl".text = with pkgs.rice; ''
-      layout {
-        pane split_direction="vertical" {
-          pane
-        }
-        pane size=1 borderless=true {
-          plugin location="file:${inputs.zjstatus.packages.${pkgs.system}.default}/bin/zjstatus.wasm" {
-            format_left "{mode} {tabs}"
-            format_right "#[fg=${base03}]{session}"
-
-            mode_normal "#[bg=${base02},fg=${base0F},bold] {name} "
-            mode_tab "#[bg=${base0F},fg=${base00},bold] {name} "
-
-            tab_normal "#[bg=${base02},fg=${base03}] {name} "
-            tab_active "#[bg=${base0F},fg=${base00}] {name} "
-          }
-        }
-      }
-    '';
-    "zellij/themes/default.kdl".text = lib.hm.generators.toKDL {} (with pkgs.rice; {
-      themes.default = {
-        fg = base05;
-        bg = base00;
-        black = base10;
-        red = base08;
-        green = base0B;
-        yellow = base0A;
-        blue = base0D;
-        magenta = base0E;
-        cyan = base0C;
-        white = base06;
-        orange = base09;
-      };
-    }); # }}}
+    # "zellij/config.kdl".text = ''
+    #   on_force_close "quit"
+    #   pane_frames false
+    #   session_serialization false
+    #
+    #   ui {
+    #     pane_frames {
+    #       hide_session_name true
+    #     }
+    #   }
+    #
+    #   keybinds clear-defaults=true {
+    #     normal {
+    #       bind "Ctrl t" { SwitchToMode "Tab"; }
+    #     }
+    #     tab {
+    #       bind "h" { MoveFocus "Left"; }
+    #       bind "j" { MoveFocus "Down"; }
+    #       bind "k" { MoveFocus "Up"; }
+    #       bind "l" { MoveFocus "Right"; }
+    #       bind "u" { HalfPageScrollUp; }
+    #       bind "d" { HalfPageScrollDown; }
+    #       bind "Tab" { GoToNextTab; SwitchToMode "Normal"; }
+    #       bind "w" { CloseFocus; SwitchToMode "Normal"; }
+    #       bind "n" { NewTab; SwitchToMode "Normal"; }
+    #       bind "v" { NewPane "Right"; SwitchToMode "Normal"; }
+    #       bind "s" { NewPane "Down"; SwitchToMode "Normal"; }
+    #       bind "/" { SwitchToMode "EnterSearch"; SearchInput 0; }
+    #       bind "e" { EditScrollback; SwitchToMode "Normal"; }
+    #     }
+    #     search {
+    #       bind "n" { Search "down"; }
+    #       bind "p" { Search "up"; }
+    #       bind "c" { SearchToggleOption "CaseSensitivity"; }
+    #       bind "w" { SearchToggleOption "Wrap"; }
+    #       bind "o" { SearchToggleOption "WholeWord"; }
+    #     }
+    #     entersearch {
+    #       bind "Ctrl c" "Esc" { SwitchToMode "Scroll"; }
+    #       bind "Enter" { SwitchToMode "Search"; }
+    #     }
+    #     shared_except "normal" {
+    #       bind "Ctrl t" { SwitchToMode "Normal"; }
+    #       bind "Esc" { SwitchToMode "Normal"; }
+    #     }
+    #   }
+    # '';
+    # "zellij/layouts/default.kdl".text = with pkgs.rice; ''
+    #   layout {
+    #     pane split_direction="vertical" {
+    #       pane
+    #     }
+    #     pane size=1 borderless=true {
+    #       plugin location="file:${inputs.zjstatus.packages.${pkgs.system}.default}/bin/zjstatus.wasm" {
+    #         format_left "{mode} {tabs}"
+    #         format_right "#[fg=${base03}]{session}"
+    #
+    #         mode_normal "#[bg=${base02},fg=${base0F},bold] {name} "
+    #         mode_tab "#[bg=${base0F},fg=${base00},bold] {name} "
+    #
+    #         tab_normal "#[bg=${base02},fg=${base03}] {name} "
+    #         tab_active "#[bg=${base0F},fg=${base00}] {name} "
+    #       }
+    #     }
+    #   }
+    # '';
+    # "zellij/themes/default.kdl".text = lib.hm.generators.toKDL {} (with pkgs.rice; {
+    #   themes.default = {
+    #     fg = base05;
+    #     bg = base00;
+    #     black = base10;
+    #     red = base08;
+    #     green = base0B;
+    #     yellow = base0A;
+    #     blue = base0D;
+    #     magenta = base0E;
+    #     cyan = base0C;
+    #     white = base06;
+    #     orange = base09;
+    #   };
+    # }); # }}}
 
     # broot {{{
     "broot/conf.toml".source = (pkgs.formats.toml {}).generate "broot-config" {
@@ -447,7 +444,7 @@ in {
     };
 
     xplr = {
-      enable = true;
+      # enable = true;
       extraConfig = builtins.readFile (pkgs.runCommand "xplr/init.lua" {
           nativeBuildInputs = with pkgs; [fennel];
         } ''
@@ -470,7 +467,7 @@ in {
     git-credential-oauth.enable = true;
     info.enable = true;
     nix-index.enable = true;
-    zellij.enable = true;
+    # zellij.enable = true;
     # }}}
   };
 

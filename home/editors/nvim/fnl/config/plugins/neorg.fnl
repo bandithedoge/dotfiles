@@ -1,5 +1,9 @@
 [(_G.use :nvim-neorg/neorg
-         {:dependencies [(_G.use :nvim-lua/plenary.nvim)]
+         {:dependencies [(_G.use :nvim-lua/plenary.nvim)
+                         (_G.use :nvim-neorg/lua-utils.nvim)
+                         (_G.use :nvim-neotest/nvim-nio)
+                         (_G.use :MunifTanjim/nui.nvim)
+                         (_G.use :pysan3/pathlib.nvim)]
           :ft :norg
           :opts {:load {:core.defaults {}
                         :core.esupports.metagen {:config {:type :auto
