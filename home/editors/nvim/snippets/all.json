@@ -1,0 +1,122 @@
+{
+    "base00": {
+        "prefix": "base00",
+        "body": ["base00"],
+        "description": "Default Background. Example: #282c34"
+    },
+    "base01": {
+        "prefix": "base01",
+        "body": ["base01"],
+        "description": "Lighter Background (Used for status bars, line number and folding marks). Example: #3f4451"
+    },
+    "base02": {
+        "prefix": "base02",
+        "body": ["base02"],
+        "description": "Selection Background. Example: #4f5666"
+    },
+    "base03": {
+        "prefix": "base03",
+        "body": ["base03"],
+        "description": "Comments, Invisibles, Line Highlighting. Example: #545862"
+    },
+    "base04": {
+        "prefix": "base04",
+        "body": ["base04"],
+        "description": "Dark Foreground (used for status bars). Example: #9196a1"
+    },
+    "base05": {
+        "prefix": "base05",
+        "body": ["base05"],
+        "description": "Default Foreground, Caret, Delimiters, Operators. Example: #abb2bf"
+    },
+    "base06": {
+        "prefix": "base06",
+        "body": ["base06"],
+        "description": "Light Foreground (Not often used). Example: #e6e6e6"
+    },
+    "base07": {
+        "prefix": "base07",
+        "body": ["base07"],
+        "description": "Light Background (Not often used). Example: #ffffff"
+    },
+    "base08": {
+        "prefix": "base08",
+        "body": ["base08"],
+        "description": "Variables, XML Tags, Markup Link Text, Markup Lists, Diff Deleted. Example: #e05561 (Red)"
+    },
+    "base09": {
+        "prefix": "base09",
+        "body": ["base09"],
+        "description": "Integers, Boolean, Constants, XML Attributes, Markup Link Url. Example: #d18f52 (Orange)"
+    },
+    "base0A": {
+        "prefix": "base0A",
+        "body": ["base0A"],
+        "description": "Classes, Markup Bold, Search Text Background. Example: #e6b965 (Yellow)"
+    },
+    "base0B": {
+        "prefix": "base0B",
+        "body": ["base0B"],
+        "description": "Strings, Inherited Class, Markup Code, Diff Inserted. Example: #8cc265 (Green)"
+    },
+    "base0C": {
+        "prefix": "base0C",
+        "body": ["base0C"],
+        "description": "Support, Regular Expressions, Escape Characters, Markup Quotes. Example: #42b3c2 (Cyan)"
+    },
+    "base0D": {
+        "prefix": "base0D",
+        "body": ["base0D"],
+        "description": "Functions, Methods, Attribute IDs, Headings. Example: #4aa5f0 (Blue)"
+    },
+    "base0E": {
+        "prefix": "base0E",
+        "body": ["base0E"],
+        "description": "Keywords, Storage, Selector, Markup Italic, Diff Changed. Example: #c162de (Magenta)"
+    },
+    "base0F": {
+        "prefix": "base0F",
+        "body": ["base0F"],
+        "description": "Deprecated, Opening/Closing Embedded Language Tags, e.g. <?php>. Example: #bf4034"
+    },
+    "base10": {
+        "prefix": "base10",
+        "body": ["base10"],
+        "description": "Darker Background. Example: #21252b"
+    },
+    "base11": {
+        "prefix": "base11",
+        "body": ["base11"],
+        "description": "Darkest Background. Example: #181a1f"
+    },
+    "base12": {
+        "prefix": "base12",
+        "body": ["base12"],
+        "description": "Bright Red. Example: #ff616e"
+    },
+    "base13": {
+        "prefix": "base13",
+        "body": ["base13"],
+        "description": "Bright Yellow. Example: #f0a45d"
+    },
+    "base14": {
+        "prefix": "base14",
+        "body": ["base14"],
+        "description": "Bright Green. Example: #a5e075"
+    },
+    "base15": {
+        "prefix": "base15",
+        "body": ["base15"],
+        "description": "Bright Cyan. Example: #4cd1e0"
+    },
+    "base16": {
+        "prefix": "base16",
+        "body": ["base16"],
+        "description": "Bright Blue. Example: #4dc4ff"
+    },
+    "base17": {
+        "prefix": "base17",
+        "body": ["base17"],
+        "description": "Bright Magenta. Example: #de73ff"
+    }
+}

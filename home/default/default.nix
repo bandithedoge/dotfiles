@@ -17,14 +17,13 @@ in {
     '';
     packages = with pkgs; [
       # {{{
+      age
       aria
       broot
       comma
       fd
       ffmpeg
-      fh
       file
-      geekbench
       hactool
       hyperfine
       imagemagickBig
@@ -36,10 +35,12 @@ in {
       niv
       nix-output-monitor
       nix-prefetch
+      nurl
       oi
       pandoc
       rclone
       ripgrep
+      sops
       sox
       unar
       unzip
@@ -278,7 +279,13 @@ in {
           fzf-fish
           colored-man-pages
         ]);
-      functions = {
+      functions = let
+        mkNom = subc: {
+          body = ''
+            nix ${subc} $argv --log-format internal-json -v &| nom --json
+          '';
+        };
+      in {
         br.body = ''
           set f (mktemp)
           broot --outcmd $f $argv
@@ -290,9 +297,10 @@ in {
           rm -f "$f"
           eval "$d"
         '';
-        nb.body = ''
-          nix build $argv --log-format internal-json -v &| nom --json
-        '';
+        nb = mkNom "build";
+        nd = mkNom "develop";
+        nr = mkNom "run";
+        ns = mkNom "shell";
       };
       interactiveShellInit = with pkgs.rice; ''
         set fish_color_autosuggestion '${base03}'
@@ -435,31 +443,61 @@ in {
       userEmail = "bandithedoge@protonmail.com";
       ignores = ["*~"];
       lfs.enable = true;
-      delta = {
-        # enable = true;
-        options = {
-          theme = "base16";
-        };
-      };
     };
 
-    xplr = {
-      # enable = true;
-      extraConfig = builtins.readFile (pkgs.runCommand "xplr/init.lua" {
-          nativeBuildInputs = with pkgs; [fennel];
-        } ''
-          fennel --globals xplr -c ${./xplr.fnl} > $out
-        '');
-      plugins = pkgs.lib.genAttrs [
-        "tree-view"
-        "fzf"
-        "map"
-        "web-devicons"
-        "wl-clipboard"
-        "dragon"
-        "ouch"
-        "command-mode"
-      ] (name: pkgs.bandithedoge.xplrPlugins.${name});
+    yazi = {
+      enable = true;
+      enableFishIntegration = true;
+      shellWrapperName = "y";
+      package = pkgs.yazi.override {extraPackages = with pkgs; [glow miller hexyl exiftool mediainfo ouch clipboard-jh];};
+
+      settings = {
+        manager = {
+          sort_by = "natural";
+          show_hidden = true;
+        };
+        preview = {
+          wrap = "yes";
+          tab_size = 4;
+        };
+        opener = {
+          extract = [
+            {run = "ouch d -y \"%*\""; desc = "Extract here with ouch";}
+          ];
+        };
+        plugin = {
+          prepend_previewers = [
+            {name = "*.md"; run = "glow";}
+            {mime = "text/csv"; run = "miller";}
+            {mime = "audio/*"; run = "exifaudio";}
+            {mime ="application/*zip"; run = "ouch";}
+            {mime = "application/x-{tar,bzip2,7z-compressed,rar,xz}"; run = "ouch";}
+            {name = "*/"; run = "eza-preview";}
+          ];
+          append_previewers = [
+            {name = "*"; run = "hexyl";}
+          ];
+        };
+      };
+
+      plugins = pkgs.lib.genAttrs [ "glow" "miller" "hexyl" "exifaudio" "ouch" "eza-preview" "system-clipboard" "yatline"] (name: pkgs.bandithedoge.yaziPlugins.${name});
+
+      keymap = {
+        manager.prepend_keymap = [
+            {on = "C"; run = "plugin ouch --args=zip"; desc = "Compress with ouch";}
+            {on = "E"; run = "plugin eza-preview"; desc = "Toggle tree/list dir preview";}
+            {on = "<C-y>"; run = "plugin system-clipboard";}
+        ];
+        completion.prepend_keymap = [
+          {on = "<C-j>"; run = "arrow 1";}
+          {on = "<C-k>"; run = "arrow -1";}
+        ];
+      };
+
+      initLua = builtins.readFile (pkgs.runCommand "yazi/init.lua" {nativeBuildInputs = with pkgs; [fennel];}
+      ''
+        fennel -c ${./yazi.fnl} > $out
+      '');
     };
 
     dircolors.enable = true;
@@ -467,7 +505,6 @@ in {
     git-credential-oauth.enable = true;
     info.enable = true;
     nix-index.enable = true;
-    # zellij.enable = true;
     # }}}
   };
 

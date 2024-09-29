@@ -160,23 +160,27 @@
                                 :NeogitChangeCopied {:link :DiffFile}
                                 :NeogitChangeBothModified {:link :DiffChanged}
                                 :NeogitChangeNewFile {:link :DiffNewFile}
-                                "@org.headline.level1" {:link :rainbowcol1
-                                                        :style :bold}
-                                "@org.headline.level2" {:link :rainbowcol2
-                                                        :style :bold}
-                                "@org.headline.level3" {:link :rainbowcol3
-                                                        :style :bold}
-                                "@org.headline.level4" {:link :rainbowcol4
-                                                        :style :bold}
-                                "@org.headline.level5" {:link :rainbowcol5
-                                                        :style :bold}
-                                "@org.headline.level6" {:link :rainbowcol6
-                                                        :style :bold}
-                                "@org.headline.level7" {:link :rainbowcol7
-                                                        :style :bold}
-                                "@org.headline.level8" {:link :rainbowcol1
-                                                        :style :bold}
-                                :EdgyNormal {:link :NormalNC}}}})
+                                :RenderMarkdownH1 {:link :rainbowcol1
+                                                   :style :bold}
+                                :RenderMarkdownH2 {:link :rainbowcol2
+                                                   :style :bold}
+                                :RenderMarkdownH3 {:link :rainbowcol3
+                                                   :style :bold}
+                                :RenderMarkdownH4 {:link :rainbowcol4
+                                                   :style :bold}
+                                :RenderMarkdownH5 {:link :rainbowcol5
+                                                   :style :bold}
+                                :RenderMarkdownH6 {:link :rainbowcol6
+                                                   :style :bold}
+                                :RenderMarkdownH1Bg {:bg _G.base01}
+                                :RenderMarkdownH2Bg {:bg _G.base01}
+                                :RenderMarkdownH3Bg {:bg _G.base01}
+                                :RenderMarkdownH4Bg {:bg _G.base01}
+                                :RenderMarkdownH5Bg {:bg _G.base01}
+                                :RenderMarkdownH6Bg {:bg _G.base01}
+                                :EdgyNormal {:link :NormalNC}
+                                :NeoTreeModified {:fg _G.base08}
+                                :NeoTreeCursorLine {:bg :bg1}}}})
 
 (nightfox.compile)
 (vim.cmd.colorscheme :nightfox)

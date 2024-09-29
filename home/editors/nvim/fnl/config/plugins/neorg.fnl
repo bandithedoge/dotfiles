@@ -17,19 +17,5 @@
                         :core.completion {:config {:engine :nvim-cmp}}
                         :core.dirman {:config {:workspaces {:school "~/sql"}
                                                :autochdir true}}
-                        :core.concealer {:config {:icons {:heading {:enabled true
-                                                                    :level_1 {:icon "❋"
-                                                                              :highlight :rainbowcol1}
-                                                                    :level_2 {:icon " ❂"
-                                                                              :highlight :rainbowcol2}
-                                                                    :level_3 {:icon "  ❀"
-                                                                              :highlight :rainbowcol3}
-                                                                    :level_4 {:icon "   ✿"
-                                                                              :highlight :rainbowcol4}
-                                                                    :level_5 {:icon "    ❖"
-                                                                              :highlight :rainbowcol5}
-                                                                    :level_6 {:icon "     ✣"
-                                                                              :highlight :rainbowcol6}}
-                                                          :markup {:icon " "}}}}
                         :core.export {}}}})]
 

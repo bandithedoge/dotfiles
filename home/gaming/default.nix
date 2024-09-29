@@ -8,19 +8,25 @@
           ];
         extraLibraries = pkgs':
           with pkgs'; [
+            at-spi2-atk
             dconf
             fribidi
             libgudev
             libvdpau
             nspr
+            pango
+            pixman
             speex
             xorg.libXScrnSaver
             xorg.libXdamage
             xorg.libXfixes
             xorg.libXft
+            xorg.libXtst
           ];
       })
       bandithedoge.sgdboop-bin
+      bandithedoge.umu
+      pcsx2
       prismlauncher
       vitetris
       vulkanPackages_latest.vulkan-tools

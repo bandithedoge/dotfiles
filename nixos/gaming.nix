@@ -6,13 +6,16 @@
   programs = {
     steam = {
       enable = true;
+      protontricks.enable = true;
       package = pkgs.steam.override {
         extraLibraries = pkgs:
           with pkgs; [
             xz
             openssl
           ];
+        extraPreBwrapCmds = "touch /etc/NIXOS";
       };
+      extraCompatPackages = with pkgs; [luxtorpeda proton-ge-custom steamtinkerlaunch];
     };
     gamescope = {
       enable = true;
@@ -24,8 +27,6 @@
     gamemode.enable = true;
     honkers-railway-launcher.enable = true;
   };
-
-  chaotic.steam.extraCompatPackages = with pkgs; [luxtorpeda proton-ge-custom steamtinkerlaunch];
 
   security.pam.loginLimits = [
     {

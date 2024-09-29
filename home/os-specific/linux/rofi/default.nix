@@ -24,5 +24,9 @@ pkgs.poetry2nix.mkPoetryApplication rec {
         substituteInPlace pyproject.toml --replace 'poetry.masonry.api' 'poetry.core.masonry.api'
       '';
     });
+
+    lxml = super.lxml.overridePythonAttrs (old: {
+      buildInputs = old.buildInputs ++ [pkgs.zlib];
+    });
   });
 }

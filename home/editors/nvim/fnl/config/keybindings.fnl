@@ -1,28 +1,24 @@
+(import-macros {: merge!} :hibiscus.core)
+
 [(_G.use :folke/which-key.nvim
-         {:keys [(_G.key :<bs> "<cmd>WhichKey <localleader><cr>")]
+         {:keys [(_G.key :<bs> "<cmd>WhichKey <localleader><cr>" {:mode [:n :v]})]
           :event :VeryLazy
-          :opts {:ignore_missing false
-                 :icons {:separator "󰅂"}
+          :opts {:delay 0
+                 :icons {:separator "󰅂" :mappings false}
                  :show_help false
-                 :disable {:filetypes [:TelescopePrompt]}}
-          :config #(let [wk (require :which-key)]
-                     (wk.setup $2)
-                     (wk.register (let [lsp vim.lsp.buf]
-                                    {:<leader> {:f {:name :Find}
-                                                :o {:name :Open
-                                                    :d ["<cmd>cd ~/dotfiles<cr>"
-                                                        :Dotfiles]
-                                                    :g ["<cmd>cd ~/git<cr>"
-                                                        :Git]
-                                                    :s ["<cmd>cd ~/sql<cr>"
-                                                        :School]}
-                                                :W [:<cmd>close<cr>
-                                                    "Close window"]
-                                                :l [:<cmd>Lazy<cr> :lazy.nvim]}
-                                     :<localleader> {:s [lsp.document_symbol
-                                                         :Symbols]
-                                                     :d {:name :Debug}
-                                                     :r [lsp.rename :Rename]
-                                                     :l {:name :Language
-                                                         :r {:name :Repl}}}})))})]
+                 :spec [(merge! [:<leader>W :<cmd>close<cr>]
+                                {:desc "Close window"})
+                        (merge! [:<leader>f] {:group :Find})
+                        (merge! [:<leader>l :<cmd>Lazy<cr>] {:desc :lazy.nvim})
+                        (merge! [:<leader>o] {:group :Open})
+                        (merge! [:<leader>od "<cmd>cd ~/dotfiles<cr>"]
+                                {:desc :Dotfiles})
+                        (merge! [:<leader>og "<cmd>cd ~/git<cr>"] {:desc :Git})
+                        (merge! [:<localleader>d] {:group :Debug})
+                        (merge! [:<localleader>l] {:group :Language-specific})
+                        (merge! [:<localleader>r vim.lsp.buf.rename]
+                                {:desc :Rename})
+                        (merge! [:<localleader>s vim.lsp.buf.document_symbol]
+                                {:desc :Symbols})
+                        (merge! [:<localleder>lr] {:name :REPL})]}})]
 

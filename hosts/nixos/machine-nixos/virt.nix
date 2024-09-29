@@ -11,9 +11,26 @@
       onShutdown = "shutdown";
       onBoot = "ignore";
       qemu = {
-        runAsRoot = false;
+        # runAsRoot = false;
         ovmf.enable = true;
         vhostUserPackages = with pkgs; [virtiofsd];
+        verbatimConfig = ''
+          user = "bandithedoge"
+        '';
+      };
+      hooks.qemu = {
+        webdav = pkgs.writeShellScript "virt-webdav-hook" ''
+          if [ $1 = DarwinKVM ]; then
+            case $2 in
+              start)
+                systemctl start virt-webdav
+                ;;
+              stopped)
+                systemctl stop virt-webdav
+                ;;
+            esac
+          fi
+        '';
       };
     };
     # waydroid.enable = true;
@@ -37,19 +54,16 @@
       "vfio_iommu_type1"
       "vfio_pci"
     ];
-    blacklistedKernelModules = [
-      "i915"
-    ];
     kernelParams = [
       "intel_iommu=on"
       "iommu=pt"
-      "vfio-pci.ids=8086:0412"
+      "vfio-pci.ids=1002:67df,1002:aaf0"
       "vga=normal"
-      "i915.modeset=0"
       "kvm.ignore_msrs=1"
       "kvm.report_ignored_msrs=0"
       "kvm_intel.nested=1"
       "kvm_intel.emulate_invalid_guest_state=0"
+      "pcie_acs_override=downstream,multifunction"
     ];
   };
 
@@ -92,10 +106,35 @@
     };
   };
 
-  networking.firewall.allowedUDPPortRanges = [
-    {
-      from = 60000;
-      to = 61000;
-    }
-  ];
+  networking.firewall = {
+    allowedUDPPortRanges = [
+      {
+        from = 60000;
+        to = 61000;
+      }
+    ];
+    allowedTCPPorts = [4918];
+  };
+
+  # services.samba = {
+  #   enable = true;
+  #   openFirewall = true;
+  #   shares.data = {
+  #     path = "/mnt";
+  #     "read only" = false;
+  #     "guest ok" = "yes";
+  #   };
+  #   extraConfig = ''
+  #     bind interfaces only = yes
+  #     interfaces = virbr0
+  #   '';
+  # };
+
+  systemd.services.virt-webdav = {
+    after = ["network.target"];
+    serviceConfig = {
+      ExecStart = "${pkgs.rclone}/bin/rclone serve webdav /mnt --addr 192.168.122.1:4918 --bind 192.168.122.1";
+      Restart = "on-failure";
+    };
+  };
 }

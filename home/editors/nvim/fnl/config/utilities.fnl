@@ -17,7 +17,7 @@
           :cmd :Neogen
           :keys [(_G.key :<localleader>g :<cmd>Neogen<cr>
                          {:desc "Generate annotation"})]
-          :opts {:snippet_engine :luasnip}})
+          :opts {:snippet_engine :nvim}})
  ;;
  (_G.use :Allendang/nvim-expand-expr
          {:keys [(_G.key :<localleader>e
@@ -30,5 +30,10 @@
  ;;
  (_G.use :sQVe/sort.nvim {:cmd :Sort})
  ;;
- (_G.use :gbprod/yanky.nvim {:config true :event :VeryLazy})]
+ (_G.use :gbprod/yanky.nvim
+         {:config true
+          :event :LazyFile
+          :keys [(_G.key :y "<Plug>(YankyYank)" {:mode [:n :x]})
+                 (_G.key :p "<Plug>(YankyPutAfter)" {:mode [:n :x]})
+                 (_G.key :P "<Plug>(YankyPutBefore)" {:mode [:n :x]})]})]
 

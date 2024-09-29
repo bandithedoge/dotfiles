@@ -75,7 +75,7 @@
       enable = config.hostname == "machine-nixos";
       package =
         if !pkgs.stdenv.isDarwin
-        then pkgs.firefox_nightly
+        then pkgs.firefox
         else pkgs.dummy;
       nativeMessagingHosts = with pkgs; [tridactyl-native];
       profiles = {

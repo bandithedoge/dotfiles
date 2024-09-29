@@ -46,6 +46,8 @@
                                                        :typescriptreact
                                                        :typescript
                                                        :javascript]})
+                     (when (vim.fn.filereadable :.vscode/launch.json)
+                       (vscode.load_launchjs))
                      (set dap.adapters.codelldb
                           {:type :server
                            ; :host :localhost

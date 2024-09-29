@@ -2,7 +2,7 @@
   imports = [./virt.nix];
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_cachyos-lto;
+    kernelPackages = pkgs.linuxPackages_zen;
     kernelParams = ["threadirqs"];
     loader = {
       systemd-boot.enable = true;
@@ -27,11 +27,11 @@
 
   programs.openvpn3.enable = true;
 
-  services.ananicy = {
-    enable = true;
-    package = pkgs.ananicy-cpp;
-    rulesProvider = pkgs.ananicy-cpp-rules;
-  };
+  # services.ananicy = {
+  #   enable = true;
+  #   package = pkgs.ananicy-cpp;
+  #   rulesProvider = pkgs.ananicy-cpp-rules;
+  # };
 
   # TODO
   # services.replay-sorcery = {
@@ -90,22 +90,31 @@
   # }}}
 
   environment.variables = {
-    BROWSER = "firefox-nightly";
+    BROWSER = "firefox";
     WINEFSYNC = "1";
     # ROC_ENABLE_PRE_VEGA = "1";
   };
 
-  # chaotic = {
-  #   mesa-git = {
-  #     enable = true;
-  #     extraPackages = with pkgs; [
-  #       rocmPackages.clr.icd
-  #     ];
-  #   };
-  # };
+  chaotic = {
+    mesa-git = {
+      enable = true;
+      extraPackages = with pkgs; [
+        intel-media-driver
+        intel-vaapi-driver
+        rocmPackages.clr
+        rocmPackages.clr.icd
+      ];
+      extraPackages32 = with pkgs; [
+        driversi686Linux.intel-media-driver
+        driversi686Linux.intel-vaapi-driver
+      ];
+    };
+  };
 
-  hardware.amdgpu = {
-    initrd.enable = true;
-    opencl.enable = true;
+  hardware = {
+    amdgpu = {
+      initrd.enable = true;
+      opencl.enable = true;
+    };
   };
 }

@@ -92,7 +92,7 @@ when isMainModule:
         exec "flatpak update"
     else:
       for input in inputs:
-        exec &"nix flake lock {input} --flake {path}"
+        exec &"nix flake update {input} --flake {path}"
 
   if args["cleanup"] or args["c"]:
     exec "home-manager expire-generations '-3 days'"

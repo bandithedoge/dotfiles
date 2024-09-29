@@ -9,6 +9,8 @@ in {
     packages = with pkgs; [
       autotiling
       chayang
+      gtklock
+      qtile_git
       satty
       sway-contrib.grimshot
       swaybg
@@ -17,7 +19,6 @@ in {
       wev
       wl-clipboard
       wlr-which-key
-      gtklock
     ];
     sessionVariables = {
       GDK_BACKEND = "wayland,x11";
@@ -30,8 +31,8 @@ in {
   wayland.windowManager.sway = with pkgs.rice; {
     # {{{
     enable = true;
-    package = pkgs.swayfx;
-    checkConfig = false; # swayfx fails to create a renderer when rebuilding
+    package = pkgs.sway;
+    # checkConfig = false; # swayfx fails to create a renderer when rebuilding
     config = {
       bars = [
         {command = "waybar";}
@@ -123,8 +124,12 @@ in {
         "*" = with pkgs.rice; {
           bg = "${wallpaper} fill ${base00}";
         };
-        "DP-1".pos = "0 0";
-        "DP-4".pos = "1920 50";
+        "DP-1".pos = "0 450";
+        "DP-2".pos = "1920 500";
+        "DP-3" = {
+          transform = "270";
+          pos = "3840 0";
+        };
       };
       modifier = "Mod4";
       keybindings = let
@@ -199,15 +204,10 @@ in {
         };
       };
     };
-    extraConfig = ''
-      blur enable
-      blur_xray enable
-      shadows enable
-      shadows_on_csd enable
-
-      titlebar_separator disable
-      titlebar_border_thickness 2
-    '';
+    # extraConfig = ''
+    #   titlebar_separator disable
+    #   titlebar_border_thickness 2
+    # '';
   }; # }}}
 
   programs.waybar = {
@@ -374,60 +374,11 @@ in {
     style = pkgs.rice.compileSCSS ./waybar.scss;
   }; # }}}
 
-  programs.foot = {
-    enable = false;
-    server.enable = false;
-    settings = let
-      color = pkgs.lib.removePrefix "#";
-    in
-      with pkgs.rice; {
-        main = {
-          shell = "zellij";
-          font = "${monoFont}:size=11.5";
-          pad = "5x5 center";
-        };
-        bell.urgent = "yes";
-        url.osc8-underline = "always";
-        cursor = {
-          style = "beam";
-          blink = "yes";
-          color = "${color base00} ${color base0F}";
-        };
-        mouse.hide-when-typing = "yes";
-        colors = {
-          foreground = color base05;
-          background = color base00;
-          urls = color base0F;
-          flash = color base08;
-
-          regular0 = color base01;
-          regular1 = color base08;
-          regular2 = color base0B;
-          regular3 = color base09;
-          regular4 = color base0D;
-          regular5 = color base0E;
-          regular6 = color base0C;
-          regular7 = color base06;
-
-          bright0 = color base02;
-          bright1 = color base12;
-          bright2 = color base14;
-          bright3 = color base13;
-          bright4 = color base16;
-          bright5 = color base17;
-          bright6 = color base15;
-          bright7 = color base0F;
-        };
-      };
-  };
-
   services.hypridle = {
     enable = true;
-    settings = let
-      color = c: "0x${pkgs.lib.removePrefix "#" c}";
-    in {
+    settings = {
       general = {
-        lock_cmd = "pidof waylock || (chayang -d 10; gtklock)";
+        lock_cmd = "pidof waylock || (chayang -d 10 && gtklock)";
         before_sleep_cmd = "loginctl lock-session";
       };
       listener = [

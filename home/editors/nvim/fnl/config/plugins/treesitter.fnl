@@ -21,7 +21,6 @@
           :opts {:auto_install (not _G.USING_NIX)
                  :highlight {:enable true
                              :additional_vim_regex_highlighting [:org]}
-                 :indent {:enable true}
                  :playground {:enable true}
                  :autotag {:enable true :filetypes [:html :xml]}}
           :config #(let [ts (require :nvim-treesitter.configs)

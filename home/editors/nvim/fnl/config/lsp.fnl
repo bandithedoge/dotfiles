@@ -1,18 +1,5 @@
 (import-macros {: merge!} :hibiscus.core)
 
-(vim.fn.sign_define [{:name :DiagnosticSignError
-                      :text ""
-                      :texthl :DiagnosticSignError}
-                     {:name :DiagnosticSignWarn
-                      :text ""
-                      :texthl :DiagnosticSignWarn}
-                     {:name :DiagnosticSignInfo
-                      :text ""
-                      :texthl :DiagnosticSignInfo}
-                     {:name :DiagnosticSignHint
-                      :text "󰌵"
-                      :texthl :DiagnosticSignHint}])
-
 [(_G.use :aznhe21/actions-preview.nvim
          {:dependencies [(_G.use :MunifTanjim/nui.nvim)]
           :keys [(_G.key :<localleader>a
@@ -26,8 +13,8 @@
  (_G.use :stevearc/conform.nvim
          {:keys [(_G.key :<localleader>f
                          #(let [conform (require :conform)]
-                            (conform.format {:lsp_format :prefer}))
-                         {:desc :Format})]
+                            (conform.format))
+                         {:desc :Format :mode [:n :v]})]
           :cmd [:ConformInfo]
           :opts {:formatters_by_ft {:css [:prettierd :stylelint]
                                     :fennel [:fnlfmt]
@@ -94,23 +81,14 @@
  ;;
  (_G.use :icholy/lsplinks.nvim {:lazy true :config true})
  ;;
- (_G.use :nvimdev/lspsaga.nvim
-         {:dependencies [(_G.use :nvim-tree/nvim-web-devicons)]
-          :event :LspAttach
-          :opts {:ui {:code_action " 󰌵" :border :solid :title false}
-                 :code_action {:num_shortcut false :show_server_name true}
-                 :lightbulb {:sign false}
-                 :symbol_in_winbar {:enable false :show_file false}}})
- ;;
  (_G.use :mfussenegger/nvim-lint
          {:event :LazyFile
           :opts {:css [:stylelint]
                  :fish [:fish]
                  :less [:stylelint]
                  :make [:checkmake]
-                 :nix [:statix]
-                 :scss [:stylelint]
-                 :yaml [:actionlint]}
+                 :nix [:statix :nix]
+                 :scss [:stylelint]}
           :config #(let [lint (require :lint)]
                      (set lint.linters_by_ft $2)
                      (vim.api.nvim_create_autocmd [:BufWritePost
@@ -120,10 +98,16 @@
  ;;
  (_G.use :neovim/nvim-lspconfig
          {:event :LazyFile
-          :dependencies [(_G.use :folke/neoconf.nvim
-                                 {:cmd :Neoconf :lazy true :config true})
-                         (_G.use :AstroNvim/AstroLSP
-                                 {:opts {:features {:autoformat false
+          :dependencies [(_G.use :AstroNvim/AstroLSP
+                                 {:dependencies [(_G.use :AstroNvim/astrocore)
+                                                 (_G.use :folke/neoconf.nvim
+                                                         {:cmd :Neoconf
+                                                          :lazy true
+                                                          :config true})
+                                                 (_G.use :SmiteshP/nvim-navic
+                                                         {:opts {:highlight true
+                                                                 :separator " 󰅂 "}})]
+                                  :opts {:features {:autoformat false
                                                     :inlay_hints true}
                                          :formatting {:format_on_save {:enabled false}}
                                          :handlers {1 #(let [lsp (require :lspconfig)]
@@ -143,10 +127,8 @@
                                                                (lsp.jsonls.setup (merge! $2
                                                                                          {:settings {:json {:schemas (schemastore.json.schemas)
                                                                                                             :validate {:enable true}}}})))
-                                                    :lua_ls #(let [lsp (require :lspconfig)
-                                                                   neodev (require :neodev)]
-                                                               (neodev.setup {:setup_jsonls false})
-                                                               (lsp.lua_ls.setup $2))
+                                                    :lua_ls #(let [lazydev (require :lazydev)]
+                                                               (lazydev.setup))
                                                     :yamlls #(let [lsp (require :lspconfig)
                                                                    schemastore (require :schemastore)]
                                                                (lsp.yamlls.setup (merge! $2
@@ -158,7 +140,8 @@
                                          :mappings {:n {:gx {1 #(let [lsplinks (require :lsplinks)]
                                                                   (lsplinks.gx))
                                                              :cond :textDocument/documentLink}}}
-                                         :servers [:bashls
+                                         :servers [:basedpyright
+                                                   :bashls
                                                    :clangd
                                                    :cssls
                                                    :dartls
@@ -177,26 +160,25 @@
                                                    :neocmake
                                                    :nil_ls
                                                    :nim_langserver
-                                                   :pylsp
+                                                   :ruff
                                                    :rust_analyzer
                                                    :tailwindcss
-                                                   :tsserver
+                                                   :taplo
+                                                   :ts_ls
                                                    :yamlls
                                                    :zls]
-                                         :config {:clangd {:capabilities {:offsetEncoding :utf-8}}
-                                                  :cssls {:init_options {:provideFormatter false}}
+                                         :config {:clangd {:capabilities {:offsetEncoding :utf-16}}
                                                   :eslint {:settings {:packageManager :pnpm}}
                                                   :fennel_language_server {:settings {:fennel {:workspace {:library (vim.api.nvim_list_runtime_paths)}
                                                                                                :diagnostics {:globals [:vim
                                                                                                                        :case]}}}}
-                                                  :html {:init_options {:provideFormatter false}}
                                                   :ltex {:settings {:ltex {:completionEnabled true
                                                                            :additionalRules {:enablePickyRules true
                                                                                              :motherTongue :pl-PL}}}}
-                                                  :nil_ls {:settings {:nil {:formatting {:command [:alejandra]}}}}
-                                                  :pylsp {:settings {:pylsp {:plugins {:ruff {:enabled true
-                                                                                              :formatEnabled true}
-                                                                                       :pydocstyle {:enabled false}}}}}}}})
+                                                  :nil_ls {:settings {:nil {:formatting {:command [:alejandra]}}}}}
+                                         :on_attach #(let [navic (require :nvim-navic)]
+                                                       (when ($1.supports_method :textDocument/documentSymbol)
+                                                         (navic.attach $1 $2)))}})
                          (_G.use :williamboman/mason-lspconfig.nvim
                                  {:cond (not _G.USING_NIX)
                                   :dependencies [(_G.use :williamboman/mason.nvim)]

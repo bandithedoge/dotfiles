@@ -17,11 +17,10 @@
       rustfmt
 
       # python
+      basedpyright
       poetry
       python3
       python3Packages.debugpy
-      python3Packages.python-lsp-ruff
-      python3Packages.python-lsp-server
       ruff
 
       # shell
@@ -109,6 +108,9 @@
       # go
       go
       gopls
+
+      # toml
+      taplo
     ];
     # }}}
   };
@@ -133,6 +135,7 @@
             path = drv;
           })
           (with pkgs.vimPlugins; [
+            astrocore
             lua-utils-nvim
             nui-nvim
             nvim-nio
@@ -150,19 +153,19 @@
             which-key-nvim
 
             # language-specific
+            SchemaStore-nvim
             clangd_extensions-nvim
             dhall-vim
             faust-nvim
             flutter-tools-nvim
             haskell-tools-nvim
-            neodev-nvim
+            lazydev-nvim
             nvim-luaref
             nvim-parinfer
-            org-bullets-nvim
             orgmode
             purescript-vim
             rasi-vim
-            SchemaStore-nvim
+            render-markdown-nvim
             telescope-manix
             tree-sitter-hypr
             vim-coffee-script
@@ -170,8 +173,8 @@
             yuck-vim
 
             # lsp
-            actions-preview-nvim
             AstroLSP
+            actions-preview-nvim
             conform-nvim
             fidget-nvim
             glance-nvim
@@ -179,10 +182,10 @@
             lsp_lines-nvim
             lsp_signature-nvim
             lsplinks-nvim
-            lspsaga-nvim
             neoconf-nvim
             nvim-lint
             nvim-lspconfig
+            nvim-navic
 
             # ui
             diffview-nvim
@@ -193,6 +196,7 @@
             neogit
             nvim-highlight-colors
             nvim-hlslens
+            nvim-notify
             tiny-devicons-auto-colors-nvim
             todo-comments-nvim
             trouble-nvim
@@ -210,26 +214,23 @@
 
             # cmp
             cmp-cmdline
+            cmp-git
             cmp-nvim-lsp
             cmp-path
             cmp-under-comparator
             cmp_luasnip
+            friendly-snippets
             lspkind-nvim
             nvim-cmp
+            nvim-snippets
 
             heirline-nvim
 
-            # luasnip
-            friendly-snippets
-            LuaSnip
-
             mini-nvim
 
-            neorg
+            neo-tree-nvim
 
-            # nvim-tree
-            nvim-lsp-file-operations
-            nvim-tree-lua
+            neorg
 
             # telescope
             dressing-nvim

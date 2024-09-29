@@ -18,7 +18,10 @@
     printing = {
       enable = true;
       cups-pdf.enable = true;
-      drivers = with pkgs; [gutenprint];
+      drivers = with pkgs; [
+        gutenprint
+        cnijfilter2
+      ];
     };
 
     earlyoom = {

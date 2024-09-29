@@ -45,7 +45,7 @@
             :config #(let [telescope (require :telescope)]
                        (telescope.load_extension :ht))}))
  ;;
- (_G.use :folke/neodev.nvim {:lazy true})
+ (_G.use :folke/lazydev.nvim {:lazy true})
  ;;
  (_G.use :milisims/nvim-luaref)
  ;;
@@ -65,8 +65,7 @@
                                                                     "<Plug>(parinfer-backtab)"))}))})
  ;;
  (_G.use :nvim-orgmode/orgmode
-         {:dependencies [(_G.use :nvim-orgmode/org-bullets.nvim)]
-          :ft [:org]
+         {:ft [:org]
           :opts {:mappings {:prefix :<localleader>l
                             :global {:org_agenda false :org_capture false}}
                  :win_border :solid
@@ -98,35 +97,38 @@
                                                                      on-error))))]
                                        {:d (mk-pandoc :docx)
                                         :h (mk-pandoc :html)
-                                        :o (mk-pandoc :odt)})}
-          :config #(let [org (require :orgmode)
-                         bullets (require :org-bullets)]
-                     (org.setup $2)
-                     (bullets.setup {:symbols {:list "•"
-                                               :headlines ["✯"
-                                                           "✵"
-                                                           "✺"
-                                                           "✼"
-                                                           "❁"
-                                                           "❃"
-                                                           "❆"]
-                                               :half ["󰡖"
-                                                      :OrgTSCheckboxHalfChecked]
-                                               :done ["󰄵" :OrgDone]
-                                               :todo ["󰄱" :OrgTODO]}}))})
+                                        :o (mk-pandoc :odt)})}})
  ;;
  (_G.use :purescript-contrib/purescript-vim)
  ;;
  (_G.use :Fymyte/rasi.vim)
  ;;
+ (_G.use :MeanderingProgrammer/render-markdown.nvim
+         (let [ft [:markdown :norg :rmd :org]]
+           {: ft
+            :keys [(_G.key :<localleader>lm
+                           #(let [render-markdown (require :render-markdown)]
+                              (render-markdown.toggle))
+                           {:desc "Toggle Markdown rendering" : ft})]
+            :opts {:file_types ft
+                   :win_options {:showbreak {:default "" :rendered "  "}
+                                 :breakindent {:default false :rendered true}
+                                 :breakindentopt {:default "" :rendered ""}}
+                   :quote {:repeat_linebreak true}
+                   :code {:width :block :left_pad 2 :right_pad 4}
+                   :heading {:width :block :left_pad 2 :right_pad 4}
+                   :indent {:enabled true :skip_heading true}
+                   :sign {:enabled false}}}))
+ ;;
  (_G.use :b0o/SchemaStore.nvim {:lazy true})
  ;;
- (_G.use :MrcJkb/telescope-manix
-         (let [ft [:nix]]
-          {:dependencies [(_G.use :nvim-lua/plenary.nvim)
-                          (_G.use :nvim-telescope/telescope.nvim)]
-           :keys [(_G.key :<localleader>lm "<cmd>Telescope manix<cr>" {:desc :Manix : ft})]
-           : ft}))
+ (_G.use :MrcJkb/telescope-manix (let [ft [:nix]]
+                                   {:dependencies [(_G.use :nvim-lua/plenary.nvim)
+                                                   (_G.use :nvim-telescope/telescope.nvim)]
+                                    :keys [(_G.key :<localleader>lm
+                                                   "<cmd>Telescope manix<cr>"
+                                                   {:desc :Manix : ft})]
+                                    : ft}))
  ;;
  (_G.use :luckasRanarison/tree-sitter-hypr)
  ;;

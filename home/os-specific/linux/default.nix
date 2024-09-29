@@ -18,19 +18,19 @@ in {
       bandithedoge.deemix-gui-bin
       bandithedoge.propertree
       bleachbit
+      blender-hip
       bottles
       boxbuddy
       d-spy
+      devhelp
       discord
       distrobox_git
       ferdium
       flameshot
       fractal
-      furmark
-      gnome.devhelp
-      gnome.zenity
       inkscape
       keepassxc
+      kicad
       krita
       libnotify
       libreoffice-fresh
@@ -46,6 +46,7 @@ in {
       vesktop
       wine-tkg
       xdragon
+      zenity
     ];
 
     pointerCursor = {
@@ -95,7 +96,7 @@ in {
   };
 
   # HACK: https://github.com/nix-community/home-manager/issues/2659
-  systemd.user.sessionVariables = config.home.sessionVariables;
+  # systemd.user.sessionVariables = config.home.sessionVariables;
 
   # gtk {{{
   gtk = rec {
@@ -418,14 +419,14 @@ in {
         quality-menu
       ];
       config = {
-        profile = "sw-fast";
-        video-sync = "display-resample";
-        osd-bar = false;
-        border = false;
-        save-position-on-quit = true;
-        vo = "gpu-next";
-        hwdec = "auto-safe";
         ao = "pipewire";
+        border = false;
+        hwdec = "auto-safe";
+        osd-bar = false;
+        profile = "sw-fast";
+        save-position-on-quit = true;
+        video-sync = "display-resample";
+        vo = "gpu-next";
       };
       scriptOpts.uosc = {
         timeline_style = "bar";

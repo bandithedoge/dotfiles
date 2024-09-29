@@ -5,7 +5,7 @@
           :opts {:wo {:winbar false}
                  :animate {:enabled false}
                  :bottom [:Trouble :dap-repl :dapui_console]
-                 :left [:NvimTree]
+                 :left [:neo-tree]
                  :right [:dapui_scopes
                          :dapui_breakpoints
                          :dapui_stacks
@@ -25,6 +25,11 @@
                          :topdelete {:text ""}
                          :changedelete {:text "▎"}
                          :untracked {:text "▎"}}
+                 :signs_staged {:add {:text "▎"}
+                                :change {:text "▎"}
+                                :delete {:text ""}
+                                :topdelete {:text ""}
+                                :changedelete {:text "▎"}}
                  :diff_opts {:internal true}}})
  ;;
  (_G.use :lukas-reineke/indent-blankline.nvim
@@ -45,7 +50,8 @@
                                        :neo-tree
                                        :lazy
                                        :mason
-                                       :trouble]
+                                       :trouble
+                                       :notify]
                            :buftypes [:terminal :prompt]}
                  :indent {:char "│"}}
           :config #(let [ibl (require :ibl)
@@ -69,6 +75,20 @@
          {:event :LazyFile :opts {:enable_tailwind true}})
  ;;
  (_G.use :kevinhwang91/nvim-hlslens {:event :CmdlineEnter :config true})
+ ;;
+ (_G.use :rcarriga/nvim-notify
+         {:event :VeryLazy
+          :keys [(_G.key :<leader>fn "<cmd>Telescope notify<cr>"
+                         {:desc :Notifications})]
+          :opts {:stages :slide
+                 :fps 60
+                 :render :wrapped-compact
+                 :timeout 5000
+                 :max_height #(math.floor (* vim.o.lines 0.75))
+                 :max_width #(math.floor (* vim.o.columns 0.75))}
+          :config #(let [notify (require :notify)]
+                     (notify.setup $2)
+                     (set vim.notify notify))})
  ;;
  (_G.use :rachartier/tiny-devicons-auto-colors.nvim
          {:dependencies [(_G.use :nvim-tree/nvim-web-devicons)]

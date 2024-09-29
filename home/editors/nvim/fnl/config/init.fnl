@@ -42,9 +42,11 @@
 (g! maplocalleader "\\")
 (g! editorconfig true)
 
-(map! [n] :j :gj)
-(map! [n] :k :gk)
-(map! [n] :<cr> ":noh<cr>")
+(map! [nx] :j :gj)
+(map! [nx] :k :gk)
+(map! [in] :<esc> :<cmd>noh<cr><esc>)
+(map! [n] :<C-j> :<cmd>bnext<cr>)
+(map! [n] :<C-k> :<cmd>bprevious<cr>)
 
 (when vim.g.neovide
   (let [padding 10]
@@ -53,6 +55,18 @@
     (g! neovide_padding_right padding)
     (g! neovide_padding_left padding))
   (g! neovide_hide_mouse_when_typing true))
+
+(vim.fn.sign_define :DiagnosticSignError
+                    {:text "" :texthl :DiagnosticSignError})
+
+(vim.fn.sign_define :DiagnosticSignWarn
+                    {:text "" :texthl :DiagnosticSignWarn})
+
+(vim.fn.sign_define :DiagnosticSignInfo
+                    {:text "" :texthl :DiagnosticSignInfo})
+
+(vim.fn.sign_define :DiagnosticSignHint
+                    {:text "󰌵" :texthl :DiagnosticSignHint})
 
 (lambda _G.use [?name ?opts ?alt-name]
   (if _G.USING_NIX
@@ -68,7 +82,8 @@
 
 (let [lazy (require :lazy)
       event (require :lazy.core.handler.event)]
-  (set event.mappings.LazyFile {:id :LazyFile :event [:BufReadPost :BufNewFile :BufReadPre]})
+  (set event.mappings.LazyFile
+       {:id :LazyFile :event [:BufReadPost :BufNewFile :BufReadPre]})
   (tset event :mappings "User LazyFile" event.mappings.LazyFile)
   (lazy.setup [(require :config.dap)
                (require :config.keybindings)
@@ -78,10 +93,9 @@
                (require :config.utilities)
                (require :config.plugins.cmp)
                (require :config.plugins.heirline)
-               (require :config.plugins.luasnip)
                (require :config.plugins.mini)
+               (require :config.plugins.neo-tree)
                (require :config.plugins.neorg)
-               (require :config.plugins.nvim-tree)
                (require :config.plugins.telescope)
                (require :config.plugins.treesitter)
                (require :config.standalone)]

@@ -13,7 +13,5 @@ final: prev: {
     withVencord = true;
   };
 
-  # scfbuild = prev.scfbuild.overrideAttrs (oldAttrs: {
-  #   propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [final.python3Packages.distlib];
-  # });
+  sway = prev.sway_git;
 }

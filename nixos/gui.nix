@@ -1,6 +1,7 @@
 {
   pkgs,
   config,
+  lib,
   ...
 }: {
   environment = {
@@ -18,6 +19,16 @@
   };
 
   programs = {
+    uwsm = {
+      enable = true;
+      waylandCompositors = {
+        sway = {
+          prettyName = "Sway";
+          binPath = pkgs.lib.getExe pkgs.sway;
+        };
+      };
+    };
+
     regreet = {
       enable = true;
       cageArgs = ["-s" "-d" "-m" "last"];
@@ -26,7 +37,7 @@
           path = wallpaperBlurred;
           fit = "Fill";
         };
-        GTK = {
+        GTK = lib.mkForce {
           application_prefer_dark_theme = true;
           cursor_theme_name = gtk.cursorTheme.name;
           font = "${uiFont} 16";

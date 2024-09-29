@@ -15,80 +15,11 @@
         icons (require :nvim-web-devicons)]
     (local components
            {; mode {{{
-            :mode (let [n :NORMAL
-                        n? :NORMAL?
-                        v :VISUAL
-                        vl :V-LINE
-                        vb :V-BLOCK
-                        s :SELECT
-                        sl :S-LINE
-                        sb :S-BLOCK
-                        i :INSERT
-                        r :REPLACE
-                        c :COMMAND
-                        ex :EX
-                        p :PROMPT
-                        ! :SHELL
-                        t :TERMINAL]
-                    {:init #(set $1.mode (vim.fn.mode 1))
-                     ; static {{{
-                     :static {:mode-names {: n
-                                           :no n?
-                                           :nov n?
-                                           "no\022" n?
-                                           :niI n
-                                           :niR n
-                                           :niV n
-                                           :nt n
-                                           :ntT n
-                                           : v
-                                           :vs v
-                                           :V vl
-                                           :Vs vl
-                                           "\022" vb
-                                           "\022s" vb
-                                           : s
-                                           :S sl
-                                           "\019" sb
-                                           : i
-                                           :ic i
-                                           :ix i
-                                           :R r
-                                           :Rc r
-                                           :Rx r
-                                           :Rv r
-                                           :Rvc r
-                                           :Rvx r
-                                           : c
-                                           :cv ex
-                                           :r p
-                                           :rm p
-                                           :r? p
-                                           : !
-                                           : t}
-                              :colors {n _G.base0F
-                                       n? _G.base0F
-                                       v _G.base0A
-                                       vl _G.base0A
-                                       vb _G.base0A
-                                       s _G.base0D
-                                       sl _G.base0D
-                                       sb _G.base0D
-                                       i _G.base0B
-                                       r _G.base08
-                                       c _G.base0E
-                                       ex _G.base0E
-                                       p _G.base0F
-                                       ! _G.base0F
-                                       t _G.base0F}}
-                     ; }}}
-                     :provider #(pad (. $1.mode-names $1.mode))
-                     :hl #{:fg _G.base00
-                           :bg (. $1.colors (. $1.mode-names $1.mode))
-                           :bold true}
-                     :update (merge! [:ModeChanged]
-                                     {:pattern "*:*"
-                                      :callback #(vim.schedule_wrap (vim.cmd.redrawstatus))})})
+            :mode {:provider #(pad (. $1.mode-names $1.mode))
+                   :update (merge! [:ModeChanged]
+                                   {:pattern "*:*"
+                                    :callback #(vim.schedule_wrap (vim.cmd.redrawstatus))})
+                   :hl #($1:mode-hl)}
             ; }}}
             ; filename {{{
             :filename [{:init #(set $1.filename (vim.api.nvim_buf_get_name 0))
@@ -188,23 +119,99 @@
                                              (padr (.. " " count))))
                            :hl {:fg _G.base08}}])
             ; }}}
-            :ruler {:provider (padr "%l/%L:%c %P")}
-            :navic {:condition conditions.lsp_attached
-                    :init #(set $1.bar
-                                (let [winbar (require :lspsaga.symbol.winbar)]
-                                  (winbar.get_bar)))
-                    :provider #(and $1.bar (padl $1.bar))}
+            :ruler {:provider (pad "%l/%L:%c %P") :hl #($1:mode-hl)}
+            :navic {:condition #(and (conditions.lsp_attached)
+                                     (let [navic (require :nvim-navic)]
+                                       (navic.is_available)))
+                    :provider #(let [navic (require :nvim-navic)]
+                                 (padl (navic.get_location)))
+                    :update :CursorMoved}
             :spacer {:provider "%="}
             :indent {:init #(set $1.shiftwidth vim.bo.shiftwidth)
                      :provider #(padl (.. "󰌒 " $1.shiftwidth))}})
     (heirline.setup {:statusline (merge! {:hl {:bg _G.base02 :fg _G.base05}
-                                          :fallthrough false}
+                                          :init #(set $1.mode (vim.fn.mode 1))
+                                          :fallthrough false
+                                          ; static {{{
+                                          :static (let [n :NORMAL
+                                                        n? :NORMAL?
+                                                        v :VISUAL
+                                                        vl :V-LINE
+                                                        vb :V-BLOCK
+                                                        s :SELECT
+                                                        sl :S-LINE
+                                                        sb :S-BLOCK
+                                                        i :INSERT
+                                                        r :REPLACE
+                                                        c :COMMAND
+                                                        ex :EX
+                                                        p :PROMPT
+                                                        ! :SHELL
+                                                        t :TERMINAL]
+                                                    {:mode-names {: n
+                                                                  :no n?
+                                                                  :nov n?
+                                                                  "no\022" n?
+                                                                  :niI n
+                                                                  :niR n
+                                                                  :niV n
+                                                                  :nt n
+                                                                  :ntT n
+                                                                  : v
+                                                                  :vs v
+                                                                  :V vl
+                                                                  :Vs vl
+                                                                  "\022" vb
+                                                                  "\022s" vb
+                                                                  : s
+                                                                  :S sl
+                                                                  "\019" sb
+                                                                  : i
+                                                                  :ic i
+                                                                  :ix i
+                                                                  :R r
+                                                                  :Rc r
+                                                                  :Rx r
+                                                                  :Rv r
+                                                                  :Rvc r
+                                                                  :Rvx r
+                                                                  : c
+                                                                  :cv ex
+                                                                  :r p
+                                                                  :rm p
+                                                                  :r? p
+                                                                  : !
+                                                                  : t}
+                                                     :mode-colors {n _G.base0F
+                                                                   n? _G.base0F
+                                                                   v _G.base0A
+                                                                   vl _G.base0A
+                                                                   vb _G.base0A
+                                                                   s _G.base0D
+                                                                   sl _G.base0D
+                                                                   sb _G.base0D
+                                                                   i _G.base0B
+                                                                   r _G.base08
+                                                                   c _G.base0E
+                                                                   ex _G.base0E
+                                                                   p _G.base0F
+                                                                   ! _G.base0F
+                                                                   t _G.base0F}
+                                                     :mode-hl #(let [mode (if (conditions.is_active)
+                                                                              (vim.fn.mode)
+                                                                              :n)]
+                                                                 {:fg _G.base00
+                                                                  :bg (. $1.mode-colors
+                                                                         (. $1.mode-names
+                                                                            mode))
+                                                                  :bold true})})}
+                                         ; }}}
                                          [(merge! {:condition #(conditions.buffer_matches {:buftype []
                                                                                            :filetype [:TelescopePrompt
                                                                                                       :DressingInput
                                                                                                       :Trouble
-                                                                                                      :lazy
-                                                                                                      :saga_codeaction]})}
+                                                                                                      :trouble
+                                                                                                      :lazy]})}
                                                   [components.mode
                                                    components.spacer])
                                           (merge! {:condition #(conditions.buffer_matches {:buftype [:help]})}
@@ -220,7 +227,8 @@
                                                                                         "")]
                                                                        tname))}
                                                    components.spacer])
-                                          (merge! {:condition #(conditions.buffer_matches {:filetype [:NvimTree]})}
+                                          (merge! {:condition #(conditions.buffer_matches {:filetype [:NvimTree
+                                                                                                      :neo-tree]})}
                                                   [{:provider #(pad (vim.fn.fnamemodify (vim.fn.getcwd)
                                                                                         ":~"))
                                                     :hl {:fg _G.base00
@@ -266,7 +274,8 @@
                                                                                        :TelescopeResult
                                                                                        :Trouble
                                                                                        :lazy
-                                                                                       :saga_codeaction]}
+                                                                                       :saga_codeaction
+                                                                                       :neo-tree-preview]}
                                                                            $1.buf)}})))
 
 [(_G.use :rebelot/heirline.nvim {:dependencies [(_G.use :nvim-tree/nvim-web-devicons)]

@@ -19,8 +19,8 @@
     bandithedoge.digits-bin
     bandithedoge.geonkick
     bandithedoge.ildaeil
-    bandithedoge.lamb
-    bandithedoge.tal.chorus-lx
+    # bandithedoge.lamb
+    # bandithedoge.tal.chorus-lx
     bandithedoge.tal.drum
     bandithedoge.tal.j-8
     bandithedoge.tal.mod
