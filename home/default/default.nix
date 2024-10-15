@@ -37,6 +37,7 @@ in {
       nix-prefetch
       nurl
       oi
+      ouch
       pandoc
       rclone
       ripgrep
@@ -462,42 +463,95 @@ in {
         };
         opener = {
           extract = [
-            {run = "ouch d -y \"%*\""; desc = "Extract here with ouch";}
+            {
+              run = "ouch d -y \"%*\"";
+              desc = "Extract here with ouch";
+            }
           ];
         };
         plugin = {
           prepend_previewers = [
-            {name = "*.md"; run = "glow";}
-            {mime = "text/csv"; run = "miller";}
-            {mime = "audio/*"; run = "exifaudio";}
-            {mime ="application/*zip"; run = "ouch";}
-            {mime = "application/x-{tar,bzip2,7z-compressed,rar,xz}"; run = "ouch";}
-            {name = "*/"; run = "eza-preview";}
+            {
+              name = "*.md";
+              run = "glow";
+            }
+            {
+              mime = "text/csv";
+              run = "miller";
+            }
+            {
+              mime = "audio/*";
+              run = "exifaudio";
+            }
+            {
+              mime = "application/*zip";
+              run = "ouch";
+            }
+            {
+              mime = "application/x-{tar,bzip2,7z-compressed,rar,xz}";
+              run = "ouch";
+            }
+            {
+              name = "*/";
+              run = "eza-preview";
+            }
           ];
           append_previewers = [
-            {name = "*"; run = "hexyl";}
+            {
+              name = "*";
+              run = "hexyl";
+            }
           ];
         };
       };
 
-      plugins = pkgs.lib.genAttrs [ "glow" "miller" "hexyl" "exifaudio" "ouch" "eza-preview" "system-clipboard" "yatline"] (name: pkgs.bandithedoge.yaziPlugins.${name});
+      plugins = pkgs.lib.genAttrs [
+        "exifaudio"
+        "eza-preview"
+        "glow"
+        "hexyl"
+        "miller"
+        "ouch"
+        "system-clipboard"
+        "yatline"
+      ] (name: pkgs.bandithedoge.yaziPlugins.${name});
 
       keymap = {
         manager.prepend_keymap = [
-            {on = "C"; run = "plugin ouch --args=zip"; desc = "Compress with ouch";}
-            {on = "E"; run = "plugin eza-preview"; desc = "Toggle tree/list dir preview";}
-            {on = "<C-y>"; run = "plugin system-clipboard";}
+          {
+            on = "C";
+            run = "plugin ouch --args=zip";
+            desc = "Compress with ouch";
+          }
+          {
+            on = "E";
+            run = "plugin eza-preview";
+            desc = "Toggle tree/list dir preview";
+          }
+          {
+            on = "<C-y>";
+            run = "plugin system-clipboard";
+          }
         ];
         completion.prepend_keymap = [
-          {on = "<C-j>"; run = "arrow 1";}
-          {on = "<C-k>"; run = "arrow -1";}
+          {
+            on = "<C-j>";
+            run = "arrow 1";
+          }
+          {
+            on = "<C-k>";
+            run = "arrow -1";
+          }
         ];
       };
 
       initLua = builtins.readFile (pkgs.runCommand "yazi/init.lua" {nativeBuildInputs = with pkgs; [fennel];}
-      ''
-        fennel -c ${./yazi.fnl} > $out
-      '');
+        ''
+          cat <<EOF > $out
+            ${pkgs.rice.def.lua}
+          EOF
+          fennel -c ${./yazi.fnl} >> $out
+        '');
     };
 
     dircolors.enable = true;

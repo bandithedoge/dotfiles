@@ -25,7 +25,7 @@
           ];
       })
       bandithedoge.sgdboop-bin
-      bandithedoge.umu
+      # bandithedoge.umu
       pcsx2
       prismlauncher
       vitetris

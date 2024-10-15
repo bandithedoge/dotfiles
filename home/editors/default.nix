@@ -208,6 +208,7 @@
             mkdir-nvim
             neogen
             nvim-expand-expr
+            presence-nvim
             remember-nvim
             sort-nvim
             yanky-nvim
@@ -219,10 +220,11 @@
             cmp-path
             cmp-under-comparator
             cmp_luasnip
+            cmp_luasnip
             friendly-snippets
             lspkind-nvim
+            LuaSnip
             nvim-cmp
-            nvim-snippets
 
             heirline-nvim
 

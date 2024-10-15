@@ -45,8 +45,8 @@
 (map! [nx] :j :gj)
 (map! [nx] :k :gk)
 (map! [in] :<esc> :<cmd>noh<cr><esc>)
-(map! [n] :<C-j> :<cmd>bnext<cr>)
-(map! [n] :<C-k> :<cmd>bprevious<cr>)
+(map! [n] :<A-j> :<cmd>bnext<cr>)
+(map! [n] :<A-k> :<cmd>bprevious<cr>)
 
 (when vim.g.neovide
   (let [padding 10]
@@ -89,15 +89,16 @@
                (require :config.keybindings)
                (require :config.languages)
                (require :config.lsp)
-               (require :config.ui)
-               (require :config.utilities)
                (require :config.plugins.cmp)
                (require :config.plugins.heirline)
+               (require :config.plugins.luasnip)
                (require :config.plugins.mini)
                (require :config.plugins.neo-tree)
                (require :config.plugins.neorg)
                (require :config.plugins.telescope)
                (require :config.plugins.treesitter)
+               (require :config.ui)
+               (require :config.utilities)
                (require :config.standalone)]
               {:install {:missing (not _G.USING_NIX)}
                :checker {:enabled (not _G.USING_NIX)}

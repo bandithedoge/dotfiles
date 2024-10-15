@@ -13,7 +13,7 @@
  (_G.use :stevearc/conform.nvim
          {:keys [(_G.key :<localleader>f
                          #(let [conform (require :conform)]
-                            (conform.format))
+                            (conform.format {:lsp_format :fallback}))
                          {:desc :Format :mode [:n :v]})]
           :cmd [:ConformInfo]
           :opts {:formatters_by_ft {:css [:prettierd :stylelint]

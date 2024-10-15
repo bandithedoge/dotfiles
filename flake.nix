@@ -5,7 +5,7 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     lix.inputs.nixpkgs.follows = "nixpkgs";
     lix.url = "https://git.lix.systems/lix-project/nixos-module/archive/2.91.0.tar.gz";
-    nixos-flake.url = "github:srid/nixos-flake";
+    nixos-unified.url = "github:srid/nixos-unified";
 
     nixos-hardware.url = "github:nixos/nixos-hardware";
     darwin.url = "github:lnl7/nix-darwin/master";
@@ -20,10 +20,7 @@
     emacs.url = "github:nix-community/emacs-overlay";
     flatpak.url = "github:gmodena/nix-flatpak";
     hypridle.url = "github:hyprwm/hypridle";
-    hyprland.url = "github:hyprwm/hyprland/v0.39.1";
-    hyprlock.url = "github:hyprwm/hyprlock";
-    hyprsplit.inputs.hyprland.follows = "hyprland";
-    hyprsplit.url = "github:shezdy/hyprsplit/v0.39.1";
+    matlab.url = "gitlab:doronbehar/nix-matlab";
     mozilla.url = "github:mozilla/nixpkgs-mozilla";
     musnix.url = "github:musnix/musnix";
     neorg.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
@@ -43,13 +40,14 @@
   outputs = inputs @ {self, ...}:
     inputs.flake-parts.lib.mkFlake {inherit inputs;} {
       systems = ["x86_64-linux" "x86_64-darwin"];
-      imports = with inputs; [nixos-flake.flakeModule];
+      imports = with inputs; [nixos-unified.flakeModule];
       flake = {
         nixosConfigurations = let
           defaults = rec {
             overlays = with inputs; [
               emacs.overlays.default
               lix.overlays.default
+              matlab.overlay
               mozilla.overlays.firefox
               neorg.overlays.default
               neovim-plugins.overlays.default
@@ -90,7 +88,6 @@
                 aagl.nixosModules.default
                 flatpak.nixosModules.nix-flatpak
                 home-manager.nixosModules.home-manager
-                # hyprland.nixosModules.default
                 lix.nixosModules.default
                 musnix.nixosModules.musnix
                 nix-gaming.nixosModules.pipewireLowLatency
@@ -102,68 +99,77 @@
                 ./sops.nix
                 ./users/bandithedoge.nix
                 self.nixosModules.default
-                self.nixosModules.home-manager
               ];
             };
           };
         in {
-          thonkpad = self.nixos-flake.lib.mkLinuxSystem {
-            nixpkgs = defaults.nixpkgs // {hostPlatform = "x86_64-linux";};
-            imports = with inputs.nixos-hardware.nixosModules;
-              defaults.imports.nixos
-              ++ [
-                lenovo-thinkpad-t440p
-                common-pc-laptop-ssd
-                ./hosts/nixos/thonkpad
-                ./nixos/audio.nix
-                ./nixos/gui.nix
-                {
-                  home-manager.users.bandithedoge = {
-                    hostname = "thonkpad";
-                    imports = [
-                      self.homeModules.default
-                      ./home/editors
-                      ./home/gaming
-                      ./home/gui
-                      ./home/os-specific/linux
-                    ];
-                  };
-                }
-              ];
-          };
+          thonkpad =
+            self.nixos-unified.lib.mkLinuxSystem
+            {
+              home-manager = true;
+            }
+            {
+              nixpkgs = defaults.nixpkgs // {hostPlatform = "x86_64-linux";};
+              imports = with inputs.nixos-hardware.nixosModules;
+                defaults.imports.nixos
+                ++ [
+                  lenovo-thinkpad-t440p
+                  common-pc-laptop-ssd
+                  ./hosts/nixos/thonkpad
+                  ./nixos/audio.nix
+                  ./nixos/gui.nix
+                  {
+                    home-manager.users.bandithedoge = {
+                      hostname = "thonkpad";
+                      imports = [
+                        self.homeModules.default
+                        ./home/editors
+                        ./home/gaming
+                        ./home/gui
+                        ./home/os-specific/linux
+                      ];
+                    };
+                  }
+                ];
+            };
 
-          machine-nixos = self.nixos-flake.lib.mkLinuxSystem {
-            nixpkgs =
-              defaults.nixpkgs
-              // {
-                hostPlatform = "x86_64-linux";
-                config.rocmSupport = true;
-              };
-            imports = with inputs.nixos-hardware.nixosModules;
-              defaults.imports.nixos
-              ++ [
-                common-pc
-                common-pc-ssd
-                common-cpu-intel
-                common-gpu-amd
-                ./hosts/nixos/machine-nixos
-                ./nixos/audio.nix
-                ./nixos/gui.nix
-                ./nixos/gaming.nix
-                {
-                  home-manager.users.bandithedoge = {
-                    hostname = "machine-nixos";
-                    imports = [
-                      self.homeModules.default
-                      ./home/editors
-                      ./home/gaming
-                      ./home/gui
-                      ./home/os-specific/linux
-                    ];
-                  };
-                }
-              ];
-          };
+          machine-nixos =
+            self.nixos-unified.lib.mkLinuxSystem
+            {
+              home-manager = true;
+            }
+            {
+              nixpkgs =
+                defaults.nixpkgs
+                // {
+                  hostPlatform = "x86_64-linux";
+                  config.rocmSupport = true;
+                };
+              imports = with inputs.nixos-hardware.nixosModules;
+                defaults.imports.nixos
+                ++ [
+                  common-pc
+                  common-pc-ssd
+                  common-cpu-intel
+                  common-gpu-amd
+                  ./hosts/nixos/machine-nixos
+                  ./nixos/audio.nix
+                  ./nixos/gui.nix
+                  ./nixos/gaming.nix
+                  {
+                    home-manager.users.bandithedoge = {
+                      hostname = "machine-nixos";
+                      imports = [
+                        self.homeModules.default
+                        ./home/editors
+                        ./home/gaming
+                        ./home/gui
+                        ./home/os-specific/linux
+                      ];
+                    };
+                  }
+                ];
+            };
         };
 
         nixosModules.default = _: {
@@ -176,7 +182,6 @@
             ./nix.nix
             ./sops.nix
             flatpak.homeManagerModules.nix-flatpak
-            # hyprland.homeManagerModules.default
             nix-index-database.hmModules.nix-index
             sops-nix.homeManagerModule
           ];

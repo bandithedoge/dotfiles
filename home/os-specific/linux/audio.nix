@@ -1,42 +1,59 @@
 {pkgs, ...}: {
   home.packages = with pkgs; [
     ardour
+    bandithedoge.cantata
     bandithedoge.cardinal
     bandithedoge.clap-info
     bandithedoge.vgmtrans
-    bandithedoge.zrythm
     carla
     furnace
-    helvum
-    # picard
+    mpc-cli
+    picard
     playerctl
     pwvucontrol
     reaper
     strawberry-qt6
+    coppwr
 
-    # plugins
     bandithedoge.airwindows-consolidated
     bandithedoge.digits-bin
     bandithedoge.geonkick
     bandithedoge.ildaeil
-    # bandithedoge.lamb
-    # bandithedoge.tal.chorus-lx
-    bandithedoge.tal.drum
-    bandithedoge.tal.j-8
-    bandithedoge.tal.mod
-    bandithedoge.tal.noisemaker
-    bandithedoge.tal.reverb-4
-    bandithedoge.tal.sampler
-    bandithedoge.tal.u-no-lx
     distrho
     lsp-plugins
     plugdata
     surge-XT
   ];
 
-  services.easyeffects = {
-    enable = true;
-    preset = "main";
+  services = {
+    easyeffects = {
+      enable = true;
+      preset = "main";
+    };
+
+    mpd = {
+      enable = true;
+      musicDirectory = "/mnt/data/Music/Music";
+      extraConfig = ''
+        audio_output {
+          type "pipewire"
+          name "default"
+        }
+      '';
+      network.startWhenNeeded = true;
+    };
+
+    mpd-discord-rpc = {
+      enable = true;
+      settings = {
+        format = {
+          details = "$artist - $title";
+          state = "$album";
+          large_text = "$date";
+          small_image = "";
+        };
+      };
+    };
   };
 
   xdg.configFile."yabridgectl/config.toml".text = ''

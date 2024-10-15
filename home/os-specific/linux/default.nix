@@ -34,13 +34,16 @@ in {
       krita
       libnotify
       libreoffice-fresh
+      matlab
       nicotine-plus
       nim
       nix-alien
+      octaveFull
       pciutils
       qbittorrent
       qview
       rclone
+      teams-for-linux
       telegram-desktop_git
       tor-browser-bundle-bin
       vesktop

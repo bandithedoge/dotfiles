@@ -4,7 +4,8 @@
          {:dependencies [(_G.use :nvim-lua/plenary.nvim)
                          (_G.use :nvim-tree/nvim-web-devicons)
                          (_G.use :MunifTanjim/nui.nvim)]
-          :keys [(_G.key :<leader>t "<cmd>Neotree toggle<cr>")]
+          :keys [(_G.key :<leader>t "<cmd>Neotree toggle<cr>"
+                         {:desc "File tree"})]
           :cmd :Neotree
           :opts {:sources [:filesystem]
                  :open_files_do_not_replace_types [:terminal
@@ -65,5 +66,6 @@
                  :event_handlers [{:event :neo_tree_buffer_enter
                                    :handler #(vim.cmd "highlight! Cursor blend=100")}
                                   {:event :neo_tree_buffer_leave
-                                   :handler #(vim.cmd (.. "highlight! Cursor blend=0 guibg=" _G.base0F))}]}})]
+                                   :handler #(vim.cmd (.. "highlight! Cursor blend=0 guibg="
+                                                          _G.base0F))}]}})]
 

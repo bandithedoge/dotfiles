@@ -184,12 +184,12 @@ in {
           "${mod}+Control+Shift+${up}" = "move container to focus output up";
           "${mod}+Control+Shift+${right}" = "move container to focus output right";
 
-          XF86AudioMute = "exec amixer set Master toggle";
-          XF86AudioRaiseVolume = "exec amixer set Master 5%+";
-          XF86AudioLowerVolume = "exec amixer set Master 5%-";
-          XF86AudioPlay = "exec playerctl -p strawberry play-pause";
-          XF86AudioPrev = "exec playerctl -p strawberry previous";
-          XF86AudioNext = "exec playerctl -p strawberry next";
+          XF86AudioMute = "exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
+          XF86AudioRaiseVolume = "exec wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+";
+          XF86AudioLowerVolume = "exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-";
+          XF86AudioPlay = "exec mpc toggle";
+          XF86AudioPrev = "exec mpc prev";
+          XF86AudioNext = "exec mpc next";
         };
       modes = let
         inherit (config.wayland.windowManager.sway.config) up down left right;
@@ -364,6 +364,7 @@ in {
           format-muted = red (icon "");
           on-click = "amixer set Master toggle";
           on-click-right = "pwvucontrol";
+          on-click-middle = "coppwr";
         };
         clock = {
           inherit interval;
@@ -450,7 +451,7 @@ in {
             };
             p = {
               desc = "Music player";
-              cmd = "strawberry";
+              cmd = "cantata";
             };
             b = {
               desc = "Web browser";

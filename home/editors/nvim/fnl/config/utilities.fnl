@@ -1,5 +1,3 @@
-(import-macros {: map!} :hibiscus.vim)
-
 [(_G.use :LunarVim/bigfile.nvim {:event :BufReadPre})
  ;;
  (_G.use :direnv/direnv.vim {:cond _G.USING_NIX :event :LazyFile})
@@ -24,6 +22,8 @@
                          #(let [expand-expr (require :expand_expr)]
                             (expand-expr.expand))
                          {:desc "Expand expression"})]})
+ ;;
+ (_G.use :andweeb/presence.nvim {:event :LazyFile :opts {}})
  ;;
  (_G.use :vladdoster/remember.nvim
          {:config #(require :remember) :event :LazyFile})
