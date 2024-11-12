@@ -12,6 +12,4 @@ final: prev: {
     withOpenASAR = true;
     withVencord = true;
   };
-
-  sway = prev.sway_git;
 }

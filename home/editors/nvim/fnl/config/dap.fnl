@@ -50,24 +50,21 @@
                        (vscode.load_launchjs))
                      (set dap.adapters.codelldb
                           {:type :server
-                           ; :host :localhost
+                           ;:host :localhost
                            :port "${port}"
                            :executable {:command :codelldb
                                         :args [:--port "${port}"]}})
-                     (set dap.configurations.c
-                          [{:type :codelldb
-                            :request :launch
-                            :name "Launch file"
-                            :program #(vim.fn.input "Path to executable: "
-                                                    (.. (vim.fn.getcwd) "/")
-                                                    :file)
-                            :cwd "${workspaceFolder}"}
-                           {:type :codelldb
-                            :request :attach
-                            :name "Attach to process"
-                            :pid utils.pick_process
-                            :cwd "${workspaceFolder}"}])
-                     (set dap.configurations.cpp dap.configurations.c)
-                     (set dap.configurations.rust dap.configurations.c)
-                     (set dap.configurations.zig dap.configurations.c))})]
-
+                     (each [_ lang (ipairs [:c :cpp :rust :zig])]
+                       (tset dap.configurations lang
+                             [{:type :codelldb
+                               :request :launch
+                               :name "Launch file"
+                               :program #(vim.fn.input "Path to executable: "
+                                                       (.. (vim.fn.getcwd) "/")
+                                                       :file)
+                               :cwd "${workspaceFolder}"}
+                              {:type :codelldb
+                               :request :attach
+                               :name "Attach to process"
+                               :pid utils.pick_process
+                               :cwd "${workspaceFolder}"}])))})]

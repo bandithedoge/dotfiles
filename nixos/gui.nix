@@ -19,16 +19,6 @@
   };
 
   programs = {
-    uwsm = {
-      enable = true;
-      waylandCompositors = {
-        sway = {
-          prettyName = "Sway";
-          binPath = pkgs.lib.getExe pkgs.sway;
-        };
-      };
-    };
-
     regreet = {
       enable = true;
       cageArgs = ["-s" "-d" "-m" "last"];

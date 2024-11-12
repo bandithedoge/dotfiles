@@ -12,6 +12,8 @@
           with pkgs; [
             xz
             openssl
+            gst_all_1.gst-plugins-bad
+            gst_all_1.gst-plugins-ugly
           ];
         extraPreBwrapCmds = "touch /etc/NIXOS";
       };
@@ -20,7 +22,7 @@
     gamescope = {
       enable = true;
       # capSysNice = true;
-      package = pkgs.gamescope_git;
+      # package = pkgs.gamescope_git;
     };
 
     anime-game-launcher.enable = true;

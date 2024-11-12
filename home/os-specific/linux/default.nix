@@ -12,8 +12,6 @@ in {
 
   home = {
     packages = with pkgs; [
-      (cutter.withPlugins (p: with p; [rz-ghidra jsdec sigdb]))
-      (ghidra.withExtensions (p: with p; [machinelearning]))
       appimage-run
       bandithedoge.deemix-gui-bin
       bandithedoge.propertree
@@ -27,10 +25,8 @@ in {
       distrobox_git
       ferdium
       flameshot
-      fractal
       inkscape
       keepassxc
-      kicad
       krita
       libnotify
       libreoffice-fresh
@@ -38,8 +34,8 @@ in {
       nicotine-plus
       nim
       nix-alien
-      octaveFull
       pciutils
+      prusa-slicer
       qbittorrent
       qview
       rclone
@@ -50,6 +46,7 @@ in {
       wine-tkg
       xdragon
       zenity
+      zoom-us
     ];
 
     pointerCursor = {
@@ -89,6 +86,9 @@ in {
           "xdg-config/gtk-4.0:ro"
         ];
       };
+      "org.jdownloader.JDownloader".Context.filesystems = [
+        "/mnt"
+      ];
     };
     packages = [
       "com.github.tchx84.Flatseal"
@@ -134,7 +134,7 @@ in {
         autoCloseIdleDaemon = true;
         buttons = "@Variant(\\0\\0\\0\\x7f\\0\\0\\0\\vQList<int>\\0\\0\\0\\0\\a\\0\\0\\0\\0\\0\\0\\0\\x12\\0\\0\\0\\xf\\0\\0\\0\\n\\0\\0\\0\\v\\0\\0\\0\\r\\0\\0\\0\\f)";
         contrastUiColor = base0F;
-        copyAndCloseAfterUpload = true;
+        # copyAndCloseAfterUpload = true;
         copyOnDoubleClick = true;
         drawColor = base0F;
         filenamePattern = "%F_%H:%M:%S";
@@ -617,7 +617,7 @@ in {
 
   services = {
     dunst = with pkgs.rice; {
-      enable = true;
+      enable = false;
       inherit (gtk) iconTheme;
       settings = {
         global = {

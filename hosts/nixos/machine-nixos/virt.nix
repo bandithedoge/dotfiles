@@ -16,6 +16,14 @@
         vhostUserPackages = with pkgs; [virtiofsd];
         verbatimConfig = ''
           user = "bandithedoge"
+
+          cgroup_device_acl = [
+            "/dev/null", "/dev/full", "/dev/zero",
+            "/dev/random", "/dev/urandom",
+            "/dev/ptmx", "/dev/kvm", "/dev/kqemu",
+            "/dev/rtc","/dev/hpet", "/dev/vfio/vfio",
+            "/dev/kvmfr0"
+          ]
         '';
       };
       hooks.qemu = {
@@ -44,10 +52,14 @@
   boot = {
     kernelModules = [
       "kvm-intel"
+      "kvmfr"
       "vfio"
       "vfio_iommu_type1"
       "vfio_pci"
       "vfio_virqfd"
+    ];
+    extraModulePackages = with config.boot.kernelPackages; [
+      kvmfr
     ];
     initrd.kernelModules = [
       "vfio"
@@ -64,47 +76,18 @@
       "kvm_intel.nested=1"
       "kvm_intel.emulate_invalid_guest_state=0"
       "pcie_acs_override=downstream,multifunction"
+      "kvmfr.static_size_mb=32"
     ];
   };
 
   services.udev.extraRules = ''
     SUBSYSTEM=="vfio", OWNER="root", GROUP="kvm"
+    SUBSYSTEM=="kvmfr", OWNER="bandithedoge", GROUP="kvm", MODE="0660"
   '';
 
   systemd.tmpfiles.rules = [
     "f /dev/shm/looking-glass 666 bandithedoge qemu-libvirtd -"
   ];
-
-  home-manager.users.bandithedoge.programs.looking-glass-client = {
-    enable = true;
-    package = pkgs.looking-glass-client.overrideAttrs (_: {
-      version = "B6";
-      src = pkgs.fetchFromGitHub {
-        owner = "gnif";
-        repo = "LookingGlass";
-        rev = "B6";
-        sha256 = "sha256-6vYbNmNJBCoU23nVculac24tHqH7F4AZVftIjL93WJU=";
-        fetchSubmodules = true;
-      };
-      patches = [];
-    });
-    settings = {
-      win = {
-        inherit (pkgs.rice) uiFont;
-        uiSize = 16;
-        fullScreen = true;
-        quickSplash = true;
-        # jitRender = true;
-      };
-      # input = {
-      #   escapeKey = "KEY_HOME";
-      # };
-      audio = {
-        micDefault = "allow";
-        periodSize = 512;
-      };
-    };
-  };
 
   networking.firewall = {
     allowedUDPPortRanges = [
@@ -116,19 +99,24 @@
     allowedTCPPorts = [4918];
   };
 
-  # services.samba = {
-  #   enable = true;
-  #   openFirewall = true;
-  #   shares.data = {
-  #     path = "/mnt";
-  #     "read only" = false;
-  #     "guest ok" = "yes";
-  #   };
-  #   extraConfig = ''
-  #     bind interfaces only = yes
-  #     interfaces = virbr0
-  #   '';
-  # };
+  services.samba = {
+    enable = true;
+    openFirewall = true;
+    settings = {
+      data = {
+        path = "/mnt";
+        "read only" = "no";
+        "guest ok" = "yes";
+        "bind interfaces only" = "yes";
+        interfaces = "virbr0";
+      };
+      global = {
+        security = "user";
+        "passwd program" = "/run/wrappers/bin/passwd %u";
+        "invalid users" = ["root"];
+      };
+    };
+  };
 
   systemd.services.virt-webdav = {
     after = ["network.target"];

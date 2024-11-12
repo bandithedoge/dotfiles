@@ -4,7 +4,7 @@
 
     flake-parts.url = "github:hercules-ci/flake-parts";
     lix.inputs.nixpkgs.follows = "nixpkgs";
-    lix.url = "https://git.lix.systems/lix-project/nixos-module/archive/2.91.0.tar.gz";
+    lix.url = "https://git.lix.systems/lix-project/nixos-module/archive/2.91.1-1.tar.gz";
     nixos-unified.url = "github:srid/nixos-unified";
 
     nixos-hardware.url = "github:nixos/nixos-hardware";
@@ -20,6 +20,11 @@
     emacs.url = "github:nix-community/emacs-overlay";
     flatpak.url = "github:gmodena/nix-flatpak";
     hypridle.url = "github:hyprwm/hypridle";
+    hyprland-plugins.inputs.hyprland.follows = "hyprland";
+    hyprland-plugins.url = "github:hyprwm/hyprland-plugins";
+    hyprland.url = "https://flakehub.com/f/hyprwm/Hyprland/*.tar.gz";
+    hyprsplit.inputs.hyprland.follows = "hyprland";
+    hyprsplit.url = "github:shezdy/hyprsplit";
     matlab.url = "gitlab:doronbehar/nix-matlab";
     mozilla.url = "github:mozilla/nixpkgs-mozilla";
     musnix.url = "github:musnix/musnix";
@@ -88,6 +93,7 @@
                 aagl.nixosModules.default
                 flatpak.nixosModules.nix-flatpak
                 home-manager.nixosModules.home-manager
+                hyprland.nixosModules.default
                 lix.nixosModules.default
                 musnix.nixosModules.musnix
                 nix-gaming.nixosModules.pipewireLowLatency
@@ -126,6 +132,7 @@
                         ./home/editors
                         ./home/gaming
                         ./home/gui
+                        ./home/hosts/thonkpad.nix
                         ./home/os-specific/linux
                       ];
                     };
@@ -164,6 +171,7 @@
                         ./home/editors
                         ./home/gaming
                         ./home/gui
+                        ./home/hosts/machine-nixos.nix
                         ./home/os-specific/linux
                       ];
                     };
@@ -179,11 +187,13 @@
         homeModules.default = {pkgs, ...}: {
           options.hostname = pkgs.lib.mkOption {type = pkgs.lib.types.str;};
           imports = with inputs; [
-            ./nix.nix
-            ./sops.nix
             flatpak.homeManagerModules.nix-flatpak
+            hyprland.homeManagerModules.default
             nix-index-database.hmModules.nix-index
             sops-nix.homeManagerModule
+
+            ./nix.nix
+            ./sops.nix
           ];
         };
       };

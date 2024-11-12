@@ -17,6 +17,7 @@ in {
     '';
     packages = with pkgs; [
       # {{{
+      (sox.override {enableLame = true;})
       age
       aria
       broot
@@ -42,7 +43,6 @@ in {
       rclone
       ripgrep
       sops
-      sox
       unar
       unzip
       wgcf
@@ -283,7 +283,7 @@ in {
       functions = let
         mkNom = subc: {
           body = ''
-            nix ${subc} $argv --log-format internal-json -v &| nom --json
+            nix --log-format internal-json -v ${subc} $argv &| nom --json
           '';
         };
       in {
@@ -411,7 +411,7 @@ in {
 
     eza = {
       enable = true;
-      icons = true;
+      icons = "auto";
       git = true;
     };
 
@@ -447,6 +447,7 @@ in {
     };
 
     yazi = {
+      # {{{
       enable = true;
       enableFishIntegration = true;
       shellWrapperName = "y";
@@ -553,6 +554,7 @@ in {
           fennel -c ${./yazi.fnl} >> $out
         '');
     };
+    # }}}
 
     dircolors.enable = true;
     gh.enable = true;

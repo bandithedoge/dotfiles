@@ -2,7 +2,7 @@
   imports = [./virt.nix];
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_zen;
+    kernelPackages = pkgs.linuxPackages_xanmod;
     kernelParams = ["threadirqs"];
     loader = {
       systemd-boot.enable = true;
@@ -24,8 +24,6 @@
 
     wireguard.enable = true;
   };
-
-  programs.openvpn3.enable = true;
 
   # services.ananicy = {
   #   enable = true;

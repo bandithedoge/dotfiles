@@ -2,10 +2,6 @@
   home = {
     packages = with pkgs; [
       (pkgs.lutris.override {
-        extraPkgs = pkgs':
-          with pkgs'; [
-            gamescope_git
-          ];
         extraLibraries = pkgs':
           with pkgs'; [
             at-spi2-atk
@@ -36,7 +32,7 @@
 
   programs.mangohud = {
     enable = true;
-    enableSessionWide = true;
+    # enableSessionWide = true;
     package = pkgs.mangohud_git;
     settings = {
       fps_limit = "0,60";

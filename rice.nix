@@ -4,7 +4,7 @@ in
   rice
   // (with rice; rec {
     terminal = "kitty";
-    wm = "sway";
+    wm = "Hyprland";
     menu = "rofi -show drun";
 
     wallpaper = ./wallpaper.jpg;

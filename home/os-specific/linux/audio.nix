@@ -1,11 +1,11 @@
 {pkgs, ...}: {
   home.packages = with pkgs; [
     ardour
-    bandithedoge.cantata
     bandithedoge.cardinal
     bandithedoge.clap-info
     bandithedoge.vgmtrans
     carla
+    coppwr
     furnace
     mpc-cli
     picard
@@ -13,13 +13,36 @@
     pwvucontrol
     reaper
     strawberry-qt6
-    coppwr
 
+    (bandithedoge.the-usual-suspects.osirus.override {
+      rom = pkgs.fetchurl {
+        url = "https://archive.org/download/access-virus-b-c-roms/Access%20Virus%20B%20%28am29f040b_4v9%29.zip/Access%20Virus%20B%20%28am29f040b_4v9%29.BIN";
+        sha256 = "0br4c84y19igpr883m7dkrwsav9qh90965ri2rqwmzk52hmdgkkw";
+        name = "firmware.bin";
+      };
+    })
+    (bandithedoge.the-usual-suspects.ostirus.override {
+      rom = pkgs.fetchurl {
+        url = "https://archive.org/download/firmware_20240515/firmware.bin";
+        sha256 = "0sndnl7s1nr4f7y83bw6dr0cy79rwy0mzfq5f8dwp7iganlawgcf";
+      };
+    })
     bandithedoge.airwindows-consolidated
-    bandithedoge.digits-bin
+    bandithedoge.destruqtor
     bandithedoge.geonkick
     bandithedoge.ildaeil
-    distrho
+    bandithedoge.microbiome-bin
+    bandithedoge.misstrhortion
+    bandithedoge.panacea-bin
+    bandithedoge.tonelib.bassdrive
+    bandithedoge.tonelib.easycomp
+    bandithedoge.tonelib.noisereducer
+    bandithedoge.tonelib.tubewarmth
+    bandithedoge.uhhyou
+    bandithedoge.white-elephant-audio.carve-bin
+    bandithedoge.white-elephant-audio.monstr-bin
+    bandithedoge.white-elephant-audio.richter-bin
+    bandithedoge.white-elephant-audio.songbird-bin
     lsp-plugins
     plugdata
     surge-XT
@@ -29,30 +52,6 @@
     easyeffects = {
       enable = true;
       preset = "main";
-    };
-
-    mpd = {
-      enable = true;
-      musicDirectory = "/mnt/data/Music/Music";
-      extraConfig = ''
-        audio_output {
-          type "pipewire"
-          name "default"
-        }
-      '';
-      network.startWhenNeeded = true;
-    };
-
-    mpd-discord-rpc = {
-      enable = true;
-      settings = {
-        format = {
-          details = "$artist - $title";
-          state = "$album";
-          large_text = "$date";
-          small_image = "";
-        };
-      };
     };
   };
 
