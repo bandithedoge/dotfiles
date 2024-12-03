@@ -1,5 +1,3 @@
-(: (require :eza-preview) :setup)
-
 (: (require :yatline) :setup
    {:section_separator {:open "" :close ""}
     :part_separator {:open "" :close ""}

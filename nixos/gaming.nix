@@ -19,14 +19,27 @@
       };
       extraCompatPackages = with pkgs; [luxtorpeda proton-ge-custom steamtinkerlaunch];
     };
+
     gamescope = {
       enable = true;
       # capSysNice = true;
-      # package = pkgs.gamescope_git;
+      package = pkgs.gamescope.overrideAttrs (_: {
+        NIX_CFLAGS_COMPILE = ["-fno-fast-math"];
+      });
     };
 
     anime-game-launcher.enable = true;
-    gamemode.enable = true;
+    gamemode = {
+      enable = true;
+      settings = {
+        general.softrealtime = "auto";
+        gpu = {
+          apply_gpu_optimisations = "accept-responsibility";
+          gpu_device = 0;
+          amd_performance_level = "high";
+        };
+      };
+    };
     honkers-railway-launcher.enable = true;
   };
 

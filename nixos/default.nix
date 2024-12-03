@@ -1,5 +1,5 @@
 {pkgs, ...}: {
-  system.stateVersion = "23.11";
+  system.stateVersion = "24.11";
 
   hardware.enableRedistributableFirmware = true;
 
@@ -85,23 +85,30 @@
       base15
       base0F
     ]);
-    useXkbConfig = true;
+    keyMap = "pl";
   };
 
-  documentation.man.enable = true;
+  documentation.man = {
+    enable = true;
+    man-db.enable = false;
+    mandoc.enable = true;
+  };
 
-  # https://github.com/CachyOS/CachyOS-Settings/blob/master/etc/sysctl.d/99-cachyos-settings.conf
+  # https://github.com/CachyOS/CachyOS-Settings/blob/master/usr/lib/sysctl.d/99-cachyos-settings.conf
   boot.kernel.sysctl = {
     "fs.file-max" = 2097152;
     "fs.inotify.max_user_watches" = 524288;
     "fs.xfs.xfssyncd_centisecs" = 10000;
     "kernel.kexec_load_disabled" = true;
+    "kernel.kptr_restrict" = 2;
     "kernel.nmi_watchdog" = 0;
+    "kernel.printk" = "3 3 3 3";
     "kernel.sched_rt_runtime_us" = 980000;
     "kernel.unprivileged_userns_clone" = true;
     "net.core.netdev_max_backlog" = 16384;
     "net.core.somaxconn" = 8192;
     "net.ipv4.tcp_congestion_control" = "bbr";
+    "net.ipv4.tcp_ecn" = 1;
     "net.ipv4.tcp_fastopen" = 3;
     "net.ipv4.tcp_rfc1337" = true;
     "net.ipv4.tcp_slow_start_after_idle" = false;

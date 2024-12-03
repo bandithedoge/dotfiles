@@ -184,4 +184,3 @@
 
 (nightfox.compile)
 (vim.cmd.colorscheme :nightfox)
-

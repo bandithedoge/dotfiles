@@ -11,7 +11,7 @@ in {
 
   home = {
     # {{{
-    stateVersion = "23.05";
+    stateVersion = "24.11";
     activation.setupEtc = config.lib.dag.entryAfter ["writeBoundary"] ''
       /run/current-system/sw/bin/systemctl start --user sops-nix
     '';
@@ -451,12 +451,13 @@ in {
       enable = true;
       enableFishIntegration = true;
       shellWrapperName = "y";
-      package = pkgs.yazi.override {extraPackages = with pkgs; [glow miller hexyl exiftool mediainfo ouch clipboard-jh];};
+      package = pkgs.yazi.override {extraPackages = with pkgs; [glow miller hexyl exiftool mediainfo ouch clipboard-jh p7zip];};
 
       settings = {
         manager = {
           sort_by = "natural";
           show_hidden = true;
+          linemode = "size";
         };
         preview = {
           wrap = "yes";
@@ -465,8 +466,8 @@ in {
         opener = {
           extract = [
             {
-              run = "ouch d -y \"%*\"";
-              desc = "Extract here with ouch";
+              run = "unar %*";
+              desc = "Extract";
             }
           ];
         };
@@ -483,10 +484,6 @@ in {
             {
               mime = "audio/*";
               run = "exifaudio";
-            }
-            {
-              mime = "application/*zip";
-              run = "ouch";
             }
             {
               mime = "application/x-{tar,bzip2,7z-compressed,rar,xz}";
@@ -520,6 +517,16 @@ in {
       keymap = {
         manager.prepend_keymap = [
           {
+            on = "q";
+            run = "quit --no-cwd-file";
+            desc = "Quit";
+          }
+          {
+            on = "Q";
+            run = "quit";
+            desc = "Quit and cd";
+          }
+          {
             on = "C";
             run = "plugin ouch --args=zip";
             desc = "Compress with ouch";
@@ -532,6 +539,22 @@ in {
           {
             on = "<C-y>";
             run = "plugin system-clipboard";
+            desc = "Copy file";
+          }
+          {
+            on = "<C-n>";
+            run = ''
+              shell 'dragon "$@"' --confirm
+            '';
+            desc = "Drag and drop";
+          }
+          {
+            on = "<Tab>";
+            run = "tab_switch 1 --relative";
+          }
+          {
+            on = "<S-Tab>";
+            run = "tab_switch -1 --relative";
           }
         ];
         completion.prepend_keymap = [
@@ -544,6 +567,10 @@ in {
             run = "arrow -1";
           }
         ];
+      };
+
+      theme = with pkgs.rice; {
+        manager.border.fg = base03;
       };
 
       initLua = builtins.readFile (pkgs.runCommand "yazi/init.lua" {nativeBuildInputs = with pkgs; [fennel];}

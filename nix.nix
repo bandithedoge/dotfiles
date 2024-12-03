@@ -6,6 +6,7 @@
       max-call-depth = 100000;
       trusted-users = ["root" "@wheel" "bandithedoge"];
       use-xdg-base-directories = true;
+      keep-failed = true;
 
       substituters = [
         "https://bandithedoge.cachix.org"

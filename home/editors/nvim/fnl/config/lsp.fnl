@@ -172,7 +172,8 @@
                                                   :fennel_language_server {:settings {:fennel {:workspace {:library (vim.api.nvim_list_runtime_paths)}
                                                                                                :diagnostics {:globals [:vim
                                                                                                                        :case]}}}}
-                                                  :ltex {:settings {:ltex {:completionEnabled true
+                                                  :ltex {:filetypes [:gitcommit :markdown :org :rst :tex :pandoc]
+                                                         :settings {:ltex {:completionEnabled true
                                                                            :additionalRules {:enablePickyRules true
                                                                                              :motherTongue :pl-PL}}}}
                                                   :nil_ls {:settings {:nil {:formatting {:command [:alejandra]}}}}}

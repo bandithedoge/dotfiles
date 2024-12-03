@@ -19,9 +19,12 @@
             xorg.libXft
             xorg.libXtst
           ];
+        extraPkgs = pkgs': with pkgs'; [
+          xorg.xmessage
+        ];
       })
       bandithedoge.sgdboop-bin
-      # bandithedoge.umu
+      gzdoom
       pcsx2
       prismlauncher
       vitetris
@@ -34,7 +37,7 @@
     enable = true;
     # enableSessionWide = true;
     package = pkgs.mangohud_git;
-    settings = {
+    settings = with pkgs.rice; {
       fps_limit = "0,60";
       vsync = 1;
       gl_vsync = 0;

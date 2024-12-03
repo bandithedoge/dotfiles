@@ -1094,7 +1094,7 @@
     :custom
     (c-ts-mode-indent-offset 4)
     :config
-    (use-package clangd-inactive-regions
+    (use-package eglot-inactive-regions
       :ghook 'eglot-managed-mode-hook))
 
   (use-package cmake-ts-mode

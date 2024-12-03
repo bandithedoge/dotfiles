@@ -37,7 +37,6 @@
     nur.url = "github:nix-community/NUR";
     nyx.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
     poetry2nix.url = "github:nix-community/poetry2nix";
-    prismlauncher.url = "github:PrismLauncher/PrismLauncher";
     sops-nix.url = "github:Mic92/sops-nix";
     zjstatus.url = "github:dj95/zjstatus";
   };
@@ -61,7 +60,6 @@
               nix-gaming.overlays.default
               nur.overlay
               poetry2nix.overlays.default
-              prismlauncher.overlays.default
 
               (_: prev: {
                 bandithedoge = import nur-bandithedoge {
@@ -77,7 +75,6 @@
                 inherit (aagl.packages.${prev.system}) honkers-railway-launcher anime-game-launcher;
                 inherit (emacs.packages.${prev.system}) emacs-unstable-pgtk commercial-emacs;
                 inherit (nix-gaming.packages.${prev.system}) wine-ge wine-tkg;
-                inherit (prismlauncher.packages.${prev.system}) prismlauncher prismlauncher-unwrapped;
               })
               (import ./overlay.nix)
             ];

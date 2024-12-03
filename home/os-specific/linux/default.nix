@@ -12,6 +12,7 @@ in {
 
   home = {
     packages = with pkgs; [
+      (gimp-with-plugins.override {plugins = with pkgs.gimpPlugins; [gmic bimp];})
       appimage-run
       bandithedoge.deemix-gui-bin
       bandithedoge.propertree
@@ -25,6 +26,7 @@ in {
       distrobox_git
       ferdium
       flameshot
+      fractal
       inkscape
       keepassxc
       krita
@@ -44,6 +46,7 @@ in {
       tor-browser-bundle-bin
       vesktop
       wine-tkg
+      winetricks
       xdragon
       zenity
       zoom-us
@@ -56,6 +59,7 @@ in {
   };
 
   services.flatpak = {
+    # {{{
     enable = true;
     uninstallUnmanaged = true;
     remotes = [
@@ -97,6 +101,7 @@ in {
       "org.jdownloader.JDownloader"
     ];
   };
+  # }}}
 
   # HACK: https://github.com/nix-community/home-manager/issues/2659
   # systemd.user.sessionVariables = config.home.sessionVariables;
@@ -120,11 +125,15 @@ in {
     gtk4 = gtk3;
   };
 
-  dconf.settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
+  dconf.settings."org/gnome/desktop/interface" = with pkgs.rice; {
+    color-scheme = "prefer-dark";
+    font-name = "${uiFont} 12";
+    monospace-font-name = "${monoFont} 12";
+  };
   # }}}
 
   xdg.configFile = let
-    css = pkgs.rice.compileSCSS ./gtk.scss;
+    css = pkgs.rice.compileSCSS ../../../gtk.scss;
   in {
     "gtk-4.0/gtk.css".source = css;
     "gtk-3.0/gtk.css".source = css;

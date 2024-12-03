@@ -146,6 +146,7 @@ in {
             "tile, title:(Adobe Photoshop 2021)|(Adobe Illustrator 2021)|(Guitar Pro 8)|(DaVinci Resolve Studio)"
             "immediate, class:(gamescope)"
             "nearestneighbor 1, class:(gamescope)"
+            "nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0"
           ]
           ++ map (x: "opacity 0.95 0.85, class:(${x})") [
             terminal

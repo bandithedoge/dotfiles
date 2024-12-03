@@ -13,6 +13,9 @@ in
       mv blur.png $out
     '';
 
+    uiFontPackage = pkgs.roboto;
+    monoFontPackage = pkgs.nerd-fonts.jetbrains-mono;
+
     gtk = {
       theme = {
         name = "adw-gtk3-dark";

@@ -1,7 +1,6 @@
 {
   pkgs,
   config,
-  lib,
   ...
 }: {
   environment = {
@@ -12,29 +11,23 @@
       rice.gtk.cursorTheme.package
       rice.gtk.iconTheme.package
       rice.gtk.theme.package
-      winetricks
       xorg.setxkbmap
     ];
-    etc."greetd/regreet.css".source = pkgs.lib.mkForce (pkgs.rice.compileSCSS ../home/os-specific/linux/gtk.scss);
   };
 
   programs = {
     regreet = {
       enable = true;
       cageArgs = ["-s" "-d" "-m" "last"];
-      settings = with pkgs.rice; {
-        background = {
-          path = wallpaperBlurred;
-          fit = "Fill";
-        };
-        GTK = lib.mkForce {
-          application_prefer_dark_theme = true;
-          cursor_theme_name = gtk.cursorTheme.name;
-          font = "${uiFont} 16";
-          icon_theme_name = gtk.iconTheme.name;
-          theme_name = gtk.theme.name;
-        };
+      inherit (pkgs.rice.gtk) theme;
+      cursorTheme = {
+        inherit (pkgs.rice.gtk.cursorTheme) name package;
       };
+      settings.background = with pkgs.rice; {
+        path = wallpaperBlurred;
+        fit = "Fill";
+      };
+      extraCss = builtins.readFile (pkgs.rice.compileSCSS ../gtk.scss);
     };
 
     gnome-disks.enable = true;
@@ -72,13 +65,17 @@
     flatpak.enable = true;
   };
 
-  xdg.portal = {
-    enable = true;
-    wlr.enable = true;
-    config.sway.default = ["wlr" "gtk"];
-    extraPortals = with pkgs; [
-      xdg-desktop-portal-gtk
-    ];
+  xdg = {
+    portal = {
+      enable = true;
+      wlr.enable = true;
+      config.sway.default = ["wlr" "gtk"];
+      extraPortals = with pkgs; [
+        xdg-desktop-portal-gtk
+      ];
+    };
+
+    terminal-exec.enable = true;
   };
 
   gtk.iconCache.enable = true;
@@ -86,21 +83,19 @@
   fonts = {
     enableDefaultPackages = true;
     packages = with pkgs; [
-      (nerdfonts.override {fonts = ["JetBrainsMono"];})
-      bandithedoge.symbols-nerd-font
-      # emojione
-      roboto
+      nerd-fonts.symbols-only
+      rice.monoFontPackage
+      rice.uiFontPackage
       roboto-slab
       twemoji-color-font
     ];
     fontconfig = {
       enable = true;
-      hinting.autohint = true;
+      # hinting.autohint = true;
       defaultFonts = with pkgs.rice; {
         monospace = [monoFont];
         sansSerif = [uiFont];
         serif = [serifFont];
-        # emoji = [emojiFont];
       };
     };
   };

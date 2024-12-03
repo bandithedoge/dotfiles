@@ -5,7 +5,6 @@ import std/[
   strformat,
   strutils,
   terminal,
-  strtabs,
 ]
 import docopt
 
@@ -88,6 +87,7 @@ when isMainModule:
     if inputs.len() == 0:
       exec &"nix flake update --flake {path}"
       exec (if isNixOS: "sudo " else: "") & "nix-channel --update"
+      exec "nix profile upgrade '.*' --impure"
       if isLinux:
         exec "flatpak update"
     else:
@@ -97,5 +97,4 @@ when isMainModule:
   if args["cleanup"] or args["c"]:
     exec "home-manager expire-generations '-3 days'"
     exec (if isNixOS or isDarwin: "sudo " else: "") & "nix-collect-garbage -d"
-    exec (if isNixOS: "sudo " else: "") & "nix-store --optimise"
     if isDarwin: exec "brew cleanup -s --prune=all"

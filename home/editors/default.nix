@@ -31,6 +31,7 @@
       # web
       bandithedoge.nodePackages.emmet-language-server
       bandithedoge.nodePackages.tailwindcss-language-server
+      bun
       eslint_d
       nodePackages.pnpm
       nodePackages.stylelint
