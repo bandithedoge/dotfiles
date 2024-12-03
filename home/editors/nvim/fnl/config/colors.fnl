@@ -180,7 +180,8 @@
                                 :RenderMarkdownH6Bg {:bg _G.base01}
                                 :EdgyNormal {:link :NormalNC}
                                 :NeoTreeModified {:fg _G.base08}
-                                :NeoTreeCursorLine {:bg :bg1}}}})
+                                :NeoTreeCursorLine {:bg :bg1}
+                                :DapUINormalNC {:link :NormalNC}}}})
 
 (nightfox.compile)
 (vim.cmd.colorscheme :nightfox)

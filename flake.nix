@@ -16,6 +16,7 @@
     # nur-bandithedoge.url = "path:/home/bandithedoge/git/nur-packages";
 
     aagl.url = "github:ezKEa/aagl-gtk-on-nix";
+    blink.url = "github:Saghen/blink.cmp";
     colors.url = "github:Misterio77/nix-colors";
     emacs.url = "github:nix-community/emacs-overlay";
     flatpak.url = "github:gmodena/nix-flatpak";
@@ -68,10 +69,10 @@
                     config.allowUnfree = true;
                   };
                 };
-                colors = colors.lib-core;
-                hyprlandPlugins = {
-                  hyprsplit = hyprsplit.packages.${prev.system}.default;
+                vimPlugins = prev.vimPlugins // {
+                  inherit (blink.packages.${prev.system}) blink-cmp;
                 };
+                colors = colors.lib-core;
                 inherit (aagl.packages.${prev.system}) honkers-railway-launcher anime-game-launcher;
                 inherit (emacs.packages.${prev.system}) emacs-unstable-pgtk commercial-emacs;
                 inherit (nix-gaming.packages.${prev.system}) wine-ge wine-tkg;

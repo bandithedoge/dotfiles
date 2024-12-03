@@ -10,6 +10,7 @@
                  :nui {:layout {:relative :cursor :position 0}
                        :preview {:border {:style :solid}}
                        :select {:border {:style :solid}}}}})
+ ;;
  (_G.use :stevearc/conform.nvim
          {:keys [(_G.key :<localleader>f
                          #(let [conform (require :conform)]
@@ -106,6 +107,7 @@
                                                           :config true})
                                                  (_G.use :SmiteshP/nvim-navic
                                                          {:opts {:highlight true
+<<<<<<< Updated upstream
                                                                  :separator " 󰅂 "}})]
                                   :opts {:features {:autoformat false
                                                     :inlay_hints true}
@@ -180,6 +182,84 @@
                                          :on_attach #(let [navic (require :nvim-navic)]
                                                        (when ($1.supports_method :textDocument/documentSymbol)
                                                          (navic.attach $1 $2)))}})
+=======
+                                                                 :separator " 󰅂 "}})
+                                                 (_G.use :Saghen/blink.cmp)]
+                                  :opts #{:features {:autoformat false
+                                                     :inlay_hints true}
+                                          :formatting {:format_on_save {:enabled false}}
+                                          :handlers {1 #(let [lsp (require :lspconfig)]
+                                                          ((. lsp $1 :setup) $2))
+                                                     :clangd #(let [lsp (require :lspconfig)
+                                                                    clangd (require :clangd_extensions)]
+                                                                (lsp.clangd.setup $2)
+                                                                (clangd.setup {}))
+                                                     :dartls #(let [flutter-tools (require :flutter-tools)]
+                                                                (flutter-tools.setup {:ui {:border :solid}
+                                                                                      :lsp {:color {:enabled true
+                                                                                                    :virtual_text false
+                                                                                                    :background true}}}))
+                                                     :hls false
+                                                     :jsonls #(let [lsp (require :lspconfig)
+                                                                    schemastore (require :schemastore)]
+                                                                (lsp.jsonls.setup (merge! $2
+                                                                                          {:settings {:json {:schemas (schemastore.json.schemas)
+                                                                                                             :validate {:enable true}}}})))
+                                                     :lua_ls #(let [lazydev (require :lazydev)]
+                                                                (lazydev.setup))
+                                                     :yamlls #(let [lsp (require :lspconfig)
+                                                                    schemastore (require :schemastore)]
+                                                                (lsp.yamlls.setup (merge! $2
+                                                                                          {:settings {:yaml {:schemaStore {:enable false
+                                                                                                                           :url ""}
+                                                                                                             :schemas (schemastore.yaml.schemas)}}})))}
+                                          ; :capabilities (merge! (vim.lsp.protocol.make_client_capabilities)
+                                          ;                       {:textDocument {:completion {:completionItem {:snippetSupport true}}}})
+                                          :capabilities (let [blink (require :blink.cmp)]
+                                                          (blink.get_lsp_capabilities (vim.lsp.protocol.make_client_capabilities)))
+                                          :mappings {:n {:gx {1 #(let [lsplinks (require :lsplinks)]
+                                                                   (lsplinks.gx))
+                                                              :cond :textDocument/documentLink}}}
+                                          :servers [:basedpyright
+                                                    :bashls
+                                                    :clangd
+                                                    :cssls
+                                                    :dartls
+                                                    :emmet_language_server
+                                                    :eslint
+                                                    :fennel_language_server
+                                                    :gopls
+                                                    :hls
+                                                    :html
+                                                    :jsonls
+                                                    :julials
+                                                    :ltex
+                                                    :lua_ls
+                                                    :marksman
+                                                    :mesonlsp
+                                                    :neocmake
+                                                    :nil_ls
+                                                    :nim_langserver
+                                                    :ruff
+                                                    :rust_analyzer
+                                                    :tailwindcss
+                                                    :taplo
+                                                    :ts_ls
+                                                    :yamlls
+                                                    :zls]
+                                          :config {:clangd {:capabilities {:offsetEncoding :utf-16}}
+                                                   :eslint {:settings {:packageManager :pnpm}}
+                                                   :fennel_language_server {:settings {:fennel {:workspace {:library (vim.api.nvim_list_runtime_paths)}
+                                                                                                :diagnostics {:globals [:vim
+                                                                                                                        :case]}}}}
+                                                   :ltex {:settings {:ltex {:completionEnabled true
+                                                                            :additionalRules {:enablePickyRules true
+                                                                                              :motherTongue :pl-PL}}}}
+                                                   :nil_ls {:settings {:nil {:formatting {:command [:alejandra]}}}}}
+                                          :on_attach #(let [navic (require :nvim-navic)]
+                                                        (when ($1.supports_method :textDocument/documentSymbol)
+                                                          (navic.attach $1 $2)))}})
+>>>>>>> Stashed changes
                          (_G.use :williamboman/mason-lspconfig.nvim
                                  {:cond (not _G.USING_NIX)
                                   :dependencies [(_G.use :williamboman/mason.nvim)]
@@ -187,4 +267,3 @@
                                                        (astrolsp.lsp_setup $1))]}})]
           :config #(let [astrolsp (require :astrolsp)]
                      (vim.tbl_map astrolsp.lsp_setup astrolsp.config.servers))})]
-

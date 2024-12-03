@@ -27,6 +27,7 @@
       gzdoom
       pcsx2
       prismlauncher
+      unciv
       vitetris
       vulkanPackages_latest.vulkan-tools
     ];

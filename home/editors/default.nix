@@ -112,6 +112,8 @@
 
       # toml
       taplo
+
+      julia
     ];
     # }}}
   };
@@ -124,10 +126,17 @@
       tangerine-nvim
       nightfox-nvim
       lazy-nvim
+      lua-utils-nvim
+      pathlib-nvim
     ];
 
     extraConfig = "set runtimepath^=${./nvim}";
-    extraLuaPackages = ps: with ps; [fennel];
+    extraPackages = with pkgs; [imagemagick];
+    extraLuaPackages = ps:
+      with ps; [
+        fennel
+        magick
+      ];
     extraLuaConfig = with pkgs.rice; let
       lazyPlugins =
         pkgs.linkFarm "lazy-plugins"
@@ -137,11 +146,9 @@
           })
           (with pkgs.vimPlugins; [
             astrocore
-            lua-utils-nvim
             nui-nvim
             nvim-nio
             nvim-web-devicons
-            pathlib-nvim
             plenary-nvim
             popup-nvim
             sqlite-lua
@@ -174,8 +181,8 @@
             yuck-vim
 
             # lsp
-            AstroLSP
             actions-preview-nvim
+            AstroLSP
             conform-nvim
             fidget-nvim
             glance-nvim
@@ -189,6 +196,7 @@
             nvim-navic
 
             # ui
+            colorful-winsep-nvim
             diffview-nvim
             edgy-nvim
             FTerm-nvim
@@ -206,8 +214,10 @@
             bigfile-nvim
             direnv-vim
             fold-cycle-nvim
+            image-nvim
             mkdir-nvim
             neogen
+            nix-develop-nvim
             nvim-expand-expr
             presence-nvim
             remember-nvim
@@ -215,17 +225,11 @@
             yanky-nvim
 
             # cmp
-            cmp-cmdline
-            cmp-git
-            cmp-nvim-lsp
-            cmp-path
-            cmp-under-comparator
-            cmp_luasnip
-            cmp_luasnip
+            blink-cmp
+            blink-compat
             friendly-snippets
             lspkind-nvim
             LuaSnip
-            nvim-cmp
 
             heirline-nvim
 

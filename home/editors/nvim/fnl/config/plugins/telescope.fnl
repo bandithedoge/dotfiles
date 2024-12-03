@@ -33,9 +33,8 @@
                          {:desc :Help})
                  (_G.key :<leader>fH "<cmd>Telescope highlights<cr>"
                          {:desc "Highlight groups"})
-                 (_G.key :<leader>ft "<cmd>Telescope builtin<cr>"
+                 (_G.key :<leader>fT "<cmd>Telescope builtin<cr>"
                          {:desc :Telescope})
-                 (_G.key :<leader>fT :<cmd>TodoTelescope<cr> {:desc :TODOs})
                  (_G.key :<leader>fo "<cmd>Telescope vim_options<cr>"
                          {:desc :Options})
                  (_G.key :<leader>fk "<cmd>Telescope keymaps<cr>"

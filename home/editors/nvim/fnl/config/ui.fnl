@@ -1,4 +1,8 @@
-[(_G.use :sindrets/diffview.nvim {:cmd [:DiffviewOpen]})
+[(_G.use :nvim-zh/colorful-winsep.nvim
+         {:event :WinLeave
+          :opts {:hi {:bg _G.base10 :fg _G.base0F} :smooth false :symbols ["─" "│" "┌" "┐" "└" "┘"]}})
+ ;;
+ (_G.use :sindrets/diffview.nvim {:cmd [:DiffviewOpen]})
  ;;
  (_G.use :folke/edgy.nvim
          {:event :VeryLazy
@@ -105,6 +109,7 @@
          {:dependencies [(_G.use :nvim-lua/plenary.nvim)
                          (_G.use :folke/trouble.nvim)]
           :cmd [:TodoTrouble :TodoTelescope]
+          :keys [(_G.key :<leader>ft :<cmd>TodoTelescope<cr> {:desc :TODO})]
           :event :LazyFile
           :opts {:signs false}})
  ;;
@@ -113,4 +118,3 @@
           :keys [(_G.key :<localleader>t "<cmd>Trouble diagnostics toggle<cr>"
                          {:desc :Diagnostics})]
           :opts {:auto_preview false :use_diagnostic_signs true :padding false}})]
-

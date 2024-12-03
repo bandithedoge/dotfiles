@@ -89,7 +89,7 @@
                (require :config.keybindings)
                (require :config.languages)
                (require :config.lsp)
-               (require :config.plugins.cmp)
+               (require :config.plugins.blink)
                (require :config.plugins.heirline)
                (require :config.plugins.luasnip)
                (require :config.plugins.mini)

@@ -51,8 +51,12 @@
             :lsp {:condition conditions.lsp_attached
                   :update [:LspAttach :LspDetach]
                   :provider #(padr (.. "󰒓 "
-                                       (table.concat (icollect [_ server (pairs (vim.lsp.get_active_clients {:bufnr 0}))]
-                                                       server.name)
+                                       (table.concat (merge! (icollect [_ server (pairs (vim.lsp.get_active_clients {:bufnr 0}))]
+                                                               server.name)
+                                                             (if (. package.loaded
+                                                                    :lint)
+                                                                 (let [lint (require :lint)]
+                                                                   (lint.get_running 0))))
                                                      " ")))
                   :hl {:fg _G.base03}}
             ; }}}
@@ -281,4 +285,3 @@
 [(_G.use :rebelot/heirline.nvim {:dependencies [(_G.use :nvim-tree/nvim-web-devicons)]
                                  :event :VeryLazy
                                  : config})]
-

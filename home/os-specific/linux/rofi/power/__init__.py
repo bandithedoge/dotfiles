@@ -1,6 +1,5 @@
 import rofi_menu
 
-
 def main():
     rofi_menu.run(
         rofi_menu.Menu(

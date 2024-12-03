@@ -1,6 +1,7 @@
 {
   pkgs,
   inputs,
+  lib,
   ...
 }: let
   rofi-stuff = pkgs.callPackage ../rofi {};
@@ -62,7 +63,7 @@ in {
           mouse_move_enables_dpms = true;
           key_press_enables_dpms = true;
           allow_session_lock_restore = true;
-          vrr = 0;
+          vrr = lib.mkDefault 0;
         };
         master.mfact = 0.5;
         xwayland.force_zero_scaling = true;

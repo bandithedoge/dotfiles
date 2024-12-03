@@ -17,5 +17,17 @@
                         :core.completion {:config {:engine :nvim-cmp}}
                         :core.dirman {:config {:workspaces {:school "~/sql"}
                                                :autochdir true}}
-                        :core.export {}}}})]
+                        :core.export {}
+                        :core.concealer {:config {:icons {:heading {:icons ["❋"
+                                                                            "❂"
+                                                                            "❀"
+                                                                            "✿"
+                                                                            "❖"
+                                                                            "✣"]
+                                                                    :highlights [:rainbowcol1
+                                                                                 :rainbowcol2
+                                                                                 :rainbowcol3
+                                                                                 :rainbowcol4
+                                                                                 :rainbowcol5
+                                                                                 :rainbowcol6]}}}}}}})]
 

@@ -8,6 +8,8 @@
                             (fold-cycle.open)))]
           :opts {:softwrap_movement_fix true}})
  ;;
+ (_G.use :3rd/image.nvim {:ft [:markdown :norg :typst] :opts {}})
+ ;;
  (_G.use :jghauser/mkdir.nvim {:event :LazyFile})
  ;;
  (_G.use :danymat/neogen
@@ -15,7 +17,9 @@
           :cmd :Neogen
           :keys [(_G.key :<localleader>g :<cmd>Neogen<cr>
                          {:desc "Generate annotation"})]
-          :opts {:snippet_engine :nvim}})
+          :opts {:snippet_engine :luasnip}})
+ ;;
+ (_G.use :figsoda/nix-develop.nvim {:cmd [:NixDevelop :NixShell :RiffShell]})
  ;;
  (_G.use :Allendang/nvim-expand-expr
          {:keys [(_G.key :<localleader>e
@@ -36,4 +40,3 @@
           :keys [(_G.key :y "<Plug>(YankyYank)" {:mode [:n :x]})
                  (_G.key :p "<Plug>(YankyPutAfter)" {:mode [:n :x]})
                  (_G.key :P "<Plug>(YankyPutBefore)" {:mode [:n :x]})]})]
-

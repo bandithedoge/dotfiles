@@ -71,6 +71,8 @@
 
   networking.hostName = "thonkpad";
 
+  networking.wireless.allowAuxiliaryImperativeNetworks = true;
+
   # jebać ose
   security.pki.certificateFiles = [
     (pkgs.fetchurl {
