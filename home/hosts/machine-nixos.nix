@@ -1,4 +1,15 @@
 {pkgs, ...}: {
+  home = {
+    packages = with pkgs; [
+      gpu-screen-recorder
+      gpu-screen-recorder-gtk
+    ];
+    sessionVariables = {
+      BROWSER = "floorp";
+      WINEFSYNC = "1";
+    };
+  };
+
   programs.looking-glass-client = {
     enable = true;
     # package = pkgs.looking-glass-client.overrideAttrs (_: {
@@ -56,5 +67,35 @@
         };
       };
     };
+  };
+
+  systemd.user.services.gpu-screen-recorder = {
+    Unit = {
+      Description = "GPU Screen Recorder Service";
+      After = ["pipewire.service"];
+    };
+    Service = {
+      ExecStartPre = "${pkgs.lib.getBin pkgs.libnotify}/bin/notify-send -u low 'GPU Screen Recorder' 'Replay started' -i com.dec05eba.gpu_screen_recorder -a 'GPU Screen Recorder'";
+      ExecStart = pkgs.lib.concatStringsSep " " [
+        "${pkgs.lib.getBin pkgs.gpu-screen-recorder}/bin/gpu-screen-recorder"
+        "-w DP-2"
+        "-c mp4"
+        "-q ultra"
+        "-cr full"
+        "-f 60"
+        "-r 60"
+        "-o /mnt/data/recordings"
+        "-ac opus"
+        "-ab 320"
+        "-a default_output|mono-microphone"
+        "-a default_output"
+        "-a mono-microphone"
+      ];
+      KillSignal = "SIGINT";
+      Restart = "on-failure";
+      RestartSec = "5";
+      Type = "simple";
+    };
+    Install.WantedBy = ["graphical-session.target"];
   };
 }

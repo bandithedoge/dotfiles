@@ -1,12 +1,21 @@
-{...}: {
+{
+  pkgs,
+  flake,
+  ...
+}: {
   nix = {
     enable = true;
+    # package = pkgs.lix;
     settings = {
       auto-optimise-store = true;
+      # builders-use-substitutes = true;
+      extra-experimental-features = ["nix-command" "flakes"];
+      keep-failed = true;
+      log-lines = 50;
       max-call-depth = 100000;
       trusted-users = ["root" "@wheel" "bandithedoge"];
       use-xdg-base-directories = true;
-      keep-failed = true;
+      warn-dirty = false;
 
       substituters = [
         "https://bandithedoge.cachix.org"
@@ -15,6 +24,7 @@
         "https://cache.nixos.org"
         "https://emacsng.cachix.org"
         "https://ezkea.cachix.org"
+        "https://ghostty.cachix.org"
         "https://hyprland.cachix.org"
         "https://jakestanger.cachix.org"
         "https://kira-bruneau.cachix.org"
@@ -29,6 +39,7 @@
         "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
         "emacsng.cachix.org-1:i7wOr4YpdRpWWtShI8bT6V7lOTnPeI7Ho6HaZegFWMI="
         "ezkea.cachix.org-1:ioBmUbJTZIKsHmWWXPe1FSFbeVe+afhfgqgTSNd34eI="
+        "ghostty.cachix.org-1:QB389yTa6gTyneehvqG58y0WnHjQOqgnA+wBnpWWxns="
         "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
         "jakestanger.cachix.org-1:VWJE7AWNe5/KOEvCQRxoE8UsI2Xs2nHULJ7TEjYm7mM="
         "kira-bruneau.cachix.org-1:FJSccwNPRNHPBHN+qxAme2Svp537q7dDuHkqLnyOTaQ="
@@ -37,11 +48,7 @@
         "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
       ];
     };
-    extraOptions = ''
-      extra-experimental-features = nix-command flakes
-      log-lines = 50
-      warn-dirty = false
-    '';
+    nixPath = ["nixpkgs=${flake.inputs.nixpkgs}"];
   };
 
   nixpkgs.config.allowUnfree = true;

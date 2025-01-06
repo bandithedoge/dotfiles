@@ -181,7 +181,73 @@
                                 :EdgyNormal {:link :NormalNC}
                                 :NeoTreeModified {:fg _G.base08}
                                 :NeoTreeCursorLine {:bg :bg1}
-                                :DapUINormalNC {:link :NormalNC}}}})
+                                :DapUINormalNC {:link :NormalNC}
+                                :SnacksDashboardDir {:fg _G.base03}
+                                :SnacksDashboardKey {:fg _G.base0F}
+                                :SnacksDashboardFile {:fg _G.base0F
+                                                      :style :bold}
+                                :SnacksDashboardSpecial {:fg _G.base0F}
+                                :SnacksDashboardIcon {:fg _G.base0F}
+                                :SnacksDashboardFooter {:fg _G.base03}
+                                :SnacksDashboardDesc {:fg _G.base0F
+                                                      :style :bold}
+                                :SnacksNotifierError {:link :NormalFloat}
+                                :SnacksNotifierWarn {:link :NormalFloat}
+                                :SnacksNotifierInfo {:link :NormalFloat}
+                                :SnacksNotifierDebug {:link :NormalFloat}
+                                :SnacksNotifierTrace {:link :NormalFloat}
+                                :SnacksNotifierBorderError {:link :NormalFloat}
+                                :SnacksNotifierBorderWarn {:link :NormalFloat}
+                                :SnacksNotifierBorderInfo {:link :NormalFloat}
+                                :SnacksNotifierBorderDebug {:link :NormalFloat}
+                                :SnacksNotifierBorderTrace {:link :NormalFloat}
+                                :SnacksNotifierTitleError {:fg _G.base08
+                                                           :bg _G.base02
+                                                           :style :bold}
+                                :SnacksNotifierTitleWarn {:fg _G.base0A
+                                                          :bg _G.base02
+                                                          :style :bold}
+                                :SnacksNotifierTitleInfo {:fg _G.base0D
+                                                          :bg _G.base02
+                                                          :style :bold}
+                                :SnacksNotifierTitleDebug {:fg _G.base03
+                                                           :bg _G.base02
+                                                           :style :bold}
+                                :SnacksNotifierTitleTrace {:fg _G.base03
+                                                           :bg _G.base02
+                                                           :style :bold}
+                                :SnacksNotifierFooterError {:fg _G.base08
+                                                            :bg _G.base02}
+                                :SnacksNotifierFooterWarn {:fg _G.base0A
+                                                           :bg _G.base02}
+                                :SnacksNotifierFooterInfo {:fg _G.base0D
+                                                           :bg _G.base02}
+                                :SnacksNotifierFooterDebug {:fg _G.base03
+                                                            :bg _G.base02}
+                                :SnacksNotifierFooterTrace {:fg _G.base03
+                                                            :bg _G.base02}
+                                :SnacksNotifierIconError {:link :SnacksNotifierFooterError}
+                                :SnacksNotifierIconWarn {:link :SnacksNotifierFooterWarn}
+                                :SnacksNotifierIconInfo {:link :SnacksNotifierFooterInfo}
+                                :SnacksNotifierIconDebug {:link :SnacksNotifierFooterDebug}
+                                :SnacksNotifierIconTrace {:link :SnacksNotifierFooterTrace}
+                                :SnacksNotifierHistory {:link :NormalFloat}
+                                :SnacksNotifierHistoryTitle {:bg _G.base02
+                                                             :link :Title}
+                                :SnacksInputTitle {:fg _G.base0F :style :bold}
+                                :SnacksInputIcon {:fg _G.base0F}
+                                :GlancePreviewNormal {:link :NormalFloat}
+                                :GlancePreviewCursorLine {:bg _G.base00}
+                                :GlanceListNormal {:link :NormalFloat}
+                                :GlanceBorderTop {:bg _G.base00}
+                                :GlanceIndent {:link :NonText}
+                                :LspReferenceText {:bg _G.base01}
+                                :LspReferenceRead {:link :LspReferenceText}
+                                :LspReferenceWrite {:link :LspReferenceText}
+                                :FzfLuaNormal {:bg _G.base02}
+                                :FzfLuaTitle {:fg _G.base00
+                                              :bg _G.base0F
+                                              :style :bold}}}})
 
 (nightfox.compile)
 (vim.cmd.colorscheme :nightfox)

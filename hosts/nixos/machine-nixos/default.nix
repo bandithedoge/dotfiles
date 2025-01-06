@@ -2,8 +2,8 @@
   imports = [./virt.nix];
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_xanmod;
-    kernelParams = ["threadirqs"];
+    kernelPackages = pkgs.linuxPackages_cachyos;
+    kernelParams = ["threadirqs" "preempt=full"];
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
@@ -11,8 +11,6 @@
   };
 
   powerManagement.cpuFreqGovernor = "performance";
-
-  services.irqbalance.enable = true;
 
   networking = {
     hostName = "machine-nixos";
@@ -24,12 +22,6 @@
 
     wireguard.enable = true;
   };
-
-  # services.ananicy = {
-  #   enable = true;
-  #   package = pkgs.ananicy-cpp;
-  #   rulesProvider = pkgs.ananicy-cpp-rules;
-  # };
 
   # TODO
   # services.replay-sorcery = {
@@ -87,20 +79,15 @@
   ];
   # }}}
 
-  environment.variables = {
-    BROWSER = "firefox";
-    WINEFSYNC = "1";
-    # ROC_ENABLE_PRE_VEGA = "1";
-  };
-
   chaotic = {
     mesa-git = {
       enable = true;
       extraPackages = with pkgs; [
         intel-media-driver
         intel-vaapi-driver
-        rocmPackages.clr
-        rocmPackages.clr.icd
+        # https://nixpk.gs/pr-tracker.html?pr=370180
+        # rocmPackages.clr
+        # rocmPackages.clr.icd
       ];
       extraPackages32 = with pkgs; [
         driversi686Linux.intel-media-driver
@@ -112,7 +99,49 @@
   hardware = {
     amdgpu = {
       initrd.enable = true;
-      opencl.enable = true;
+      # https://nixpk.gs/pr-tracker.html?pr=370180
+      # opencl.enable = true;
+    };
+  };
+
+  programs.gpu-screen-recorder.enable = true;
+
+  services.pipewire = {
+    extraConfig.pipewire = {
+      "10-loopback-mono-mic" = {
+        "context.modules" = [
+          {
+            name = "libpipewire-module-loopback";
+            args = {
+              "node.description" = "USB Audio CODEC [MONO]";
+              "capture.props" = {
+                "node.name" = "capture.mono-microphone";
+                "audio.position" = ["FL"];
+                "target.object" = "alsa_input.usb-Burr-Brown_from_TI_USB_Audio_CODEC-00.analog-stereo-input";
+                "stream.dont-remix" = true;
+                "node.passive" = true;
+              };
+              "playback.props" = {
+                "media.class" = "Audio/Source";
+                "node.name" = "mono-microphone";
+                "audio.position" = ["MONO"];
+              };
+            };
+          }
+        ];
+      };
+    };
+    wireplumber.extraConfig = {
+      "51-disable-builtin-audio" = {
+        "monitor.alsa.rules" = [
+          {
+            matches = [{"alsa.id" = "~HDMI|PCH";}];
+            actions.update-props = {
+              "device.disabled" = true;
+            };
+          }
+        ];
+      };
     };
   };
 }

@@ -1,11 +1,12 @@
 {
-  pkgs ? import <nixpkgs> {
-    overlays = [(builtins.getFlake "github:nix-community/poetry2nix").overlays.default];
-  },
+  pkgs ?
+    import <nixpkgs> {
+      overlays = [(builtins.getFlake "github:nix-community/poetry2nix").overlays.default];
+    },
 }:
 pkgs.poetry2nix.mkPoetryApplication rec {
   projectDir = ./.;
-  python = pkgs.python311;
+  python = pkgs.python3;
 
   postInstall = ''
     wrapProgram $out/bin/keepass \
@@ -27,6 +28,11 @@ pkgs.poetry2nix.mkPoetryApplication rec {
 
     lxml = super.lxml.overridePythonAttrs (old: {
       buildInputs = old.buildInputs ++ [pkgs.zlib];
+    });
+
+    argon2-cffi-bindings = super.argon2-cffi-bindings.overridePythonAttrs (old: {
+      format = null;
+      pyproject = true;
     });
   });
 }

@@ -22,8 +22,14 @@
             "/dev/random", "/dev/urandom",
             "/dev/ptmx", "/dev/kvm", "/dev/kqemu",
             "/dev/rtc","/dev/hpet", "/dev/vfio/vfio",
-            "/dev/kvmfr0"
+
+            "/dev/kvmfr0",
+            "/dev/input/by-id/usb-Logitech_G102_Prodigy_Gaming_Mouse_018438583538-event-mouse",
+            "/dev/input/by-id/usb-SEMITEK_USB-HID_Gaming_Keyboard_SN0000000001-event-kbd",
           ]
+
+          security_default_confined = 0
+          clear_emulator_capabilities = 0
         '';
       };
       hooks.qemu = {
@@ -99,21 +105,23 @@
     allowedTCPPorts = [4918];
   };
 
-  services.samba = {
-    enable = true;
-    openFirewall = true;
-    settings = {
-      data = {
-        path = "/mnt";
-        "read only" = "no";
-        "guest ok" = "yes";
-        "bind interfaces only" = "yes";
-        interfaces = "virbr0";
-      };
-      global = {
-        security = "user";
-        "passwd program" = "/run/wrappers/bin/passwd %u";
-        "invalid users" = ["root"];
+  services = {
+    samba = {
+      enable = true;
+      openFirewall = true;
+      settings = {
+        data = {
+          path = "/mnt";
+          "read only" = "no";
+          "guest ok" = "yes";
+          "bind interfaces only" = "yes";
+          interfaces = "virbr0";
+        };
+        global = {
+          security = "user";
+          "passwd program" = "/run/wrappers/bin/passwd %u";
+          "invalid users" = ["root"];
+        };
       };
     };
   };

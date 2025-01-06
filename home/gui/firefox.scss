@@ -27,3 +27,11 @@
 #nav-bar {
     border-right-width: 0 !important;
 }
+
+.toolbar-items {
+    background-color: $base00;
+}
+
+.tab-stack::after {
+    opacity: 0 !important;
+}

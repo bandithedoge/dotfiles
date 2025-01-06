@@ -31,8 +31,16 @@
       freeSwapThreshold = 5;
     };
 
+    # scx = {
+    #   enable = true;
+    #   scheduler = "scx_bpfland";
+    #   package = pkgs.scx_git.full;
+    # };
+
     devmon.enable = true;
+    irqbalance.enable = true;
     openssh.enable = true;
+    resolved.enable = true;
     upower.enable = true;
   };
 
@@ -88,35 +96,33 @@
     keyMap = "pl";
   };
 
-  documentation.man = {
-    enable = true;
-    man-db.enable = false;
-    mandoc.enable = true;
-  };
-
-  # https://github.com/CachyOS/CachyOS-Settings/blob/master/usr/lib/sysctl.d/99-cachyos-settings.conf
-  boot.kernel.sysctl = {
-    "fs.file-max" = 2097152;
-    "fs.inotify.max_user_watches" = 524288;
-    "fs.xfs.xfssyncd_centisecs" = 10000;
-    "kernel.kexec_load_disabled" = true;
-    "kernel.kptr_restrict" = 2;
-    "kernel.nmi_watchdog" = 0;
-    "kernel.printk" = "3 3 3 3";
-    "kernel.sched_rt_runtime_us" = 980000;
-    "kernel.unprivileged_userns_clone" = true;
-    "net.core.netdev_max_backlog" = 16384;
-    "net.core.somaxconn" = 8192;
-    "net.ipv4.tcp_congestion_control" = "bbr";
-    "net.ipv4.tcp_ecn" = 1;
-    "net.ipv4.tcp_fastopen" = 3;
-    "net.ipv4.tcp_rfc1337" = true;
-    "net.ipv4.tcp_slow_start_after_idle" = false;
-    "net.ipv4.tcp_syncookies" = true;
-    "net.ipv4.tcp_timestamps" = false;
-    "vm.dirty_writeback_centisecs" = 1500;
-    "vm.page-cluster" = 1;
-    "vm.swappiness" = pkgs.lib.mkForce 40;
+  boot = {
+    tmp.cleanOnBoot = true;
+    # https://github.com/CachyOS/CachyOS-Settings/blob/master/usr/lib/sysctl.d/99-cachyos-settings.conf
+    kernel.sysctl = {
+      "fs.file-max" = 2097152;
+      "fs.inotify.max_user_watches" = 524288;
+      "fs.xfs.xfssyncd_centisecs" = 10000;
+      "kernel.kexec_load_disabled" = true;
+      "kernel.kptr_restrict" = 2;
+      "kernel.nmi_watchdog" = 0;
+      "kernel.printk" = "3 3 3 3";
+      "kernel.sched_rt_runtime_us" = 980000;
+      "kernel.split_lock_mitigate" = 0;
+      "kernel.unprivileged_userns_clone" = true;
+      "net.core.netdev_max_backlog" = 16384;
+      "net.core.somaxconn" = 8192;
+      "net.ipv4.tcp_congestion_control" = "bbr";
+      "net.ipv4.tcp_ecn" = 1;
+      "net.ipv4.tcp_fastopen" = 3;
+      "net.ipv4.tcp_rfc1337" = true;
+      "net.ipv4.tcp_slow_start_after_idle" = false;
+      "net.ipv4.tcp_syncookies" = true;
+      "net.ipv4.tcp_timestamps" = false;
+      "vm.dirty_writeback_centisecs" = 1500;
+      "vm.page-cluster" = 1;
+      "vm.swappiness" = pkgs.lib.mkForce 40;
+    };
   };
 
   zramSwap.enable = true;

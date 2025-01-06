@@ -4,7 +4,7 @@
   ...
 }: {
   imports = [
-    ./sway.nix
+    # ./sway.nix
     ./hyprland.nix
   ];
 
@@ -86,6 +86,7 @@
         };
         privacy = {
           icon-size = 16;
+          modules = [{type = "screenshare";}];
         };
         mpris = {
           format = "${icon "{status_icon}"} {artist} - {title}";
@@ -300,13 +301,8 @@
         save-after-copy = true;
         output-filename = "/home/bandithedoge/Pictures/%F_%H:%M:%S.png";
       };
-      color-palette = with pkgs.rice; {
-        first = base0F;
-        second = base08;
-        third = base0B;
-        fourth = base09;
-        fifth = base0D;
-      };
+      font.family = pkgs.rice.uiFont;
+      color-palette.palette = with pkgs.rice; [base08 base09 base0A base0B base0C base0D base0E];
     };
 
     "wlr-which-key/config.yaml".text = with pkgs.rice;
@@ -326,41 +322,41 @@
           {
             d = {
               desc = "Discord";
-              cmd = "vesktop";
+              cmd = "uwsm app vesktop";
             };
             p = {
               desc = "Music player";
-              cmd = "strawberry";
+              cmd = "uwsm app strawberry";
             };
             b = {
               desc = "Web browser";
-              cmd = "$BROWSER";
+              cmd = "uwsm app $BROWSER";
             };
             g = {
               desc = "Game launcher";
-              cmd = "lutris";
+              cmd = "uwsm app lutris";
             };
             k = {
               desc = "Password manager";
-              cmd = "keepassxc";
+              cmd = "uwsm app keepassxc";
             };
             e = {
               desc = "Emacs";
-              cmd = "emacs";
+              cmd = "uwsm app emacs";
             };
             f = {
               desc = "Ferdium";
-              cmd = "ferdium";
+              cmd = "uwsm app ferdium";
             };
           }
           // pkgs.lib.optionalAttrs (config.hostname == "machine-nixos") {
             v = {
               desc = "Virtual machines";
-              cmd = "virt-manager";
+              cmd = "uwsm app virt-manager";
             };
             l = {
               desc = "Looking Glass Client";
-              cmd = "looking-glass-client";
+              cmd = "uwsm app looking-glass-client";
             };
           };
       };

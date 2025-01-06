@@ -12,21 +12,17 @@ in {
 
   home = {
     packages = with pkgs; [
-      (gimp-with-plugins.override {plugins = with pkgs.gimpPlugins; [gmic bimp];})
       appimage-run
       bandithedoge.deemix-gui-bin
       bandithedoge.propertree
       bleachbit
-      blender-hip
-      bottles
-      boxbuddy
+      # blender-hip # https://nixpk.gs/pr-tracker.html?pr=370180
+      czkawka
       d-spy
-      devhelp
-      discord
-      distrobox_git
       ferdium
-      flameshot
       fractal
+      gimp
+      handbrake
       inkscape
       keepassxc
       krita
@@ -34,22 +30,20 @@ in {
       libreoffice-fresh
       matlab
       nicotine-plus
-      nim
       nix-alien
       pciutils
       prusa-slicer
       qbittorrent
       qview
-      rclone
-      teams-for-linux
       telegram-desktop_git
-      tor-browser-bundle-bin
       vesktop
       wine-tkg
       winetricks
       xdragon
       zenity
-      zoom-us
+
+      # fonts
+      cm_unicode
     ];
 
     pointerCursor = {
@@ -99,12 +93,13 @@ in {
       "de.bforartists.Bforartists"
       "org.gtk.Gtk3theme.adw-gtk3-dark"
       "org.jdownloader.JDownloader"
+      "re.sonny.Workbench"
     ];
   };
   # }}}
 
   # HACK: https://github.com/nix-community/home-manager/issues/2659
-  # systemd.user.sessionVariables = config.home.sessionVariables;
+  systemd.user.sessionVariables = config.home.sessionVariables;
 
   # gtk {{{
   gtk = rec {
@@ -132,38 +127,18 @@ in {
   };
   # }}}
 
-  xdg.configFile = let
-    css = pkgs.rice.compileSCSS ../../../gtk.scss;
-  in {
-    "gtk-4.0/gtk.css".source = css;
-    "gtk-3.0/gtk.css".source = css;
-
-    "flameshot/flameshot.ini".source = (pkgs.formats.ini {}).generate "flameshot.ini" {
-      General = with pkgs.rice; {
-        autoCloseIdleDaemon = true;
-        buttons = "@Variant(\\0\\0\\0\\x7f\\0\\0\\0\\vQList<int>\\0\\0\\0\\0\\a\\0\\0\\0\\0\\0\\0\\0\\x12\\0\\0\\0\\xf\\0\\0\\0\\n\\0\\0\\0\\v\\0\\0\\0\\r\\0\\0\\0\\f)";
-        contrastUiColor = base0F;
-        # copyAndCloseAfterUpload = true;
-        copyOnDoubleClick = true;
-        drawColor = base0F;
-        filenamePattern = "%F_%H:%M:%S";
-        saveAfterCopy = true;
-        showMagnifier = true;
-        startupLaunch = false;
-        uiColor = base0F;
-        userColors = "picker, ${base0F}, ${base08}, ${base0B}, ${base09}, ${base0D}, ${base0E}, ${base0C}";
-      };
-    };
-  };
-
-  # qt {{{
-  # TODO: customized qt
   qt = {
     enable = true;
     platformTheme.name = "adwaita";
     style.name = "adwaita-dark";
   };
-  # }}}
+
+  xdg.configFile = let
+    css = pkgs.rice.compileSCSS ../../../gtk.scss;
+  in {
+    "gtk-4.0/gtk.css".source = css;
+    "gtk-3.0/gtk.css".source = css;
+  };
 
   xdg.portal = {
     enable = true;
@@ -679,5 +654,12 @@ in {
   };
   # }}}
 
-  fonts.fontconfig.enable = true;
+  fonts.fontconfig = {
+    enable = true;
+    defaultFonts = with pkgs.rice; {
+      monospace = [monoFont];
+      sansSerif = [uiFont];
+      serif = [serifFont];
+    };
+  };
 }

@@ -7,6 +7,7 @@
     steam = {
       enable = true;
       protontricks.enable = true;
+      remotePlay.openFirewall = true;
       package = pkgs.steam.override {
         extraLibraries = pkgs:
           with pkgs; [
@@ -16,8 +17,14 @@
             gst_all_1.gst-plugins-ugly
           ];
         extraPreBwrapCmds = "touch /etc/NIXOS";
+        # https://github.com/NixOS/nixpkgs/issues/338266#issuecomment-2419568331
+        extraBwrapArgs = ["--unsetenv TZ"];
       };
-      extraCompatPackages = with pkgs; [luxtorpeda proton-ge-custom steamtinkerlaunch];
+      extraCompatPackages = with pkgs; [
+        luxtorpeda
+        proton-ge-custom
+        steamtinkerlaunch
+      ];
     };
 
     gamescope = {
@@ -28,11 +35,13 @@
       });
     };
 
-    anime-game-launcher.enable = true;
     gamemode = {
       enable = true;
       settings = {
-        general.softrealtime = "auto";
+        general = {
+          softrealtime = "auto";
+          renice = 10;
+        };
         gpu = {
           apply_gpu_optimisations = "accept-responsibility";
           gpu_device = 0;
@@ -40,7 +49,6 @@
         };
       };
     };
-    honkers-railway-launcher.enable = true;
   };
 
   security.pam.loginLimits = [
@@ -51,4 +59,6 @@
       value = "524288";
     }
   ];
+
+  networking.mihoyo-telemetry.block = true;
 }

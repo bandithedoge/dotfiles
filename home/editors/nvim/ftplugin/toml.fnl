@@ -1,2 +1,3 @@
 (import-macros {: setlocal!} :hibiscus.vim)
-(setlocal! shiftwidth 2)
+
+(setlocal! :shiftwidth 2)

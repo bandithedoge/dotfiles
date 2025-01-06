@@ -1,18 +1,20 @@
+(import-macros {: use!} :config.macros)
 (import-macros {: merge!} :hibiscus.core)
 
-(lambda pad [content]
-  (.. " " content " "))
+(macro pad [content]
+  `(.. " " ,content " "))
 
-(lambda padl [content]
-  (.. " " content))
+(macro padl [content]
+  `(.. " " ,content))
 
-(lambda padr [content]
-  (.. content " "))
+(macro padr [content]
+  `(.. ,content " "))
 
 (fn config []
   (let [heirline (require :heirline)
         conditions (require :heirline.conditions)
-        icons (require :nvim-web-devicons)]
+        utils (require :heirline.utils)
+        icons (require :mini.icons)]
     (local components
            {; mode {{{
             :mode {:provider #(pad (. $1.mode-names $1.mode))
@@ -34,16 +36,14 @@
             ; fileicon {{{
             :fileicon {:init #(do
                                 (set $1.filename (vim.api.nvim_buf_get_name 0))
-                                (let [(icon color) (icons.get_icon_color $1.filename
-                                                                         (vim.fn.fnamemodify $1.filename
-                                                                                             ":e")
-                                                                         {:default true})]
+                                (let [(icon hl _default) (icons.get :filetype
+                                                                    vim.bo.filetype)]
                                   (set $1.icon icon)
-                                  (set $1.color color)))
+                                  (set $1.hl hl)))
                        :provider #(and $1.icon (padl $1.icon))
-                       :hl #{:fg $1.color}}
+                       :hl #$1.hl}
             ; }}}
-            :filetype {:provider #(padl vim.bo.filetype)}
+            :filetype {:provider #(and vim.bo.filetype (padl vim.bo.filetype))}
             :fileformat {:provider #(padl (case vim.bo.fileformat
                                             :unix ""
                                             :dos ""))}
@@ -210,13 +210,15 @@
                                                                             mode))
                                                                   :bold true})})}
                                          ; }}}
-                                         [(merge! {:condition #(conditions.buffer_matches {:buftype []
+                                         [(merge! {:condition #(conditions.buffer_matches {:buftype [:nofile]
                                                                                            :filetype [:TelescopePrompt
                                                                                                       :DressingInput
                                                                                                       :Trouble
                                                                                                       :trouble
                                                                                                       :lazy]})}
                                                   [components.mode
+                                                   components.fileicon
+                                                   components.filetype
                                                    components.spacer])
                                           (merge! {:condition #(conditions.buffer_matches {:buftype [:help]})}
                                                   [components.mode
@@ -267,6 +269,21 @@
                                        components.navic
                                        components.spacer
                                        components.diagnostics]])
+                     :tabline (merge! {:condition #(>= (length (vim.api.nvim_list_tabpages))
+                                                       2)
+                                       :hl {:bg _G.base00}}
+                                      [{:provider "%="}
+                                       (utils.make_tablist {:provider #(.. "%"
+                                                                           $1.tabnr
+                                                                           "T "
+                                                                           $1.tabpage
+                                                                           " %T")
+                                                            :hl #(if $1.is_active
+                                                                     {:fg _G.base00
+                                                                      :bg _G.base0F
+                                                                      :bold true}
+                                                                     {:fg _G.base03
+                                                                      :bg _G.base02})})])
                      :opts {:disable_winbar_cb #(conditions.buffer_matches {:buftype [:nofile
                                                                                       :prompt
                                                                                       :terminal
@@ -282,6 +299,4 @@
                                                                                        :neo-tree-preview]}
                                                                            $1.buf)}})))
 
-[(_G.use :rebelot/heirline.nvim {:dependencies [(_G.use :nvim-tree/nvim-web-devicons)]
-                                 :event :VeryLazy
-                                 : config})]
+[(use! :rebelot/heirline.nvim {:event :VeryLazy : config})]

@@ -14,6 +14,9 @@
     initrd.availableKernelModules = ["xhci_pci" "ehci_pci" "ahci" "usb_storage" "sd_mod" "sr_mod" "rtsx_pci_sdmmc"];
     loader.systemd-boot.enable = true;
     supportedFilesystems = ["ntfs"];
+    kernel.sysctl = {
+      "rcutree.enable_rcu_lazy" = 1;
+    };
   };
 
   powerManagement = {

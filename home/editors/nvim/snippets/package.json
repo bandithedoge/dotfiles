@@ -1,14 +1,9 @@
 {
-    "name": "snippets",
-    "engines": {
-        "vscode": "*"
-    },
+    "name": "personal-snippets",
     "contributes": {
         "snippets": [
             {
-                "language": [
-                    "global"
-                ],
+                "language": "all",
                 "path": "./all.json"
             }
         ]

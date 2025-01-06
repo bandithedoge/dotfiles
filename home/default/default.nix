@@ -2,25 +2,25 @@
   pkgs,
   config,
   ...
-}: let
-  oi = pkgs.callPackage ./oi {};
-in {
+}: {
   imports = [
     ./xdg.nix
   ];
 
   home = {
     # {{{
-    stateVersion = "24.11";
+    stateVersion = "25.05";
     activation.setupEtc = config.lib.dag.entryAfter ["writeBoundary"] ''
       /run/current-system/sw/bin/systemctl start --user sops-nix
     '';
     packages = with pkgs; [
       # {{{
       (sox.override {enableLame = true;})
+      (writeScriptBin "nust" (builtins.readFile ../../justfile))
       age
       aria
       broot
+      chafa
       comma
       fd
       ffmpeg
@@ -30,16 +30,16 @@ in {
       imagemagickBig
       innoextract
       jq
+      just
       killall
       librespeed-cli
-      neofetch
       niv
       nix-output-monitor
       nix-prefetch
       nurl
-      oi
       ouch
       pandoc
+      rclone
       rclone
       ripgrep
       sops
@@ -263,7 +263,6 @@ in {
     # {{{
     home-manager = {
       enable = true;
-      path = "...";
     };
 
     fish = {
@@ -341,6 +340,8 @@ in {
         set fish_greeting
 
         set -Ux fifc_editor $EDITOR
+
+        batman --export-env | source
       '';
     };
     # }}}
@@ -349,13 +350,6 @@ in {
       # {{{
       enable = true;
       settings = {
-        golang.symbol = "";
-        lua.symbol = "";
-        nim.symbol = "";
-        nix_shell.symbol = "";
-        python.symbol = "";
-        ruby.symbol = "";
-        rust.symbol = "";
         time = {
           disabled = false;
           format = "[$time]($style) ";
@@ -365,7 +359,31 @@ in {
           format = "[$common_meaning$signal_name $status]($style) ";
         };
         git_metrics.disabled = false;
-        directory.read_only = "";
+
+        bun.symbol = " ";
+        c.symbol = " ";
+        cmake.symbol = "󰔷 ";
+        container.symbol = "󰋘 ";
+        dart.symbol = " ";
+        deno.symbol = " ";
+        directory.read_only = " 󰌾";
+        fennel.symbol = " ";
+        git_branch.symbol = " ";
+        git_commit.tag_symbol = "󰓹 ";
+        golang.symbol = "";
+        haskell.symbol = " ";
+        hostname.ssh_symbol = " ";
+        julia.symbol = " ";
+        lua.symbol = "";
+        meson.symbol = "󰔷 ";
+        nim.symbol = "󰆥 ";
+        nix_shell.symbol = " ";
+        nodejs.symbol = " ";
+        package.symbol = "󰏗 ";
+        python.symbol = " ";
+        ruby.symbol = " ";
+        rust.symbol = " ";
+        zig.symbol = " ";
       };
     };
     # }}}
@@ -407,6 +425,7 @@ in {
     bat = {
       enable = true;
       config.theme = "base16";
+      extraPackages = with pkgs.bat-extras; [batman];
     };
 
     eza = {
@@ -418,12 +437,42 @@ in {
     skim = {
       enable = true;
       enableFishIntegration = false;
-      defaultOptions = with pkgs.rice; [
-        "--prompt='❯ '"
-        "--color=bg+:${base02},bg:${base00},spinner:${base0F},hl:${base0F},fg:${base04},header:${base0F},info:${base0A},pointer:${base0F},marker:${base0C},fg+:${base06},prompt:${base0F},hl+:${base0D}"
-        "--tabstop=4"
-        "--bind=ctrl-d:half-page-down,ctrl-u:half-page-up"
-      ];
+      defaultOptions = let
+        concat = pkgs.lib.concatMapAttrsStringSep "," (k: v: "${k}:${v}");
+      in
+        with pkgs.rice; [
+          "--prompt='❯ '"
+          # "--pointer='❯'"
+          # "--marker='┃'"
+          "--tabstop=4"
+          # "--border=none"
+
+          "--color=${concat {
+            fg = base05;
+            bg = base00;
+            "fg+" = base05;
+            "bg+" = base10;
+            selected-bg = base02;
+            hl = base0F;
+            "hl+" = base0F;
+            gutter = base00;
+            prompt = base0F;
+            pointer = base0F;
+            disabled = base03;
+            marker = base0F;
+            info = base0A;
+            scrollbar = base0F;
+            spinner = base0F;
+            border = base0F;
+          }}"
+
+          "--bind=${concat {
+            ctrl-h = "preview-up";
+            ctrl-l = "preview-down";
+            ctrl-d = "half-page-down";
+            ctrl-u = "half-page-up";
+          }}"
+        ];
     };
 
     fzf = {
@@ -444,6 +493,33 @@ in {
       userEmail = "bandithedoge@protonmail.com";
       ignores = ["*~"];
       lfs.enable = true;
+      delta = {
+        enable = true;
+        options = {
+          features = "rice";
+          rice = with pkgs.rice; rec {
+            dark = true;
+            line-numbers = true;
+            # side-by-side = true;
+
+            file-style = base0F;
+            plus-style = "${base00} ${base0B}";
+            plus-non-emph-style = plus-style;
+            plus-emph-style = "${base00} bold ul ${base0B}";
+            plus-empty-line-marker-style = plus-style;
+            minus-style = "${base00} ${base08}";
+            minus-non-emph-style = minus-style;
+            minus-emph-style = "${base00} bold ul ${base08}";
+            minus-empty-line-marker-style = minus-style;
+            line-numbers-left-style = base03;
+            line-numbers-right-style = line-numbers-left-style;
+            line-numbers-minus-style = base08;
+            line-numbers-plus-style = base0B;
+            line-numbers-zero-style = line-numbers-left-style;
+            syntax-theme = "base16";
+          };
+        };
+      };
     };
 
     yazi = {
@@ -489,10 +565,6 @@ in {
               mime = "application/x-{tar,bzip2,7z-compressed,rar,xz}";
               run = "ouch";
             }
-            {
-              name = "*/";
-              run = "eza-preview";
-            }
           ];
           append_previewers = [
             {
@@ -505,7 +577,6 @@ in {
 
       plugins = pkgs.lib.genAttrs [
         "exifaudio"
-        "eza-preview"
         "glow"
         "hexyl"
         "miller"
@@ -583,10 +654,53 @@ in {
     };
     # }}}
 
+    fastfetch = {
+      # {{{
+      enable = true;
+      settings = {
+        display = {
+          key.type = "both";
+          size.binaryPrefix = "si";
+        };
+        modules = [
+          "title"
+
+          "break"
+
+          "os"
+          "kernel"
+          "shell"
+          "editor"
+          "de"
+          "wm"
+          "wmtheme"
+          "theme"
+          "icons"
+          "font"
+          "terminal"
+          "terminalfont"
+
+          "break"
+
+          "host"
+          "board"
+          "cpu"
+          "gpu"
+          "memory"
+
+          "break"
+
+          "colors"
+        ];
+      };
+    };
+    # }}}
+
     dircolors.enable = true;
     gh.enable = true;
     git-credential-oauth.enable = true;
     info.enable = true;
+    nh.enable = true;
     nix-index.enable = true;
     # }}}
   };

@@ -30,34 +30,38 @@
       extraCss = builtins.readFile (pkgs.rice.compileSCSS ../gtk.scss);
     };
 
+    hyprland = {
+      enable = true;
+      withUWSM = true;
+    };
+
     gnome-disks.enable = true;
-    hyprland.enable = true;
     ns-usbloader.enable = true;
     system-config-printer.enable = true;
   };
 
   services = {
-    displayManager.sessionPackages = let
-      waylandSession = let
-        sessionItem = pkgs.makeDesktopItem {
-          name = "wayland";
-          desktopName = "Wayland";
-          comment = "Wayland session";
-          exec = pkgs.writeShellScript "wayland-session.sh" ''
-            source /etc/profiles/per-user/$USER/etc/profile.d/hm-session-vars.sh
-            exec systemd-cat --identifier=${pkgs.rice.wm} ${pkgs.rice.wm} "$@"
-          '';
-        };
-      in
-        (pkgs.writeTextFile {
-          name = "wayland.desktop";
-          text = builtins.readFile "${sessionItem}/share/applications/wayland.desktop";
-          destination = "/share/wayland-sessions/wayland.desktop";
-        })
-        .overrideAttrs (_: {passthru.providedSessions = ["wayland"];});
-    in [
-      waylandSession
-    ];
+    # displayManager.sessionPackages = let
+    #   waylandSession = let
+    #     sessionItem = pkgs.makeDesktopItem {
+    #       name = "wayland";
+    #       desktopName = "Wayland";
+    #       comment = "Wayland session";
+    #       exec = pkgs.writeShellScript "wayland-session.sh" ''
+    #         source /etc/profiles/per-user/$USER/etc/profile.d/hm-session-vars.sh
+    #         exec systemd-cat --identifier=${pkgs.rice.wm} ${pkgs.rice.wm} "$@"
+    #       '';
+    #     };
+    #   in
+    #     (pkgs.writeTextFile {
+    #       name = "wayland.desktop";
+    #       text = builtins.readFile "${sessionItem}/share/applications/wayland.desktop";
+    #       destination = "/share/wayland-sessions/wayland.desktop";
+    #     })
+    #     .overrideAttrs (_: {passthru.providedSessions = ["wayland"];});
+    # in [
+    #   waylandSession
+    # ];
 
     accounts-daemon.enable = true;
     gnome.gnome-keyring.enable = true;

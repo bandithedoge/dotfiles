@@ -45,7 +45,8 @@
       # nix
       alejandra
       manix
-      nil
+      # nil
+      nixd
       statix
 
       # lua
@@ -62,7 +63,7 @@
       bandithedoge.mesonlsp-bin
       clang
       clang-tools
-      clazy
+      # clazy
       cmake
       cmake-format
       gdb
@@ -76,6 +77,7 @@
 
       # nim
       bandithedoge.nimlangserver
+      nim
 
       # haskell
       cabal2nix
@@ -114,6 +116,8 @@
       taplo
 
       julia
+
+      blueprint-compiler
     ];
     # }}}
   };
@@ -126,8 +130,6 @@
       tangerine-nvim
       nightfox-nvim
       lazy-nvim
-      lua-utils-nvim
-      pathlib-nvim
     ];
 
     extraConfig = "set runtimepath^=${./nvim}";
@@ -137,7 +139,7 @@
         fennel
         magick
       ];
-    extraLuaConfig = with pkgs.rice; let
+    extraLuaConfig = let
       lazyPlugins =
         pkgs.linkFarm "lazy-plugins"
         (map (drv: {
@@ -146,9 +148,12 @@
           })
           (with pkgs.vimPlugins; [
             astrocore
+            image-nvim
+            lua-utils-nvim
             nui-nvim
             nvim-nio
-            nvim-web-devicons
+            # nvim-web-devicons
+            pathlib-nvim
             plenary-nvim
             popup-nvim
             sqlite-lua
@@ -161,23 +166,25 @@
             which-key-nvim
 
             # language-specific
-            SchemaStore-nvim
             clangd_extensions-nvim
             dhall-vim
             faust-nvim
             flutter-tools-nvim
             haskell-tools-nvim
             lazydev-nvim
+            ltex_extra-nvim
             nvim-luaref
             nvim-parinfer
             orgmode
             purescript-vim
             rasi-vim
             render-markdown-nvim
+            SchemaStore-nvim
             telescope-manix
             tree-sitter-hypr
             vim-coffee-script
             vim-faust
+            vim-just
             yuck-vim
 
             # lsp
@@ -188,7 +195,6 @@
             glance-nvim
             hover-nvim
             lsp_lines-nvim
-            lsp_signature-nvim
             lsplinks-nvim
             neoconf-nvim
             nvim-lint
@@ -199,45 +205,41 @@
             colorful-winsep-nvim
             diffview-nvim
             edgy-nvim
-            FTerm-nvim
             gitsigns-nvim
-            indent-blankline-nvim
             neogit
             nvim-highlight-colors
             nvim-hlslens
-            nvim-notify
-            tiny-devicons-auto-colors-nvim
             todo-comments-nvim
             trouble-nvim
 
             # utilities
-            bigfile-nvim
             direnv-vim
             fold-cycle-nvim
-            image-nvim
             mkdir-nvim
             neogen
             nix-develop-nvim
             nvim-expand-expr
+            persistence-nvim
             presence-nvim
             remember-nvim
             sort-nvim
-            yanky-nvim
 
-            # cmp
+            # blink
             blink-cmp
             blink-compat
             friendly-snippets
-            lspkind-nvim
-            LuaSnip
 
             heirline-nvim
 
             mini-nvim
 
+            # neo-tree
             neo-tree-nvim
+            nvim-window-picker
 
             neorg
+
+            snacks-nvim
 
             # telescope
             dressing-nvim
@@ -254,38 +256,46 @@
                   ++ (with pkgs.bandithedoge.treeSitterGrammars; [tree-sitter-hypr]));
             })
             nvim-ts-autotag
-            nvim-ts-context-commentstring
             playground
             rainbow-delimiters-nvim
+            ts-comments-nvim
           ]));
-    in ''
-      ${def.lua}
+    in
+      with pkgs.rice; ''
+        ${def.lua}
 
-      LAZY_PLUGINS = "${lazyPlugins}"
-      USING_NIX = true
+        USING_NIX = true
+        LAZY_PLUGINS = "${lazyPlugins}"
 
-      vim.o.guifont = monoFont .. ":h16"
+        vim.o.guifont = monoFont .. ":h16"
 
-      require("tangerine").setup {
-        target = vim.fn.stdpath "cache" .. "/tangerine",
-        rtpdirs = {
-          "after",
-          "ftplugin"
-        },
-        compiler = {
-          hooks = {"oninit"}
+        require("tangerine").setup {
+          target = vim.fn.stdpath "cache" .. "/tangerine",
+          rtpdirs = {
+            "after",
+            "ftplugin"
+          },
+          compiler = {
+            hooks = {"oninit"}
+          },
+          keymaps = {
+            eval_buffer = "<Nop>",
+            peek_buffer = "<Nop>",
+            goto_output = "<Nop>"
+          }
         }
-      }
 
-      require("config")
-    '';
+        require("config")
+      '';
   };
-  xdg.configFile."nvim" = {
-    source = ./nvim;
-    recursive = true;
-    onChange = ''
-      ${pkgs.lib.getExe config.programs.neovim.finalPackage} -E -c ":FnlCompile!" -c q
-    '';
+  xdg.configFile = {
+    "nvim" = {
+      source = ./nvim;
+      recursive = true;
+      onChange = ''
+        ${pkgs.lib.getExe config.programs.neovim.finalPackage} -E -c ":FnlCompile!" -c q
+      '';
+    };
   };
   # }}}
 }

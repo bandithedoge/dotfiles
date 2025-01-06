@@ -1,42 +1,33 @@
-[(_G.use :LunarVim/bigfile.nvim {:event :BufReadPre})
+(import-macros {: use! : key!} :config.macros)
+
+[(use! :direnv/direnv.vim {:cond _G.USING_NIX :event :LazyFile})
  ;;
- (_G.use :direnv/direnv.vim {:cond _G.USING_NIX :event :LazyFile})
+ (use! :jghauser/fold-cycle.nvim
+       {:keys [(key! :<tab> #(let [fold-cycle (require :fold-cycle)]
+                               (fold-cycle.open)))]
+        :opts {:softwrap_movement_fix true}})
  ;;
- (_G.use :jghauser/fold-cycle.nvim
-         {:keys [(_G.key :<tab>
-                         #(let [fold-cycle (require :fold-cycle)]
-                            (fold-cycle.open)))]
-          :opts {:softwrap_movement_fix true}})
+ (use! :jghauser/mkdir.nvim {:event :LazyFile})
  ;;
- (_G.use :3rd/image.nvim {:ft [:markdown :norg :typst] :opts {}})
+ (use! :danymat/neogen {:dependencies [(use! :nvim-treesitter/nvim-treesitter)]
+                        :cmd :Neogen
+                        :keys [(key! :<localleader>g :<cmd>Neogen<cr>
+                                     {:desc "Generate annotation"})]
+                        :opts {:snippet_engine :nvim}})
  ;;
- (_G.use :jghauser/mkdir.nvim {:event :LazyFile})
+ (use! :figsoda/nix-develop.nvim {:cmd [:NixDevelop :NixShell :RiffShell]})
  ;;
- (_G.use :danymat/neogen
-         {:dependencies [(_G.use :nvim-treesitter/nvim-treesitter)]
-          :cmd :Neogen
-          :keys [(_G.key :<localleader>g :<cmd>Neogen<cr>
-                         {:desc "Generate annotation"})]
-          :opts {:snippet_engine :luasnip}})
+ (use! :Allendang/nvim-expand-expr
+       {:keys [(key! :<localleader>e
+                     #(let [expand-expr (require :expand_expr)]
+                        (expand-expr.expand))
+                     {:desc "Expand expression"})]})
  ;;
- (_G.use :figsoda/nix-develop.nvim {:cmd [:NixDevelop :NixShell :RiffShell]})
+ (use! :folke/persistence.nvim {:event :BufReadPre})
  ;;
- (_G.use :Allendang/nvim-expand-expr
-         {:keys [(_G.key :<localleader>e
-                         #(let [expand-expr (require :expand_expr)]
-                            (expand-expr.expand))
-                         {:desc "Expand expression"})]})
+ (use! :andweeb/presence.nvim {:event :LazyFile :opts {}})
  ;;
- (_G.use :andweeb/presence.nvim {:event :LazyFile :opts {}})
+ (use! :vladdoster/remember.nvim
+       {:config #(require :remember) :event :LazyFile})
  ;;
- (_G.use :vladdoster/remember.nvim
-         {:config #(require :remember) :event :LazyFile})
- ;;
- (_G.use :sQVe/sort.nvim {:cmd :Sort})
- ;;
- (_G.use :gbprod/yanky.nvim
-         {:config true
-          :event :LazyFile
-          :keys [(_G.key :y "<Plug>(YankyYank)" {:mode [:n :x]})
-                 (_G.key :p "<Plug>(YankyPutAfter)" {:mode [:n :x]})
-                 (_G.key :P "<Plug>(YankyPutBefore)" {:mode [:n :x]})]})]
+ (use! :sQVe/sort.nvim {:cmd :Sort})]

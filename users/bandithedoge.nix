@@ -15,10 +15,12 @@
           "adbusers"
           "audio"
           "docker"
+          "gamemode"
+          "kvm"
           "plugdev"
+          "realtime"
           "vboxusers"
           "wheel"
-          "kvm"
         ];
         isNormalUser = true;
       }
@@ -29,7 +31,5 @@
 
   environment.shells = with pkgs; [fish bashInteractive];
   programs.fish.enable = true;
-
-  home-manager.users.bandithedoge.imports = [../home/default];
 }
 

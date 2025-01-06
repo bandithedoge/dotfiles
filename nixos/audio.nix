@@ -9,6 +9,7 @@
       enable = true;
       support32Bit = true;
     };
+
     extraConfig = let
       rate = 48000;
       bufsize = 512;
@@ -24,6 +25,22 @@
           "node.latency" = "${builtins.toString bufsize}/${builtins.toString rate}";
           "resample.quality" = 1;
         };
+      };
+    };
+
+    wireplumber.extraConfig = {
+      "51-disable-suspension" = {
+        "monitor.alsa.rules" = [
+          {
+            matches = [
+              {"node.name" = "~alsa_input.*";}
+              {"node.name" = "~alsa_output.*";}
+            ];
+            actions.update-props = {
+              "session.suspend-timeout-seconds" = 0;
+            };
+          }
+        ];
       };
     };
   };

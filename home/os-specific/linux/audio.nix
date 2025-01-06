@@ -15,28 +15,42 @@
     reaper
     strawberry-qt6
 
+    # (bandithedoge.arboreal.omniamp.override {noLicenseCheck = true;})
+    # (bandithedoge.arboreal.pimax.override {noLicenseCheck = true;})
     bandithedoge.aida-x
     bandithedoge.airwindows-consolidated
+    bandithedoge.apisonic.transperc
+    bandithedoge.arboreal.str-x
     bandithedoge.audible-planets-bin
     bandithedoge.destruqtor
     bandithedoge.dsp56300
     bandithedoge.geonkick
     bandithedoge.gnomedistort2
     bandithedoge.guitarix-vst-bin
+    # bandithedoge.guitarml.chameleon
+    # bandithedoge.guitarml.prince
+    # bandithedoge.guitarml.proteus
+    # bandithedoge.guitarml.smartamp
+    # bandithedoge.guitarml.smartpedal
+    # bandithedoge.guitarml.ts-m1n3
     bandithedoge.ildaeil
+    bandithedoge.maim-bin
     bandithedoge.microbiome-bin
     bandithedoge.misstrhortion
+    bandithedoge.mxtune-bin
     bandithedoge.panacea-bin
     bandithedoge.peakeater-bin
+    bandithedoge.rnnoise-plugin
     bandithedoge.roomreverb
     bandithedoge.schrammel-ojd
     bandithedoge.sg-323
     bandithedoge.showmidi-bin
+    bandithedoge.squeezer-bin
     bandithedoge.tonelib.bassdrive
     bandithedoge.tonelib.easycomp
     bandithedoge.tonelib.noisereducer
     bandithedoge.tonelib.tubewarmth
-    bandithedoge.tonez
+    bandithedoge.venn.free-suite
     bandithedoge.white-elephant-audio.carve-bin
     bandithedoge.white-elephant-audio.monstr-bin
     bandithedoge.white-elephant-audio.richter-bin
