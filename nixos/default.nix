@@ -37,11 +37,18 @@
     #   package = pkgs.scx_git.full;
     # };
 
+    ananicy = {
+      enable = true;
+      package = pkgs.ananicy-cpp;
+      rulesProvider = pkgs.ananicy-rules-cachyos_git;
+    };
+
     devmon.enable = true;
     irqbalance.enable = true;
     openssh.enable = true;
     resolved.enable = true;
     upower.enable = true;
+    fwupd.enable = true;
   };
 
   programs = {

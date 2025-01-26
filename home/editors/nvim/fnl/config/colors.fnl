@@ -62,6 +62,7 @@
                                 :NormalFloat {:bg :bg2 :fg :fg1}
                                 :Search {:bg :sel1 :fg :bg1}
                                 :Cursor {:bg :sel1 :fg :bg1}
+                                :CursorLineNC {:bg _G.base00}
                                 :TermCursor {:link :Cursor}
                                 :WinSeparator {:bg :bg0 :fg :bg0}
                                 :rainbowcol1 {:fg _G.base0E}
@@ -247,7 +248,10 @@
                                 :FzfLuaNormal {:bg _G.base02}
                                 :FzfLuaTitle {:fg _G.base00
                                               :bg _G.base0F
-                                              :style :bold}}}})
+                                              :style :bold}
+                                :OutlineGuides {:link :NonText}
+                                :OutlineCurrent {:fg _G.base0F :style :bold}
+                                :OutlineFoldMarker {:fg _G.base03}}}})
 
 (nightfox.compile)
 (vim.cmd.colorscheme :nightfox)

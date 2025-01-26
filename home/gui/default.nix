@@ -331,6 +331,7 @@
             splashTheming = true;
             enableMenu = true;
             hardwareAcceleration = false;
+            disableMinSize = true;
           };
 
       "vesktop/settings/quickCss.css".source = pkgs.rice.compileSCSS ./discord.scss;

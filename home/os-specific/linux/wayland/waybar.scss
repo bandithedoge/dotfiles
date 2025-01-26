@@ -2,7 +2,7 @@ window#waybar {
     background-color: $base00;
     color: $base05;
     font-family: $uiFont, $monoFont;
-    font-size: small;
+    font-size: 11pt;
 }
 
 #workspaces {
@@ -16,6 +16,7 @@ window#waybar {
         min-width: 0;
         font-weight: normal;
         transition: none;
+        font-family: $monoFont;
     }
 
     button.visible {

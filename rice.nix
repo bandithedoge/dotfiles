@@ -13,7 +13,7 @@ in
       mv blur.png $out
     '';
 
-    uiFontPackage = pkgs.roboto;
+    uiFontPackage = pkgs.barlow;
     monoFontPackage = pkgs.nerd-fonts.jetbrains-mono;
 
     gtk = {
@@ -25,11 +25,12 @@ in
         name = "Papirus-Dark";
         package = pkgs.papirus-icon-theme;
       };
-      cursorTheme = {
-        name = "capitaine-cursors";
-        package = pkgs.capitaine-cursors;
-        size = 16;
-      };
+    };
+
+    cursorTheme = {
+      name = "capitaine-cursors";
+      package = pkgs.capitaine-cursors;
+      size = 16;
     };
 
     def = rec {

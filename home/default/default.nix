@@ -26,6 +26,7 @@
       ffmpeg
       file
       hactool
+      home-manager
       hyperfine
       imagemagickBig
       innoextract

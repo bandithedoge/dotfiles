@@ -1,10 +1,10 @@
 {
   pkgs,
   config,
+  flake,
+  lib,
   ...
-}: let
-  rofi-stuff = pkgs.callPackage ./rofi {};
-in {
+}: {
   imports = [
     ./audio.nix
     ./wayland
@@ -13,19 +13,25 @@ in {
   home = {
     packages = with pkgs; [
       appimage-run
+      bandithedoge.chainner-bin
       bandithedoge.deemix-gui-bin
       bandithedoge.propertree
       bleachbit
-      # blender-hip # https://nixpk.gs/pr-tracker.html?pr=370180
+      # blender-hip
+      caprine
       czkawka
       d-spy
-      ferdium
       fractal
       gimp
+      gnome-firmware
+      gnome-graphs
       handbrake
+      icon-library
       inkscape
       keepassxc
+      keepmenu
       krita
+      kvirc
       libnotify
       libreoffice-fresh
       matlab
@@ -37,17 +43,15 @@ in {
       qview
       telegram-desktop_git
       vesktop
-      wine-tkg
+      wine-ge
       winetricks
+      wtype
       xdragon
       zenity
-
-      # fonts
-      cm_unicode
     ];
 
     pointerCursor = {
-      inherit (pkgs.rice.gtk.cursorTheme) package name size;
+      inherit (pkgs.rice.cursorTheme) package name size;
       gtk.enable = true;
     };
   };
@@ -106,8 +110,9 @@ in {
     enable = true;
     font = {
       name = pkgs.rice.uiFont;
-      size = 12;
+      size = 13;
     };
+    inherit (pkgs.rice) cursorTheme;
     inherit (pkgs.rice.gtk) theme iconTheme;
     gtk3.extraConfig = {
       gtk-application-prefer-dark-theme = true;
@@ -120,22 +125,35 @@ in {
     gtk4 = gtk3;
   };
 
-  dconf.settings."org/gnome/desktop/interface" = with pkgs.rice; {
-    color-scheme = "prefer-dark";
-    font-name = "${uiFont} 12";
-    monospace-font-name = "${monoFont} 12";
+  dconf.settings = {
+    "org/gnome/desktop/interface" = with pkgs.rice; {
+      color-scheme = "prefer-dark";
+      monospace-font-name = "${monoFont} 12";
+    };
+    "org/freedesktop/appearance".color-scheme = 1;
   };
   # }}}
 
   qt = {
     enable = true;
-    platformTheme.name = "adwaita";
+    platformTheme.name = "gtk3";
     style.name = "adwaita-dark";
   };
 
   xdg.configFile = let
     css = pkgs.rice.compileSCSS ../../../gtk.scss;
   in {
+    "keepmenu/config.ini".text = lib.generators.toINI {} {
+      dmenu.dmenu_command = "rofi -dmenu";
+      database = {
+        inherit (pkgs.rice) terminal;
+        database_1 = "~/keepass/pass.kdbx";
+        editor = config.home.sessionVariables.EDITOR;
+        gui_editor = "keepassxc";
+        type_library = "wtype";
+      };
+    };
+
     "gtk-4.0/gtk.css".source = css;
     "gtk-3.0/gtk.css".source = css;
   };
@@ -482,7 +500,23 @@ in {
         (rofi-calc.override {rofi-unwrapped = pkgs.rofi-wayland-unwrapped;})
       ];
       extraConfig = {
-        modi = "power:${rofi-stuff}/bin/power,drun,run,calc";
+        modi = let
+          power = pkgs.writeShellScript "rofi-power" ''
+            if [ -z "$@" ]; then
+              echo -en "\0prompt\x1fpower\n"
+
+              echo -en "Lock\0icon\x1fsystem-lock-screen\n"
+              echo -en "Reboot\0icon\x1fsystem-reboot\n"
+              echo -en "Shutdown\0icon\x1fsystem-shutdown\n"
+            else
+              case "$*" in
+                "Lock") loginctl lock-session; exit ;;
+                "Reboot") systemctl reboot; exit ;;
+                "Shutdown") systemctl poweroff; exit ;;
+              esac
+            fi
+          '';
+        in "power:${power},drun,calc";
 
         drun-match-fields = "name,exec";
         drun-display-format = "{name}";

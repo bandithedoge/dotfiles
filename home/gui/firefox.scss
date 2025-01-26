@@ -29,9 +29,17 @@
 }
 
 .toolbar-items {
-    background-color: $base00;
+    background-color: $base10;
 }
 
 .tab-stack::after {
     opacity: 0 !important;
+}
+
+.tab-background:is([selected]) {
+    background-color: $base00;
+}
+
+#url-bar {
+    font-size: 1em;
 }

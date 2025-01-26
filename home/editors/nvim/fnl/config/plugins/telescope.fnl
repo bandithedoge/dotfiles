@@ -29,22 +29,28 @@
                      {:desc "Highlight groups"})
                (key! :<leader>fT "<cmd>Telescope builtin<cr>"
                      {:desc :Telescope})
-               (key! :<leader>fo "<cmd>Telescope vim_options<cr>"
-                     {:desc :Options})
                (key! :<leader>fk "<cmd>Telescope keymaps<cr>"
                      {:desc :Keybindings})
-               (key! :<leader>b "<cmd>Telescope buffers<cr>" {:desc :Buffers})]
+               (key! :<leader>fm "<cmd>Telescope man_pages<cr>" {:desc :Man})
+               (key! :<leader>b
+                     "<cmd>Telescope buffers sort_mru=true sort_lastused=true ignore_current_buffer=true<cr>"
+                     {:desc :Buffers})]
         :opts #(let [actions (require :telescope.actions)]
                  {:defaults {:prompt_prefix "❯ "
+                             :selection_caret "▌"
                              :border true
                              :borderchars [" " " " " " " " " " " " " " " "]
                              :path_display [:smart]
                              :dynamic_preview_title true
+                             :results_title false
+                             :prompt_title false
                              :mappings {:i {:<esc> actions.close
                                             :<C-j> actions.move_selection_next
                                             :<C-k> actions.move_selection_previous
                                             :<C-h> actions.preview_scrolling_up
                                             :<C-l> actions.preview_scrolling_down
+                                            :<C-u> actions.preview_scrolling_up
+                                            :<C-d> actions.preview_scrolling_down
                                             :<C-r> actions.delete_buffer}}}
                   :pickers {:commands {:theme :ivy :border false}}})
         :config #(let [telescope (require :telescope)]

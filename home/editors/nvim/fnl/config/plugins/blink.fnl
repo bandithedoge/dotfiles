@@ -15,7 +15,7 @@
                          :<C-l> [:scroll_documentation_down]
                          :<Tab> [:snippet_forward :fallback]
                          :<S-Tab> [:snippet_backward :fallback]}
-                :completion {:list {:selection :manual}
+                :completion {:list {:selection {:preselect false :auto_insert false}}
                              :menu {:min_width 25
                                     :max_height 15
                                     :draw {:treesitter [:lsp :lazydev]

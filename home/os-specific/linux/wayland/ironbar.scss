@@ -1,0 +1,83 @@
+* {
+    font-size: small;
+    border: none;
+    font-family: $uiFont, $monoFont;
+}
+
+button {
+    font-weight: normal;
+    background-color: transparent;
+}
+
+button:hover {
+    background-color: $base02;
+}
+
+#bar {
+    background-color: $base00;
+    color: $base05;
+}
+
+.widget {
+    padding: 0 10px;
+}
+
+.workspaces {
+    padding: 0;
+
+    button.item {
+        padding: 0 5px;
+        background-color: $base02;
+        color: $base03;
+        border-radius: 0px;
+        min-width: 0;
+        font-weight: normal;
+        transition: none;
+
+        label {
+            font-family: $monoFont;
+        }
+    }
+
+    button.item.focused {
+        background-color: $base0F;
+        color: $base00;
+    }
+
+    button.item.urgent {
+        background-color: $base08;
+        color: $base00;
+    }
+}
+
+.popup {
+    padding: 10px;
+}
+
+.calendar {
+    padding: 5px;
+}
+
+.calendar-clock {
+    font-size: x-large;
+    padding-bottom: 10px;
+}
+
+.popup-volume {
+    .device-box .slider {
+        min-height: 150px;
+    }
+
+    .apps-box {
+        min-width: 250px;
+    }
+}
+
+.popup-volume .label,
+.popup-music .text-button label,
+.btn-mute,
+.controls label,
+.icon {
+    font-size: large;
+    font-family: $monoFont;
+}

@@ -8,8 +8,10 @@ default:
 
 update +INPUTS="":
     nix flake update {{ INPUTS }} {{ token-opt }}
-    nix-channel --update
-    flatpak update
+
+    @if [[ "{{ INPUTS }}" == "" ]]; then nix-channel --update; flatpak update; fi
+
+    @if [[ "{{ INPUTS }}" == *"home-manager"* ]] || [[ "{{ INPUTS }}" == "" ]]; then home-manager news --flake .#bandithedoge; fi
 
 clean:
     nh clean all -v

@@ -24,13 +24,15 @@
             xorg.xmessage
           ];
       })
+      bandithedoge.cherry-doom
+      bandithedoge.helion-bin
       bandithedoge.sgdboop-bin
-      bandithedoge.umu
       doomrunner
       gzdoom
       limo
       pcsx2
       prismlauncher
+      umu
       vulkanPackages_latest.vulkan-tools
     ];
     # sessionVariables.PROTONPATH = pkgs.proton-cachyos + "/share/steam/compatibilitytools.d/proton-cachyos";

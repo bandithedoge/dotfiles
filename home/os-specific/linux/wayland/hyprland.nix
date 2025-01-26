@@ -1,11 +1,8 @@
 {
   pkgs,
-  inputs,
   lib,
   ...
-}: let
-  rofi-stuff = pkgs.callPackage ../rofi {};
-in {
+}: {
   home.packages = with pkgs; [
     grimblast
   ];
@@ -76,13 +73,13 @@ in {
           };
           monitor = [
             ", preferred, auto, 1"
-            "DP-1, preferred, 0x0, 1"
-            "DP-2, preferred, 1920x60, 1"
-            "DP-3, preferred, 3840x-400, 1, transform, 1"
+            # "DP-1, preferred, 0x0, 1"
+            "DP-2, preferred, 0x0, 1"
+            "DP-3, preferred, 1920x0, 1"
           ];
-          workspace = [
-            "m[DP-3], layoutopt:orientation:top"
-          ];
+          # workspace = [
+          #   "m[DP-3], layoutopt:orientation:top"
+          # ];
           exec = [
             "systemctl --user restart waybar"
           ];
@@ -92,9 +89,9 @@ in {
           bind =
             [
               "${mod}, return, exec, ${terminal}"
-              "${mod}, space, exec, ${menu}"
+              "${mod}, space, exec, uwsm app -- ${menu}"
               "${mod}, backspace, exec, wlr-which-key"
-              "${mod} CTRL, p, exec, ${rofi-stuff}/bin/keepass"
+              "${mod} CTRL, p, exec, keepmenu"
               ", Print, exec, ${pkgs.writeShellScript "screenshot" "grimblast save area - | satty -f -"}"
               "SHIFT, Print, exec, ${pkgs.writeShellScript "save-replay" "killall -SIGUSR1 gpu-screen-recorder && notify-send -u low 'GPU Screen Recorder' 'Replay saved' -i com.dec05eba.gpu_screen_recorder -a 'GPU Screen Recorder'"}"
 

@@ -96,8 +96,8 @@
             paused = "󰏤";
             stopped = "󰓛";
           };
-          on-scroll-up = "playerctl -p strawberry volume 0.05+";
-          on-scroll-down = "playerctl -p strawberry volume 0.05-";
+          on-scroll-up = "playerctl -p strawberry volume 0.01+";
+          on-scroll-down = "playerctl -p strawberry volume 0.01-";
         };
         gamemode = {
           use-icon = false;
@@ -223,29 +223,168 @@
     };
   }; # }}}
 
+  programs.ironbar = let
+    # {{{
+    icon = i: "<span font=\"${pkgs.rice.monoFont} 11\">${i}<tt> </tt></span>";
+  in {
+    enable = false;
+    package = pkgs.ironbar;
+    style = pkgs.rice.compileSCSS ./ironbar.scss;
+    config = {
+      position = "top";
+      height = 28;
+      start = [
+        {type = "workspaces";}
+        {
+          type = "focused";
+          icon_size = 16;
+          truncate = "end";
+        }
+      ];
+      end = pkgs.lib.flatten [
+        {type = "tray";}
+        {
+          type = "music";
+          player_type = "mpris";
+          format = "{artist} – {title}";
+          truncate = "end";
+          cover_image_size = 250;
+          icons = {
+            play = "󰐊";
+            pause = "󰏤";
+            prev = "󰒮";
+            next = "󰒭";
+            volume = icon "󰕾";
+            track = icon "󰎈";
+            album = icon "󰀥";
+            artist = icon "󰠃";
+          };
+        }
+        (
+          pkgs.lib.optional (config.hostname == "thonkpad")
+          {
+            type = "script";
+            exec = pkgs.writeShellScript "network" ''
+              network () {
+                WIFI=$(cat /sys/class/net/wlp3s0/carrier || echo 0)
+                ETHERNET=$(cat /sys/class/net/enp0s25/carrier || echo 0)
+                TEXT=$(iwgetid --raw || echo "")
+
+                if [ $WIFI == 1 ] && [ $ETHERNET == 1 ]; then
+                  ICON="󰖩 󰈁"
+                elif [ $WIFI == 1 ] && [ $ETHERNET == 0 ]; then
+                  ICON=󰖩
+                elif [ $WIFI == 0 ] && [ $ETHERNET == 1 ]; then
+                  ICON=󰈁
+                  TEXT=""
+                else
+                  STATE=none
+                  TEXT=""
+                fi
+
+                if [ $TEXT == "" ]; then
+                  echo ${icon "$ICON"}
+                else
+                  echo "${icon "$ICON"} $TEXT"
+                fi
+              }
+
+              network
+
+              connmanctl monitor | while read -s line; do
+                network
+              done
+            '';
+          }
+        )
+        {
+          type = "sys_info";
+          format = [
+            "${icon "󰘚"} {cpu_percent}%"
+          ];
+          interval = 1;
+        }
+        {
+          type = "sys_info";
+          format = [
+            "${icon "󰍛"} {memory_used} GB"
+          ];
+          interval = 1;
+        }
+        {
+          type = "sys_info";
+          format = [
+            "${icon "󰔏"} {temp_c:coretemp-Package-id-0}°C"
+          ];
+          interval = 1;
+        }
+        (
+          pkgs.lib.optional (config.hostname == "thonkpad")
+          {
+            type = "script";
+            mode = "watch";
+            cmd = pkgs.writeShellScript "battery" ''
+              battery () {
+                case $(cat /sys/class/power_supply/AC/online) in
+                  1)
+                    ICON=󰂅
+                    ;;
+                  *)
+                    ICON=󰁾
+                    ;;
+                esac
+
+                CAPACITY=$(cat /sys/class/power_supply/BAT0/capacity)
+                if [ $CAPACITY -ge 98 ]; then
+                  CAPACITY=100
+                fi
+                echo "${icon "$ICON"} $CAPACITY%"
+              }
+
+              battery
+
+              upower --monitor | while read -s line; do
+                battery
+              done
+            '';
+          }
+        )
+        {
+          type = "volume";
+          format = "${icon "{icon}"} {percentage}%";
+          icons = {
+            volume_high = "󰕾";
+            volume_medium = "󰖀";
+            volume_low = "󰕿";
+            muted = "󰖁";
+          };
+        }
+        {
+          type = "clock";
+          format = "${icon "󰥔"} %A %d %B %H:%M:%S";
+        }
+      ];
+    };
+  };
+  # }}}
+
   services.hypridle = {
     enable = true;
     settings = {
       general = {
-        lock_cmd = "pidof waylock || (chayang -d 10 && gtklock)";
+        lock_cmd = "pidof gtklock || gtklock";
         before_sleep_cmd = "loginctl lock-session";
       };
       listener = [
         {
           timeout = 300;
-          on-timeout = "loginctl lock-session";
+          on-timeout = "chayang -d 10 && loginctl lock-session";
         }
-        (let
-          script = pkgs.writeShellScript "output" ''
-            for output in $(wlr-randr --json | jq '.[].name' -r); do
-              wlr-randr --dryrun --output $output --$1
-            done
-          '';
-        in {
+        {
           timeout = 360;
-          on-timeout = "${script} off";
-          on-resume = "${script} on";
-        })
+          on-timeout = "hyprctl dispatch dpms off";
+          on-resume = "hyprctl dispatch dpms on";
+        }
       ];
     };
   };
@@ -344,9 +483,9 @@
               desc = "Emacs";
               cmd = "uwsm app emacs";
             };
-            f = {
-              desc = "Ferdium";
-              cmd = "uwsm app ferdium";
+            c = {
+              desc = "Caprine";
+              cmd = "uwsm app caprine";
             };
           }
           // pkgs.lib.optionalAttrs (config.hostname == "machine-nixos") {

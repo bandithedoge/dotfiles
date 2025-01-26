@@ -11,6 +11,7 @@
       # {{{
       checkmake
       editorconfig-checker
+      snyk
 
       # rust
       rust-analyzer
@@ -63,14 +64,13 @@
       bandithedoge.mesonlsp-bin
       clang
       clang-tools
-      # clazy
       cmake
       cmake-format
+      cmake-lint
       gdb
       lldb
       neocmakelsp
       ninja
-      pkg-config
       qt6.qtdeclarative
       qt6.qttools
       vscode-extensions.vadimcn.vscode-lldb.adapter
@@ -105,6 +105,7 @@
       faust
 
       # zig
+      bandithedoge.zlint-bin
       zig
       zls
 
@@ -118,6 +119,8 @@
       julia
 
       blueprint-compiler
+
+      slint-lsp
     ];
     # }}}
   };
@@ -178,13 +181,12 @@
             orgmode
             purescript-vim
             rasi-vim
-            render-markdown-nvim
             SchemaStore-nvim
-            telescope-manix
             tree-sitter-hypr
             vim-coffee-script
             vim-faust
             vim-just
+            vim-slint
             yuck-vim
 
             # lsp
@@ -192,6 +194,7 @@
             AstroLSP
             conform-nvim
             fidget-nvim
+            garbage-day-nvim
             glance-nvim
             hover-nvim
             lsp_lines-nvim
@@ -200,6 +203,7 @@
             nvim-lint
             nvim-lspconfig
             nvim-navic
+            outline-nvim
 
             # ui
             colorful-winsep-nvim

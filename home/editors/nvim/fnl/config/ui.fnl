@@ -15,7 +15,8 @@
                :right [:dapui_scopes
                        :dapui_breakpoints
                        :dapui_stacks
-                       :dapui_watches]}})
+                       :dapui_watches
+                       :Outline]}})
  ;;
  (use! :lewis6991/gitsigns.nvim
        {:event :LazyFile
@@ -59,10 +60,10 @@
  (use! :folke/trouble.nvim {:cmd [:TroubleToggle :Trouble]
                             :keys [(key! :<localleader>t
                                          "<cmd>Trouble diagnostics toggle<cr>"
-                                         {:desc :Diagnostics})
-                                   (key! :<localleader>s
-                                         "<cmd>Trouble symbols toggle<cr>"
-                                         {:desc :Symbols})]
+                                         {:desc :Diagnostics})]
+                                   ; (key! :<localleader>s
+                                   ;       "<cmd>Trouble symbols toggle<cr>"
+                                   ;       {:desc :Symbols})]
                             :opts {:auto_preview false
                                    :use_diagnostic_signs true
                                    :padding false}})]

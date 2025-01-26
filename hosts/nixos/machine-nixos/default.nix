@@ -2,7 +2,7 @@
   imports = [./virt.nix];
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_cachyos;
+    kernelPackages = pkgs.linuxPackages_xanmod_latest;
     kernelParams = ["threadirqs" "preempt=full"];
     loader = {
       systemd-boot.enable = true;
@@ -99,7 +99,6 @@
   hardware = {
     amdgpu = {
       initrd.enable = true;
-      # https://nixpk.gs/pr-tracker.html?pr=370180
       # opencl.enable = true;
     };
   };
@@ -143,5 +142,11 @@
         ];
       };
     };
+  };
+
+  musnix = {
+    enable = true;
+    rtcqs.enable = true;
+    das_watchdog.enable = true;
   };
 }

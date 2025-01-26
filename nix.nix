@@ -1,11 +1,12 @@
 {
   pkgs,
   flake,
+  lib,
   ...
 }: {
   nix = {
     enable = true;
-    # package = pkgs.lix;
+    package = lib.mkDefault pkgs.lix;
     settings = {
       auto-optimise-store = true;
       # builders-use-substitutes = true;
@@ -22,30 +23,18 @@
         "https://berberman.cachix.org"
         "https://cache.garnix.io"
         "https://cache.nixos.org"
-        "https://emacsng.cachix.org"
-        "https://ezkea.cachix.org"
-        "https://ghostty.cachix.org"
-        "https://hyprland.cachix.org"
-        "https://jakestanger.cachix.org"
-        "https://kira-bruneau.cachix.org"
+        "https://chaotic-nyx.cachix.org/"
         "https://nix-community.cachix.org"
         "https://nix-gaming.cachix.org"
-        "https://nixpkgs-wayland.cachix.org"
       ];
       trusted-public-keys = [
         "bandithedoge.cachix.org-1:ZtcHw1anyEa4t6H8m3o/ctYFrwYFPAwoENSvofamE6g="
         "berberman.cachix.org-1:UHGhodNXVruGzWrwJ12B1grPK/6Qnrx2c3TjKueQPds="
         "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
         "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-        "emacsng.cachix.org-1:i7wOr4YpdRpWWtShI8bT6V7lOTnPeI7Ho6HaZegFWMI="
-        "ezkea.cachix.org-1:ioBmUbJTZIKsHmWWXPe1FSFbeVe+afhfgqgTSNd34eI="
-        "ghostty.cachix.org-1:QB389yTa6gTyneehvqG58y0WnHjQOqgnA+wBnpWWxns="
-        "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
-        "jakestanger.cachix.org-1:VWJE7AWNe5/KOEvCQRxoE8UsI2Xs2nHULJ7TEjYm7mM="
-        "kira-bruneau.cachix.org-1:FJSccwNPRNHPBHN+qxAme2Svp537q7dDuHkqLnyOTaQ="
+        "chaotic-nyx.cachix.org-1:HfnXSw4pj95iI/n17rIDy40agHj12WfF+Gqk6SonIT8="
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
         "nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4="
-        "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
       ];
     };
     nixPath = ["nixpkgs=${flake.inputs.nixpkgs}"];

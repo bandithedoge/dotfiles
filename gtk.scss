@@ -20,6 +20,8 @@ $colors: (
     warning_fg_color: $base00,
 
     error_color: $base08,
+    error_bg_color: $base08,
+    error_fg_color: $base00,
 
     window_bg_color: $base00,
     window_fg_color: $base05,
@@ -32,6 +34,13 @@ $colors: (
     headerbar_border_color: $base02,
     headerbar_backdrop_color: $base01,
 
+    sidebar_bg_color: $base10,
+    sidebar_fg_color: $base05,
+    sidebar_backdrop_color: $base00,
+    secondary_sidebar_bg_color: $base10,
+    secondary_sidebar_fg_color: $base05,
+    secondary_sidebar_backdrop_color: $base00,
+
     card_bg_color: $base01,
     card_fg_color: $base05,
 
@@ -40,6 +49,8 @@ $colors: (
 
     popover_bg_color: $base02,
     popover_fg_color: $base05,
+
+    scrollbar_outline_color: $base02,
 );
 
 @each $name, $color in $colors {
@@ -55,6 +66,7 @@ headerbar.default-decoration {
     margin-top: -100px;
 }
 
-window.csd, window.csd decoration {
-  box-shadow: none;
+window.csd,
+window.csd decoration {
+    box-shadow: none;
 }

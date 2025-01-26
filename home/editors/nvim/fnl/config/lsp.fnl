@@ -43,12 +43,15 @@
  ;;
  (use! :j-hui/fidget.nvim
        {:event :LazyFile
-        :opts {:progress {:suppress_on_insert true
-                          :ignore_done_already true
-                          :display {:done_style :diffAdded
+        :opts {:progress {:display {:done_style :diffAdded
                                     :progress_style :Comment
                                     :group_style :FloatTitle
-                                    :icon_style :Normal}}}})
+                                    :icon_style :Normal}
+                          :notification {:window {:winblend 0
+                                                  :normal_hl :NormalFloat
+                                                  :relative :window}}}}})
+ ;;
+ (use! :Zeioth/garbage-day.nvim {:event :LspAttach :config true})
  ;;
  (use! :DNLHC/glance.nvim
        {:dependencies [(use! :neovim/nvim-lspconfig)]
@@ -67,9 +70,7 @@
                                       :<C-j> (actions.preview_scroll_win -5)
                                       :<C-k> (actions.preview_scroll_win 5)}
                                :preview {:<Tab> (actions.enter_win :list)}})
-                  :folds {:fold_closed "󰅂"
-                          :fold_open "󰅀"
-                          :folded false}})})
+                  :folds {:fold_closed "󰅂" :fold_open "󰅀" :folded false}})})
  ;;
  (use! :lewis6991/hover.nvim
        {:keys [(key! :K #(let [hover (require :hover)] (hover.hover)))]
@@ -93,13 +94,33 @@
  ;;
  (use! :mfussenegger/nvim-lint
        {:event :LazyFile
-        :opts {:css [:stylelint]
+        :opts {:cmake [:cmakelint]
+               :css [:stylelint]
                :fish [:fish]
                :less [:stylelint]
                :make [:checkmake]
                :nix [:statix]
-               :scss [:stylelint]}
+               :scss [:stylelint]
+               :zig [:zlint]}
         :config #(let [lint (require :lint)]
+                   (set lint.linters.zlint
+                        {:cmd :zlint
+                         :append_fname false
+                         :args [:-f :gh]
+                         :ignore_exitcode true
+                         :parser (let [parser (require :lint.parser)]
+                                   (parser.from_pattern "^::(%w) file=(%w+),line=(%d+),col=(%d+),title=(%w+)::(%w+)"
+                                                        [:severity
+                                                         :file
+                                                         :line
+                                                         :col
+                                                         :code
+                                                         :message]
+                                                        {:error vim.diagnostic.severity.ERROR
+                                                         :warning vim.diagnostic.severity.WARN
+                                                         :notice vim.diagnostic.severity.INFO}
+                                                        {:source :zlint
+                                                         :severity vim.diagnostic.severity.WARN}))})
                    (set lint.linters_by_ft $2)
                    (vim.api.nvim_create_autocmd [:BufWritePost
                                                  :BufReadPost
@@ -178,6 +199,7 @@
                                                 :nixd
                                                 :ruff
                                                 :rust_analyzer
+                                                :slint_lsp
                                                 :tailwindcss
                                                 :taplo
                                                 :ts_ls
@@ -189,7 +211,15 @@
                                                                                             :diagnostics {:globals [:vim
                                                                                                                     :case]}}}}
                                                :ltex {:settings {:ltex {:additionalRules {:enablePickyRules true
-                                                                                          :motherTongue :pl-PL}}}}
+                                                                                          :motherTongue :pl-PL}}}
+                                                      :filetypes [:markdown
+                                                                  :org
+                                                                  :rst
+                                                                  :tex
+                                                                  :pandoc
+                                                                  :rmd
+                                                                  :html
+                                                                  :xhtml]}
                                                :nil_ls {:settings {:nil {:formatting {:command [:alejandra]}}}}
                                                :nixd {:settings {:nixd {:formatting {:command [:alejandra]}
                                                                         :options {:nixos {:expr (.. "(builtins.getFlake \"/home/bandithedoge/dotfiles\").nixosConfigurations."
@@ -209,4 +239,18 @@
                               :opts {:handlers [#(let [astrolsp (require :astrolsp)]
                                                    (astrolsp.lsp_setup $1))]}})]
         :config #(let [astrolsp (require :astrolsp)]
-                   (vim.tbl_map astrolsp.lsp_setup astrolsp.config.servers))})]
+                   (vim.tbl_map astrolsp.lsp_setup astrolsp.config.servers))})
+ ;;
+ (use! :hedyhli/outline.nvim
+       {:cmd [:Outline :OutlineOpen]
+        :keys [(key! :<localleader>s :<cmd>Outline<cr> {:desc :Symbols})]
+        :opts {:outline_window {:width 20
+                                :hide_cursor true
+                                :winhl "Normal:NormalNC,CursorLine:CursorLineNC"}
+               :symbols {:filter (merge! {:exclude true} [:String])
+                         :icon_fetcher #(_G.MiniIcons.get :lsp $1)}}})]
+
+; :icon_fetcher #(do
+;                  (local (icon _ _)
+;                         (_G.MiniIcons.get :lsp $1))
+;                  icon)}}})]

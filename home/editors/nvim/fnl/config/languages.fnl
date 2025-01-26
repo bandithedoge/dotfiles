@@ -55,7 +55,6 @@
  (use! :gpanders/nvim-parinfer
        {:event [:BufReadPre :BufNewFile]
         :init #(do
-                 ; (g! parinfer_no_maps true)
                  (g! :parinfer_force_balance true)
                  (vim.api.nvim_create_autocmd :User
                                               {:pattern :parinfer
@@ -106,23 +105,6 @@
  ;;
  (use! :Fymyte/rasi.vim)
  ;;
- (let [ft [:markdown :norg :rmd :org]]
-   (use! :MeanderingProgrammer/render-markdown.nvim
-         {: ft
-          :keys [(key! :<localleader>lm
-                       #(let [render-markdown (require :render-markdown)]
-                          (render-markdown.toggle))
-                       {:desc "Toggle Markdown rendering" : ft})]
-          :opts {:file_types ft
-                 :win_options {:showbreak {:default "" :rendered "  "}
-                               :breakindent {:default false :rendered true}
-                               :breakindentopt {:default "" :rendered ""}}
-                 :quote {:repeat_linebreak true}
-                 :code {:width :block :left_pad 2 :right_pad 4}
-                 :heading {:width :block :left_pad 2 :right_pad 4}
-                 :indent {:enabled true :skip_heading true}
-                 :sign {:enabled false}}}))
- ;;
  (use! :b0o/SchemaStore.nvim {:lazy true})
  ;;
  (use! :luckasRanarison/tree-sitter-hypr)
@@ -132,5 +114,7 @@
  (use! :gmoe/vim-faust)
  ;;
  (use! :NoahTheDuke/vim-just)
+ ;;
+ (use! :slint-ui/vim-slint)
  ;;
  (use! :elkowar/yuck.vim)]

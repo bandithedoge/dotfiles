@@ -8,7 +8,7 @@
       greetd.greetd
       qt5.qtwayland
       qt6.qtwayland
-      rice.gtk.cursorTheme.package
+      rice.cursorTheme.package
       rice.gtk.iconTheme.package
       rice.gtk.theme.package
       xorg.setxkbmap
@@ -21,7 +21,7 @@
       cageArgs = ["-s" "-d" "-m" "last"];
       inherit (pkgs.rice.gtk) theme;
       cursorTheme = {
-        inherit (pkgs.rice.gtk.cursorTheme) name package;
+        inherit (pkgs.rice.cursorTheme) name package;
       };
       settings.background = with pkgs.rice; {
         path = wallpaperBlurred;

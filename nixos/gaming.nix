@@ -35,20 +35,20 @@
       });
     };
 
-    gamemode = {
-      enable = true;
-      settings = {
-        general = {
-          softrealtime = "auto";
-          renice = 10;
-        };
-        gpu = {
-          apply_gpu_optimisations = "accept-responsibility";
-          gpu_device = 0;
-          amd_performance_level = "high";
-        };
-      };
-    };
+    # gamemode = {
+    #   enable = true;
+    #   settings = {
+    #     general = {
+    #       softrealtime = "auto";
+    #       renice = 10;
+    #     };
+    #     gpu = {
+    #       apply_gpu_optimisations = "accept-responsibility";
+    #       gpu_device = 0;
+    #       amd_performance_level = "high";
+    #     };
+    #   };
+    # };
   };
 
   security.pam.loginLimits = [
@@ -61,4 +61,10 @@
   ];
 
   networking.mihoyo-telemetry.block = true;
+
+  boot.kernel.sysctl = {
+    "kernel.sched_cfs_bandwidth_slice_us" = 3000;
+    "net.ipv4.tcp_fin_timeout" = 5;
+    "vm.max_map_count" = 2147483642;
+  };
 }
