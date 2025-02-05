@@ -208,9 +208,9 @@
           title.format = "{audio}{private}{current_title}";
         };
         url = {
-          default_page = "https://serx.ml";
+          default_page = "https://www.startpage.com";
           open_base_url = true;
-          start_pages = "https://serx.ml";
+          start_pages = "https://www.startpage.com";
         };
         window = {
           hide_decoration = true;

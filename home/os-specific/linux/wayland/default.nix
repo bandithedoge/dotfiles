@@ -5,7 +5,8 @@
 }: {
   imports = [
     # ./sway.nix
-    ./hyprland.nix
+    # ./hyprland.nix
+    ./niri.nix
   ];
 
   home = {
@@ -31,7 +32,10 @@
     # {{{
     enable = true;
     style = pkgs.rice.compileSCSS ./waybar.scss;
-    systemd.enable = true;
+    systemd = {
+      enable = true;
+      # target = "sway-session.target";
+    };
     settings = with pkgs.rice; let
       red = s: "<span foreground=\"${base08}\">${s}</span>";
       icon = i: "<span font=\"${monoFont} 11\">${i}<tt> </tt></span>";
@@ -43,8 +47,8 @@
         position = "top";
         height = 27;
         modules-left = [
-          "hyprland/workspaces"
-          "hyprland/window"
+          "niri/workspaces"
+          "niri/window"
         ];
         modules-right = [
           "tray"
@@ -76,6 +80,15 @@
           on-scroll-down = "hyprctl dispatch workspace m-1";
         };
         "hyprland/window" = {
+          icon = true;
+          icon-size = 16;
+          separate-outputs = true;
+        };
+        "niri/workspaces" = {
+          on-scroll-up = "niri msg action focus-workspace-up";
+          on-scroll-down = "niri msg action focus-workspace-down";
+        };
+        "niri/window" = {
           icon = true;
           icon-size = 16;
           separate-outputs = true;
@@ -382,8 +395,8 @@
         }
         {
           timeout = 360;
-          on-timeout = "hyprctl dispatch dpms off";
-          on-resume = "hyprctl dispatch dpms on";
+          on-timeout = "niri msg action power-off-monitors";
+          on-resume = "niri msg action power-on-monitors";
         }
       ];
     };
@@ -461,41 +474,41 @@
           {
             d = {
               desc = "Discord";
-              cmd = "uwsm app vesktop";
+              cmd = "vesktop";
             };
             p = {
               desc = "Music player";
-              cmd = "uwsm app strawberry";
+              cmd = "strawberry";
             };
             b = {
               desc = "Web browser";
-              cmd = "uwsm app $BROWSER";
+              cmd = "$BROWSER";
             };
             g = {
               desc = "Game launcher";
-              cmd = "uwsm app lutris";
+              cmd = "lutris";
             };
             k = {
               desc = "Password manager";
-              cmd = "uwsm app keepassxc";
+              cmd = "keepassxc";
             };
             e = {
               desc = "Emacs";
-              cmd = "uwsm app emacs";
+              cmd = "emacs";
             };
             c = {
               desc = "Caprine";
-              cmd = "uwsm app caprine";
+              cmd = "caprine";
             };
           }
           // pkgs.lib.optionalAttrs (config.hostname == "machine-nixos") {
             v = {
               desc = "Virtual machines";
-              cmd = "uwsm app virt-manager";
+              cmd = "virt-manager";
             };
             l = {
               desc = "Looking Glass Client";
-              cmd = "uwsm app looking-glass-client";
+              cmd = "looking-glass-client";
             };
           };
       };

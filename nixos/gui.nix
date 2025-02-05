@@ -30,9 +30,21 @@
       extraCss = builtins.readFile (pkgs.rice.compileSCSS ../gtk.scss);
     };
 
-    hyprland = {
+    # hyprland = {
+    #   enable = true;
+    #   withUWSM = true;
+    #   xwayland.enable = false;
+    # };
+
+    niri.enable = true;
+
+    uwsm = {
       enable = true;
-      withUWSM = true;
+      waylandCompositors.niri = {
+        prettyName = "Niri";
+        comment = "Niri managed by UWSM";
+        binPath = "/run/current-system/sw/bin/niri";
+      };
     };
 
     gnome-disks.enable = true;
@@ -72,7 +84,7 @@
   xdg = {
     portal = {
       enable = true;
-      wlr.enable = true;
+      # wlr.enable = true;
       config.sway.default = ["wlr" "gtk"];
       extraPortals = with pkgs; [
         xdg-desktop-portal-gtk

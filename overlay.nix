@@ -12,4 +12,8 @@ final: prev: {
     withOpenASAR = true;
     withVencord = true;
   };
+
+  connman-gtk = prev.connman-gtk.overrideAttrs (_: {
+    NIX_CFLAGS_COMPILE = ["-Wno-incompatible-pointer-types"];
+  });
 }

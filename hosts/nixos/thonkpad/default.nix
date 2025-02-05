@@ -9,7 +9,7 @@
   };
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_cachyos-lto;
+    kernelPackages = pkgs.linuxPackages_xanmod_latest;
     kernelModules = ["kvm-intel"];
     initrd.availableKernelModules = ["xhci_pci" "ehci_pci" "ahci" "usb_storage" "sd_mod" "sr_mod" "rtsx_pci_sdmmc"];
     loader.systemd-boot.enable = true;

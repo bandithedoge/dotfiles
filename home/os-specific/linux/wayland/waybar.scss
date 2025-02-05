@@ -2,7 +2,7 @@ window#waybar {
     background-color: $base00;
     color: $base05;
     font-family: $uiFont, $monoFont;
-    font-size: 11pt;
+    font-size: 15px;
 }
 
 #workspaces {
@@ -19,11 +19,16 @@ window#waybar {
         font-family: $monoFont;
     }
 
-    button.visible {
-        color: $base0F;
+    button.empty {
+        background-color: $base00;
+        color: $base02;
     }
 
     button.active {
+        color: $base0F;
+    }
+
+    button.focused {
         background-color: $base0F;
         color: $base00;
     }

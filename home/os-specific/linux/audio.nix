@@ -5,7 +5,7 @@
     bandithedoge.clap-info
     bandithedoge.partiels
     bandithedoge.vgmtrans
-    bandithedoge.zrythm
+    # bandithedoge.zrythm
     bespokesynth-with-vst2
     carla
     coppwr

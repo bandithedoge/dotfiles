@@ -311,6 +311,7 @@
         linux-cgroup = "always";
         gtk-tabs-location = "bottom";
         adw-toolbar-style = "flat";
+        class = "ghostty";
       };
     };
 
