@@ -1,17 +1,17 @@
 {pkgs, ...}: {
   home = {
     packages = with pkgs; [
+      bandithedoge.cantata
       gpu-screen-recorder
       gpu-screen-recorder-gtk
+      librewolf-wayland
+      mpc
     ];
-    sessionVariables = {
-      BROWSER = "floorp";
-      WINEFSYNC = "1";
-    };
+    sessionVariables.BROWSER = "floorp";
   };
 
   programs.looking-glass-client = {
-    enable = true;
+    enable = false;
     # package = pkgs.looking-glass-client.overrideAttrs (_: {
     #   version = "B6";
     #   src = pkgs.fetchFromGitHub {
@@ -45,7 +45,7 @@
 
   services = {
     mpd = {
-      enable = false;
+      enable = true;
       musicDirectory = "/mnt/data/Music/Music";
       extraConfig = ''
         audio_output {
@@ -57,7 +57,7 @@
     };
 
     mpd-discord-rpc = {
-      enable = false;
+      enable = true;
       settings = {
         format = {
           details = "$artist - $title";

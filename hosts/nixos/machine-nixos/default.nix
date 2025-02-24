@@ -1,9 +1,19 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  config,
+  ...
+}: {
   imports = [./virt.nix];
 
+  environment.systemPackages = with pkgs; [
+    wireguard-tools
+  ];
+
   boot = {
-    kernelPackages = pkgs.linuxPackages_xanmod_latest;
+    kernelPackages = pkgs.linuxPackages_cachyos;
     kernelParams = ["threadirqs" "preempt=full"];
+    kernelModules = ["wireguard"];
+    # extraModulePackages = with config.boot.kernelPackages; [wireguard];
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
@@ -15,25 +25,11 @@
   networking = {
     hostName = "machine-nixos";
 
-    networkmanager = {
-      enable = true;
-      plugins = with pkgs; [networkmanager-openvpn];
-    };
-
-    wireguard.enable = true;
+    # networkmanager = {
+    #   enable = true;
+    #   plugins = with pkgs; [networkmanager-openvpn];
+    # };
   };
-
-  # TODO
-  # services.replay-sorcery = {
-  #   enable = true;
-  #   enableSysAdminCapability = true;
-  #   autoStart = true;
-  #   settings = {
-  #     videoInput = "hwaccel";
-  #     videoFramerate = 60;
-  #     controller = "command";
-  #   };
-  # };
 
   # drives {{{
   fileSystems = {
@@ -85,9 +81,8 @@
       extraPackages = with pkgs; [
         intel-media-driver
         intel-vaapi-driver
-        # https://nixpk.gs/pr-tracker.html?pr=370180
-        # rocmPackages.clr
-        # rocmPackages.clr.icd
+        rocmPackages.clr
+        rocmPackages.clr.icd
       ];
       extraPackages32 = with pkgs; [
         driversi686Linux.intel-media-driver
@@ -99,7 +94,7 @@
   hardware = {
     amdgpu = {
       initrd.enable = true;
-      # opencl.enable = true;
+      opencl.enable = true;
     };
   };
 

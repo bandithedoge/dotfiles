@@ -4,32 +4,62 @@
     @return color.red($c), color.green($c), color.blue($c);
 }
 
-@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/DiscordRecolor/DiscordRecolor.css);
+@import url(https://github.com/refact0r/midnight-discord/raw/refs/heads/master/midnight.theme.css);
 
 :root {
-    --settingsicons: 1;
     --font: #{$uiFont};
-    --accentcolor: #{col($base0F)};
-    --accentcolor2: #{col($base17)};
-    --linkcolor: #{col($base0F)};
-    --mentioncolor: #{col($base0F)};
-    --successcolor: #{col($base0B)};
-    --warningcolor: #{col($base0A)};
-    --dangercolor: #{col($base08)};
+    --corner-text: "Vesktop";
 
-    --textbrightest: #{col($base07)};
-    --textbrighter: #{col($base07)};
-    --textbright: #{col($base06)};
-    --textdark: #{col($base03)};
-    --textdarker: #{col($base03)};
-    --textdarkest: #{col($base03)};
+    --online-indicator: #{$base0B};
+    --dnd-indicator: #{$base08};
+    --idle-indicator: #{$base0A};
+    --streaming-indicator: #{$base0E};
 
-    --backgroundaccent: #{col($base02)};
-    --backgroundprimary: #{col($base00)};
-    --backgroundsecondary: #{col($base10)};
-    --backgroundsecondaryalt: #{col($base10)};
-    --backgroundtertiary: #{col($base10)};
-    --backgroundfloating: #{col($base02)};
+    --accent-1: #{$base0F};
+    --accent-2: #{$base0F};
+    --accent-3: #{$base0F};
+    --accent-4: #{$base0F};
+    --accent-5: #{$base0F};
+    --mention: #{color.adjust($base0F, $alpha: -0.95)};
+    --mention-hover: #{color.adjust($base0F, $alpha: -0.9)};
 
-    --font-code: #{$monoFont};
+    --text-0: #{$base00};
+    --text-1: #{$base04};
+    --text-2: #{$base05};
+    --text-3: #{$base05};
+    --text-4: #{$base05};
+    --text-5: #{$base03};
+
+    --bg-1: #{$base02};
+    --bg-2: #{$base02};
+    --bg-3: #{$base10};
+    --bg-4: #{$base00};
+    --hover: #{$base02};
+    --active: #{$base02};
+    --message-hover: #{color.adjust($base02, $alpha: -0.8)};
+
+    --spacing: 6px;
+
+    --list-item-transition: 0.2s ease;
+    --unread-bar-transition: 0.2s ease;
+    --moon-spin-transition: 0.4s ease;
+    --icon-spin-transition: 1s ease;
+
+    --roundness-xl: 10px;
+    --roundness-l: 20px;
+    --roundness-m: 16px;
+    --roundness-s: 12px;
+    --roundness-xs: 10px;
+    --roundness-xxs: 8px;
+
+    --discord-icon: block;
+    --moon-icon: none;
+
+    --login-bg-filter: saturate(0.3) hue-rotate(-15deg) brightness(0.4);
+    --green-to-accent-3-filter: hue-rotate(56deg) saturate(1.43);
+    --blurple-to-accent-3-filter: hue-rotate(304deg) saturate(0.84)
+        brightness(1.2);
+
+    --windows-nav: none;
+    --custom-nav: none;
 }

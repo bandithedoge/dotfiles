@@ -17,14 +17,12 @@
       bandithedoge.deemix-gui-bin
       bandithedoge.propertree
       bleachbit
-      # blender-hip
+      blender-hip
       caprine
       czkawka
       d-spy
       fractal
       gimp
-      gnome-firmware
-      gnome-graphs
       handbrake
       icon-library
       inkscape
@@ -41,18 +39,26 @@
       prusa-slicer
       qbittorrent
       qview
+      rice.monoFontPackage
+      rice.uiFontPackage
       telegram-desktop_git
-      vesktop
+      # vesktop
       wine-ge
       winetricks
       wtype
       xdragon
       zenity
+      discord
+      cloudflare-warp
     ];
+
+    sessionVariables.WINEFSYNC = "1";
 
     pointerCursor = {
       inherit (pkgs.rice.cursorTheme) package name size;
       gtk.enable = true;
+      hyprcursor.enable = true;
+      x11.enable = true;
     };
   };
 
@@ -91,19 +97,28 @@
       "org.jdownloader.JDownloader".Context.filesystems = [
         "/mnt"
       ];
+      "dev.vencord.Vesktop".Context.filesystems = [
+        "host"
+        "xdg-config/vesktop"
+        "xdg-run/app/dev.vencord.Vesktop:create"
+      ];
     };
     packages = [
       "com.github.tchx84.Flatseal"
-      "de.bforartists.Bforartists"
+      "dev.vencord.Vesktop"
       "org.gtk.Gtk3theme.adw-gtk3-dark"
       "org.jdownloader.JDownloader"
-      "re.sonny.Workbench"
     ];
   };
   # }}}
 
-  # HACK: https://github.com/nix-community/home-manager/issues/2659
-  systemd.user.sessionVariables = config.home.sessionVariables;
+  systemd.user = {
+    # HACK: https://github.com/nix-community/home-manager/issues/2659
+    inherit (config.home) sessionVariables;
+    tmpfiles.rules = [
+      # "L %t/discord-ipc-0 - - - - .flatpak/dev.vencord.Vesktop/xdg-run/discord-ipc-0"
+    ];
+  };
 
   # gtk {{{
   gtk = rec {
@@ -158,15 +173,7 @@
     "gtk-3.0/gtk.css".source = css;
   };
 
-  xdg.portal = {
-    enable = true;
-    extraPortals = with pkgs; [
-      xdg-desktop-portal-gtk
-      xdg-desktop-portal-hyprland
-      xdg-desktop-portal-wlr
-    ];
-    config.hyprland.default = ["hyprland" "gtk"];
-  };
+  xdg.portal.extraPortals = with pkgs; [xdg-desktop-portal-gtk];
 
   programs = {
     qutebrowser = {
@@ -634,32 +641,6 @@
   };
 
   services = {
-    dunst = with pkgs.rice; {
-      enable = false;
-      inherit (gtk) iconTheme;
-      settings = {
-        global = {
-          follow = "keyboard";
-          offset = "5x5";
-          progress_bar_frame_width = 2;
-          frame_width = 2;
-          frame_color = base0F;
-          font = uiFont;
-          format = "<i>%a</i>\\n<b>%s</b>\\n%b";
-          background = base02;
-          foreground = base05;
-        };
-        urgency_low = {
-          frame_color = base03;
-          foreground = base03;
-        };
-        urgency_critical = {
-          frame_color = base08;
-          foreground = base08;
-        };
-      };
-    };
-
     syncthing.enable = true;
     systembus-notify.enable = true;
     gnome-keyring.enable = true;

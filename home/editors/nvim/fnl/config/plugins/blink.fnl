@@ -1,5 +1,4 @@
-(import-macros {: use!} :config.macros)
-(import-macros {: merge!} :hibiscus.core)
+(import-macros {: use! : tx!} :config.macros)
 
 [(use! :Saghen/blink.cmp
        {:dependencies [(use! :saghen/blink.compat)
@@ -15,15 +14,18 @@
                          :<C-l> [:scroll_documentation_down]
                          :<Tab> [:snippet_forward :fallback]
                          :<S-Tab> [:snippet_backward :fallback]}
-                :completion {:list {:selection {:preselect false :auto_insert false}}
+                :completion {:list {:selection {:preselect false
+                                                :auto_insert false}}
                              :menu {:min_width 25
                                     :max_height 15
                                     :draw {:treesitter [:lsp :lazydev]
-                                           :columns [(merge! [:kind_icon
-                                                              :label
-                                                              :label_description]
-                                                             {:gap 1})
-                                                     [:kind]]
+                                           :columns #(if (= $1.mode :cmdline)
+                                                         [[:label]]
+                                                         [(tx! :kind_icon
+                                                               :label
+                                                               :label_description
+                                                               {:gap 1})
+                                                          [:kind]])
                                            :components {:kind_icon {:ellipsis false
                                                                     :text #(let [icons (require :mini.icons)]
                                                                              (local (icon _

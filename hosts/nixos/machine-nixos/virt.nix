@@ -58,14 +58,15 @@
   boot = {
     kernelModules = [
       "kvm-intel"
-      "kvmfr"
+      # "kvmfr"
       "vfio"
       "vfio_iommu_type1"
       "vfio_pci"
       "vfio_virqfd"
     ];
     extraModulePackages = with config.boot.kernelPackages; [
-      kvmfr
+      # https://github.com/NixOS/nixpkgs/issues/379503
+      # kvmfr
     ];
     initrd.kernelModules = [
       "vfio"

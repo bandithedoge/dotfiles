@@ -11,7 +11,7 @@
       # {{{
       checkmake
       editorconfig-checker
-      snyk
+      # snyk
 
       # rust
       rust-analyzer
@@ -33,13 +33,13 @@
       bandithedoge.nodePackages.emmet-language-server
       bandithedoge.nodePackages.tailwindcss-language-server
       bun
-      eslint_d
       nodePackages.pnpm
       nodePackages.stylelint
       nodePackages.typescript
       nodePackages.typescript-language-server
       nodePackages.vscode-langservers-extracted
       nodejs
+      oxlint
       prettierd
       yarn
 
@@ -56,6 +56,7 @@
       fnlfmt
       luajit
       luajitPackages.luacheck
+      luarocks
       selene
       stylua
       sumneko-lua-language-server
@@ -137,11 +138,7 @@
 
     extraConfig = "set runtimepath^=${./nvim}";
     extraPackages = with pkgs; [imagemagick];
-    extraLuaPackages = ps:
-      with ps; [
-        fennel
-        magick
-      ];
+    extraLuaPackages = ps: with ps; [fennel];
     extraLuaConfig = let
       lazyPlugins =
         pkgs.linkFarm "lazy-plugins"
@@ -151,11 +148,9 @@
           })
           (with pkgs.vimPlugins; [
             astrocore
-            image-nvim
             lua-utils-nvim
             nui-nvim
             nvim-nio
-            # nvim-web-devicons
             pathlib-nvim
             plenary-nvim
             popup-nvim
@@ -262,6 +257,7 @@
             nvim-ts-autotag
             playground
             rainbow-delimiters-nvim
+            treesj
             ts-comments-nvim
           ]));
     in

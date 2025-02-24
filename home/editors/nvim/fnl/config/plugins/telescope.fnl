@@ -37,7 +37,7 @@
                      {:desc :Buffers})]
         :opts #(let [actions (require :telescope.actions)]
                  {:defaults {:prompt_prefix "❯ "
-                             :selection_caret "▌"
+                             :selection_caret "▌ "
                              :border true
                              :borderchars [" " " " " " " " " " " " " " " "]
                              :path_display [:smart]

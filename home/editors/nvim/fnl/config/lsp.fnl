@@ -1,4 +1,4 @@
-(import-macros {: use! : key!} :config.macros)
+(import-macros {: use! : key! : tx!} :config.macros)
 (import-macros {: merge!} :hibiscus.core)
 
 [(use! :aznhe21/actions-preview.nvim
@@ -46,10 +46,10 @@
         :opts {:progress {:display {:done_style :diffAdded
                                     :progress_style :Comment
                                     :group_style :FloatTitle
-                                    :icon_style :Normal}
-                          :notification {:window {:winblend 0
-                                                  :normal_hl :NormalFloat
-                                                  :relative :window}}}}})
+                                    :icon_style :Normal}}
+               :notification {:window {:winblend 0
+                                       :normal_hl :NormalFloat
+                                       :relative :win}}}})
  ;;
  (use! :Zeioth/garbage-day.nvim {:event :LspAttach :config true})
  ;;
@@ -139,43 +139,46 @@
                                                    {:opts {:highlight true
                                                            :separator " 󰅂 "}})
                                              (use! :Saghen/blink.cmp)]
-                              :opts #{:features {:autoformat false
-                                                 :inlay_hints true}
+                              :opts #{:features {:inlay_hints true}
                                       :formatting {:format_on_save {:enabled false}}
-                                      :handlers {1 #(let [lsp (require :lspconfig)]
-                                                      ((. lsp $1 :setup) $2))
-                                                 :clangd #(let [lsp (require :lspconfig)
-                                                                clangd (require :clangd_extensions)]
-                                                            (lsp.clangd.setup $2)
-                                                            (clangd.setup {}))
-                                                 :dartls #(let [flutter-tools (require :flutter-tools)]
-                                                            (flutter-tools.setup {:ui {:border :solid}
-                                                                                  :lsp {:color {:enabled true
-                                                                                                :virtual_text false
-                                                                                                :background true}}}))
-                                                 :hls false
-                                                 :jsonls #(let [lsp (require :lspconfig)
-                                                                schemastore (require :schemastore)]
-                                                            (lsp.jsonls.setup (merge! $2
-                                                                                      {:settings {:json {:schemas (schemastore.json.schemas)
-                                                                                                         :validate {:enable true}}}})))
-                                                 :ltex #(let [ltex-extra (require :ltex_extra)]
-                                                          (ltex-extra.setup {:load_langs [:en-US
-                                                                                          :pl-PL]
-                                                                             :server_opts $2}))
-                                                 :yamlls #(let [lsp (require :lspconfig)
-                                                                schemastore (require :schemastore)]
-                                                            (lsp.yamlls.setup (merge! $2
-                                                                                      {:settings {:yaml {:schemaStore {:enable false
-                                                                                                                       :url ""}
-                                                                                                         :schemas (schemastore.yaml.schemas)}}})))}
-                                      ; :capabilities (merge! (vim.lsp.protocol.make_client_capabilities)
-                                      ;                       {:textDocument {:completion {:completionItem {:snippetSupport true}}}})
-                                      :capabilities (let [blink (require :blink.cmp)]
+                                      :handlers (tx! #(let [lsp (require :lspconfig)]
+                                                        ((. lsp $1 :setup) $2))
+                                                     {:clangd #(let [lsp (require :lspconfig)
+                                                                     clangd (require :clangd_extensions)]
+                                                                 (lsp.clangd.setup $2)
+                                                                 (clangd.setup {}))
+                                                      :dartls #(let [flutter-tools (require :flutter-tools)]
+                                                                 (flutter-tools.setup {:ui {:border :solid}
+                                                                                       :lsp {:color {:enabled true
+                                                                                                     :virtual_text false
+                                                                                                     :background true}}}))
+                                                      :hls false
+                                                      :jsonls #(let [lsp (require :lspconfig)
+                                                                     schemastore (require :schemastore)]
+                                                                 (lsp.jsonls.setup (merge! $2
+                                                                                           {:settings {:json {:schemas (schemastore.json.schemas)
+                                                                                                              :validate {:enable true}}}})))
+                                                      :ltex #(let [ltex-extra (require :ltex_extra)]
+                                                               (ltex-extra.setup {:load_langs [:en-US
+                                                                                               :pl-PL]
+                                                                                  :server_opts $2}))
+                                                      :yamlls #(let [lsp (require :lspconfig)
+                                                                     schemastore (require :schemastore)]
+                                                                 (lsp.yamlls.setup (merge! $2
+                                                                                           {:settings {:yaml {:schemaStore {:enable false}
+                                                                                                              :url ""}
+                                                                                                       :schemas (schemastore.yaml.schemas)}})))})
+                                      :capabilities (let [blink (require :blink-cmp)]
                                                       (blink.get_lsp_capabilities (vim.lsp.protocol.make_client_capabilities)))
                                       :mappings {:n {:gx {1 #(let [lsplinks (require :lsplinks)]
                                                                (lsplinks.gx))
                                                           :cond :textDocument/documentLink}}}
+                                      :file_operations {:operations {:willRename true
+                                                                     :didRename true
+                                                                     :willCreate true
+                                                                     :didCreate true
+                                                                     :willDelete true
+                                                                     :didDelete true}}
                                       :servers [:basedpyright
                                                 :bashls
                                                 :blueprint_ls
@@ -183,7 +186,6 @@
                                                 :cssls
                                                 :dartls
                                                 :emmet_language_server
-                                                :eslint
                                                 :fennel_language_server
                                                 :gopls
                                                 :hls
@@ -197,6 +199,7 @@
                                                 :neocmake
                                                 :nim_langserver
                                                 :nixd
+                                                :oxlint
                                                 :ruff
                                                 :rust_analyzer
                                                 :slint_lsp
@@ -206,7 +209,6 @@
                                                 :yamlls
                                                 :zls]
                                       :config {:clangd {:capabilities {:offsetEncoding :utf-16}}
-                                               :eslint {:settings {:packageManager :pnpm}}
                                                :fennel_language_server {:settings {:fennel {:workspace {:library (vim.api.nvim_list_runtime_paths)}
                                                                                             :diagnostics {:globals [:vim
                                                                                                                     :case]}}}}
@@ -247,10 +249,5 @@
         :opts {:outline_window {:width 20
                                 :hide_cursor true
                                 :winhl "Normal:NormalNC,CursorLine:CursorLineNC"}
-               :symbols {:filter (merge! {:exclude true} [:String])
+               :symbols {:filter (tx! :String {:exclude true})
                          :icon_fetcher #(_G.MiniIcons.get :lsp $1)}}})]
-
-; :icon_fetcher #(do
-;                  (local (icon _ _)
-;                         (_G.MiniIcons.get :lsp $1))
-;                  icon)}}})]

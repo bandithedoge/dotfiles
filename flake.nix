@@ -1,6 +1,7 @@
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    flake-utils.url = "github:numtide/flake-utils";
 
     lix = {
       url = "https://git.lix.systems/lix-project/lix/archive/main.tar.gz";
@@ -23,25 +24,77 @@
     nur-bandithedoge.url = "github:bandithedoge/nur-packages";
     # nur-bandithedoge.url = "path:/home/bandithedoge/git/nur-packages";
 
-    aagl.inputs.nixpkgs.follows = "nixpkgs";
-    aagl.url = "github:ezKEa/aagl-gtk-on-nix";
-    blink.url = "github:Saghen/blink.cmp";
-    colors.url = "github:Misterio77/nix-colors";
-    emacs.url = "github:nix-community/emacs-overlay";
+    aagl = {
+      url = "github:ezKEa/aagl-gtk-on-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    astal = {
+      url = "github:aylur/astal";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    blink = {
+      url = "github:Saghen/blink.cmp";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-parts.follows = "flake-parts";
+      };
+    };
+    colors = {
+      url = "github:Misterio77/nix-colors";
+      inputs.nixpkgs-lib.follows = "nixpkgs";
+    };
     flatpak.url = "github:gmodena/nix-flatpak";
-    ironbar.url = "github:JakeStanger/ironbar";
     matlab.url = "gitlab:doronbehar/nix-matlab";
-    musnix.url = "github:musnix/musnix";
-    neorg.url = "github:nvim-neorg/nixpkgs-neorg-overlay";
-    neovim-plugins.url = "github:m15a/flake-awesome-neovim-plugins";
-    neovim.url = "github:nix-community/neovim-nightly-overlay";
-    nix-alien.url = "github:thiagokokada/nix-alien";
+    musnix = {
+      url = "github:musnix/musnix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    neorg = {
+      url = "github:nvim-neorg/nixpkgs-neorg-overlay";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "flake-utils";
+      };
+    };
+    neovim-plugins = {
+      url = "github:m15a/flake-awesome-neovim-plugins";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "flake-utils";
+      };
+    };
+    niri = {
+      url = "github:sodiboo/niri-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nix-alien = {
+      url = "github:thiagokokada/nix-alien";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nix-gaming.url = "github:fufexan/nix-gaming";
-    nix-index-database.url = "github:Mic92/nix-index-database";
-    nur.url = "github:nix-community/NUR";
+    nix-index-database = {
+      url = "github:Mic92/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nur = {
+      url = "github:nix-community/NUR";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-parts.follows = "flake-parts";
+      };
+    };
     nyx.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
-    poetry2nix.url = "github:nix-community/poetry2nix";
-    sops-nix.url = "github:Mic92/sops-nix";
+    poetry2nix = {
+      url = "github:nix-community/poetry2nix";
+      inputs = {
+        flake-utils.follows = "flake-utils";
+        nixpkgs.follows = "nixpkgs";
+      };
+    };
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     betterfox.url = "github:yokoffing/Betterfox";
     betterfox.flake = false;
@@ -50,12 +103,9 @@
   outputs = inputs @ {self, ...}: let
     defaults = rec {
       overlays = with inputs; [
-        emacs.overlays.default
-        # lix-module.overlays.default
         matlab.overlay
         neorg.overlays.default
         neovim-plugins.overlays.default
-        neovim.overlays.default
         nix-alien.overlays.default
         nix-gaming.overlays.default
         nur.overlays.default
@@ -64,24 +114,13 @@
 
         (_: prev: {
           bandithedoge = nur-bandithedoge.legacyPackages.${prev.system};
-          # bandithedoge = import nur-bandithedoge {
-          #   pkgs = import nur-bandithedoge.inputs.nixpkgs {
-          #     inherit (prev) system;
-          #     config.allowUnfree = true;
-          #   };
-          # };
-
-          vimPlugins =
-            prev.vimPlugins
-            // {
-              inherit (blink.packages.${prev.system}) blink-cmp;
-            };
-
           colors = colors.lib-core;
+
+          vimPlugins = prev.vimPlugins // {inherit (blink.packages.${prev.system}) blink-cmp;};
+
           inherit (aagl.packages.${prev.system}) honkers-railway-launcher anime-game-launcher;
-          inherit (emacs.packages.${prev.system}) emacs-unstable-pgtk commercial-emacs;
           inherit (nix-gaming.packages.${prev.system}) wine-ge wine-tkg;
-          # inherit (ironbar.packages.${prev.system}) ironbar;
+          astal = astal.packages.${prev.system} // {inherit (astal) lib;};
         })
         (import ./overlay.nix)
       ];
@@ -102,6 +141,8 @@
       flake = {
         nixosModules.default = {lib, ...}: {
           imports = with inputs; [
+            {inherit (defaults) nixpkgs;}
+
             aagl.nixosModules.default
             flatpak.nixosModules.nix-flatpak
             home-manager.nixosModules.home-manager
@@ -110,6 +151,8 @@
             nyx.nixosModules.default
             sops-nix.nixosModules.default
 
+            {home-manager.useGlobalPkgs = lib.mkForce false;}
+
             ./nix.nix
             ./nixos
             ./sops.nix
@@ -117,15 +160,14 @@
           ];
         };
 
-        homeModules.default = {
-          pkgs,
-          lib,
-          ...
-        }: {
+        homeModules.default = {pkgs, ...}: {
           imports = with inputs; [
+            {inherit (defaults) nixpkgs;}
+
             flatpak.homeManagerModules.nix-flatpak
-            ironbar.homeManagerModules.default
+            niri.homeModules.niri
             nix-index-database.hmModules.nix-index
+            nyx.homeModules.default
             sops-nix.homeManagerModule
 
             ./home/default
@@ -133,8 +175,6 @@
             ./nix.nix
             ./sops.nix
           ];
-
-          # config.nix.package = lib.mkDefault pkgs.lix;
 
           options.hostname = pkgs.lib.mkOption {type = pkgs.lib.types.str;};
         };
@@ -181,7 +221,7 @@
                 defaults.nixpkgs
                 // {
                   hostPlatform = "x86_64-linux";
-                  # config.rocmSupport = true;
+                  config.rocmSupport = true;
                 };
               imports = with inputs.nixos-hardware.nixosModules; [
                 self.nixosModules.default
@@ -224,6 +264,8 @@
             self.homeModules.default
             # lix-module.nixosModules.default
           ];
+
+          inherit (defaults) nixpkgs;
 
           home = {
             username = "bandithedoge";

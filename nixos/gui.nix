@@ -3,31 +3,27 @@
   config,
   ...
 }: {
-  environment = {
-    systemPackages = with pkgs; [
-      greetd.greetd
-      qt5.qtwayland
-      qt6.qtwayland
-      rice.cursorTheme.package
-      rice.gtk.iconTheme.package
-      rice.gtk.theme.package
-      xorg.setxkbmap
-    ];
-  };
-
   programs = {
-    regreet = {
+    regreet = with pkgs.rice; {
       enable = true;
       cageArgs = ["-s" "-d" "-m" "last"];
-      inherit (pkgs.rice.gtk) theme;
+      inherit (gtk) theme iconTheme;
       cursorTheme = {
-        inherit (pkgs.rice.cursorTheme) name package;
+        inherit (cursorTheme) name package;
       };
-      settings.background = with pkgs.rice; {
-        path = wallpaperBlurred;
-        fit = "Fill";
+      font = {
+        package = uiFontPackage;
+        name = uiFont;
+        size = 12;
       };
-      extraCss = builtins.readFile (pkgs.rice.compileSCSS ../gtk.scss);
+      settings = {
+        background = {
+          path = wallpaperBlurred;
+          fit = "Fill";
+        };
+        widget.clock.format = "%A %d %B %T";
+      };
+      extraCss = builtins.readFile (compileSCSS ../gtk.scss);
     };
 
     # hyprland = {
@@ -37,62 +33,20 @@
     # };
 
     niri.enable = true;
-
-    uwsm = {
-      enable = true;
-      waylandCompositors.niri = {
-        prettyName = "Niri";
-        comment = "Niri managed by UWSM";
-        binPath = "/run/current-system/sw/bin/niri";
-      };
-    };
-
     gnome-disks.enable = true;
     ns-usbloader.enable = true;
     system-config-printer.enable = true;
   };
 
   services = {
-    # displayManager.sessionPackages = let
-    #   waylandSession = let
-    #     sessionItem = pkgs.makeDesktopItem {
-    #       name = "wayland";
-    #       desktopName = "Wayland";
-    #       comment = "Wayland session";
-    #       exec = pkgs.writeShellScript "wayland-session.sh" ''
-    #         source /etc/profiles/per-user/$USER/etc/profile.d/hm-session-vars.sh
-    #         exec systemd-cat --identifier=${pkgs.rice.wm} ${pkgs.rice.wm} "$@"
-    #       '';
-    #     };
-    #   in
-    #     (pkgs.writeTextFile {
-    #       name = "wayland.desktop";
-    #       text = builtins.readFile "${sessionItem}/share/applications/wayland.desktop";
-    #       destination = "/share/wayland-sessions/wayland.desktop";
-    #     })
-    #     .overrideAttrs (_: {passthru.providedSessions = ["wayland"];});
-    # in [
-    #   waylandSession
-    # ];
-
     accounts-daemon.enable = true;
     gnome.gnome-keyring.enable = true;
     greetd.enable = true;
     flatpak.enable = true;
   };
 
-  xdg = {
-    portal = {
-      enable = true;
-      # wlr.enable = true;
-      config.sway.default = ["wlr" "gtk"];
-      extraPortals = with pkgs; [
-        xdg-desktop-portal-gtk
-      ];
-    };
-
-    terminal-exec.enable = true;
-  };
+  xdg.terminal-exec.enable = true;
+  xdg.portal.extraPortals = with pkgs; [xdg-desktop-portal-gtk];
 
   gtk.iconCache.enable = true;
 

@@ -1,4 +1,4 @@
-(import-macros {: use!} :config.macros)
+(import-macros {: use! : key!} :config.macros)
 (import-macros {: g!} :hibiscus.vim)
 
 [(use! :nvim-treesitter/nvim-treesitter
@@ -15,7 +15,15 @@
                                                           :rainbowcol4
                                                           :rainbowcol5
                                                           :rainbowcol6
-                                                          :rainbowcol7]}))})]
+                                                          :rainbowcol7]}))})
+                       (use! :Wansmer/treesj
+                             {:keys [(key! :gj
+                                           #(let [treesj (require :treesj)]
+                                              (treesj.join)))
+                                     (key! :gk
+                                           #(let [treesj (require :treesj)]
+                                              (treesj.split)))]
+                              :opts {:use_default_keymaps false}})]
         :build (when (not _G.USING_NIX) ":TSUpdate")
         :event :LazyFile
         :opts {:auto_install (not _G.USING_NIX)

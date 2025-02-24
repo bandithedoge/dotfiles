@@ -4,10 +4,6 @@
   flake,
   ...
 }: {
-  home.packages = with pkgs; [
-    ghostty
-  ];
-
   programs = {
     floorp = {
       # {{{
@@ -32,7 +28,7 @@
         default = {
           name = "default";
           isDefault = true;
-          extensions = with pkgs.bandithedoge.firefoxAddons; [
+          extensions.packages = with pkgs.bandithedoge.firefoxAddons; [
             augmented-steam
             base64-decoder
             betterviewer
@@ -87,6 +83,7 @@
             "browser.autofocus" = false;
             "browser.newtabpage.activity-stream.improvesearch.handoffToAwesomebar" = false;
             "devtools.chrome.enabled" = true;
+            "extensions.webextensions.ExtensionStorageIDB.enabled" = false;
             "font.name.monospace.x-western" = pkgs.rice.monoFont;
             "font.name.sans-serif.x-western" = pkgs.rice.uiFont;
             "font.name.serif.x-western" = pkgs.rice.serifFont;
@@ -254,7 +251,7 @@
             "userChrome.urlView.always_show_page_actions" = false;
             "userChrome.urlView.move_icon_to_left" = false;
           };
-          extraConfig =
+          preConfig =
             builtins.readFile (flake.inputs.betterfox + "/Fastfox.js")
             + builtins.readFile (flake.inputs.betterfox + "/Peskyfox.js")
             + builtins.readFile (flake.inputs.betterfox + "/Securefox.js")
@@ -268,7 +265,9 @@
     }; # }}}
 
     ghostty = {
+      # {{{
       enable = true;
+      enableFishIntegration = true;
       settings = with pkgs.rice; {
         font-family = monoFont;
         font-size = 12;
@@ -308,14 +307,13 @@
           "15=${base0F}"
         ];
 
-        linux-cgroup = "always";
+        linux-cgroup = "never";
+        gtk-single-instance = false;
         gtk-tabs-location = "bottom";
         adw-toolbar-style = "flat";
         class = "ghostty";
       };
-    };
-
-    librewolf.enable = config.hostname == "machine-nixos";
+    }; # }}}
   };
   xdg = {
     configFile = {
@@ -335,7 +333,19 @@
             disableMinSize = true;
           };
 
-      "vesktop/settings/quickCss.css".source = pkgs.rice.compileSCSS ./discord.scss;
+      "Vencord/settings/quickCss.css".source = pkgs.rice.compileSCSS ./discord.scss;
+
+      "discord/settings.json".text = builtins.toJSON {
+        SKIP_HOST_UPDATE = true;
+        DANGEROUS_ENABLE_DEVTOOLS_ONLY_ENABLE_IF_YOU_KNOW_WHAT_YOURE_DOING = true;
+        OPEN_ON_STARTUP = false;
+        BACKGROUND_COLOR = pkgs.rice.base00;
+        enableHardwareAcceleration = false;
+        openasar = {
+          setup = true;
+          cmdPreset = "battery";
+        };
+      };
     };
   };
 }

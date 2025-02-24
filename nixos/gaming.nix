@@ -1,8 +1,4 @@
 {pkgs, ...}: {
-  environment.systemPackages = with pkgs; [
-    steamtinkerlaunch
-  ];
-
   programs = {
     steam = {
       enable = true;
@@ -13,26 +9,23 @@
           with pkgs; [
             xz
             openssl
+            gst_all_1.gstreamer
             gst_all_1.gst-plugins-bad
             gst_all_1.gst-plugins-ugly
+            gst_all_1.gst-plugins-good
           ];
         extraPreBwrapCmds = "touch /etc/NIXOS";
         # https://github.com/NixOS/nixpkgs/issues/338266#issuecomment-2419568331
         extraBwrapArgs = ["--unsetenv TZ"];
       };
       extraCompatPackages = with pkgs; [
-        luxtorpeda
         proton-ge-custom
-        steamtinkerlaunch
       ];
     };
 
     gamescope = {
       enable = true;
       # capSysNice = true;
-      package = pkgs.gamescope.overrideAttrs (_: {
-        NIX_CFLAGS_COMPILE = ["-fno-fast-math"];
-      });
     };
 
     # gamemode = {

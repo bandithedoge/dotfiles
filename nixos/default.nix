@@ -48,7 +48,6 @@
     openssh.enable = true;
     resolved.enable = true;
     upower.enable = true;
-    fwupd.enable = true;
   };
 
   programs = {
@@ -70,11 +69,8 @@
     pam.services.gtklock.text = ''
       auth include login
     '';
-    polkit.enable = true;
     sudo.enable = false;
-    sudo-rs = {
-      enable = true;
-    };
+    sudo-rs.enable = true;
   };
 
   users.mutableUsers = true;

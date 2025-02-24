@@ -1,0 +1,15 @@
+window {
+    background-color: $base00;
+    color: $base05;
+    font-family: $uiFont, $monoFont;
+    font-size: 15px;
+}
+
+button {
+    background: none;
+    border-radius: 0px;
+}
+
+.tray button {
+    padding: 0 5px;
+}

@@ -7,7 +7,6 @@ in {
   xdg = {
     enable = true;
     configFile = {
-      # npm
       "npm/npmrc".text = ''
         prefix=${data}/npm
         cache=${cache}/npm
@@ -21,40 +20,25 @@ in {
     preferXdgDirectories = true;
 
     sessionVariables = {
-      # android
       ANDROID_USER_HOME = "${data}/android";
-
-      # bash
-      HISTFILE = "${state}/bash/history";
-
-      # x
-      XCOMPOSECACHE = "${cache}/X11/xcompose";
-
-      # java
-      _JAVA_OPTIONS = "-Djava.util.prefs.userRoot=${conf}/java";
-
-      # npm
-      NPM_CONFIG_USERCONFIG = "${conf}/npm/npmrc";
-
-      # cinelerra
-      CIN_CONFIG = "${conf}/bcast5";
-
-      # cargo
       CARGO_HOME = "${data}/cargo";
-
-      # nimble
+      CIN_CONFIG = "${conf}/bcast5";
+      DOTNET_CLI_HOME = "${data}/dotnet";
+      HISTFILE = "${state}/bash/history";
+      JULIA_DEPOT_PATH = "${data}/julia:$JULIA_DEPOT_PATH";
       NIMBLE_DIR = "${data}/nimble";
+      NPM_CONFIG_USERCONFIG = "${conf}/npm/npmrc";
+      XCOMPOSECACHE = "${cache}/X11/xcompose";
+      _JAVA_OPTIONS = "-Djava.util.prefs.userRoot=${conf}/java";
+      GNUPGHOME = "${data}/gnupg";
     };
 
     shellAliases = {
-      # wget
       wget = "wget --hsts-file=\"${data}/wget-hsts\"";
-
-      # yarn
       yarn = "yarn --use-yarnrc ${conf}/yarn/config";
+      adb = "HOME=\"$XDG_DATA_HOME/android\" adb";
     };
   };
 
-  # gtk
   gtk.gtk2.configLocation = "${conf}/gtk-2.0/gtkrc";
 }

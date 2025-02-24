@@ -7,12 +7,15 @@
     # ./sway.nix
     # ./hyprland.nix
     ./niri.nix
+    # ./astal
   ];
 
   home = {
     packages = with pkgs; [
       chayang
       gtklock
+      qt5.qtwayland
+      qt6.qtwayland
       satty
       swaybg
       wev
@@ -33,7 +36,7 @@
     enable = true;
     style = pkgs.rice.compileSCSS ./waybar.scss;
     systemd = {
-      enable = true;
+      # enable = true;
       # target = "sway-session.target";
     };
     settings = with pkgs.rice; let
@@ -53,7 +56,8 @@
         modules-right = [
           "tray"
           "privacy"
-          "mpris"
+          # "mpris"
+          "mpd"
           "gamemode"
           (
             if config.hostname == "thonkpad"
@@ -111,6 +115,18 @@
           };
           on-scroll-up = "playerctl -p strawberry volume 0.01+";
           on-scroll-down = "playerctl -p strawberry volume 0.01-";
+        };
+        mpd = {
+          format = "${icon "{stateIcon}"} {artist} – {title}";
+          on-click = "mpc toggle";
+          on-click-right = "mpc next";
+          on-click-middle = "mpc prev";
+          on-scroll-up = "mpc volume +5";
+          on-scroll-down = "mpc volume -5";
+          state-icons = {
+            playing = "󰐊";
+            paused = "󰏤";
+          };
         };
         gamemode = {
           use-icon = false;
@@ -236,170 +252,40 @@
     };
   }; # }}}
 
-  programs.ironbar = let
-    # {{{
-    icon = i: "<span font=\"${pkgs.rice.monoFont} 11\">${i}<tt> </tt></span>";
-  in {
-    enable = false;
-    package = pkgs.ironbar;
-    style = pkgs.rice.compileSCSS ./ironbar.scss;
-    config = {
-      position = "top";
-      height = 28;
-      start = [
-        {type = "workspaces";}
-        {
-          type = "focused";
-          icon_size = 16;
-          truncate = "end";
-        }
-      ];
-      end = pkgs.lib.flatten [
-        {type = "tray";}
-        {
-          type = "music";
-          player_type = "mpris";
-          format = "{artist} – {title}";
-          truncate = "end";
-          cover_image_size = 250;
-          icons = {
-            play = "󰐊";
-            pause = "󰏤";
-            prev = "󰒮";
-            next = "󰒭";
-            volume = icon "󰕾";
-            track = icon "󰎈";
-            album = icon "󰀥";
-            artist = icon "󰠃";
-          };
-        }
-        (
-          pkgs.lib.optional (config.hostname == "thonkpad")
-          {
-            type = "script";
-            exec = pkgs.writeShellScript "network" ''
-              network () {
-                WIFI=$(cat /sys/class/net/wlp3s0/carrier || echo 0)
-                ETHERNET=$(cat /sys/class/net/enp0s25/carrier || echo 0)
-                TEXT=$(iwgetid --raw || echo "")
-
-                if [ $WIFI == 1 ] && [ $ETHERNET == 1 ]; then
-                  ICON="󰖩 󰈁"
-                elif [ $WIFI == 1 ] && [ $ETHERNET == 0 ]; then
-                  ICON=󰖩
-                elif [ $WIFI == 0 ] && [ $ETHERNET == 1 ]; then
-                  ICON=󰈁
-                  TEXT=""
-                else
-                  STATE=none
-                  TEXT=""
-                fi
-
-                if [ $TEXT == "" ]; then
-                  echo ${icon "$ICON"}
-                else
-                  echo "${icon "$ICON"} $TEXT"
-                fi
-              }
-
-              network
-
-              connmanctl monitor | while read -s line; do
-                network
-              done
-            '';
-          }
-        )
-        {
-          type = "sys_info";
-          format = [
-            "${icon "󰘚"} {cpu_percent}%"
-          ];
-          interval = 1;
-        }
-        {
-          type = "sys_info";
-          format = [
-            "${icon "󰍛"} {memory_used} GB"
-          ];
-          interval = 1;
-        }
-        {
-          type = "sys_info";
-          format = [
-            "${icon "󰔏"} {temp_c:coretemp-Package-id-0}°C"
-          ];
-          interval = 1;
-        }
-        (
-          pkgs.lib.optional (config.hostname == "thonkpad")
-          {
-            type = "script";
-            mode = "watch";
-            cmd = pkgs.writeShellScript "battery" ''
-              battery () {
-                case $(cat /sys/class/power_supply/AC/online) in
-                  1)
-                    ICON=󰂅
-                    ;;
-                  *)
-                    ICON=󰁾
-                    ;;
-                esac
-
-                CAPACITY=$(cat /sys/class/power_supply/BAT0/capacity)
-                if [ $CAPACITY -ge 98 ]; then
-                  CAPACITY=100
-                fi
-                echo "${icon "$ICON"} $CAPACITY%"
-              }
-
-              battery
-
-              upower --monitor | while read -s line; do
-                battery
-              done
-            '';
-          }
-        )
-        {
-          type = "volume";
-          format = "${icon "{icon}"} {percentage}%";
-          icons = {
-            volume_high = "󰕾";
-            volume_medium = "󰖀";
-            volume_low = "󰕿";
-            muted = "󰖁";
-          };
-        }
-        {
-          type = "clock";
-          format = "${icon "󰥔"} %A %d %B %H:%M:%S";
-        }
-      ];
-    };
-  };
-  # }}}
-
-  services.hypridle = {
+  # services.hypridle = {
+  #   enable = true;
+  #   settings = {
+  #     general = {
+  #       lock_cmd = "pidof gtklock || gtklock";
+  #       before_sleep_cmd = "loginctl lock-session";
+  #     };
+  #     listener = [
+  #       {
+  #         timeout = 300;
+  #         on-timeout = "chayang -d 10 && loginctl lock-session";
+  #       }
+  #       {
+  #         timeout = 360;
+  #         on-timeout = "niri msg action power-off-monitors";
+  #         on-resume = "niri msg action power-on-monitors";
+  #       }
+  #     ];
+  #   };
+  # };
+  services.swayidle = {
     enable = true;
-    settings = {
-      general = {
-        lock_cmd = "pidof gtklock || gtklock";
-        before_sleep_cmd = "loginctl lock-session";
-      };
-      listener = [
-        {
-          timeout = 300;
-          on-timeout = "chayang -d 10 && loginctl lock-session";
-        }
-        {
-          timeout = 360;
-          on-timeout = "niri msg action power-off-monitors";
-          on-resume = "niri msg action power-on-monitors";
-        }
-      ];
-    };
+    timeouts = [
+      {
+        timeout = 300;
+        command = "chayang -d 10 && loginctl lock-session";
+      }
+    ];
+    events = [
+      {
+        event = "lock";
+        command = "pidof gtklock || ${with pkgs; lib.getExe gtklock}";
+      }
+    ];
   };
 
   services.mako = with pkgs.rice; {
@@ -474,11 +360,7 @@
           {
             d = {
               desc = "Discord";
-              cmd = "vesktop";
-            };
-            p = {
-              desc = "Music player";
-              cmd = "strawberry";
+              cmd = "discord";
             };
             b = {
               desc = "Web browser";
@@ -502,6 +384,10 @@
             };
           }
           // pkgs.lib.optionalAttrs (config.hostname == "machine-nixos") {
+            p = {
+              desc = "Music player";
+              cmd = "cantata";
+            };
             v = {
               desc = "Virtual machines";
               cmd = "virt-manager";

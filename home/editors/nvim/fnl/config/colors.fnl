@@ -58,7 +58,7 @@
                                        :sel1 _G.base0F}}
                  :specs {:nightfox {}}
                  :groups {:all {:Title {:fg _G.base0F :style :bold}
-                                :FloatBorder {:bg :bg2 :fg :bg2}
+                                :FloatBorder {:bg :bg2 :fg :fg3}
                                 :NormalFloat {:bg :bg2 :fg :fg1}
                                 :Search {:bg :sel1 :fg :bg1}
                                 :Cursor {:bg :sel1 :fg :bg1}
@@ -72,14 +72,13 @@
                                 :rainbowcol5 {:fg _G.base0A}
                                 :rainbowcol6 {:fg _G.base09}
                                 :rainbowcol7 {:fg :pink}
-                                :Hlargs {:fg _G.base0F}
                                 :WhichKeyFloat {:link :FloatBorder}
                                 :LspFloatWinNormal {:link :FloatBorder}
                                 :TelescopeBorder {:link :FloatBorder}
                                 :TelescopeTitle {:fg :sel1}
                                 :TelescopeNormal {:bg :bg2}
                                 :TelescopeSelectionCaret {:fg :sel1
-                                                          :bg :bg2
+                                                          :bg _G.base10
                                                           :style :bold}
                                 :MatchParen {:fg :sel1
                                              :bg :bg0

@@ -1,10 +1,9 @@
-(import-macros {: use! : key!} :config.macros)
+(import-macros {: use! : key! : tx!} :config.macros)
 (import-macros {: merge!} :hibiscus.core)
 
 [(use! :nvim-neo-tree/neo-tree.nvim
        {:dependencies [(use! :nvim-lua/plenary.nvim)
                        (use! :MunifTanjim/nui.nvim)
-                       (use! :3rd/image.nvim)
                        (use! :s1n7ax/nvim-window-picker
                              {:opts {:highlights {:statusline {:unfocused {:fg _G.base00
                                                                            :bg _G.base0F}}}
@@ -26,11 +25,11 @@
                :window {:mappings {:l :set_root
                                    :h :navigate_up
                                    :<space> :none
-                                   :Y (merge! [#(vim.fn.setreg "+"
-                                                               (: ($1.tree:get_node)
-                                                                  :get_id)
-                                                               :c)]
-                                              {:desc "Copy Path to Clipboard"})}
+                                   :Y (tx! #(vim.fn.setreg "+"
+                                                           (: ($1.tree:get_node)
+                                                              :get_id)
+                                                           :c)
+                                           {:desc "Copy Path to Clipboard"})}
                         :width 32}
                :default_component_configs {:modified {:symbol "󰆓"}
                                            :diagnostics {:symbols {:error (. (vim.fn.sign_getdefined :DiagnosticSignError)

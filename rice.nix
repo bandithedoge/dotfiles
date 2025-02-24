@@ -4,7 +4,7 @@ in
   rice
   // (with rice; rec {
     terminal = "ghostty";
-    wm = "Hyprland";
+    wm = "niri";
     menu = "rofi -show drun";
 
     wallpaper = ./wallpaper.jpg;
@@ -182,7 +182,7 @@ in
         ${builtins.readFile path}
       '';
     in
-      pkgs.runCommand "output.css" {} ''
-        ${pkgs.dart-sass}/bin/sass ${input} > $out
+      pkgs.runCommand "output.css" {nativeBuildInputs = with pkgs; [dart-sass];} ''
+        sass ${input} > $out
       '';
   })

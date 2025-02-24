@@ -6,17 +6,16 @@
                :smooth false
                :symbols ["─" "│" "┌" "┐" "└" "┘"]}})
  ;;
- (use! :folke/edgy.nvim
-       {:event :VeryLazy
-        :opts {:wo {:winbar false}
-               :animate {:enabled false}
-               :bottom [:Trouble :dap-repl :dapui_console]
-               :left [:neo-tree]
-               :right [:dapui_scopes
-                       :dapui_breakpoints
-                       :dapui_stacks
-                       :dapui_watches
-                       :Outline]}})
+ (use! :folke/edgy.nvim {:event :VeryLazy
+                         :opts {:wo {:winbar false}
+                                :animate {:enabled false}
+                                :bottom [:Trouble :dap-repl :dapui_console]
+                                :left [:neo-tree]
+                                :right [:dapui_scopes
+                                        :dapui_breakpoints
+                                        :dapui_stacks
+                                        :dapui_watches
+                                        :Outline]}})
  ;;
  (use! :lewis6991/gitsigns.nvim
        {:event :LazyFile
@@ -38,7 +37,7 @@
                        (use! :sindrets/diffview.nvim)
                        (use! :nvim-telescope/telescope.nvim)]
         :cmd :Neogit
-        :keys [(key! :<leader>g :<cmd>Neogit<cr> {:desc :Git})]
+        ; :keys [(key! :<leader>g :<cmd>Neogit<cr> {:desc :Git})]
         :opts {:graph_style :kitty
                :signs {:hunk ["" ""]
                        :item ["󰅂" "󰅀"]
@@ -61,9 +60,9 @@
                             :keys [(key! :<localleader>t
                                          "<cmd>Trouble diagnostics toggle<cr>"
                                          {:desc :Diagnostics})]
-                                   ; (key! :<localleader>s
-                                   ;       "<cmd>Trouble symbols toggle<cr>"
-                                   ;       {:desc :Symbols})]
+                            ; (key! :<localleader>s
+                            ;       "<cmd>Trouble symbols toggle<cr>"
+                            ;       {:desc :Symbols})]
                             :opts {:auto_preview false
                                    :use_diagnostic_signs true
                                    :padding false}})]

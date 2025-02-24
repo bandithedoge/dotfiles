@@ -7,6 +7,10 @@
             at-spi2-atk
             dconf
             fribidi
+            gst_all_1.gst-plugins-bad
+            gst_all_1.gst-plugins-good
+            gst_all_1.gst-plugins-ugly
+            gst_all_1.gstreamer
             libgudev
             libvdpau
             nspr
@@ -24,24 +28,39 @@
             xorg.xmessage
           ];
       })
-      bandithedoge.cherry-doom
       bandithedoge.helion-bin
+      bandithedoge.nugget-doom
       bandithedoge.sgdboop-bin
       doomrunner
       gzdoom
       limo
       pcsx2
       prismlauncher
-      umu
+      umu-launcher
       vulkanPackages_latest.vulkan-tools
+      woof-doom
     ];
     # sessionVariables.PROTONPATH = pkgs.proton-cachyos + "/share/steam/compatibilitytools.d/proton-cachyos";
   };
 
-  services.flatpak.packages = [
-    "moe.launcher.an-anime-game-launcher"
-    "moe.launcher.the-honkers-railway-launcher"
-  ];
+  services.flatpak = {
+    remotes = [
+      {
+        name = "launcher.moe";
+        location = "https://gol.launcher.moe/gol.launcher.moe.flatpakrepo";
+      }
+    ];
+    packages = [
+      {
+        appId = "moe.launcher.an-anime-game-launcher";
+        origin = "launcher.moe";
+      }
+      {
+        appId = "moe.launcher.the-honkers-railway-launcher";
+        origin = "launcher.moe";
+      }
+    ];
+  };
 
   programs.mangohud = {
     enable = true;
