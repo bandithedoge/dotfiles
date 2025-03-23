@@ -96,8 +96,18 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    betterfox.url = "github:yokoffing/Betterfox";
-    betterfox.flake = false;
+    betterfox = {
+      url = "github:yokoffing/Betterfox";
+      flake = false;
+    };
+    kvlibadwaita = {
+      url = "github:GabePoel/KvLibadwaita";
+      flake = false;
+    };
+    firefox-ui-fix = {
+      url = "github:black7375/Firefox-UI-Fix";
+      flake = false;
+    };
   };
 
   outputs = inputs @ {self, ...}: let
@@ -136,7 +146,9 @@
     inputs.flake-parts.lib.mkFlake {inherit inputs;} {
       debug = true;
       systems = ["x86_64-linux" "x86_64-darwin"];
-      imports = with inputs; [nixos-unified.flakeModule];
+      imports = with inputs; [
+        nixos-unified.flakeModule
+      ];
 
       flake = {
         nixosModules.default = {lib, ...}: {

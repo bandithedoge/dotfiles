@@ -5,31 +5,17 @@
 }: {
   imports = [./virt.nix];
 
-  environment.systemPackages = with pkgs; [
-    wireguard-tools
-  ];
-
   boot = {
-    kernelPackages = pkgs.linuxPackages_cachyos;
-    kernelParams = ["threadirqs" "preempt=full"];
-    kernelModules = ["wireguard"];
-    # extraModulePackages = with config.boot.kernelPackages; [wireguard];
+    kernelParams = ["preempt=full" "mitigations=off"];
+    kernelModules = ["wireguard" "ntsync"];
+    blacklistedKernelModules = ["iTCO_wdt"];
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
   };
 
-  powerManagement.cpuFreqGovernor = "performance";
-
-  networking = {
-    hostName = "machine-nixos";
-
-    # networkmanager = {
-    #   enable = true;
-    #   plugins = with pkgs; [networkmanager-openvpn];
-    # };
-  };
+  networking.hostName = "machine-nixos";
 
   # drives {{{
   fileSystems = {
@@ -77,7 +63,7 @@
 
   chaotic = {
     mesa-git = {
-      enable = true;
+      enable = false;
       extraPackages = with pkgs; [
         intel-media-driver
         intel-vaapi-driver
@@ -98,7 +84,11 @@
     };
   };
 
-  programs.gpu-screen-recorder.enable = true;
+  services.scx = {
+    enable = true;
+    package = pkgs.scx_git.rustscheds;
+    scheduler = "scx_lavd";
+  };
 
   services.pipewire = {
     extraConfig.pipewire = {
@@ -143,5 +133,6 @@
     enable = true;
     rtcqs.enable = true;
     das_watchdog.enable = true;
+    rtirq.enable = true;
   };
 }

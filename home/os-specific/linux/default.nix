@@ -19,10 +19,10 @@
       bleachbit
       blender-hip
       caprine
-      czkawka
       d-spy
+      equibop
+      foliate
       fractal
-      gimp
       handbrake
       icon-library
       inkscape
@@ -31,25 +31,20 @@
       krita
       kvirc
       libnotify
-      libreoffice-fresh
-      matlab
+      newsflash
       nicotine-plus
       nix-alien
       pciutils
-      prusa-slicer
       qbittorrent
-      qview
+      qt6ct
       rice.monoFontPackage
       rice.uiFontPackage
       telegram-desktop_git
-      # vesktop
       wine-ge
       winetricks
       wtype
       xdragon
       zenity
-      discord
-      cloudflare-warp
     ];
 
     sessionVariables.WINEFSYNC = "1";
@@ -83,6 +78,7 @@
     overrides = {
       global = {
         Environment = {
+          inherit (config.home.sessionVariables) QT_QPA_PLATFORMTHEME;
           XCURSOR_PATH = "/run/host/user-share/icons:/run/host/share/icons";
         };
         Context.filesystems = [
@@ -92,6 +88,10 @@
           "xdg-config/MangoHud:ro"
           "xdg-config/gtk-3.0:ro"
           "xdg-config/gtk-4.0:ro"
+          "xdg-config/Kvantum:ro"
+          "xdg-config/qt5ct:ro"
+          "xdg-config/qt6ct:ro"
+          "xdg-config/fontconfig:ro"
         ];
       };
       "org.jdownloader.JDownloader".Context.filesystems = [
@@ -151,12 +151,114 @@
 
   qt = {
     enable = true;
-    platformTheme.name = "gtk3";
-    style.name = "adwaita-dark";
+    platformTheme.name = "qtct";
+    style.package = with pkgs; [
+      libsForQt5.qtstyleplugin-kvantum
+      qt6Packages.qtstyleplugin-kvantum
+    ];
   };
 
   xdg.configFile = let
     css = pkgs.rice.compileSCSS ../../../gtk.scss;
+    # qt {{{
+    qtct = version:
+      pkgs.lib.generators.toINI {} {
+        Appearance = {
+          color_scheme_path = "${config.xdg.configHome}/qt${builtins.toString version}ct/colors/rice.conf";
+          custom_palette = true;
+          icon_theme = "breeze-dark";
+          standard_dialogs = "xdgdesktopportal";
+          style = "kvantum-dark";
+        };
+        Fonts =
+          if version == 6
+          then {
+            general = "\"${pkgs.rice.uiFont},11,-1,5,400,0,0,0,0,0,0,0,0,0,0,1\"";
+            fixed = "\"${pkgs.rice.monoFont},11,-1,5,400,0,0,0,0,0,0,0,0,0,0,1\"";
+          }
+          else {
+            general = "${pkgs.rice.uiFont},12,-1,5,50,0,0,0,0,0";
+            fixed = "${pkgs.rice.monoFont},11,-1,5,50,0,0,0,0,0,Regular";
+          };
+        Interface = {
+          activate_item_on_single_click = 0;
+          buttonbox_layout = 0;
+          cursor_flash_time = 1000;
+          dialog_buttons_have_icons = 2;
+          double_click_interval = 400;
+          gui_effects = "@Invalid()";
+          keyboard_scheme = 2;
+          menus_have_icons = true;
+          show_shortcuts_in_context_menus = true;
+          stylesheets = "@Invalid()";
+          toolbutton_style = 4;
+          underline_shortcut = 1;
+          wheel_scroll_lines = 3;
+        };
+        SettingsWindow.geometry = "@ByteArray(\\x1\\xd9\\xd0\\xcb\\0\\x3\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\x2\\xde\\0\\0\\x4\\b\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\x2\\xde\\0\\0\\x4\\b\\0\\0\\0\\0\\0\\0\\0\\0\\a\\x80\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\x2\\xde\\0\\0\\x4\\b)";
+        Troubleshooting = {
+          force_raster_widgets = 1;
+          ignored_applications = "@Invalid()";
+        };
+      };
+
+    qtColorScheme = pkgs.lib.generators.toINI {} {
+      ColorScheme = let
+        concat = pkgs.lib.concatMapStringsSep "," (x: "#ff" + (pkgs.lib.removePrefix "#" x));
+      in
+        with pkgs.rice; rec {
+          active_colors = concat [
+            base05 # window text
+            base00 # button bg
+            base06 # bright
+            base04 # less bright
+            base00 # dark
+            base01 # less dark
+            base05 # normal text
+            base06 # bright text
+            base05 # button text
+            base00 # normal bg
+            base10 # window
+            base00 # shadow
+            base0F # highlight
+            base00 # highlighted text
+            base0F # link
+            base0E # visited link
+            base02 # alt bg
+            base05 # default
+            base02 # tooltip bg
+            base05 # tooltip text
+            base03 # placeholder text
+            base0F # accent
+          ];
+          inactive_colors = active_colors;
+          disabled_colors = concat [
+            base03 # window text
+            base00 # button bg
+            base06 # bright
+            base04 # less bright
+            base00 # dark
+            base01 # less dark
+            base03 # normal text
+            base06 # bright text
+            base03 # button text
+            base00 # normal bg
+            base00 # window
+            base00 # shadow
+            base0F # highlight
+            base00 # highlighted text
+            base0F # link
+            base0E # visited link
+            base00 # alt bg
+            base05 # default
+            base02 # tooltip bg
+            base05 # tooltip text
+            base03 # placeholder text
+            base0F # accent
+          ];
+        };
+    };
+    # }}}
   in {
     "keepmenu/config.ini".text = lib.generators.toINI {} {
       dmenu.dmenu_command = "rofi -dmenu";
@@ -171,254 +273,27 @@
 
     "gtk-4.0/gtk.css".source = css;
     "gtk-3.0/gtk.css".source = css;
+
+    "qt6ct/qt6ct.conf".text = qtct 6;
+    "qt6ct/colors/rice.conf".text = qtColorScheme;
+    "qt5ct/qt5ct.conf".text = qtct 5;
+    "qt5ct/colors/rice.conf".text = qtColorScheme;
+    "Kvantum/KvLibadwaita".source = flake.inputs.kvlibadwaita + "/src/KvLibadwaita";
+    "Kvantum/kvantum.kvconfig".text = lib.generators.toINI {} {General.theme = "KvLibadwaitaDark";};
   };
 
   xdg.portal.extraPortals = with pkgs; [xdg-desktop-portal-gtk];
 
-  programs = {
-    qutebrowser = {
-      # {{{
-      enable = config.hostname == "thonkpad";
-      searchEngines = {
-        DEFAULT = "https://www.startpage.com/sp/search?query={}";
-        g = "https://www.google.com/search?q={}";
-        a = "https://wiki.archlinux.org/?search={}";
-        n = "https://nixos.wiki/index.php?search={}";
-      };
-      settings = {
-        changelog_after_upgrade = "patch";
-        completion.timestamp_format = "%A %d %B %T";
-        confirm_quit = ["downloads"];
-        content = {
-          blocking.method = "both";
-          pdfjs = true;
-        };
-        downloads.position = "bottom";
-        fonts = {
-          default_family = pkgs.rice.uiFont;
-          default_size = "14px";
-          hints = pkgs.rice.monoFont;
-        };
-        hints.leave_on_load = true;
-        new_instance_open_target = "tab-bg";
-        qt.highdpi = true;
-        scrolling.smooth = true;
-        session.lazy_restore = true;
-        statusbar.widgets = [
-          "progress"
-          "keypress"
-          "url"
-        ];
-        tabs = {
-          last_close = "startpage";
-          position = "left";
-          title.format = "{audio}{private}{current_title}";
-        };
-        url = {
-          default_page = "https://www.startpage.com";
-          open_base_url = true;
-          start_pages = "https://www.startpage.com";
-        };
-        window = {
-          hide_decoration = true;
-          title_format = "{audio}{private}{current_title}";
-          transparent = true;
-        };
-        colors = let
-          blank = "#00000000";
-        in
-          with pkgs.rice; {
-            # {{{
-            completion = {
-              fg = base05;
-              even.bg = base01;
-              odd.bg = base01;
-              category = {
-                bg = base02;
-                fg = base05;
-                border = {
-                  bottom = blank;
-                  top = blank;
-                };
-              };
-              item.selected = {
-                bg = base0F;
-                fg = base00;
-                match.fg = base00;
-                border = {
-                  bottom = blank;
-                  top = blank;
-                };
-              };
-              match.fg = base0F;
-              scrollbar = {
-                bg = base01;
-                fg = base0F;
-              };
-            };
-            contextmenu = {
-              disabled = {
-                bg = blank;
-                fg = base03;
-              };
-              menu = {
-                bg = base02;
-                fg = base05;
-              };
-              selected = {
-                bg = base0F;
-                fg = base00;
-              };
-            };
-            downloads = {
-              bar.bg = base10;
-              error = {
-                bg = base08;
-                fg = base00;
-              };
-              start = {
-                bg = base00;
-                fg = base08;
-              };
-              system = {
-                bg = "none";
-                fg = "none";
-              };
-            };
-            hints = {
-              bg = base02;
-              fg = base05;
-              match.fg = base0F;
-            };
-            keyhint = {
-              bg = base02;
-              fg = base05;
-              suffix.fg = base0F;
-            };
-            messages = {
-              error = {
-                bg = base08;
-                fg = base00;
-                border = base08;
-              };
-              info = {
-                bg = base0D;
-                fg = base00;
-                border = base0D;
-              };
-              warning = {
-                bg = base09;
-                fg = base00;
-                border = base09;
-              };
-            };
-            prompts = {
-              bg = base02;
-              fg = base05;
-              border = blank;
-              selected = {
-                bg = base0F;
-                fg = base00;
-              };
-            };
-            statusbar = {
-              caret = {
-                bg = base0A;
-                fg = base00;
-                selection = {
-                  bg = base09;
-                  fg = base00;
-                };
-              };
-              command = {
-                bg = base00;
-                fg = base05;
-                private = {
-                  bg = base00;
-                  fg = base05;
-                };
-              };
-              insert = {
-                bg = base0B;
-                fg = base00;
-              };
-              normal = {
-                bg = base00;
-                fg = base04;
-              };
-              passthrough = {
-                bg = base0B;
-                fg = base00;
-              };
-              private = {
-                bg = base0D;
-                fg = base00;
-              };
-              progress.bg = base0F;
-              url = {
-                fg = base05;
-                hover.fg = base0F;
-                success.http.fg = base0F;
-                success.https.fg = base0F;
-                warn.fg = base08;
-              };
-            };
-            tabs = {
-              bar.bg = base10;
-              even = {
-                bg = base00;
-                fg = base05;
-              };
-              odd = {
-                bg = base00;
-                fg = base05;
-              };
-              indicator = {
-                error = base08;
-                start = base01;
-                system = "none";
-              };
-              pinned = {
-                even = {
-                  bg = base02;
-                  fg = base05;
-                };
-                odd = {
-                  bg = base02;
-                  fg = base05;
-                };
-                selected = {
-                  even = {
-                    bg = base0F;
-                    fg = base00;
-                  };
-                  odd = {
-                    bg = base0F;
-                    fg = base00;
-                  };
-                };
-              };
-              selected = {
-                even = {
-                  bg = base0F;
-                  fg = base00;
-                };
-                odd = {
-                  bg = base0F;
-                  fg = base00;
-                };
-              };
-            };
-            webpage = {
-              bg = base00;
-              preferred_color_scheme = "dark";
-            };
-          };
-        # }}}
-      };
+  xdg.mimeApps = rec {
+    enable = true;
+    associations.added = defaultApplications;
+    defaultApplications = {
+      "application/pdf" = "org.pwmt.zathura.desktop";
+      "image/vnd.djvu" = "org.pwmt.zathura.desktop";
     };
-    # }}}
+  };
 
+  programs = {
     mpv = {
       # {{{
       enable = true;
@@ -433,7 +308,7 @@
       config = {
         ao = "pipewire";
         border = false;
-        hwdec = "auto-safe";
+        hwdec = "vdpau";
         osd-bar = false;
         profile = "sw-fast";
         save-position-on-quit = true;
@@ -635,7 +510,6 @@
       plugins = with pkgs.obs-studio-plugins; [
         wlrobs
         obs-gstreamer
-        looking-glass-obs
       ];
     };
   };
@@ -647,26 +521,26 @@
   };
 
   # polkit {{{
-  systemd.user.services.polkit-gnome-authentication-agent-1 = {
-    Unit = {
-      Description = "polkit-gnome-authentication-agent-1";
-      After = ["graphical-session.target"];
-    };
-
-    Install = {
-      WantedBy = ["graphical-session.target"];
-      Wants = ["graphical-session.target"];
-      After = ["graphical-session.target"];
-    };
-
-    Service = {
-      Type = "simple";
-      ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
-      Restart = "on-failure";
-      RestartSec = 1;
-      TimeoutStopSec = 10;
-    };
-  };
+  # systemd.user.services.polkit-gnome-authentication-agent-1 = {
+  #   Unit = {
+  #     Description = "polkit-gnome-authentication-agent-1";
+  #     After = ["graphical-session.target"];
+  #   };
+  #
+  #   Install = {
+  #     WantedBy = ["graphical-session.target"];
+  #     Wants = ["graphical-session.target"];
+  #     After = ["graphical-session.target"];
+  #   };
+  #
+  #   Service = {
+  #     Type = "simple";
+  #     ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+  #     Restart = "on-failure";
+  #     RestartSec = 1;
+  #     TimeoutStopSec = 10;
+  #   };
+  # };
   # }}}
 
   fonts.fontconfig = {

@@ -169,7 +169,9 @@
                                                                                                               :url ""}
                                                                                                        :schemas (schemastore.yaml.schemas)}})))})
                                       :capabilities (let [blink (require :blink-cmp)]
-                                                      (blink.get_lsp_capabilities (vim.lsp.protocol.make_client_capabilities)))
+                                                      (merge! (vim.lsp.protocol.make_client_capabilities)
+                                                              (blink.get_lsp_capabilities {}
+                                                                                          false)))
                                       :mappings {:n {:gx {1 #(let [lsplinks (require :lsplinks)]
                                                                (lsplinks.gx))
                                                           :cond :textDocument/documentLink}}}
@@ -203,8 +205,8 @@
                                                 :ruff
                                                 :rust_analyzer
                                                 :slint_lsp
-                                                :tailwindcss
                                                 :taplo
+                                                :tinymist
                                                 :ts_ls
                                                 :yamlls
                                                 :zls]
@@ -214,15 +216,17 @@
                                                                                                                     :case]}}}}
                                                :ltex {:settings {:ltex {:additionalRules {:enablePickyRules true
                                                                                           :motherTongue :pl-PL}}}
-                                                      :filetypes [:markdown
+                                                      :filetypes [:html
+                                                                  :markdown
                                                                   :org
-                                                                  :rst
-                                                                  :tex
                                                                   :pandoc
                                                                   :rmd
-                                                                  :html
+                                                                  :rst
+                                                                  :tex
+                                                                  :typst
                                                                   :xhtml]}
-                                               :nil_ls {:settings {:nil {:formatting {:command [:alejandra]}}}}
+                                               :neocmake {:init_options {:format {:enable true}
+                                                                         :lint {:enable true}}}
                                                :nixd {:settings {:nixd {:formatting {:command [:alejandra]}
                                                                         :options {:nixos {:expr (.. "(builtins.getFlake \"/home/bandithedoge/dotfiles\").nixosConfigurations."
                                                                                                     (vim.fn.hostname)
@@ -231,7 +235,8 @@
                                                                                   :flake-parts {:expr "(builtins.getFlake \"/home/bandithedoge/dotfiles\").debug.options"}
                                                                                   :flake-parts2 {:expr "(builtins.getFlake \"/home/bandithedoge/dotfiles\").currentSystem.options"}}}}
                                                       :cmd [:nixd
-                                                            :--semantic-tokens=true]}}
+                                                            :--semantic-tokens=true]}
+                                               :tinymist {:settings {:formatterMode :typstyle}}}
                                       :on_attach #(let [navic (require :nvim-navic)]
                                                     (when ($1.supports_method :textDocument/documentSymbol)
                                                       (navic.attach $1 $2)))}})

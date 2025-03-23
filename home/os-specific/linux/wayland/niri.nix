@@ -68,6 +68,17 @@
           left = 15;
           right = 15;
         };
+        tab-indicator = {
+          position = "top";
+          place-within-column = true;
+        };
+        shadow = {
+          enable = true;
+          offset = {
+            x = 0;
+            y = 0;
+          };
+        };
       };
 
       window-rules = [
@@ -178,6 +189,7 @@
         "Mod+r".action = switch-preset-column-width;
         "Mod+Comma".action = consume-window-into-column;
         "Mod+Period".action = expel-window-from-column;
+        "Mod+g".action = toggle-column-tabbed-display;
 
         "Mod+WheelScrollDown".action = focus-workspace-down;
         "Mod+WheelScrollUp".action = focus-workspace-up;

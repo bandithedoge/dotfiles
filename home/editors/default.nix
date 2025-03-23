@@ -9,10 +9,6 @@
     sessionVariables.EDITOR = "nvim";
     packages = with pkgs; [
       # {{{
-      checkmake
-      editorconfig-checker
-      # snyk
-
       # rust
       rust-analyzer
       rustfmt
@@ -33,9 +29,7 @@
       bandithedoge.nodePackages.emmet-language-server
       bandithedoge.nodePackages.tailwindcss-language-server
       bun
-      nodePackages.pnpm
       nodePackages.stylelint
-      nodePackages.typescript
       nodePackages.typescript-language-server
       nodePackages.vscode-langservers-extracted
       nodejs
@@ -45,8 +39,6 @@
 
       # nix
       alejandra
-      manix
-      # nil
       nixd
       statix
 
@@ -55,26 +47,18 @@
       fennel
       fnlfmt
       luajit
-      luajitPackages.luacheck
-      luarocks
-      selene
       stylua
       sumneko-lua-language-server
 
       # c
       bandithedoge.mesonlsp-bin
-      clang
       clang-tools
       cmake
-      cmake-format
       cmake-lint
-      gdb
       lldb
+      meson
       neocmakelsp
       ninja
-      qt6.qtdeclarative
-      qt6.qttools
-      vscode-extensions.vadimcn.vscode-lldb.adapter
 
       # nim
       bandithedoge.nimlangserver
@@ -86,8 +70,6 @@
       haskell-language-server
       haskellPackages.cabal-fmt
       haskellPackages.cabal-install
-      haskellPackages.haskell-debug-adapter
-      haskellPackages.hoogle
       haskellPackages.stack
 
       # yaml
@@ -100,7 +82,9 @@
       # writing
       ltex-ls
       marksman
+      tinymist
       typst
+      typstyle
 
       # faust
       faust
@@ -156,11 +140,6 @@
             popup-nvim
             sqlite-lua
 
-            # dap
-            nvim-dap
-            nvim-dap-ui
-            nvim-dap-virtual-text
-
             which-key-nvim
 
             # language-specific
@@ -178,6 +157,7 @@
             rasi-vim
             SchemaStore-nvim
             tree-sitter-hypr
+            typst-preview-nvim
             vim-coffee-script
             vim-faust
             vim-just

@@ -1,46 +1,16 @@
 {pkgs, ...}: {
   home = {
     packages = with pkgs; [
-      (pkgs.lutris.override {
-        extraLibraries = pkgs':
-          with pkgs'; [
-            at-spi2-atk
-            dconf
-            fribidi
-            gst_all_1.gst-plugins-bad
-            gst_all_1.gst-plugins-good
-            gst_all_1.gst-plugins-ugly
-            gst_all_1.gstreamer
-            libgudev
-            libvdpau
-            nspr
-            pango
-            pixman
-            speex
-            xorg.libXScrnSaver
-            xorg.libXdamage
-            xorg.libXfixes
-            xorg.libXft
-            xorg.libXtst
-          ];
-        extraPkgs = pkgs':
-          with pkgs'; [
-            xorg.xmessage
-          ];
-      })
+      lutris
       bandithedoge.helion-bin
       bandithedoge.nugget-doom
-      bandithedoge.sgdboop-bin
+      bandithedoge.vkdoom
       doomrunner
-      gzdoom
-      limo
       pcsx2
       prismlauncher
       umu-launcher
       vulkanPackages_latest.vulkan-tools
-      woof-doom
     ];
-    # sessionVariables.PROTONPATH = pkgs.proton-cachyos + "/share/steam/compatibilitytools.d/proton-cachyos";
   };
 
   services.flatpak = {
@@ -59,7 +29,17 @@
         appId = "moe.launcher.the-honkers-railway-launcher";
         origin = "launcher.moe";
       }
+      {
+        appId = "org.openmw.OpenMW";
+        origin = "flathub-beta";
+      }
     ];
+    overrides = {
+      "org.openmw.OpenMW" = {
+        Context.sockets = ["wayland" "!x11" "!fallback-x11"];
+        Environment.OSG_VERTEX_BUFFER_HINT = "VERTEX_BUFFER_OBJECT";
+      };
+    };
   };
 
   programs.mangohud = {

@@ -5,18 +5,9 @@
       protontricks.enable = true;
       remotePlay.openFirewall = true;
       package = pkgs.steam.override {
-        extraLibraries = pkgs:
-          with pkgs; [
-            xz
-            openssl
-            gst_all_1.gstreamer
-            gst_all_1.gst-plugins-bad
-            gst_all_1.gst-plugins-ugly
-            gst_all_1.gst-plugins-good
-          ];
-        extraPreBwrapCmds = "touch /etc/NIXOS";
         # https://github.com/NixOS/nixpkgs/issues/338266#issuecomment-2419568331
         extraBwrapArgs = ["--unsetenv TZ"];
+        extraArgs = "-no-cef-sandbox";
       };
       extraCompatPackages = with pkgs; [
         proton-ge-custom

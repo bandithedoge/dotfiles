@@ -19,13 +19,10 @@
       (writeScriptBin "nust" (builtins.readFile ../../justfile))
       age
       aria
-      broot
-      chafa
       comma
       fd
       ffmpeg
       file
-      hactool
       home-manager
       hyperfine
       imagemagickBig
@@ -40,7 +37,6 @@
       nurl
       ouch
       pandoc
-      patchelf
       rclone
       ripgrep
       sops
@@ -71,111 +67,6 @@
 
   xdg.configFile = {
     "rice.json".text = builtins.toJSON (pkgs.lib.filterAttrsRecursive (_: v: !builtins.isFunction v) pkgs.rice);
-
-    # broot {{{
-    "broot/conf.toml".source = (pkgs.formats.toml {}).generate "broot-config" {
-      modal = true;
-      default_flags = "gh";
-      skin = let
-        color = c: "rgb(${pkgs.colors.conversions.hexToRGBString ", " (pkgs.lib.removePrefix "#" c)})";
-      in
-        with pkgs.rice; {
-          # {{{
-          default = "${color base05} ${color base00}";
-          tree = "${color base03} none";
-          file = "${color base05} none";
-          directory = "${color base0D} none bold";
-          exe = "${color base0B} none bold";
-          link = "${color base0E} none";
-          perm__ = "${color base02} none";
-          perm_r = "${color base0B} none";
-          perm_w = "${color base09} none";
-          perm_x = "${color base0E} none";
-          owner = "${color base0C} none";
-          group = "${color base0A} none";
-          count = "${color base03} none";
-          dates = "${color base03} none";
-          content_match = "${color base0F} none";
-          git_branch = "${color base05} none";
-          git_insertions = "${color base0B} none";
-          git_deletions = "${color base08} none";
-          git_status_current = "${color base05} none";
-          git_status_modified = "${color base09} none";
-          git_status_new = "${color base0B} none";
-          git_status_ignored = "${color base03} none";
-          git_status_conflicted = "${color base0E} none";
-          git_status_other = "${color base0D} none";
-          selected_line = "none ${color base10}";
-          char_match = "none ${color base0A} bold";
-          file_error = "${color base08} none";
-          flag_label = "${color base03} none";
-          flag_value = "${color base05} none";
-          input = "${color base04} none";
-          status_error = "${color base00} ${color base08}";
-          status_job = "${color base00} ${color base0F}";
-          status_normal = "${color base04} ${color base02}";
-          status_italic = "${color base0F} ${color base02}";
-          status_bold = "${color base0F} ${color base02} bold";
-          status_code = "${color base03} ${color base02}";
-          status_ellipsis = "${color base03} ${color base02}";
-          purpose_normal = "${color base05} ${color base01}";
-          purpose_italic = "${color base0F} ${color base01}";
-          purpose_bold = "${color base0F} ${color base01} bold";
-          purpose_ellipsis = "${color base03} ${color base01}";
-          scrollbar_track = "${color base01} none";
-          scrollbar_thumb = "${color base0F} none";
-          help_paragraph = "${color base0F} ${color base02} bold";
-          help_bold = "${color base0F} none bold";
-          help_italic = "${color base0F} none";
-          help_code = "${color base03} ${color base01}";
-          help_headers = "${color base0F} none bold";
-          help_table_border = "${color base03} none";
-          preview_title = "${color base05} ${color base02} bold";
-          preview = "${color base05} ${color base10}";
-          preview_line_number = "${color base03} ${color base02}";
-          preview_match = "none ${color base0F}";
-          hex_null = "${color base03} none";
-          hex_ascii_graphic = "${color base0C} none";
-          hex_ascii_whitespace = "${color base0A} none";
-          hex_ascii_other = "${color base0B} none";
-          hex_non_ascii = "${color base08} none";
-          staging_area_title = "${color base0F} ${color base02} bold";
-          mode_command_mark = "${color base00} ${color base0F} bold";
-        }; # }}}
-      verbs = [
-        {
-          invocation = "edit";
-          key = "e";
-          execution = "$EDITOR {file}";
-          leave_broot = false;
-        }
-        {
-          invocation = "dragon";
-          external = "dragon {file}";
-          leave_broot = false;
-        }
-        {
-          key = "q";
-          execution = ":quit";
-        }
-        {
-          key = "p";
-          execution = ":toggle_preview";
-        }
-        {
-          key = "ctrl-h";
-          execution = ":panel_left";
-        }
-        {
-          key = "ctrl-l";
-          execution = ":panel_right";
-        }
-        {
-          key = ".";
-          execution = ":toggle_hidden";
-        }
-      ];
-    }; #}}}
   };
 
   programs = {
@@ -645,8 +536,12 @@
       };
     };
 
+    gh = {
+      enable = true;
+      settings.git_protocol = "ssh";
+    };
+
     dircolors.enable = true;
-    gh.enable = true;
     git-credential-oauth.enable = true;
     info.enable = true;
     nh.enable = true;

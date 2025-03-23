@@ -23,4 +23,9 @@ final: prev: {
     NIX_CFLAGS_COMPILE = ["-fno-fast-math"];
     inherit (prev.gamescope) postPatch;
   });
+
+  equibop = prev.equibop.override {
+    withTTS = false;
+    withMiddleClickScroll = true;
+  };
 }

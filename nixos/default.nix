@@ -38,10 +38,12 @@
     # };
 
     ananicy = {
-      enable = true;
+      enable = false;
       package = pkgs.ananicy-cpp;
       rulesProvider = pkgs.ananicy-rules-cachyos_git;
     };
+
+    journald.extraConfig = "SystemMaxUse=50M";
 
     devmon.enable = true;
     irqbalance.enable = true;
@@ -100,6 +102,7 @@
   };
 
   boot = {
+    kernelPackages = pkgs.linuxPackages_cachyos;
     tmp.cleanOnBoot = true;
     # https://github.com/CachyOS/CachyOS-Settings/blob/master/usr/lib/sysctl.d/99-cachyos-settings.conf
     kernel.sysctl = {
@@ -122,9 +125,11 @@
       "net.ipv4.tcp_slow_start_after_idle" = false;
       "net.ipv4.tcp_syncookies" = true;
       "net.ipv4.tcp_timestamps" = false;
+      "vm.dirty_background_bytes" = 67108864;
+      "vm.dirty_bytes" = 268435456;
       "vm.dirty_writeback_centisecs" = 1500;
       "vm.page-cluster" = 1;
-      "vm.swappiness" = pkgs.lib.mkForce 40;
+      "vm.vfs_cache_pressure" = 50;
     };
   };
 
@@ -136,8 +141,15 @@
     defaultNetwork.settings.dns_enabled = true;
   };
 
-  systemd.coredump.extraConfig = ''
-    Storage=none
-    ProcessSizeMax=0
-  '';
+  systemd = {
+    extraConfig = ''
+      DefaultTimeoutStartSec=15s
+      DefaultTimeoutStopSec=10s
+      DefaultLimitNOFILE=2048:2097152
+    '';
+    coredump.extraConfig = ''
+      Storage=none
+      ProcessSizeMax=0
+    '';
+  };
 }

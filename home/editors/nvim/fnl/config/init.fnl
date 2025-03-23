@@ -81,8 +81,7 @@
   (set event.mappings.LazyFile
        {:id :LazyFile :event [:BufReadPost :BufNewFile :BufReadPre]})
   (tset event :mappings "User LazyFile" event.mappings.LazyFile)
-  (lazy.setup [(require :config.dap)
-               (require :config.keybindings)
+  (lazy.setup [(require :config.keybindings)
                (require :config.languages)
                (require :config.lsp)
                (require :config.plugins.blink)

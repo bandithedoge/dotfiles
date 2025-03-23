@@ -317,12 +317,12 @@
   };
   xdg = {
     configFile = {
-      "vesktop/settings.json".text = let
+      "equibop/settings.json".text = let
         color = c: "rgb(${pkgs.colors.conversions.hexToRGBString ", " (pkgs.lib.removePrefix "#" c)})";
       in
         with pkgs.rice;
           builtins.toJSON {
-            minimizeToTray = "on";
+            minimizeToTray = true;
             discordBranch = "stable";
             arRPC = "on";
             splashColor = color base05;
@@ -331,9 +331,10 @@
             enableMenu = true;
             hardwareAcceleration = false;
             disableMinSize = true;
+            trayColor = pkgs.lib.removePrefix "#" base0F;
           };
 
-      "Vencord/settings/quickCss.css".source = pkgs.rice.compileSCSS ./discord.scss;
+      "equibop/settings/quickCss.css".source = pkgs.rice.compileSCSS ./discord.scss;
 
       "discord/settings.json".text = builtins.toJSON {
         SKIP_HOST_UPDATE = true;

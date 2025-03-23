@@ -109,6 +109,12 @@
  ;;
  (use! :luckasRanarison/tree-sitter-hypr)
  ;;
+ (let [ft :typst]
+   (use! :chomosuke/typst-preview.nvim
+         {: ft
+          :keys [(key! :<localleader>lp :<cmd>TypstPreview<cr> {:desc :Preview : ft})]
+          :opts {}}))
+ ;;
  (use! :kchmck/vim-coffee-script)
  ;;
  (use! :gmoe/vim-faust)

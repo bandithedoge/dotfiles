@@ -26,15 +26,7 @@
       extraCss = builtins.readFile (compileSCSS ../gtk.scss);
     };
 
-    # hyprland = {
-    #   enable = true;
-    #   withUWSM = true;
-    #   xwayland.enable = false;
-    # };
-
     niri.enable = true;
-    gnome-disks.enable = true;
-    ns-usbloader.enable = true;
     system-config-printer.enable = true;
   };
 
@@ -53,11 +45,13 @@
   fonts = {
     enableDefaultPackages = true;
     packages = with pkgs; [
+      corefonts
       nerd-fonts.symbols-only
       rice.monoFontPackage
       rice.uiFontPackage
       roboto-slab
       twemoji-color-font
+      vista-fonts
     ];
     fontconfig = {
       enable = true;
@@ -81,31 +75,25 @@
     };
   };
 
-  security.pam = {
-    services = {
-      waylock = {};
-      gtklock = {};
+  security = {
+    soteria.enable = true;
+    pam = {
+      services.gtklock = {};
+      loginLimits = [
+        {
+          domain = "*";
+          type = "hard";
+          item = "nofile";
+          value = "2097152";
+        }
+        {
+          domain = "@realtime";
+          type = "-";
+          item = "memlock";
+          value = "unlimited";
+        }
+      ];
     };
-    loginLimits = [
-      {
-        domain = "*";
-        type = "hard";
-        item = "nofile";
-        value = "2097152";
-      }
-      {
-        domain = "@realtime";
-        type = "-";
-        item = "rtprio";
-        value = "99";
-      }
-      {
-        domain = "@realtime";
-        type = "-";
-        item = "memlock";
-        value = "unlimited";
-      }
-    ];
   };
 
   hardware.graphics = {
