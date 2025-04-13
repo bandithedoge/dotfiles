@@ -1,27 +1,36 @@
 @use "sass:color";
 
-@function col($c) {
-    @return color.red($c), color.green($c), color.blue($c);
+@import url(https://raw.githubusercontent.com/refact0r/midnight-discord/refs/heads/master/build/midnight.css);
+
+body {
+    --font: #{$uiFont}, sans-serif;
+
+    --gap: 5px;
+    --divider-thickness: 2px;
+
+    --animations: on;
+    --list-item-transition: 0.2s ease;
+    --dms-icon-svg-transition: 0.4s ease;
+
+    --move-top-bar-buttons: on;
+    --custom-app-top-bar-height: 24px;
+
+    --custom-window-controls: off;
+
+    --dms-icon: default;
+
+    --dms-background: off;
+    --background-image: off;
+
+    --transparency-tweaks: off;
+    --remove-bg-layer: off;
+    --panel-blur: off;
+
+    --small-user-panel: on;
 }
 
-@import url(https://github.com/refact0r/midnight-discord/raw/refs/heads/master/midnight.theme.css);
-
 :root {
-    --font: #{$uiFont};
-    --corner-text: "Vesktop";
-
-    --online-indicator: #{$base0B};
-    --dnd-indicator: #{$base08};
-    --idle-indicator: #{$base0A};
-    --streaming-indicator: #{$base0E};
-
-    --accent-1: #{$base0F};
-    --accent-2: #{$base0F};
-    --accent-3: #{$base0F};
-    --accent-4: #{$base0F};
-    --accent-5: #{$base0F};
-    --mention: #{color.adjust($base0F, $alpha: -0.95)};
-    --mention-hover: #{color.adjust($base0F, $alpha: -0.9)};
+    --colors: on;
 
     --text-0: #{$base00};
     --text-1: #{$base04};
@@ -36,30 +45,59 @@
     --bg-4: #{$base00};
     --hover: #{$base02};
     --active: #{$base02};
-    --message-hover: #{color.adjust($base02, $alpha: -0.8)};
+    --active-2: #{$base02};
+    --message-hover: #{color.adjust($base02, $alpha: -0.5)};
 
-    --spacing: 6px;
+    --accent-1: #{$base0F};
+    --accent-2: #{$base0F};
+    --accent-3: #{$base0F};
+    --accent-4: #{$base0F};
+    --accent-5: #{$base0F};
+    --accent-new: #{$base08};
+    --mention: #{color.adjust($base0F, $alpha: -0.95)};
+    --mention-hover: #{color.adjust($base0F, $alpha: -0.9)};
+    --reply: #{color.adjust($base0F, $alpha: -0.95)};
+    --reply-hover: #{color.adjust($base0F, $alpha: -0.9)};
 
-    --list-item-transition: 0.2s ease;
-    --unread-bar-transition: 0.2s ease;
-    --moon-spin-transition: 0.4s ease;
-    --icon-spin-transition: 1s ease;
+    --online: #{$base0B};
+    --dnd: #{$base08};
+    --idle: #{$base0A};
+    --streaming: #{$base0E};
+    --offline: #{$base03};
 
-    --roundness-xl: 10px;
-    --roundness-l: 20px;
-    --roundness-m: 16px;
-    --roundness-s: 12px;
-    --roundness-xs: 10px;
-    --roundness-xxs: 8px;
+    --border-light: #{$base02};
+    --border: #{$base00};
+    --button-border: #{$base02};
 
-    --discord-icon: block;
-    --moon-icon: none;
+    --red-1: #{$base08};
+    --red-2: #{$base08};
+    --red-3: #{$base08};
+    --red-4: #{$base08};
+    --red-5: #{$base08};
 
-    --login-bg-filter: saturate(0.3) hue-rotate(-15deg) brightness(0.4);
-    --green-to-accent-3-filter: hue-rotate(56deg) saturate(1.43);
-    --blurple-to-accent-3-filter: hue-rotate(304deg) saturate(0.84)
-        brightness(1.2);
+    --green-1: #{$base0B};
+    --green-2: #{$base0B};
+    --green-3: #{$base0B};
+    --green-4: #{$base0B};
+    --green-5: #{$base0B};
 
-    --windows-nav: none;
-    --custom-nav: none;
+    --blue-1: #{$base0D};
+    --blue-2: #{$base0D};
+    --blue-3: #{$base0D};
+    --blue-4: #{$base0D};
+    --blue-5: #{$base0D};
+
+    --yellow-1: #{$base0A};
+    --yellow-2: #{$base0A};
+    --yellow-3: #{$base0A};
+    --yellow-4: #{$base0A};
+    --yellow-5: #{$base0A};
+
+    --purple-1: #{$base0E};
+    --purple-2: #{$base0E};
+    --purple-3: #{$base0E};
+    --purple-4: #{$base0E};
+    --purple-5: #{$base0E};
+
+    --radius-lg: 8px;
 }

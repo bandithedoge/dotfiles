@@ -6,7 +6,7 @@
 }: {
   home.packages = with pkgs; [
     ardour
-    bandithedoge.cardinal
+    # bandithedoge.cardinal
     bandithedoge.clap-info
     bandithedoge.partiels
     carla
@@ -18,8 +18,9 @@
     strawberry-qt6
 
     (bandithedoge.distrho-ports.override {plugins = ["vitalium"];})
-    (yabridge.override {wine = pkgs.wine-ge;})
-    (yabridgectl.override {wine = pkgs.wine-ge;})
+    (yabridge.override {inherit (pkgs) wine;})
+    (yabridgectl.override {inherit (pkgs) wine;})
+    aether-lv2
     bandithedoge.airwindows-consolidated
     bandithedoge.blepfx.crunchrr
     bandithedoge.blepfx.destruqtor
@@ -28,14 +29,6 @@
     bandithedoge.geonkick
     bandithedoge.gnomedistort2
     bandithedoge.guitarix-vst-bin
-    bandithedoge.igorski.darvaza
-    bandithedoge.igorski.delirion
-    bandithedoge.igorski.fogpad
-    bandithedoge.igorski.homecorrupter
-    bandithedoge.igorski.rechoir
-    bandithedoge.igorski.regrader
-    bandithedoge.igorski.transformant
-    bandithedoge.igorski.vstsid
     bandithedoge.ildaeil
     bandithedoge.ircam-vamp-plugins-bin
     bandithedoge.lamb-bin
@@ -51,10 +44,10 @@
     bandithedoge.sg-323
     bandithedoge.showmidi-bin
     bandithedoge.squeezer-bin
-    bandithedoge.tonelib.bassdrive
-    bandithedoge.tonelib.easycomp
-    bandithedoge.tonelib.noisereducer
-    bandithedoge.tonelib.tubewarmth
+    # bandithedoge.tonelib.bassdrive
+    # bandithedoge.tonelib.easycomp
+    # bandithedoge.tonelib.noisereducer
+    # bandithedoge.tonelib.tubewarmth
     bandithedoge.u-he.ace
     bandithedoge.u-he.bazille
     bandithedoge.u-he.colourcopy
@@ -82,6 +75,7 @@
     calf
     chow-tape-model
     dragonfly-reverb
+    lsp-plugins
   ];
 
   services.easyeffects.enable = true;

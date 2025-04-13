@@ -31,6 +31,7 @@
       just
       killall
       librespeed-cli
+      ncdu
       niv
       nix-output-monitor
       nix-prefetch
@@ -83,11 +84,11 @@
           name = x.pname;
           inherit (x) src;
         }) (with pkgs.fishPlugins; [
-          puffer
-          forgit
           autopair
+          done
+          forgit
           fzf-fish
-          colored-man-pages
+          puffer
         ]);
       functions = let
         mkNom = subc: {
@@ -542,7 +543,6 @@
     };
 
     dircolors.enable = true;
-    git-credential-oauth.enable = true;
     info.enable = true;
     nh.enable = true;
     nix-index.enable = true;

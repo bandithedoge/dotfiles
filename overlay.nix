@@ -28,4 +28,6 @@ final: prev: {
     withTTS = false;
     withMiddleClickScroll = true;
   };
+
+  wine = prev.wine-ge;
 }

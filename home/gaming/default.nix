@@ -1,11 +1,10 @@
 {pkgs, ...}: {
   home = {
     packages = with pkgs; [
-      lutris
-      bandithedoge.helion-bin
       bandithedoge.nugget-doom
       bandithedoge.vkdoom
       doomrunner
+      lutris
       pcsx2
       prismlauncher
       umu-launcher

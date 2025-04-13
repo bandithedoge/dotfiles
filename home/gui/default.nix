@@ -53,32 +53,6 @@
             ublock-origin
             violentmonkey
           ];
-          search = {
-            force = true;
-            default = "Startpage";
-            engines = {
-              "Nix Packages" = {
-                urls = [
-                  {
-                    template = "https://search.nixos.org/packages";
-                    params = [
-                      {
-                        name = "type";
-                        value = "packages";
-                      }
-                      {
-                        name = "query";
-                        value = "{searchTerms}";
-                      }
-                    ];
-                  }
-                ];
-
-                icon = "''${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-                definedAliases = ["@n"];
-              };
-            };
-          };
           settings = {
             "browser.autofocus" = false;
             "browser.newtabpage.activity-stream.improvesearch.handoffToAwesomebar" = false;
@@ -308,7 +282,7 @@
         ];
 
         linux-cgroup = "never";
-        gtk-single-instance = false;
+        gtk-single-instance = true;
         gtk-tabs-location = "bottom";
         adw-toolbar-style = "flat";
         class = "ghostty";

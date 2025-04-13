@@ -40,7 +40,7 @@
       rice.monoFontPackage
       rice.uiFontPackage
       telegram-desktop_git
-      wine-ge
+      wine
       winetricks
       wtype
       xdragon
@@ -52,7 +52,6 @@
     pointerCursor = {
       inherit (pkgs.rice.cursorTheme) package name size;
       gtk.enable = true;
-      hyprcursor.enable = true;
       x11.enable = true;
     };
   };
@@ -97,15 +96,9 @@
       "org.jdownloader.JDownloader".Context.filesystems = [
         "/mnt"
       ];
-      "dev.vencord.Vesktop".Context.filesystems = [
-        "host"
-        "xdg-config/vesktop"
-        "xdg-run/app/dev.vencord.Vesktop:create"
-      ];
     };
     packages = [
       "com.github.tchx84.Flatseal"
-      "dev.vencord.Vesktop"
       "org.gtk.Gtk3theme.adw-gtk3-dark"
       "org.jdownloader.JDownloader"
     ];
@@ -115,9 +108,6 @@
   systemd.user = {
     # HACK: https://github.com/nix-community/home-manager/issues/2659
     inherit (config.home) sessionVariables;
-    tmpfiles.rules = [
-      # "L %t/discord-ipc-0 - - - - .flatpak/dev.vencord.Vesktop/xdg-run/discord-ipc-0"
-    ];
   };
 
   # gtk {{{

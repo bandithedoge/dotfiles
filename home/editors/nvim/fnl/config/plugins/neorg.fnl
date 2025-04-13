@@ -5,7 +5,8 @@
                        (use! :nvim-neorg/lua-utils.nvim)
                        (use! :nvim-neotest/nvim-nio)
                        (use! :MunifTanjim/nui.nvim)
-                       (use! :pysan3/pathlib.nvim)]
+                       (use! :pysan3/pathlib.nvim)
+                       (use! :benlubas/neorg-interim-ls)]
         :ft :norg
         :opts {:load {:core.defaults {}
                       :core.esupports.metagen {:config {:type :auto
@@ -16,7 +17,6 @@
                       :core.integrations.treesitter {:config {:configure_parsers (not _G.USING_NIX)
                                                               :install_parsers (not _G.USING_NIX)}}
                       :core.keybinds {:config {:neorg_leader :<localleader>l}}
-                      :core.completion {:config {:engine :nvim-cmp}}
                       :core.dirman {:config {:workspaces {:school "~/sql"}
                                              :autochdir true}}
                       :core.export {}
@@ -31,4 +31,6 @@
                                                                                :rainbowcol3
                                                                                :rainbowcol4
                                                                                :rainbowcol5
-                                                                               :rainbowcol6]}}}}}}})]
+                                                                               :rainbowcol6]}}}}
+                      :core.completion {:config {:engine {:module_name :external.lsp-completion}}}
+                      :external.interim-ls {}}}})]

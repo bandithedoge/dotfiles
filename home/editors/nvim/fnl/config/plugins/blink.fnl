@@ -1,8 +1,8 @@
 (import-macros {: use! : tx!} :config.macros)
 
 [(use! :Saghen/blink.cmp
-       {:dependencies [(use! :saghen/blink.compat)
-                       (use! :rafamadriz/friendly-snippets)]
+       {:dependencies [(use! :rafamadriz/friendly-snippets)
+                       (use! :xzbdmw/colorful-menu.nvim {:opts {}})]
         :event [:InsertEnter :CmdlineEnter]
         :opts #{:keymap {:<C-Space> [:show
                                      :show_documentation
@@ -22,9 +22,7 @@
                                            :columns #(if (= $1.mode :cmdline)
                                                          [[:label]]
                                                          [(tx! :kind_icon
-                                                               :label
-                                                               :label_description
-                                                               {:gap 1})
+                                                               :label {:gap 1})
                                                           [:kind]])
                                            :components {:kind_icon {:ellipsis false
                                                                     :text #(let [icons (require :mini.icons)]
@@ -32,22 +30,21 @@
                                                                                           _)
                                                                                     (icons.get :lsp
                                                                                                $1.kind))
-                                                                             icon)}}}}
+                                                                             icon)}
+                                                        :label {:text #(let [colorful-menu (require :colorful-menu)]
+                                                                         (colorful-menu.blink_components_text $1))
+                                                                :highlight #(let [colorful-menu (require :colorful-menu)]
+                                                                              (colorful-menu.blink_components_highlight $1))}}}}
                              :documentation {:auto_show true
                                              :auto_show_delay_ms 0}}
                 :signature {:enabled true :window {:border :none}}
-                :fuzzy {:prebuilt_binaries {:download (not _G.USING_NIX)}}
+                :fuzzy {:prebuilt_binaries {:download (not _G.USING_NIX)}
+                        :sorts [:exact :score :sort_text]}
                 :sources {:default [:lsp :path :snippets]
-                          :per_filetype {:lua [:lazydev]
-                                         :norg [:neorg]
-                                         :org [:orgmode]}
+                          :per_filetype {:lua [:lazydev]}
                           :providers {:lazydev {:name :LazyDev
                                                 :module :lazydev.integrations.blink
                                                 :score_offset 100
-                                                :fallbacks [:lsp]}
-                                      :neorg {:name :neorg
-                                              :module :blink.compat.source}
-                                      :orgmode {:name :orgmode
-                                                :module :blink.compat.source}}}
+                                                :fallbacks [:lsp]}}}
                 :appearance {:use_nvim_cmp_as_default true
                              :nerd_font_variant :normal}}})]

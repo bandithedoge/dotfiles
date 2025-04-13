@@ -32,10 +32,8 @@
       nodePackages.stylelint
       nodePackages.typescript-language-server
       nodePackages.vscode-langservers-extracted
-      nodejs
       oxlint
       prettierd
-      yarn
 
       # nix
       alejandra
@@ -53,31 +51,21 @@
       # c
       bandithedoge.mesonlsp-bin
       clang-tools
-      cmake
       cmake-lint
       lldb
-      meson
       neocmakelsp
-      ninja
 
       # nim
       bandithedoge.nimlangserver
-      nim
 
       # haskell
       cabal2nix
-      ghc
       haskell-language-server
       haskellPackages.cabal-fmt
-      haskellPackages.cabal-install
-      haskellPackages.stack
 
       # yaml
       nodePackages.yaml-language-server
       actionlint
-
-      # dart
-      flutter
 
       # writing
       ltex-ls
@@ -86,16 +74,12 @@
       typst
       typstyle
 
-      # faust
-      faust
-
       # zig
       bandithedoge.zlint-bin
       zig
       zls
 
       # go
-      go
       gopls
 
       # toml
@@ -122,7 +106,12 @@
 
     extraConfig = "set runtimepath^=${./nvim}";
     extraPackages = with pkgs; [imagemagick];
-    extraLuaPackages = ps: with ps; [fennel];
+    extraLuaPackages = ps:
+      with ps; [
+        fennel
+        luautf8
+        sqlite
+      ];
     extraLuaConfig = let
       lazyPlugins =
         pkgs.linkFarm "lazy-plugins"
@@ -205,7 +194,7 @@
 
             # blink
             blink-cmp
-            blink-compat
+            colorful-menu-nvim
             friendly-snippets
 
             heirline-nvim
@@ -217,12 +206,14 @@
             nvim-window-picker
 
             neorg
+            neorg-interim-ls
 
             snacks-nvim
 
             # telescope
             dressing-nvim
             icon-picker-nvim
+            telescope-all-recent-nvim
             telescope-nvim
             telescope-zf-native-nvim
 

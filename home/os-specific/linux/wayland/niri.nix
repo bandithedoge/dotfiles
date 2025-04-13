@@ -82,6 +82,18 @@
       };
 
       window-rules = [
+        (with pkgs.rice; {
+          matches = [{is-window-cast-target = true;}];
+          focus-ring = {
+            active.color = base0E;
+            inactive.color = base03;
+          };
+          border.inactive.color = base03;
+          tab-indicator = {
+            active.color = base0E;
+            inactive.color = base03;
+          };
+        })
         {
           matches = [
             {
@@ -124,6 +136,13 @@
 
       layer-rules = [
         {
+          matches = [
+            {namespace = "waybar";}
+            {namespace = "rofi";}
+          ];
+          shadow.enable = true;
+        }
+        {
           matches = [{namespace = "^notifications$";}];
           block-out-from = "screencast";
         }
@@ -141,9 +160,7 @@
         "Mod+Ctrl+p".action.spawn = "keepmenu";
         "Mod+Ctrl+q".action.spawn = ["loginctl" "terminate-user" ""];
 
-        Print.action.spawn =
-          builtins.toString (pkgs.writeShellScript "screenshot"
-            "grimshot save area - | satty -f -");
+        Print.action = screenshot;
         "Shift+Print".action.spawn =
           builtins.toString (pkgs.writeShellScript "save-replay"
             "killall -SIGUSR1 gpu-screen-recorder && notify-send -u low 'GPU Screen Recorder' 'Replay saved' -i com.dec05eba.gpu_screen_recorder -a 'GPU Screen Recorder'");
@@ -187,6 +204,7 @@
         "Mod+t".action = toggle-window-floating;
         "Mod+f".action = fullscreen-window;
         "Mod+r".action = switch-preset-column-width;
+        "Mod+Shift+r".action = expand-column-to-available-width;
         "Mod+Comma".action = consume-window-into-column;
         "Mod+Period".action = expel-window-from-column;
         "Mod+g".action = toggle-column-tabbed-display;
@@ -203,15 +221,15 @@
         "Mod+7".action = focus-workspace 7;
         "Mod+8".action = focus-workspace 8;
         "Mod+9".action = focus-workspace 9;
-        "Mod+Shift+1".action = move-window-to-workspace 1;
-        "Mod+Shift+2".action = move-window-to-workspace 2;
-        "Mod+Shift+3".action = move-window-to-workspace 3;
-        "Mod+Shift+4".action = move-window-to-workspace 4;
-        "Mod+Shift+5".action = move-window-to-workspace 5;
-        "Mod+Shift+6".action = move-window-to-workspace 6;
-        "Mod+Shift+7".action = move-window-to-workspace 7;
-        "Mod+Shift+8".action = move-window-to-workspace 8;
-        "Mod+Shift+9".action = move-window-to-workspace 9;
+        "Mod+Shift+1".action = move-column-to-workspace 1;
+        "Mod+Shift+2".action = move-column-to-workspace 2;
+        "Mod+Shift+3".action = move-column-to-workspace 3;
+        "Mod+Shift+4".action = move-column-to-workspace 4;
+        "Mod+Shift+5".action = move-column-to-workspace 5;
+        "Mod+Shift+6".action = move-column-to-workspace 6;
+        "Mod+Shift+7".action = move-column-to-workspace 7;
+        "Mod+Shift+8".action = move-column-to-workspace 8;
+        "Mod+Shift+9".action = move-column-to-workspace 9;
       };
     };
   };

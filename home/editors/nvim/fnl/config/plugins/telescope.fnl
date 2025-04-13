@@ -16,7 +16,9 @@
                                                                                               " "
                                                                                               " "
                                                                                               " "
-                                                                                              " "]})}})})]
+                                                                                              " "]})}})})
+                       (use! :prochri/telescope-all-recent.nvim
+                             {:opts {:default {:sorting :recent :use_cwd false}}})]
         :cmd :Telescope
         :keys [(key! :<leader><space> "<cmd>Telescope commands<cr>"
                      {:desc "Enter command"})
