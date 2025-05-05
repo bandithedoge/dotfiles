@@ -303,6 +303,7 @@
       userName = "bandithedoge";
       userEmail = "bandithedoge@protonmail.com";
       ignores = ["*~"];
+      extraConfig.pull.rebase = true;
       lfs.enable = true;
       delta = {
         enable = true;

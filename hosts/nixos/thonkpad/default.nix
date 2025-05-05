@@ -9,9 +9,17 @@
   };
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_cachyos;
     kernelModules = ["kvm-intel"];
-    initrd.availableKernelModules = ["xhci_pci" "ehci_pci" "ahci" "usb_storage" "sd_mod" "sr_mod" "rtsx_pci_sdmmc"];
+    kernelParams = ["thinkpad_acpi.force_load=1"];
+    initrd.availableKernelModules = [
+      "ahci"
+      "ehci_pci"
+      "rtsx_pci_sdmmc"
+      "sd_mod"
+      "sr_mod"
+      "usb_storage"
+      "xhci_pci"
+    ];
     loader.systemd-boot.enable = true;
     supportedFilesystems = ["ntfs"];
     kernel.sysctl = {

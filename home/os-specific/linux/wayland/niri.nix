@@ -278,8 +278,9 @@
       Service = {
         Type = "notify";
         NotifyAccess = "all";
-        ExecStart = pkgs.lib.getExe pkgs.xwayland-satellite;
+        ExecStart = "${pkgs.lib.getExe pkgs.xwayland-satellite} :0";
         StandardOutput = "journal";
+        Restart = "on-failure";
       };
       Install.WantedBy = ["graphical-session.target"];
     };
