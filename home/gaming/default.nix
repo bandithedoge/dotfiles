@@ -117,5 +117,7 @@
       };
   };
 
-  xdg.dataFile."Steam/compatibilitytools.d/proton-ge-custom".source = pkgs.proton-ge-custom + "/bin";
+  xdg.dataFile = {
+    "Steam/compatibilitytools.d/proton-ge-custom".source = pkgs.proton-ge-custom + "/bin";
+  };
 }

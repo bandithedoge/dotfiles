@@ -11,6 +11,7 @@
       };
       extraCompatPackages = with pkgs; [
         proton-ge-custom
+        bandithedoge.proton-cachyos-bin
       ];
     };
 
@@ -19,20 +20,20 @@
       # capSysNice = true;
     };
 
-    # gamemode = {
-    #   enable = true;
-    #   settings = {
-    #     general = {
-    #       softrealtime = "auto";
-    #       renice = 10;
-    #     };
-    #     gpu = {
-    #       apply_gpu_optimisations = "accept-responsibility";
-    #       gpu_device = 0;
-    #       amd_performance_level = "high";
-    #     };
-    #   };
-    # };
+    gamemode = {
+      enable = true;
+      settings = {
+        general = {
+          softrealtime = "auto";
+          renice = 10;
+        };
+        gpu = {
+          apply_gpu_optimisations = "accept-responsibility";
+          gpu_device = 0;
+          amd_performance_level = "high";
+        };
+      };
+    };
   };
 
   security.pam.loginLimits = [

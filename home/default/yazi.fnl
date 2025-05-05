@@ -51,3 +51,4 @@
                                        :custom false
                                        :name :hovered_mime}]}}})
 
+(: (require :git) :setup)

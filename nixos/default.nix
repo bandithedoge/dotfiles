@@ -43,6 +43,16 @@
       rulesProvider = pkgs.ananicy-rules-cachyos_git;
     };
 
+    # https://github.com/CachyOS/CachyOS-Settings/tree/master/usr/lib/udev/rules.d
+    udev.extraRules = ''
+      KERNEL=="rtc0", GROUP="audio"
+      KERNEL=="hpet", GROUP="audio"
+
+      ACTION=="add", SUBSYSTEM=="scsi_host", KERNEL=="host*", \
+        ATTR{link_power_management_policy}=="*", \
+        ATTR{link_power_management_policy}="max_performance"
+    '';
+
     journald.extraConfig = "SystemMaxUse=50M";
 
     devmon.enable = true;
@@ -125,8 +135,8 @@
       "net.ipv4.tcp_slow_start_after_idle" = false;
       "net.ipv4.tcp_syncookies" = true;
       "net.ipv4.tcp_timestamps" = false;
-      "vm.dirty_background_bytes" = 67108864;
-      "vm.dirty_bytes" = 268435456;
+      "vm.dirty_background_ratio" = 5;
+      "vm.dirty_ratio" = 10;
       "vm.dirty_writeback_centisecs" = 1500;
       "vm.page-cluster" = 1;
       "vm.vfs_cache_pressure" = 50;

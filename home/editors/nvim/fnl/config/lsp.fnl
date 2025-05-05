@@ -105,7 +105,6 @@
         :config #(let [lint (require :lint)]
                    (set lint.linters.zlint
                         {:cmd :zlint
-                         :append_fname false
                          :args [:-f :gh]
                          :ignore_exitcode true
                          :parser (let [parser (require :lint.parser)]

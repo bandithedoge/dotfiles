@@ -84,49 +84,57 @@
     };
   };
 
-  services.scx = {
+  programs.corectrl = {
     enable = true;
-    package = pkgs.scx_git.rustscheds;
-    scheduler = "scx_lavd";
   };
 
-  services.pipewire = {
-    extraConfig.pipewire = {
-      "10-loopback-mono-mic" = {
-        "context.modules" = [
-          {
-            name = "libpipewire-module-loopback";
-            args = {
-              "node.description" = "USB Audio CODEC [MONO]";
-              "capture.props" = {
-                "node.name" = "capture.mono-microphone";
-                "audio.position" = ["FL"];
-                "target.object" = "alsa_input.usb-Burr-Brown_from_TI_USB_Audio_CODEC-00.analog-stereo-input";
-                "stream.dont-remix" = true;
-                "node.passive" = true;
+  services = {
+    pipewire = {
+      extraConfig.pipewire = {
+        "10-loopback-mono-mic" = {
+          "context.modules" = [
+            {
+              name = "libpipewire-module-loopback";
+              args = {
+                "node.description" = "USB Audio CODEC [MONO]";
+                "capture.props" = {
+                  "node.name" = "capture.mono-microphone";
+                  "audio.position" = ["FL"];
+                  "target.object" = "alsa_input.usb-Burr-Brown_from_TI_USB_Audio_CODEC-00.analog-stereo-input";
+                  "stream.dont-remix" = true;
+                  "node.passive" = true;
+                };
+                "playback.props" = {
+                  "media.class" = "Audio/Source";
+                  "node.name" = "mono-microphone";
+                  "audio.position" = ["MONO"];
+                };
               };
-              "playback.props" = {
-                "media.class" = "Audio/Source";
-                "node.name" = "mono-microphone";
-                "audio.position" = ["MONO"];
+            }
+          ];
+        };
+      };
+      wireplumber.extraConfig = {
+        "51-disable-builtin-audio" = {
+          "monitor.alsa.rules" = [
+            {
+              matches = [{"alsa.id" = "~HDMI|PCH";}];
+              actions.update-props = {
+                "device.disabled" = true;
               };
-            };
-          }
-        ];
+            }
+          ];
+        };
       };
     };
-    wireplumber.extraConfig = {
-      "51-disable-builtin-audio" = {
-        "monitor.alsa.rules" = [
-          {
-            matches = [{"alsa.id" = "~HDMI|PCH";}];
-            actions.update-props = {
-              "device.disabled" = true;
-            };
-          }
-        ];
-      };
+
+    scx = {
+      enable = true;
+      package = pkgs.scx_git.rustscheds;
+      scheduler = "scx_lavd";
     };
+
+    btrfs.autoScrub.enable = true;
   };
 
   musnix = {

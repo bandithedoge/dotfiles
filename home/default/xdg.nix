@@ -32,12 +32,6 @@ in {
       _JAVA_OPTIONS = "-Djava.util.prefs.userRoot=${conf}/java";
       GNUPGHOME = "${data}/gnupg";
     };
-
-    shellAliases = {
-      wget = "wget --hsts-file=\"${data}/wget-hsts\"";
-      yarn = "yarn --use-yarnrc ${conf}/yarn/config";
-      adb = "HOME=\"$XDG_DATA_HOME/android\" adb";
-    };
   };
 
   gtk.gtk2.configLocation = "${conf}/gtk-2.0/gtkrc";

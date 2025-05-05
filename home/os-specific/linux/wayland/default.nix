@@ -429,7 +429,7 @@
             };
             k = {
               desc = "Password manager";
-              cmd = "keepassxc";
+              cmd = "secrets";
             };
             e = {
               desc = "Emacs";

@@ -124,6 +124,8 @@
         }
         {
           matches = [
+            {app-id = "^TkFDialog$";}
+            {app-id = "^Menu$";}
             {app-id = "^Ardour-\\d+\\.\\d+\\.\\d+$";}
             {
               app-id = "^$";
@@ -131,6 +133,10 @@
             }
           ];
           open-floating = true;
+        }
+        {
+          matches = [{app-id = "org.gnome.World.Secrets";}];
+          block-out-from = "screencast";
         }
       ];
 

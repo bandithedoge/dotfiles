@@ -5,12 +5,14 @@
   ...
 }: {
   home.packages = with pkgs; [
+    (audacious.override {withPlugins = true;})
     ardour
-    # bandithedoge.cardinal
     bandithedoge.clap-info
     bandithedoge.partiels
+    cardinal
     carla
     coppwr
+    furnace
     picard
     playerctl
     pwvucontrol
@@ -24,6 +26,7 @@
     bandithedoge.airwindows-consolidated
     bandithedoge.blepfx.crunchrr
     bandithedoge.blepfx.destruqtor
+    bandithedoge.blepfx.filtrr
     bandithedoge.dsp56300
     bandithedoge.element
     bandithedoge.geonkick
@@ -31,6 +34,7 @@
     bandithedoge.guitarix-vst-bin
     bandithedoge.ildaeil
     bandithedoge.ircam-vamp-plugins-bin
+    bandithedoge.k-whooms
     bandithedoge.lamb-bin
     bandithedoge.maim-bin
     bandithedoge.microbiome-bin
@@ -44,10 +48,6 @@
     bandithedoge.sg-323
     bandithedoge.showmidi-bin
     bandithedoge.squeezer-bin
-    # bandithedoge.tonelib.bassdrive
-    # bandithedoge.tonelib.easycomp
-    # bandithedoge.tonelib.noisereducer
-    # bandithedoge.tonelib.tubewarmth
     bandithedoge.u-he.ace
     bandithedoge.u-he.bazille
     bandithedoge.u-he.colourcopy

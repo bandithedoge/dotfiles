@@ -10,6 +10,8 @@ final: prev: {
     // prev.awesomeNeovimPlugins
     // {inherit (vP) neorg nvim-treesitter blink-cmp;};
 
+  yaziPlugins = prev.yaziPlugins // prev.bandithedoge.yaziPlugins;
+
   discord = prev.discord.override {
     withOpenASAR = true;
     withVencord = true;
@@ -29,5 +31,19 @@ final: prev: {
     withMiddleClickScroll = true;
   };
 
-  wine = prev.wine-ge;
+  furnace = prev.furnace.override {
+    withGL = false;
+  };
+
+  wine = prev.wine-tkg;
+
+  # https://github.com/robbert-vdh/yabridge/issues/382
+  yabridge = prev.yabridge.overrideAttrs (_: {
+    src = prev.fetchFromGitHub {
+      owner = "robbert-vdh";
+      repo = "yabridge";
+      rev = "new-wine10-embedding";
+      hash = "sha256-vgG6hwB/1f4qHGRQBnXMSvafTzQKT8GJeMhcco/M8JQ=";
+    };
+  });
 }

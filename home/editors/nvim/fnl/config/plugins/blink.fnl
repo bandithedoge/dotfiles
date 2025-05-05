@@ -16,7 +16,7 @@
                          :<S-Tab> [:snippet_backward :fallback]}
                 :completion {:list {:selection {:preselect false
                                                 :auto_insert false}}
-                             :menu {:min_width 25
+                             :menu {:min_width 18
                                     :max_height 15
                                     :draw {:treesitter [:lsp :lazydev]
                                            :columns #(if (= $1.mode :cmdline)

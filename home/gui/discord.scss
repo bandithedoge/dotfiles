@@ -12,14 +12,14 @@ body {
     --list-item-transition: 0.2s ease;
     --dms-icon-svg-transition: 0.4s ease;
 
-    --move-top-bar-buttons: on;
-    --custom-app-top-bar-height: 24px;
+    --top-bar-height: 24px;
+    --top-bar-button-position: off;
+    --top-bar-title-position: off;
 
     --custom-window-controls: off;
 
-    --dms-icon: default;
+    --dms-icon: off;
 
-    --dms-background: off;
     --background-image: off;
 
     --transparency-tweaks: off;

@@ -23,10 +23,11 @@
       equibop
       foliate
       fractal
+      gimp3
+      gnome-secrets
       handbrake
       icon-library
       inkscape
-      keepassxc
       keepmenu
       krita
       kvirc
@@ -39,7 +40,7 @@
       qt6ct
       rice.monoFontPackage
       rice.uiFontPackage
-      telegram-desktop_git
+      telegram-desktop
       wine
       winetricks
       wtype
@@ -148,138 +149,140 @@
     ];
   };
 
-  xdg.configFile = let
-    css = pkgs.rice.compileSCSS ../../../gtk.scss;
-    # qt {{{
-    qtct = version:
-      pkgs.lib.generators.toINI {} {
-        Appearance = {
-          color_scheme_path = "${config.xdg.configHome}/qt${builtins.toString version}ct/colors/rice.conf";
-          custom_palette = true;
-          icon_theme = "breeze-dark";
-          standard_dialogs = "xdgdesktopportal";
-          style = "kvantum-dark";
-        };
-        Fonts =
-          if version == 6
-          then {
-            general = "\"${pkgs.rice.uiFont},11,-1,5,400,0,0,0,0,0,0,0,0,0,0,1\"";
-            fixed = "\"${pkgs.rice.monoFont},11,-1,5,400,0,0,0,0,0,0,0,0,0,0,1\"";
-          }
-          else {
-            general = "${pkgs.rice.uiFont},12,-1,5,50,0,0,0,0,0";
-            fixed = "${pkgs.rice.monoFont},11,-1,5,50,0,0,0,0,0,Regular";
+  xdg = {
+    configFile = let
+      css = pkgs.rice.compileSCSS ../../../gtk.scss;
+      # qt {{{
+      qtct = version:
+        pkgs.lib.generators.toINI {} {
+          Appearance = {
+            color_scheme_path = "${config.xdg.configHome}/qt${builtins.toString version}ct/colors/rice.conf";
+            custom_palette = true;
+            icon_theme = "breeze-dark";
+            standard_dialogs = "xdgdesktopportal";
+            style = "kvantum-dark";
           };
-        Interface = {
-          activate_item_on_single_click = 0;
-          buttonbox_layout = 0;
-          cursor_flash_time = 1000;
-          dialog_buttons_have_icons = 2;
-          double_click_interval = 400;
-          gui_effects = "@Invalid()";
-          keyboard_scheme = 2;
-          menus_have_icons = true;
-          show_shortcuts_in_context_menus = true;
-          stylesheets = "@Invalid()";
-          toolbutton_style = 4;
-          underline_shortcut = 1;
-          wheel_scroll_lines = 3;
+          Fonts =
+            if version == 6
+            then {
+              general = "\"${pkgs.rice.uiFont},11,-1,5,400,0,0,0,0,0,0,0,0,0,0,1\"";
+              fixed = "\"${pkgs.rice.monoFont},11,-1,5,400,0,0,0,0,0,0,0,0,0,0,1\"";
+            }
+            else {
+              general = "${pkgs.rice.uiFont},12,-1,5,50,0,0,0,0,0";
+              fixed = "${pkgs.rice.monoFont},11,-1,5,50,0,0,0,0,0,Regular";
+            };
+          Interface = {
+            activate_item_on_single_click = 0;
+            buttonbox_layout = 0;
+            cursor_flash_time = 1000;
+            dialog_buttons_have_icons = 2;
+            double_click_interval = 400;
+            gui_effects = "@Invalid()";
+            keyboard_scheme = 2;
+            menus_have_icons = true;
+            show_shortcuts_in_context_menus = true;
+            stylesheets = "@Invalid()";
+            toolbutton_style = 4;
+            underline_shortcut = 1;
+            wheel_scroll_lines = 3;
+          };
+          SettingsWindow.geometry = "@ByteArray(\\x1\\xd9\\xd0\\xcb\\0\\x3\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\x2\\xde\\0\\0\\x4\\b\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\x2\\xde\\0\\0\\x4\\b\\0\\0\\0\\0\\0\\0\\0\\0\\a\\x80\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\x2\\xde\\0\\0\\x4\\b)";
+          Troubleshooting = {
+            force_raster_widgets = 1;
+            ignored_applications = "@Invalid()";
+          };
         };
-        SettingsWindow.geometry = "@ByteArray(\\x1\\xd9\\xd0\\xcb\\0\\x3\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\x2\\xde\\0\\0\\x4\\b\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\x2\\xde\\0\\0\\x4\\b\\0\\0\\0\\0\\0\\0\\0\\0\\a\\x80\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\x2\\xde\\0\\0\\x4\\b)";
-        Troubleshooting = {
-          force_raster_widgets = 1;
-          ignored_applications = "@Invalid()";
+
+      qtColorScheme = pkgs.lib.generators.toINI {} {
+        ColorScheme = let
+          concat = pkgs.lib.concatMapStringsSep "," (x: "#ff" + (pkgs.lib.removePrefix "#" x));
+        in
+          with pkgs.rice; rec {
+            active_colors = concat [
+              base05 # window text
+              base00 # button bg
+              base06 # bright
+              base04 # less bright
+              base00 # dark
+              base01 # less dark
+              base05 # normal text
+              base06 # bright text
+              base05 # button text
+              base00 # normal bg
+              base10 # window
+              base00 # shadow
+              base0F # highlight
+              base00 # highlighted text
+              base0F # link
+              base0E # visited link
+              base02 # alt bg
+              base05 # default
+              base02 # tooltip bg
+              base05 # tooltip text
+              base03 # placeholder text
+              base0F # accent
+            ];
+            inactive_colors = active_colors;
+            disabled_colors = concat [
+              base03 # window text
+              base00 # button bg
+              base06 # bright
+              base04 # less bright
+              base00 # dark
+              base01 # less dark
+              base03 # normal text
+              base06 # bright text
+              base03 # button text
+              base00 # normal bg
+              base00 # window
+              base00 # shadow
+              base0F # highlight
+              base00 # highlighted text
+              base0F # link
+              base0E # visited link
+              base00 # alt bg
+              base05 # default
+              base02 # tooltip bg
+              base05 # tooltip text
+              base03 # placeholder text
+              base0F # accent
+            ];
+          };
+      };
+      # }}}
+    in {
+      "keepmenu/config.ini".text = lib.generators.toINI {} {
+        dmenu.dmenu_command = "rofi -dmenu";
+        database = {
+          inherit (pkgs.rice) terminal;
+          database_1 = "~/keepass/pass.kdbx";
+          editor = config.home.sessionVariables.EDITOR;
+          gui_editor = "keepassxc";
+          type_library = "wtype";
         };
       };
 
-    qtColorScheme = pkgs.lib.generators.toINI {} {
-      ColorScheme = let
-        concat = pkgs.lib.concatMapStringsSep "," (x: "#ff" + (pkgs.lib.removePrefix "#" x));
-      in
-        with pkgs.rice; rec {
-          active_colors = concat [
-            base05 # window text
-            base00 # button bg
-            base06 # bright
-            base04 # less bright
-            base00 # dark
-            base01 # less dark
-            base05 # normal text
-            base06 # bright text
-            base05 # button text
-            base00 # normal bg
-            base10 # window
-            base00 # shadow
-            base0F # highlight
-            base00 # highlighted text
-            base0F # link
-            base0E # visited link
-            base02 # alt bg
-            base05 # default
-            base02 # tooltip bg
-            base05 # tooltip text
-            base03 # placeholder text
-            base0F # accent
-          ];
-          inactive_colors = active_colors;
-          disabled_colors = concat [
-            base03 # window text
-            base00 # button bg
-            base06 # bright
-            base04 # less bright
-            base00 # dark
-            base01 # less dark
-            base03 # normal text
-            base06 # bright text
-            base03 # button text
-            base00 # normal bg
-            base00 # window
-            base00 # shadow
-            base0F # highlight
-            base00 # highlighted text
-            base0F # link
-            base0E # visited link
-            base00 # alt bg
-            base05 # default
-            base02 # tooltip bg
-            base05 # tooltip text
-            base03 # placeholder text
-            base0F # accent
-          ];
-        };
+      "gtk-4.0/gtk.css".source = css;
+      "gtk-3.0/gtk.css".source = css;
+
+      "qt6ct/qt6ct.conf".text = qtct 6;
+      "qt6ct/colors/rice.conf".text = qtColorScheme;
+      "qt5ct/qt5ct.conf".text = qtct 5;
+      "qt5ct/colors/rice.conf".text = qtColorScheme;
+      "Kvantum/KvLibadwaita".source = flake.inputs.kvlibadwaita + "/src/KvLibadwaita";
+      "Kvantum/kvantum.kvconfig".text = lib.generators.toINI {} {General.theme = "KvLibadwaitaDark";};
     };
-    # }}}
-  in {
-    "keepmenu/config.ini".text = lib.generators.toINI {} {
-      dmenu.dmenu_command = "rofi -dmenu";
-      database = {
-        inherit (pkgs.rice) terminal;
-        database_1 = "~/keepass/pass.kdbx";
-        editor = config.home.sessionVariables.EDITOR;
-        gui_editor = "keepassxc";
-        type_library = "wtype";
+
+    portal.extraPortals = with pkgs; [xdg-desktop-portal-gtk];
+
+    mimeApps = rec {
+      enable = true;
+      associations.added = defaultApplications;
+      defaultApplications = {
+        "application/pdf" = "org.pwmt.zathura.desktop";
+        "image/vnd.djvu" = "org.pwmt.zathura.desktop";
       };
-    };
-
-    "gtk-4.0/gtk.css".source = css;
-    "gtk-3.0/gtk.css".source = css;
-
-    "qt6ct/qt6ct.conf".text = qtct 6;
-    "qt6ct/colors/rice.conf".text = qtColorScheme;
-    "qt5ct/qt5ct.conf".text = qtct 5;
-    "qt5ct/colors/rice.conf".text = qtColorScheme;
-    "Kvantum/KvLibadwaita".source = flake.inputs.kvlibadwaita + "/src/KvLibadwaita";
-    "Kvantum/kvantum.kvconfig".text = lib.generators.toINI {} {General.theme = "KvLibadwaitaDark";};
-  };
-
-  xdg.portal.extraPortals = with pkgs; [xdg-desktop-portal-gtk];
-
-  xdg.mimeApps = rec {
-    enable = true;
-    associations.added = defaultApplications;
-    defaultApplications = {
-      "application/pdf" = "org.pwmt.zathura.desktop";
-      "image/vnd.djvu" = "org.pwmt.zathura.desktop";
     };
   };
 

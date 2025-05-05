@@ -339,7 +339,7 @@
       enable = true;
       enableFishIntegration = true;
       shellWrapperName = "y";
-      package = pkgs.yazi.override {extraPackages = with pkgs; [glow miller hexyl exiftool mediainfo ouch clipboard-jh p7zip];};
+      package = pkgs.yazi.override {extraPackages = with pkgs; [glow hexyl exiftool mediainfo ouch clipboard-jh p7zip];};
 
       settings = {
         manager = {
@@ -354,51 +354,82 @@
         opener = {
           extract = [
             {
-              run = "unar %*";
+              run = "unar \"$@\"";
               desc = "Extract";
             }
           ];
         };
+        open.append_rules = [
+          {
+            name = "*.zip";
+            use = "extract";
+          }
+        ];
         plugin = {
           prepend_previewers = [
             {
               name = "*.md";
-              run = "glow";
-            }
-            {
-              mime = "text/csv";
-              run = "miller";
+              run = "piper -- CLICOLOR_FORCE=1 glow -w=$w -s=dark \"$1\"";
             }
             {
               mime = "audio/*";
-              run = "exifaudio";
+              run = "piper -- exiftool -q -q -S -Duration -SampleRate -AudioSampleRate -AudioBitrate -AvgBitrate -Channels -AudioChannels \"$1\"";
             }
             {
-              mime = "application/x-{tar,bzip2,7z-compressed,rar,xz}";
-              run = "ouch";
+              mime = "application/x-{tar,7z-*,rar,xz}";
+              run = "piper -- ouch list -t \"$1\"";
+            }
+            {
+              mime = "application/{*zip*,rar,7z*,xz}";
+              run = "piper -- ouch list -t \"$1\"";
+            }
+            {
+              name = "*.{zip,rar}";
+              run = "piper -- ouch list -t \"$1\"";
+            }
+            {
+              name = "*.txt.gz";
+              run = "piper -- zless \"$1\"";
             }
           ];
           append_previewers = [
             {
               name = "*";
-              run = "hexyl";
+              run = "piper -- hexyl --border=none --terminal-width=$w \"$1\"";
+            }
+          ];
+          prepend_fetchers = [
+            {
+              id = "git";
+              name = "*";
+              run = "git";
+            }
+            {
+              id = "git";
+              name = "*/";
+              run = "git";
             }
           ];
         };
       };
 
       plugins = pkgs.lib.genAttrs [
-        "exifaudio"
-        "glow"
-        "hexyl"
-        "miller"
-        "ouch"
+        "git"
+        "lazygit"
+        "mount"
+        "piper"
+        "smart-enter"
         "system-clipboard"
         "yatline"
-      ] (name: pkgs.bandithedoge.yaziPlugins.${name});
+      ] (name: pkgs.yaziPlugins.${name});
 
       keymap = {
         manager.prepend_keymap = [
+          {
+            on = "l";
+            run = "plugin smart-enter";
+            desc = "Enter directory or open file";
+          }
           {
             on = "q";
             run = "quit --no-cwd-file";
@@ -410,16 +441,6 @@
             desc = "Quit and cd";
           }
           {
-            on = "C";
-            run = "plugin ouch --args=zip";
-            desc = "Compress with ouch";
-          }
-          {
-            on = "E";
-            run = "plugin eza-preview";
-            desc = "Toggle tree/list dir preview";
-          }
-          {
             on = "<C-y>";
             run = "plugin system-clipboard";
             desc = "Copy file";
@@ -427,7 +448,7 @@
           {
             on = "<C-n>";
             run = ''
-              shell 'dragon "$@"' --confirm
+              shell 'dragon-drop "$@"' --confirm
             '';
             desc = "Drag and drop";
           }
@@ -438,6 +459,16 @@
           {
             on = "<S-Tab>";
             run = "tab_switch -1 --relative";
+          }
+          {
+            on = ["g" "i"];
+            run = "plugin lazygit";
+            desc = "Open lazygit";
+          }
+          {
+            on = "M";
+            run = "plugin mount";
+            desc = "Mount drives";
           }
         ];
         completion.prepend_keymap = [
