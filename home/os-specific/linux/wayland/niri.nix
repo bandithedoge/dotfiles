@@ -1,6 +1,7 @@
 {
   pkgs,
   config,
+  flake,
   ...
 }: {
   home.packages = with pkgs; [
@@ -158,7 +159,9 @@
         lid-close.action.spawn = ["loginctl" "lock-session"];
       };
 
-      binds = with config.lib.niri.actions; {
+      binds = with config.lib.niri.actions; let
+        move-column-to-workspace = n: {move-column-to-workspace = n;};
+      in {
         "Mod+Shift+Slash".action = show-hotkey-overlay;
         "Mod+Return".action.spawn = pkgs.rice.terminal;
         "Mod+Space".action.spawn = pkgs.lib.splitString " " pkgs.rice.menu;

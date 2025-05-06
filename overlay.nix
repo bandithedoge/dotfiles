@@ -21,10 +21,10 @@ final: prev: {
     NIX_CFLAGS_COMPILE = ["-Wno-incompatible-pointer-types"];
   });
 
-  gamescope = prev.gamescope_git.overrideAttrs (_: {
-    NIX_CFLAGS_COMPILE = ["-fno-fast-math"];
-    inherit (prev.gamescope) postPatch;
-  });
+  # gamescope = prev.gamescope_git.overrideAttrs (_: {
+  #   NIX_CFLAGS_COMPILE = ["-fno-fast-math"];
+  #   # inherit (prev.gamescope) postPatch;
+  # });
 
   equibop = prev.equibop.override {
     withTTS = false;

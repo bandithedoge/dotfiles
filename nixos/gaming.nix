@@ -10,8 +10,8 @@
         extraArgs = "-no-cef-sandbox";
       };
       extraCompatPackages = with pkgs; [
-        proton-ge-custom
-        bandithedoge.proton-cachyos-bin
+        bandithedoge.proton.ge
+        bandithedoge.proton.sarek
       ];
     };
 

@@ -347,28 +347,26 @@
 
   services.mako = with pkgs.rice; {
     enable = true;
-    maxVisible = 10;
-    layer = "overlay";
-    # anchor = "bottom-right";
-    font = "${uiFont} 11";
-    backgroundColor = base02;
-    textColor = base05;
-    margin = "5,5";
-    borderSize = 2;
-    borderColor = base0F;
-    progressColor = base0F;
-    defaultTimeout = 10000;
-    extraConfig = ''
-      on-button-left=dismiss
-      on-button-right=invoke-default-action
-      on-button-middle=dismiss-all
+    settings = {
+      max-visible = 10;
+      layer = "overlay";
+      font = "${uiFont} 11";
+      background-color = base02;
+      text-color = base05;
+      margin = "5,5";
+      border-size = 2;
+      border-color = base0F;
+      progress-color = base0F;
+      default-timeout = 10000;
 
-      [urgency=critical]
-      border-color=${base08}
-
-      [mode=do-not-disturb]
-      invisible=1
-    '';
+      on-button-left = "dismiss";
+      on-button-right = "invoke-default-action";
+      on-button-middle = "dismiss-all";
+    };
+    criteria = {
+      "urgency=critical".border-color = base08;
+      "mode=do-not-disturb".invisible = 1;
+    };
   };
 
   xdg.configFile = {

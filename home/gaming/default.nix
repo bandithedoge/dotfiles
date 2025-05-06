@@ -118,6 +118,7 @@
   };
 
   xdg.dataFile = {
-    "Steam/compatibilitytools.d/proton-ge-custom".source = pkgs.proton-ge-custom + "/bin";
+    "Steam/compatibilitytools.d/proton-ge".source = pkgs.bandithedoge.proton.ge.steamcompattool;
+    "Steam/compatibilitytools.d/proton-sarek".source = pkgs.bandithedoge.proton.sarek.steamcompattool;
   };
 }
