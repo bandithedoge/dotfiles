@@ -34,6 +34,8 @@
         };
       };
     };
+
+    wine.ntsync.enable = true;
   };
 
   security.pam.loginLimits = [

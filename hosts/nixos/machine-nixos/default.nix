@@ -1,6 +1,5 @@
 {
   pkgs,
-  config,
   ...
 }:
 {
@@ -11,10 +10,7 @@
       "preempt=full"
       "mitigations=off"
     ];
-    kernelModules = [
-      "wireguard"
-      "ntsync"
-    ];
+    kernelModules = [ "wireguard" ];
     blacklistedKernelModules = [ "iTCO_wdt" ];
     loader = {
       systemd-boot.enable = true;

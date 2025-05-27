@@ -123,6 +123,7 @@
               flatpak.nixosModules.nix-flatpak
               home-manager.nixosModules.home-manager
               musnix.nixosModules.musnix
+              nix-gaming.nixosModules.ntsync
               nix-gaming.nixosModules.pipewireLowLatency
               nyx.nixosModules.default
               sops-nix.nixosModules.default

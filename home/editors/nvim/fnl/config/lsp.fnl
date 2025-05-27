@@ -1,5 +1,6 @@
 (import-macros {: use! : key! : tx!} :config.macros)
 (import-macros {: merge!} :hibiscus.core)
+(import-macros {: augroup!} :hibiscus.vim)
 
 [(use! :aznhe21/actions-preview.nvim
        {:dependencies [(use! :MunifTanjim/nui.nvim)]
@@ -129,75 +130,14 @@
                              {:opts {:highlight true} :separator " 󰅂 "})
                        (use! :b0o/SchemaStore.nvim)
                        (use! :Saghen/blink.cmp)
-                       ; (use! :AstroNvim/AstroLSP
-                       ;       {:dependencies [(use! :AstroNvim/astrocore)]
-                       ;        :opts #{:features {:inlay_hints true}
-                       ;                :formatting {:format_on_save {:enabled false}}
-                       ;                :handlers (tx! #(let [lsp (require :lspconfig)]
-                       ;                                  ((. lsp $1 :setup) $2))
-                       ;                               {:clangd #(let [lsp (require :lspconfig)
-                       ;                                               clangd (require :clangd_extensions)]
-                       ;                                           (lsp.clangd.setup $2)
-                       ;                                           (clangd.setup {}))
-                       ;                                :jsonls #(let [lsp (require :lspconfig)
-                       ;                                               schemastore (require :schemastore)]
-                       ;                                           (lsp.jsonls.setup (merge! $2
-                       ;                                                                     {:settings {:json {:schemas (schemastore.json.schemas)
-                       ;                                                                                        :validate {:enable true}}}})))
-                       ;                                :ltex #(let [ltex-extra (require :ltex_extra)]
-                       ;                                         (ltex-extra.setup {:load_langs [:en-US
-                       ;                                                                         :pl-PL]
-                       ;                                                            :server_opts $2}))
-                       ;                                :yamlls #(let [lsp (require :lspconfig)
-                       ;                                               schemastore (require :schemastore)]
-                       ;                                           (lsp.yamlls.setup (merge! $2
-                       ;                                                                     {:settings {:yaml {:schemaStore {:enable false}
-                       ;                                                                                        :url ""}
-                       ;                                                                                 :schemas (schemastore.yaml.schemas)}})))})
-                       ;                :capabilities (let [blink (require :blink-cmp)]
-                       ;                                (merge! (vim.lsp.protocol.make_client_capabilities)
-                       ;                                        (blink.get_lsp_capabilities {}
-                       ;                                                                    false)))
-                       ;                :mappings {:n {:gx {1 #(let [lsplinks (require :lsplinks)]
-                       ;                                         (lsplinks.gx))
-                       ;                                    :cond :textDocument/documentLink}}}
-                       ;                :file_operations {:operations {:willRename true
-                       ;                                               :didRename true
-                       ;                                               :willCreate true
-                       ;                                               :didCreate true
-                       ;                                               :willDelete true
-                       ;                                               :didDelete true}}
-                       ;                :servers [:basedpyright
-                       ;                          :bashls
-                       ;                          :clangd
-                       ;                          :cssls
-                       ;                          :emmet_language_server
-                       ;                          :fennel_language_server
-                       ;                          :html
-                       ;                          :jdtls
-                       ;                          :jsonls
-                       ;                          :ltex
-                       ;                          :lua_ls
-                       ;                          :marksman
-                       ;                          :mesonlsp
-                       ;                          :neocmake
-                       ;                          :nixd
-                       ;                          :oxlint
-                       ;                          :ruff
-                       ;                          :rust_analyzer
-                       ;                          :slint_lsp
-                       ;                          :taplo
-                       ;                          :tinymist
-                       ;                          :ts_ls
-                       ;                          :yamlls
-                       ;                          :zls]
-                       ;                :on_attach #(let [navic (require :nvim-navic)]
-                       ;                              (when ($1.supports_method :textDocument/documentSymbol)
-                       ;                                (navic.attach $1 $2)))}})
                        (use! :williamboman/mason-lspconfig.nvim
                              {:cond (not _G.USING_NIX)
                               :dependencies [(use! :williamboman/mason.nvim)]})]
         :opts #{:config {:on_attach (fn [client bufnr]
+                                      (when (or (client.supports_method :textDocument/inlayHint)
+                                                client.server_capabilities.inlayHintProvider)
+                                        (vim.lsp.inlay_hint.enable true
+                                                                   {: bufnr}))
                                       (let [navic (require :nvim-navic)]
                                         (when client.server_capabilities.documentSymbolProvider
                                           (navic.attach client bufnr))))
@@ -254,7 +194,8 @@
                                                                 (schemastore.yaml.schemas))}}}
                           :zls {}}}
         :config (fn [_ opts]
-                  (vim.lsp.config :* opts.config)
+                  (vim.lsp.inlay_hint.enable)
+                  (vim.lsp.config "*" opts.config)
                   (each [server config (pairs opts.servers)]
                     (vim.lsp.config server config)
                     (vim.lsp.enable server)))})
