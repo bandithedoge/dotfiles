@@ -80,7 +80,7 @@
             :lsp {:condition conditions.lsp_attached
                   :update [:LspAttach :LspDetach]
                   :provider #(padr (.. "󰒓 "
-                                       (table.concat (merge! (icollect [_ server (pairs (vim.lsp.get_active_clients {:bufnr 0}))]
+                                       (table.concat (merge! (icollect [_ server (pairs (vim.lsp.get_clients {:bufnr 0}))]
                                                                server.name)
                                                              (if (. package.loaded
                                                                     :lint)
@@ -336,7 +336,8 @@
                                                                                        :Trouble
                                                                                        :lazy
                                                                                        :saga_codeaction
-                                                                                       :neo-tree-preview]}
+                                                                                       :neo-tree-preview
+                                                                                       :snacks_picker_preview]}
                                                                            $1.buf)}})))
 
 [(use! :rebelot/heirline.nvim {:event :VeryLazy : config})]

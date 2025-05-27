@@ -11,13 +11,11 @@
       # {{{
       # rust
       rust-analyzer
-      rustfmt
 
       # python
       basedpyright
       poetry
       python3
-      python3Packages.debugpy
       ruff
 
       # shell
@@ -36,8 +34,8 @@
       prettierd
 
       # nix
-      alejandra
       nixd
+      nixfmt-rfc-style
       statix
 
       # lua
@@ -51,21 +49,11 @@
       # c
       bandithedoge.mesonlsp-bin
       clang-tools
-      cmake-lint
       lldb
       neocmakelsp
 
-      # nim
-      bandithedoge.nimlangserver
-
-      # haskell
-      cabal2nix
-      haskell-language-server
-      haskellPackages.cabal-fmt
-
       # yaml
       nodePackages.yaml-language-server
-      actionlint
 
       # writing
       ltex-ls
@@ -79,17 +67,12 @@
       zig
       zls
 
-      # go
-      gopls
-
       # toml
       taplo
 
-      julia
-
-      blueprint-compiler
-
-      slint-lsp
+      # java
+      openjdk
+      jdt-language-server
     ];
     # }}}
   };
@@ -109,7 +92,9 @@
     extraLuaPackages = ps:
       with ps; [
         fennel
+        lua-utils-nvim
         luautf8
+        pathlib-nvim
         sqlite
       ];
     extraLuaConfig = let
@@ -120,11 +105,8 @@
             path = drv;
           })
           (with pkgs.vimPlugins; [
-            astrocore
-            lua-utils-nvim
             nui-nvim
             nvim-nio
-            pathlib-nvim
             plenary-nvim
             popup-nvim
             sqlite-lua
@@ -132,35 +114,20 @@
             which-key-nvim
 
             # language-specific
-            clangd_extensions-nvim
-            dhall-vim
-            faust-nvim
-            flutter-tools-nvim
-            haskell-tools-nvim
             lazydev-nvim
-            ltex_extra-nvim
             nvim-luaref
             nvim-parinfer
-            orgmode
-            purescript-vim
-            rasi-vim
             SchemaStore-nvim
-            tree-sitter-hypr
             typst-preview-nvim
-            vim-coffee-script
-            vim-faust
             vim-just
-            vim-slint
             yuck-vim
 
             # lsp
             actions-preview-nvim
-            AstroLSP
             conform-nvim
             fidget-nvim
             garbage-day-nvim
             glance-nvim
-            hover-nvim
             lsp_lines-nvim
             lsplinks-nvim
             neoconf-nvim
@@ -174,19 +141,17 @@
             diffview-nvim
             edgy-nvim
             gitsigns-nvim
-            neogit
             nvim-highlight-colors
             nvim-hlslens
             todo-comments-nvim
             trouble-nvim
 
             # utilities
+            blink-pairs
             direnv-vim
             fold-cycle-nvim
             mkdir-nvim
             neogen
-            nix-develop-nvim
-            nvim-expand-expr
             persistence-nvim
             presence-nvim
             remember-nvim
@@ -222,9 +187,9 @@
               name = "nvim-treesitter";
               paths =
                 [pkgs.vimPlugins.nvim-treesitter.withAllGrammars]
-                ++ map pkgs.neovimUtils.grammarToPlugin (pkgs.vimPlugins.nvim-treesitter.allGrammars
-                  ++ (with pkgs.bandithedoge.treeSitterGrammars; [tree-sitter-hypr]));
+                ++ map pkgs.neovimUtils.grammarToPlugin pkgs.vimPlugins.nvim-treesitter.allGrammars;
             })
+            hmts-nvim
             nvim-ts-autotag
             playground
             rainbow-delimiters-nvim

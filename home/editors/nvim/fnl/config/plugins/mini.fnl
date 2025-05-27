@@ -16,12 +16,10 @@
                        package.loaded.nvim-web-devicons))
         :config #(let [bufremove (require :mini.bufremove)
                        icons (require :mini.icons)
-                       pairs (require :mini.pairs)
                        surround (require :mini.surround)
                        trailspace (require :mini.trailspace)]
                    (bufremove.setup {})
                    (icons.setup {})
-                   (pairs.setup {})
                    (surround.setup {:mappings {:add :gsa
                                                :delete :gsd
                                                :find :gsf

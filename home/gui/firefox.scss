@@ -1,45 +1,63 @@
+// :root {
+//     --arrowpanel-background: #{$base02} !important;
+//     --arrowpanel-border-color: #{$base03} !important;
+//     --arrowpanel-color: #{$base05} !important;
+//     --arrowpanel-dimmed: rgba(0, 0, 0, 0.4) !important;--arrowpanel-dimmed--arrowpanel-dimmed--arrowpanel-dimmed--arrowpanel-dimmed--arrowpanel-dimmed
+//     --lwt-accent-color-inactive: #{$base03} !important;--lwt-accent-color-inactive--lwt-accent-color-inactive--lwt-accent-color-inactive--lwt-accent-color-inactive
+//     --lwt-accent-color: #{$base0F} !important;--lwt-accent-color--lwt-accent-color--lwt-accent-color
+//     --lwt-text-color: #{$base05} !important;--lwt-text-color--lwt-text-color
+//     --lwt-toolbarbutton-active-background: #{$base0F} !important;--lwt-toolbarbutton-active-background
+//     --lwt-toolbarbutton-hover-background: #{$base02} !important;
+//     --tab-selected-bgcolor: #{$base02} !important;
+//     --toolbar-bgcolor: rgba(0, 0, 0, 0.4) !important;--toolbar-bgcolor--toolbar-bgcolor--toolbar-bgcolor--toolbar-bgcolor--toolbar-bgcolor
+//     --toolbar-field-background-color: #{$base10} !important;--toolbar-field-background-color--toolbar-field-background-color--toolbar-field-background-color--toolbar-field-background-color
+//     --toolbar-field-border-color: #{$base02} !important;--toolbar-field-border-color--toolbar-field-border-color--toolbar-field-border-color
+//     --toolbar-field-color: #{$base05} !important;--toolbar-field-color--toolbar-field-color
+//     --toolbar-field-focus-background-color: #{$base02} !important;--toolbar-field-focus-background-color
+//     --toolbar-field-focus-border-color: #{$base0F} !important;
+//     --toolbar-field-focus-color: #{$base05} !important;
+//     --toolbarbutton-icon-fill: #{$base05} !important;
+//     --urlbar-popup-url-color: #{$base0F} !important;
+// }
+
 :root {
-    --arrowpanel-background: #{$base02} !important;
-    --arrowpanel-border-color: #{$base03} !important;
-    --arrowpanel-color: #{$base05} !important;
-    --arrowpanel-dimmed: rgba(0, 0, 0, 0.4) !important;
-    --lwt-accent-color-inactive: #{$base03} !important;
-    --lwt-accent-color: #{$base0F} !important;
-    --lwt-text-color: #{$base05} !important;
-    --lwt-toolbarbutton-active-background: #{$base0F} !important;
-    --lwt-toolbarbutton-hover-background: #{$base02} !important;
+    --toolbox-bgcolor: #{$base00} !important;
     --tab-selected-bgcolor: #{$base02} !important;
-    --toolbar-bgcolor: rgba(0, 0, 0, 0.4) !important;
-    --toolbar-field-background-color: #{$base10} !important;
-    --toolbar-field-border-color: #{$base02} !important;
-    --toolbar-field-color: #{$base05} !important;
-    --toolbar-field-focus-background-color: #{$base02} !important;
-    --toolbar-field-focus-border-color: #{$base0F} !important;
-    --toolbar-field-focus-color: #{$base05} !important;
-    --toolbarbutton-icon-fill: #{$base05} !important;
-    --urlbar-popup-url-color: #{$base0F} !important;
+    --tab-selected-textcolor: #{$base0F} !important;
+
+    --button-primary-active-bgcolor: #{$base0F} !important;
+    --button-primary-bgcolor: #{$base0F} !important;
+    --button-primary-color: #{$base0F} !important;
+    --button-primary-hover-bgcolor: #{$base0F} !important;
+    --download-progress-fill-color: #{$base0F} !important;
+    --focus-outline-color: #{$base0F} !important;
+    --lwt-brighttext-url-color: #{$base0F} !important;
+    --lwt-toolbarbutton-icon-fill-attention: #{$base0F} !important;
+    --panel-banner-item-info-icon-bgcolor: #{$base0F} !important;
+    --toolbarbutton-icon-fill-attention: #{$base0F} !important;
+    --uei-button-attention-dot-color: #{$base0F} !important;
 }
 
 .titlebar-close {
     display: none;
 }
 
-#nav-bar {
-    border-right-width: 0 !important;
-}
-
-.toolbar-items {
-    background-color: $base10;
-}
-
-.tab-stack::after {
-    opacity: 0 !important;
-}
-
-.tab-background:is([selected]) {
-    background-color: $base00;
-}
-
-#urlbar, #searchbar {
-    font-size: 13pt;
-}
+// #nav-bar {
+//     border-right-width: 0 !important;border-right-widthborder-right-widthborder-right-widthborder-right-widthborder-right-width
+// }
+//
+// .toolbar-items {
+//     background-color: $base10;background-colorbackground-colorbackground-colorbackground-colorbackground-color
+// }
+//
+// .tab-stack::after {
+//     opacity: 0 !important;opacityopacityopacityopacityopacity
+// }
+//
+// .tab-background:is([selected]) {
+//     background-color: $base00;background-colorbackground-colorbackground-colorbackground-colorbackground-color
+// }
+//
+// #urlbar, #searchbar {
+//     font-size: 13pt;font-sizefont-sizefont-sizefont-sizefont-size
+// }

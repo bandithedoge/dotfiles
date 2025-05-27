@@ -56,9 +56,9 @@
     journald.extraConfig = "SystemMaxUse=50M";
 
     devmon.enable = true;
-    irqbalance.enable = true;
+    # irqbalance.enable = true;
     openssh.enable = true;
-    resolved.enable = true;
+    # resolved.enable = true;
     upower.enable = true;
   };
 
@@ -109,6 +109,10 @@
       base0F
     ]);
     keyMap = "pl";
+    font = "cozette";
+    packages = with pkgs; [
+      cozette
+    ];
   };
 
   boot = {

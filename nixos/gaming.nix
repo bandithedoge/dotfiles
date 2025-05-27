@@ -46,6 +46,7 @@
   ];
 
   networking.mihoyo-telemetry.block = true;
+  aagl.enableNixpkgsReleaseBranchCheck = false;
 
   boot.kernel.sysctl = {
     "kernel.sched_cfs_bandwidth_slice_us" = 3000;

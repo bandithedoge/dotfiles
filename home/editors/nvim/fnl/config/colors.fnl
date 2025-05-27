@@ -71,7 +71,6 @@
                                 :rainbowcol4 {:fg _G.base0B}
                                 :rainbowcol5 {:fg _G.base0A}
                                 :rainbowcol6 {:fg _G.base09}
-                                :rainbowcol7 {:fg :pink}
                                 :WhichKeyFloat {:link :FloatBorder}
                                 :LspFloatWinNormal {:link :FloatBorder}
                                 :TelescopeBorder {:link :FloatBorder}
@@ -234,8 +233,24 @@
                                 :SnacksNotifierHistory {:link :NormalFloat}
                                 :SnacksNotifierHistoryTitle {:bg _G.base02
                                                              :link :Title}
-                                :SnacksInputTitle {:fg _G.base0F :style :bold}
+                                :SnacksInputTitle {:link :Title}
                                 :SnacksInputIcon {:fg _G.base0F}
+                                :SnacksPickerCursorLine {:bg _G.base10}
+                                :SnacksPickerListCursorLine {:link :SnacksPickerCursorLine}
+                                :SnacksPickerPreviewCursorLine {:link :SnacksPickerCursorLine}
+                                :SnacksPickerBorder {:fg _G.base01 :bg _G.base01}
+                                :SnacksPickerTitle {:link :Title}
+                                :SnacksPickerPrompt {:fg _G.base0F}
+                                :SnacksPickerMatch {:fg _G.base0F}
+                                :SnacksPickerDir {:fg _G.base03}
+                                :SnacksPickerTotals {:fg _G.base03}
+                                :SnacksPickerKeymapRhs {:fg _G.base03}
+                                :SnacksPickerPathHidden {:fg _G.base03}
+                                :SnacksPickerPathIgnored {:fg _G.base03}
+                                :SnacksPickerUnselected {:fg _G.base03}
+                                :SnacksPickerGitStatusIgnored {:fg _G.base03}
+                                :SnacksPickerGitStatusUntracked {:fg _G.base03}
+                                :SnacksPickerDimmed {:fg _G.base03}
                                 :GlancePreviewNormal {:link :NormalFloat}
                                 :GlancePreviewCursorLine {:bg _G.base00}
                                 :GlanceListNormal {:link :NormalFloat}
@@ -244,10 +259,6 @@
                                 :LspReferenceText {:bg _G.base01}
                                 :LspReferenceRead {:link :LspReferenceText}
                                 :LspReferenceWrite {:link :LspReferenceText}
-                                :FzfLuaNormal {:bg _G.base02}
-                                :FzfLuaTitle {:fg _G.base00
-                                              :bg _G.base0F
-                                              :style :bold}
                                 :OutlineGuides {:link :NonText}
                                 :OutlineCurrent {:fg _G.base0F :style :bold}
                                 :OutlineFoldMarker {:fg _G.base03}}}})

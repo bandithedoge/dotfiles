@@ -1,6 +1,10 @@
 (import-macros {: use! : key!} :config.macros)
 
-[(use! :direnv/direnv.vim {:cond _G.USING_NIX :event :LazyFile})
+[(use! :Saghen/blink.pairs
+       {:event :LazyFile
+        :opts {:highlights {:enabled false :matchparen {:enabled false}}}})
+ ;;
+ (use! :direnv/direnv.vim {:cond _G.USING_NIX :event :LazyFile})
  ;;
  (use! :jghauser/fold-cycle.nvim
        {:keys [(key! :<tab> #(let [fold-cycle (require :fold-cycle)]
@@ -14,14 +18,6 @@
                         :keys [(key! :<localleader>g :<cmd>Neogen<cr>
                                      {:desc "Generate annotation"})]
                         :opts {:snippet_engine :nvim}})
- ;;
- (use! :figsoda/nix-develop.nvim {:cmd [:NixDevelop :NixShell :RiffShell]})
- ;;
- (use! :Allendang/nvim-expand-expr
-       {:keys [(key! :<localleader>e
-                     #(let [expand-expr (require :expand_expr)]
-                        (expand-expr.expand))
-                     {:desc "Expand expression"})]})
  ;;
  (use! :folke/persistence.nvim {:event :BufReadPre})
  ;;

@@ -23,7 +23,7 @@
         };
         widget.clock.format = "%A %d %B %T";
       };
-      extraCss = builtins.readFile (compileSCSS ../gtk.scss);
+      extraCss = builtins.readFile (compileSCSS "gtk.css" ../gtk.scss);
     };
 
     niri.enable = true;

@@ -31,6 +31,7 @@
       just
       killall
       librespeed-cli
+      lix-diff
       ncdu
       niv
       nix-output-monitor
@@ -294,7 +295,10 @@
 
     direnv = {
       enable = true;
-      nix-direnv.enable = true;
+      nix-direnv = {
+        enable = true;
+        package = pkgs.lixPackageSets.latest.nix-direnv;
+      };
     };
 
     git = {
@@ -339,7 +343,18 @@
       enable = true;
       enableFishIntegration = true;
       shellWrapperName = "y";
-      package = pkgs.yazi.override {extraPackages = with pkgs; [glow hexyl exiftool mediainfo ouch clipboard-jh p7zip];};
+      package = pkgs.yazi.override {
+        extraPackages = with pkgs; [
+          clipboard-jh
+          exiftool
+          glow
+          hexyl
+          mediainfo
+          ouch
+          p7zip
+          ripdrag
+        ];
+      };
 
       settings = {
         manager = {
@@ -447,9 +462,7 @@
           }
           {
             on = "<C-n>";
-            run = ''
-              shell 'dragon-drop "$@"' --confirm
-            '';
+            run = "shell -- ripdrag -n \"$@\"";
             desc = "Drag and drop";
           }
           {

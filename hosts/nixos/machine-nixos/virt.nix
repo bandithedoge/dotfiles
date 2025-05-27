@@ -62,7 +62,6 @@
       "vfio"
       "vfio_iommu_type1"
       "vfio_pci"
-      "vfio_virqfd"
     ];
     extraModulePackages = with config.boot.kernelPackages; [
       # https://github.com/NixOS/nixpkgs/issues/379503

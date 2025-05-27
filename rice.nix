@@ -176,7 +176,7 @@ in
       '';
     };
 
-    compileSCSS = path: let
+    compileSCSS = name: path: let
       input = pkgs.writeText "input.scss" ''
         ${def.scss}
         ${builtins.readFile path}

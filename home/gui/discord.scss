@@ -4,27 +4,34 @@
 
 body {
     --font: #{$uiFont}, sans-serif;
+    --code-font: #{$monoFont}, monospace;
 
-    --gap: 5px;
+    --gap: 2px;
     --divider-thickness: 2px;
+    --border-thickness: 2px;
 
     --animations: on;
     --list-item-transition: 0.2s ease;
     --dms-icon-svg-transition: 0.4s ease;
+    --border-hover-transition: 0.2s ease;
 
-    --top-bar-height: 24px;
-    --top-bar-button-position: off;
+    --top-bar-height: var(--gap);
+    --top-bar-button-position: hide;
     --top-bar-title-position: off;
 
     --custom-window-controls: off;
 
-    --dms-icon: off;
+    --custom-dms-icon: off;
 
     --background-image: off;
 
     --transparency-tweaks: off;
     --remove-bg-layer: off;
     --panel-blur: off;
+
+    --custom-chatbar: aligned;
+    --chatbar-height: 47px;
+    --chatbar-padding: 8px;
 
     --small-user-panel: on;
 }
@@ -67,6 +74,7 @@ body {
 
     --border-light: #{$base02};
     --border: #{$base00};
+    --border-hover: #{$base02};
     --button-border: #{$base02};
 
     --red-1: #{$base08};

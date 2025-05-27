@@ -1,12 +1,17 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  config,
+  ...
+}:
+{
   home = {
     packages = with pkgs; [
       bandithedoge.cantata
-      librewolf-wayland
       mpc
+      # ungoogled-chromium
       wireguard-tools
     ];
-    sessionVariables.BROWSER = "floorp";
+    sessionVariables.BROWSER = "librewolf";
   };
 
   programs.looking-glass-client = {
@@ -64,6 +69,73 @@
           large_text = "$date";
           small_image = "";
         };
+      };
+    };
+  };
+
+  programs.beets = {
+    enable = true;
+    package = pkgs.beets.override {
+      pluginOverrides =
+        pkgs.lib.recursiveUpdate
+          (pkgs.lib.genAttrs config.programs.beets.settings.plugins (name: {
+            enable = true;
+          }))
+          {
+            filetote.propagatedBuildInputs = [ pkgs.beetsPackages.filetote ];
+          };
+    };
+    mpdIntegration.enableUpdate = true;
+    settings = rec {
+      directory = config.services.mpd.musicDirectory;
+      library = directory + "/beets.db";
+      plugins = [
+        "badfiles"
+        # "chroma"
+        "discogs"
+        "duplicates"
+        "edit"
+        "embedart"
+        "fetchart"
+        "info"
+        "lastgenre"
+        "lastimport"
+        "lyrics"
+        "mbsubmit"
+        "mbsync"
+        "missing"
+        "parentwork"
+        "random"
+        "scrub"
+        "the"
+        "unimported"
+      ];
+      original_date = true;
+      per_disc_numbering = true;
+
+      import.bell = true;
+
+      paths = {
+        default = "%the{$albumartist}/[$year] $albumartist - $album%aunique{}/$disc-$track - $artist - $title";
+        comp = "Various Artists/[$year] $album%aunique{}/$disc-$track - $artist - $title";
+      };
+
+      embedart.auto = false;
+
+      lastgenre = {
+        # canonical = false;
+        count = 3;
+      };
+
+      lastfm.user = "bandithedoge";
+
+      lyrics = {
+        force = true;
+        synced = true;
+        sources = [
+          "lrclib"
+          "genius"
+        ];
       };
     };
   };

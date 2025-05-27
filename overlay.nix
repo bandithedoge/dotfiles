@@ -8,7 +8,7 @@ final: prev: {
     vP
     // prev.bandithedoge.vimPlugins
     // prev.awesomeNeovimPlugins
-    // {inherit (vP) neorg nvim-treesitter blink-cmp;};
+    // {inherit (vP) nvim-treesitter blink-cmp;};
 
   yaziPlugins = prev.yaziPlugins // prev.bandithedoge.yaziPlugins;
 
@@ -45,5 +45,12 @@ final: prev: {
       rev = "new-wine10-embedding";
       hash = "sha256-vgG6hwB/1f4qHGRQBnXMSvafTzQKT8GJeMhcco/M8JQ=";
     };
+  });
+
+  # https://github.com/NixOS/nixpkgs/pull/406514
+  cozette = prev.cozette.overrideAttrs (_: {
+    postInstall = ''
+      install -Dm644 *.psf -t $out/share/consolefonts
+    '';
   });
 }

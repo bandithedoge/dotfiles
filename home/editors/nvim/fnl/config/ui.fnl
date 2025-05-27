@@ -32,18 +32,6 @@
                               :changedelete {:text "▎"}}
                :diff_opts {:internal true}}})
  ;;
- (use! :NeogitOrg/neogit
-       {:dependencies [(use! :nvim-lua/plenary.nvim)
-                       (use! :sindrets/diffview.nvim)
-                       (use! :nvim-telescope/telescope.nvim)]
-        :cmd :Neogit
-        ; :keys [(key! :<leader>g :<cmd>Neogit<cr> {:desc :Git})]
-        :opts {:graph_style :kitty
-               :signs {:hunk ["" ""]
-                       :item ["󰅂" "󰅀"]
-                       :section ["󰅂" "󰅀"]}
-               :integrations {:diffview true}}})
- ;;
  (use! :brenoprata10/nvim-highlight-colors
        {:event :LazyFile :opts {:enable_tailwind true}})
  ;;
@@ -52,7 +40,7 @@
  (use! :folke/todo-comments.nvim
        {:dependencies [(use! :nvim-lua/plenary.nvim)]
         :cmd [:TodoTrouble :TodoTelescope]
-        :keys [(key! :<leader>ft :<cmd>TodoTelescope<cr> {:desc :TODO})]
+        :keys [(key! :<leader>ft #(_G.Snacks.picker.todo_comments) {:desc :TODO})]
         :event :LazyFile
         :opts {:signs false}})
  ;;

@@ -14,8 +14,7 @@
                                                           :rainbowcol3
                                                           :rainbowcol4
                                                           :rainbowcol5
-                                                          :rainbowcol6
-                                                          :rainbowcol7]}))})
+                                                          :rainbowcol6]}))})
                        (use! :Wansmer/treesj
                              {:keys [(key! :gj
                                            #(let [treesj (require :treesj)]
@@ -23,7 +22,8 @@
                                      (key! :gk
                                            #(let [treesj (require :treesj)]
                                               (treesj.split)))]
-                              :opts {:use_default_keymaps false}})]
+                              :opts {:use_default_keymaps false}})
+                       (use! :calops/hmts.nvim)]
         :build (when (not _G.USING_NIX) ":TSUpdate")
         :event :LazyFile
         :opts {:auto_install (not _G.USING_NIX)
@@ -36,12 +36,5 @@
                                        :node_decremental :<bs>}
                :playground {:enable true}
                :autotag {:enable true :filetypes [:html :xml]}}
-        :config #(let [ts (require :nvim-treesitter.configs)
-                       parsers (require :nvim-treesitter.parsers)
-                       parser-configs (parsers.get_parser_configs)]
-                   (ts.setup $2)
-                   (set parser-configs.hypr
-                        {:filetype :hypr
-                         :install_info {:url "https://github.com/luckasRanarison/tree-sitter-hypr"
-                                        :files [:src/parser.c]
-                                        :branch :master}}))})]
+        :config #(let [ts (require :nvim-treesitter.configs)]
+                   (ts.setup $2))})]

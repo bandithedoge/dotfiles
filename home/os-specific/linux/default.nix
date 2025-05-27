@@ -1,8 +1,8 @@
 {
   pkgs,
   config,
-  flake,
   lib,
+  inputs,
   ...
 }: {
   imports = [
@@ -12,6 +12,7 @@
 
   home = {
     packages = with pkgs; [
+      (ghidra.withExtensions (p: with p; [ghidra-delinker-extension]))
       appimage-run
       bandithedoge.chainner-bin
       bandithedoge.deemix-gui-bin
@@ -23,7 +24,7 @@
       equibop
       foliate
       fractal
-      gimp3
+      geekbench
       gnome-secrets
       handbrake
       icon-library
@@ -38,13 +39,10 @@
       pciutils
       qbittorrent
       qt6ct
-      rice.monoFontPackage
-      rice.uiFontPackage
       telegram-desktop
       wine
       winetricks
       wtype
-      xdragon
       zenity
     ];
 
@@ -114,8 +112,9 @@
   # gtk {{{
   gtk = rec {
     enable = true;
-    font = {
-      name = pkgs.rice.uiFont;
+    font = with pkgs.rice; {
+      name = uiFont;
+      package = uiFontPackage;
       size = 13;
     };
     inherit (pkgs.rice) cursorTheme;
@@ -151,7 +150,7 @@
 
   xdg = {
     configFile = let
-      css = pkgs.rice.compileSCSS ../../../gtk.scss;
+      gtkCss = pkgs.rice.compileSCSS "gtk.css" ../../../gtk.scss;
       # qt {{{
       qtct = version:
         pkgs.lib.generators.toINI {} {
@@ -263,14 +262,13 @@
         };
       };
 
-      "gtk-4.0/gtk.css".source = css;
-      "gtk-3.0/gtk.css".source = css;
-
+      "gtk-4.0/gtk.css".source = gtkCss;
+      "gtk-3.0/gtk.css".source = gtkCss;
       "qt6ct/qt6ct.conf".text = qtct 6;
       "qt6ct/colors/rice.conf".text = qtColorScheme;
       "qt5ct/qt5ct.conf".text = qtct 5;
       "qt5ct/colors/rice.conf".text = qtColorScheme;
-      "Kvantum/KvLibadwaita".source = flake.inputs.kvlibadwaita + "/src/KvLibadwaita";
+      "Kvantum/KvLibadwaita".source = inputs.kvlibadwaita + "/src/KvLibadwaita";
       "Kvantum/kvantum.kvconfig".text = lib.generators.toINI {} {General.theme = "KvLibadwaitaDark";};
     };
 
@@ -535,13 +533,4 @@
   #   };
   # };
   # }}}
-
-  fonts.fontconfig = {
-    enable = true;
-    defaultFonts = with pkgs.rice; {
-      monospace = [monoFont];
-      sansSerif = [uiFont];
-      serif = [serifFont];
-    };
-  };
 }

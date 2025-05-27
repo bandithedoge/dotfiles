@@ -9,9 +9,7 @@ default:
 update +INPUTS="":
     nix flake update {{ INPUTS }} {{ token-opt }}
 
-    @if [[ "{{ INPUTS }}" == "" ]]; then nix-channel --update; flatpak update; flatpak uninstall --unused; fi
-
-    @if [[ "{{ INPUTS }}" == *"home-manager"* ]] || [[ "{{ INPUTS }}" == "" ]]; then home-manager news --flake .#bandithedoge; fi
+    @if [[ "{{ INPUTS }}" == "" ]]; then flatpak update; flatpak uninstall --unused; fi
 
 clean:
     nh clean all -v

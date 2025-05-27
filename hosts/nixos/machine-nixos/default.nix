@@ -2,20 +2,29 @@
   pkgs,
   config,
   ...
-}: {
-  imports = [./virt.nix];
+}:
+{
+  imports = [ ./virt.nix ];
 
   boot = {
-    kernelParams = ["preempt=full" "mitigations=off"];
-    kernelModules = ["wireguard" "ntsync"];
-    blacklistedKernelModules = ["iTCO_wdt"];
+    kernelParams = [
+      "preempt=full"
+      "mitigations=off"
+    ];
+    kernelModules = [
+      "wireguard"
+      "ntsync"
+    ];
+    blacklistedKernelModules = [ "iTCO_wdt" ];
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
   };
 
-  networking.hostName = "machine-nixos";
+  networking = {
+    hostName = "machine-nixos";
+  };
 
   # drives {{{
   fileSystems = {
@@ -99,7 +108,7 @@
                 "node.description" = "USB Audio CODEC [MONO]";
                 "capture.props" = {
                   "node.name" = "capture.mono-microphone";
-                  "audio.position" = ["FL"];
+                  "audio.position" = [ "FL" ];
                   "target.object" = "alsa_input.usb-Burr-Brown_from_TI_USB_Audio_CODEC-00.analog-stereo-input";
                   "stream.dont-remix" = true;
                   "node.passive" = true;
@@ -107,7 +116,7 @@
                 "playback.props" = {
                   "media.class" = "Audio/Source";
                   "node.name" = "mono-microphone";
-                  "audio.position" = ["MONO"];
+                  "audio.position" = [ "MONO" ];
                 };
               };
             }
@@ -118,7 +127,7 @@
         "51-disable-builtin-audio" = {
           "monitor.alsa.rules" = [
             {
-              matches = [{"alsa.id" = "~HDMI|PCH";}];
+              matches = [ { "alsa.id" = "~HDMI|PCH"; } ];
               actions.update-props = {
                 "device.disabled" = true;
               };
@@ -131,16 +140,17 @@
     scx = {
       enable = true;
       package = pkgs.scx_git.rustscheds;
-      scheduler = "scx_lavd";
+      scheduler = "scx_flash";
     };
 
     btrfs.autoScrub.enable = true;
   };
 
+  nix.settings.max-jobs = 6;
+
   musnix = {
     enable = true;
     rtcqs.enable = true;
-    das_watchdog.enable = true;
     rtirq.enable = true;
   };
 }
