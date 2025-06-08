@@ -11,6 +11,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-wsl.url = "github:nix-community/NixOS-WSL/22.05-5c211b47";
+    disko = {
+      url = "github:nix-community/disko/latest";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     nur-bandithedoge.url = "github:bandithedoge/nur-packages";
 
@@ -120,6 +124,7 @@
               { inherit (defaults) nixpkgs; }
 
               aagl.nixosModules.default
+              disko.nixosModules.default
               flatpak.nixosModules.nix-flatpak
               home-manager.nixosModules.home-manager
               musnix.nixosModules.musnix

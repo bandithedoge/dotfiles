@@ -5,6 +5,8 @@
   ...
 }:
 {
+  home.sessionVariables.BROWSER = "librewolf";
+
   programs = {
     librewolf = {
       # {{{

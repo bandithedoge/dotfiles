@@ -10,7 +10,6 @@
       mpc
       wireguard-tools
     ];
-    sessionVariables.BROWSER = "librewolf";
   };
 
   programs.looking-glass-client = {

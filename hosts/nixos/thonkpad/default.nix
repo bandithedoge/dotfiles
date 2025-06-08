@@ -10,7 +10,6 @@
 
   boot = {
     kernelModules = ["kvm-intel"];
-    kernelParams = ["thinkpad_acpi.force_load=1"];
     initrd.availableKernelModules = [
       "ahci"
       "ehci_pci"
@@ -20,10 +19,11 @@
       "usb_storage"
       "xhci_pci"
     ];
-    loader.systemd-boot.enable = true;
-    supportedFilesystems = ["ntfs"];
     kernel.sysctl = {
       "rcutree.enable_rcu_lazy" = 1;
+    };
+    loader.grub = {
+      device = "nodev";
     };
   };
 
@@ -62,22 +62,66 @@
     linux-firmware
   ];
 
-  # drives {{{
-  fileSystems = {
-    "/" = {
-      device = "/dev/disk/by-uuid/11ac846a-2311-4cc5-871c-64e52c45a009";
-      fsType = "ext4";
-    };
+  hardware.graphics.enable = true;
 
-    "/boot" = {
-      device = "/dev/disk/by-uuid/C106-5693";
-      fsType = "vfat";
+  # drives {{{
+  disko.devices.disk.nixos = {
+    type = "disk";
+    device = "/dev/sda";
+    name = "nixos";
+    content = {
+      type = "gpt";
+      partitions = {
+        boot = {
+	  size = "512M";
+	  type = "EF00";
+	  content = {
+	    type = "filesystem";
+	    format = "vfat";
+	    mountpoint = "/boot";
+	    mountOptions = ["umask=0077"];
+	  };
+	};
+
+	root = {
+	  size = "100%";
+	  content = {
+	    type = "luks";
+	    name = "root";
+	    passwordFile = "/tmp/secret.key";
+	    settings.allowDiscards = true;
+	    content = {
+	      type = "btrfs";
+	      extraArgs = ["-f"];
+	      subvolumes = let
+	      in {
+	        "/root" = {
+		      mountpoint = "/";
+		    };
+		    "/home" = {
+		      mountpoint = "/home";
+	          mountOptions = [
+		        "compress=zstd"
+		      ];
+		    };
+		    "/nix" = {
+		      mountpoint = "/nix";
+	          mountOptions = [
+		        "compress=zstd"
+		        "noatime"
+		      ];
+		    };
+		    "/swap" = {
+		      mountpoint = "/.swapvol";
+		      swap.swapfile.size = "4G";
+		    };
+	      };
+	    };
+	  };
+	};
+      };
     };
   };
-
-  swapDevices = [{device = "/dev/disk/by-uuid/7eaade78-9c5e-4c25-8de4-20cf7ced3e72";}];
-
-  # system.activationScripts.kmonad.text = "${pkgs.systemd}/bin/systemctl try-restart kmonad-laptop-internal";
   # }}}
 
   networking.hostName = "thonkpad";
