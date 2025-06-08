@@ -47,16 +47,16 @@
       sumneko-lua-language-server
 
       # c
-      bandithedoge.mesonlsp-bin
       clang-tools
       lldb
+      mesonlsp
       neocmakelsp
 
       # yaml
       nodePackages.yaml-language-server
 
       # writing
-      ltex-ls
+      harper
       marksman
       tinymist
       typst
@@ -128,7 +128,6 @@
             fidget-nvim
             garbage-day-nvim
             glance-nvim
-            lsp_lines-nvim
             lsplinks-nvim
             neoconf-nvim
             nvim-lint

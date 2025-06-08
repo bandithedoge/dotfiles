@@ -2,7 +2,8 @@
   pkgs,
   config,
   ...
-}: {
+}:
+{
   imports = [
     ./xdg.nix
   ];
@@ -10,12 +11,12 @@
   home = {
     # {{{
     stateVersion = "25.05";
-    activation.setupEtc = config.lib.dag.entryAfter ["writeBoundary"] ''
+    activation.setupEtc = config.lib.dag.entryAfter [ "writeBoundary" ] ''
       /run/current-system/sw/bin/systemctl start --user sops-nix
     '';
     packages = with pkgs; [
       # {{{
-      (sox.override {enableLame = true;})
+      (sox.override { enableLame = true; })
       (writeScriptBin "nust" (builtins.readFile ../../justfile))
       age
       aria
@@ -68,7 +69,9 @@
   }; # }}}
 
   xdg.configFile = {
-    "rice.json".text = builtins.toJSON (pkgs.lib.filterAttrsRecursive (_: v: !builtins.isFunction v) pkgs.rice);
+    "rice.json".text = builtins.toJSON (
+      pkgs.lib.filterAttrsRecursive (_: v: !builtins.isFunction v) pkgs.rice
+    );
   };
 
   programs = {
@@ -81,39 +84,46 @@
       # {{{
       enable = true;
       plugins =
-        builtins.map (x: {
-          name = x.pname;
-          inherit (x) src;
-        }) (with pkgs.fishPlugins; [
-          autopair
-          done
-          forgit
-          fzf-fish
-          puffer
-        ]);
-      functions = let
-        mkNom = subc: {
-          body = ''
-            nix --log-format internal-json -v ${subc} $argv &| nom --json
-          '';
-        };
-      in {
-        br.body = ''
-          set f (mktemp)
-          broot --outcmd $f $argv
-          if test $status -ne 0
+        builtins.map
+          (x: {
+            name = x.pname;
+            inherit (x) src;
+          })
+          (
+            with pkgs.fishPlugins;
+            [
+              autopair
+              done
+              forgit
+              fzf-fish
+              puffer
+            ]
+          );
+      functions =
+        let
+          mkNom = subc: {
+            body = ''
+              nix --log-format internal-json -v ${subc} $argv &| nom --json
+            '';
+          };
+        in
+        {
+          br.body = ''
+            set f (mktemp)
+            broot --outcmd $f $argv
+            if test $status -ne 0
+              rm -f "$f"
+              return "$code"
+            end
+            set d (cat "$f")
             rm -f "$f"
-            return "$code"
-          end
-          set d (cat "$f")
-          rm -f "$f"
-          eval "$d"
-        '';
-        nb = mkNom "build";
-        nd = mkNom "develop";
-        nr = mkNom "run";
-        ns = mkNom "shell";
-      };
+            eval "$d"
+          '';
+          nb = mkNom "build";
+          nd = mkNom "develop";
+          nr = mkNom "run";
+          ns = mkNom "shell";
+        };
       interactiveShellInit = with pkgs.rice; ''
         set fish_color_autosuggestion '${base03}'
         set fish_color_cancel -r
@@ -227,7 +237,7 @@
           }
           {
             ratio = 2;
-            child = [{type = "proc";}];
+            child = [ { type = "proc"; } ];
           }
         ];
       };
@@ -237,7 +247,7 @@
     bat = {
       enable = true;
       config.theme = "base16";
-      extraPackages = with pkgs.bat-extras; [batman];
+      extraPackages = with pkgs.bat-extras; [ batman ];
     };
 
     eza = {
@@ -249,41 +259,47 @@
     skim = {
       enable = true;
       enableFishIntegration = false;
-      defaultOptions = let
-        concat = pkgs.lib.concatMapAttrsStringSep "," (k: v: "${k}:${v}");
-      in
-        with pkgs.rice; [
+      defaultOptions =
+        let
+          concat = pkgs.lib.concatMapAttrsStringSep "," (k: v: "${k}:${v}");
+        in
+        with pkgs.rice;
+        [
           "--prompt='❯ '"
           # "--pointer='❯'"
           # "--marker='┃'"
           "--tabstop=4"
           # "--border=none"
 
-          "--color=${concat {
-            fg = base05;
-            bg = base00;
-            "fg+" = base05;
-            "bg+" = base10;
-            selected-bg = base02;
-            hl = base0F;
-            "hl+" = base0F;
-            gutter = base00;
-            prompt = base0F;
-            pointer = base0F;
-            disabled = base03;
-            marker = base0F;
-            info = base0A;
-            scrollbar = base0F;
-            spinner = base0F;
-            border = base0F;
-          }}"
+          "--color=${
+            concat {
+              fg = base05;
+              bg = base00;
+              "fg+" = base05;
+              "bg+" = base10;
+              selected-bg = base02;
+              hl = base0F;
+              "hl+" = base0F;
+              gutter = base00;
+              prompt = base0F;
+              pointer = base0F;
+              disabled = base03;
+              marker = base0F;
+              info = base0A;
+              scrollbar = base0F;
+              spinner = base0F;
+              border = base0F;
+            }
+          }"
 
-          "--bind=${concat {
-            ctrl-h = "preview-up";
-            ctrl-l = "preview-down";
-            ctrl-d = "half-page-down";
-            ctrl-u = "half-page-up";
-          }}"
+          "--bind=${
+            concat {
+              ctrl-h = "preview-up";
+              ctrl-l = "preview-down";
+              ctrl-d = "half-page-down";
+              ctrl-u = "half-page-up";
+            }
+          }"
         ];
     };
 
@@ -306,8 +322,7 @@
       package = pkgs.gitAndTools.gitFull;
       userName = "bandithedoge";
       userEmail = "bandithedoge@protonmail.com";
-      ignores = ["*~"];
-      extraConfig.pull.rebase = true;
+      ignores = [ "*~" ];
       lfs.enable = true;
       delta = {
         enable = true;
@@ -357,7 +372,7 @@
       };
 
       settings = {
-        manager = {
+        mgr = {
           sort_by = "natural";
           show_hidden = true;
           linemode = "size";
@@ -439,7 +454,7 @@
       ] (name: pkgs.yaziPlugins.${name});
 
       keymap = {
-        manager.prepend_keymap = [
+        mgr.prepend_keymap = [
           {
             on = "l";
             run = "plugin smart-enter";
@@ -474,7 +489,10 @@
             run = "tab_switch -1 --relative";
           }
           {
-            on = ["g" "i"];
+            on = [
+              "g"
+              "i"
+            ];
             run = "plugin lazygit";
             desc = "Open lazygit";
           }
@@ -497,16 +515,17 @@
       };
 
       theme = with pkgs.rice; {
-        manager.border.fg = base03;
+        mgr.border.fg = base03;
       };
 
-      initLua = builtins.readFile (pkgs.runCommand "yazi/init.lua" {nativeBuildInputs = with pkgs; [fennel];}
-        ''
+      initLua = builtins.readFile (
+        pkgs.runCommand "yazi/init.lua" { nativeBuildInputs = with pkgs; [ fennel ]; } ''
           cat <<EOF > $out
             ${pkgs.rice.def.lua}
           EOF
           fennel -c ${./yazi.fnl} >> $out
-        '');
+        ''
+      );
     };
     # }}}
 
@@ -557,25 +576,40 @@
       settings = {
         gui = {
           theme = with pkgs.rice; {
-            activeBorderColor = [base0F "bold"];
-            inactiveBorderColor = [base03];
-            searchingActiveBorderColor = [base0C];
-            optionsTextColor = [base03];
-            selectedLineBgColor = [base0F "bold"];
-            inactiveViewSelectedLineBgColor = [base02];
-            cherryPickedCommitFgColor = [base00];
-            cherryPickedCommitBgColor = [base0C];
-            markedBaseCommitFgColor = [base00];
-            markedBaseCommitBgColor = [base0D];
-            unstagedChangesColor = [base08];
-            defaultFgColor = [base05];
+            activeBorderColor = [
+              base0F
+              "bold"
+            ];
+            inactiveBorderColor = [ base03 ];
+            searchingActiveBorderColor = [ base0C ];
+            optionsTextColor = [ base03 ];
+            selectedLineBgColor = [
+              base0F
+              "bold"
+            ];
+            inactiveViewSelectedLineBgColor = [ base02 ];
+            cherryPickedCommitFgColor = [ base00 ];
+            cherryPickedCommitBgColor = [ base0C ];
+            markedBaseCommitFgColor = [ base00 ];
+            markedBaseCommitBgColor = [ base0D ];
+            unstagedChangesColor = [ base08 ];
+            defaultFgColor = [ base05 ];
           };
           showNumstatInFilesView = true;
           nerdFontsVersion = "3";
           showBranchCommitHash = true;
           showDivergenceFromBaseBranch = "arrowAndNumber";
           border = "single";
-          spinner.frames = ["⣾" "⣽" "⣻" "⢿" "⡿" "⣟" "⣯" "⣷"];
+          spinner.frames = [
+            "⣾"
+            "⣽"
+            "⣻"
+            "⢿"
+            "⡿"
+            "⣟"
+            "⣯"
+            "⣷"
+          ];
         };
         # git.paging.useConfig = true;
         update.method = "never";
@@ -587,6 +621,7 @@
       settings.git_protocol = "ssh";
     };
 
+    jujutsu.enable = true;
     dircolors.enable = true;
     info.enable = true;
     nh.enable = true;

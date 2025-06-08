@@ -1,14 +1,22 @@
 final: prev: {
-  rice = prev.callPackage ./rice.nix {};
+  rice = prev.callPackage ./rice.nix { };
   dummy = prev.hello;
 
-  vimPlugins = let
-    vP = builtins.mapAttrs (_: p: p.overrideAttrs (old: {pname = builtins.replaceStrings ["."] ["-"] old.pname;})) prev.vimPlugins;
-  in
+  vimPlugins =
+    let
+      vP = builtins.mapAttrs (
+        _: p:
+        p.overrideAttrs (old: {
+          pname = builtins.replaceStrings [ "." ] [ "-" ] old.pname;
+        })
+      ) prev.vimPlugins;
+    in
     vP
     // prev.bandithedoge.vimPlugins
     // prev.awesomeNeovimPlugins
-    // {inherit (vP) nvim-treesitter blink-cmp;};
+    // {
+      inherit (vP) nvim-treesitter blink-cmp;
+    };
 
   yaziPlugins = prev.yaziPlugins // prev.bandithedoge.yaziPlugins;
 
@@ -18,7 +26,7 @@ final: prev: {
   };
 
   connman-gtk = prev.connman-gtk.overrideAttrs (_: {
-    NIX_CFLAGS_COMPILE = ["-Wno-incompatible-pointer-types"];
+    NIX_CFLAGS_COMPILE = [ "-Wno-incompatible-pointer-types" ];
   });
 
   # gamescope = prev.gamescope_git.overrideAttrs (_: {
@@ -52,5 +60,18 @@ final: prev: {
     postInstall = ''
       install -Dm644 *.psf -t $out/share/consolefonts
     '';
+  });
+
+  # https://nixpk.gs/pr-tracker.html?pr=411777
+  linuxPackages_cachyos = prev.linuxPackages_cachyos.extend (_: prev': {
+    v4l2loopback = prev'.v4l2loopback.overrideAttrs (_: rec {
+      version = "0.15.0";
+      src = final.fetchFromGitHub {
+        owner = "umlaeute";
+        repo = "v4l2loopback";
+        rev = "v${version}";
+        hash = "sha256-fa3f8GDoQTkPppAysrkA7kHuU5z2P2pqI8dKhuKYh04=";
+      };
+    });
   });
 }

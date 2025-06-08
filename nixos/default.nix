@@ -13,6 +13,7 @@
     dbus = {
       enable = true;
       packages = with pkgs; [dconf];
+      implementation = "broker";
     };
 
     printing = {

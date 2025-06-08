@@ -107,6 +107,9 @@
 (vim.fn.sign_define :DiagnosticSignHint
                     {:text "󰌵" :texthl :DiagnosticSignHint})
 
+(vim.diagnostic.config {:virtual_lines {:current_line true}
+                        :severity_sort true})
+
 (let [lazy (require :lazy)
       event (require :lazy.core.handler.event)]
   (set event.mappings.LazyFile

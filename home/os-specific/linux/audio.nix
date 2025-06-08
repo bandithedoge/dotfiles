@@ -6,9 +6,9 @@
   home.packages = with pkgs; [
     (audacious.override {withPlugins = true;})
     ardour
+    bandithedoge.cardinal
     bandithedoge.clap-info
     bandithedoge.partiels
-    cardinal
     carla
     coppwr
     furnace
@@ -22,7 +22,7 @@
     (yabridge.override {inherit (pkgs) wine;})
     (yabridgectl.override {inherit (pkgs) wine;})
     aether-lv2
-    bandithedoge.airwindows-consolidated
+    airwin2rack
     bandithedoge.blepfx.crunchrr
     bandithedoge.blepfx.destruqtor
     bandithedoge.blepfx.filtrr
@@ -46,6 +46,9 @@
     bandithedoge.schrammel-ojd
     bandithedoge.sg-323
     bandithedoge.showmidi-bin
+    bandithedoge.sinuslabs.bandbreite
+    bandithedoge.sinuslabs.ko
+    bandithedoge.sinuslabs.reach
     bandithedoge.squeezer-bin
     bandithedoge.u-he.ace
     bandithedoge.u-he.bazille
@@ -76,8 +79,6 @@
     dragonfly-reverb
     lsp-plugins
   ];
-
-  services.easyeffects.enable = true;
 
   xdg.configFile."yabridgectl/config.toml".text = ''
     plugin_dirs = [

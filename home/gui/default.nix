@@ -6,125 +6,8 @@
 }:
 {
   programs = {
-    floorp = {
-      # {{{
-      enable = false;
-      package = if !pkgs.stdenv.isDarwin then pkgs.floorp else pkgs.dummy;
-      languagePacks = [
-        "en-US"
-        "pl"
-      ];
-      policies = {
-        AppAutoUpdate = false;
-        DisableFirefoxStudies = true;
-        DisableTelemetry = true;
-        DisableFeedbackCommands = true;
-        DisablePocket = true;
-        DisableSetDesktopBackground = true;
-        DontCheckDefaultBrowser = true;
-        ManualAppUpdateOnly = true;
-      };
-      profiles = {
-        default = {
-          name = "default";
-          isDefault = true;
-          extensions.packages = with pkgs.bandithedoge.firefoxAddons; [
-            base64-decoder
-            betterviewer
-            enhanced-github
-            gitako
-            imagus
-            indie-wiki-buddy
-            lovely-forks
-            nexusmods-advance
-            privacy-pass
-            pronoundb
-            reddit-enhancement-suite
-            refined-github
-            search_by_image
-            skip-redirect
-            sponsorblock
-            stylus
-            ublock-origin
-            violentmonkey
-          ];
-          settings = {
-            "browser.autofocus" = false;
-            "browser.newtabpage.activity-stream.improvesearch.handoffToAwesomebar" = false;
-            "devtools.chrome.enabled" = true;
-            "extensions.webextensions.ExtensionStorageIDB.enabled" = false;
-            "font.name.monospace.x-western" = pkgs.rice.monoFont;
-            "font.name.sans-serif.x-western" = pkgs.rice.uiFont;
-            "font.name.serif.x-western" = pkgs.rice.serifFont;
-            "general.autoScroll" = true;
-            "identity.fxaccounts.enabled" = true;
-            "layers.acceleration.force-enabled" = true;
-            "layout.css.has-selector.enabled" = true;
-            "svg.context-properties.content.enabled" = true;
-            "toolkit.tabbox.switchByScrolling" = true;
-            "ui.context_menus.after_mouseup" = true;
-            "ui.key.menuAccessKeyFocuses" = false;
-            "widget.non-native-theme.use-theme-accent" = true;
-            "dom.security.https_only_mode" = true;
-
-            # smoothfox
-            "apz.overscroll.enabled" = true;
-            "general.smoothScroll" = true;
-            "general.smoothScroll.currentVelocityWeighting" = "0.15";
-            "general.smoothScroll.mouseWheel.durationMinMS" = 80;
-            "general.smoothScroll.stopDecelerationWeighting" = "0.6";
-            "mousewheel.min_line_scroll_amount" = 10;
-
-            "floorp.browser.sidebar.enable" = false;
-            "floorp.browser.tabbar.settings" = 2;
-            "floorp.browser.tabs.verticaltab" = true;
-            "floorp.browser.workspaces.enabled" = false;
-            "floorp.download.notification" = 3;
-            "floorp.lepton.interface" = 3;
-            "floorp.tabbar.style" = 2;
-            "floorp.tabscroll.wrap" = true;
-            "floorp.tabsleep.enabled" = true;
-            "floorp.verticaltab.hover.enabled" = true;
-
-            "userChrome.autohide.back_button" = true;
-            "userChrome.autohide.forward_button" = true;
-            "userChrome.autohide.page_action" = true;
-            "userChrome.autohide.sidebar" = false;
-            "userChrome.autohide.tab" = false;
-            "userChrome.centered.bookmarkbar" = false;
-            "userChrome.centered.tab" = false;
-            "userChrome.centered.urlbar" = true;
-            "userChrome.hidden.bookmarkbar_icon" = false;
-            "userChrome.hidden.bookmarkbar_label" = false;
-            "userChrome.hidden.disabled_menu" = false;
-            "userChrome.hidden.navbar" = false;
-            "userChrome.hidden.sidebar_header" = false;
-            "userChrome.hidden.tab_icon" = false;
-            "userChrome.hidden.tabbar" = false;
-            "userChrome.hidden.urlbar_iconbox" = false;
-            "userChrome.icon.disabled" = false;
-            "userChrome.tab.bottom_rounded_corner" = false;
-            "userChrome.tab.box_shadow" = false;
-            "userChrome.tab.connect_to_window" = false;
-            "userChrome.tab.lepton_like_padding" = false;
-            "userChrome.tab.newtab_button_like_tab" = false;
-            "userChrome.tab.newtab_button_proton" = true;
-            "userChrome.tabbar.one_liner" = false;
-            "userChrome.urlView.always_show_page_actions" = false;
-            "userChrome.urlView.move_icon_to_left" = false;
-          };
-          preConfig =
-            builtins.readFile (inputs.betterfox + "/user.js")
-            + builtins.readFile (inputs.firefox-ui-fix + "/user.js");
-          userChrome =
-            builtins.readFile (inputs.firefox-ui-fix + "/userChrome.css")
-            + builtins.readFile (pkgs.rice.compileSCSS "firefox.css" ./firefox.scss);
-          userContent = builtins.readFile (inputs.firefox-ui-fix + "/userContent.css");
-        };
-      };
-    }; # }}}
-
     librewolf = {
+      # {{{
       enable = true;
       languagePacks = [
         "en-US"
@@ -133,7 +16,7 @@
       profiles = {
         default = {
           name = "default";
-          isDefault = true;
+          id = 0;
           extensions.packages = with pkgs.bandithedoge.firefoxAddons; [
             base64-decoder
             betterviewer
@@ -231,8 +114,9 @@
             + builtins.readFile (pkgs.rice.compileSCSS "firefox.css" ./firefox.scss);
           userContent = builtins.readFile (inputs.firefox-ui-fix + "/css/leptonContent.css");
         };
+        secondary.id = 1;
       };
-    };
+    }; # }}}
 
     ghostty = {
       # {{{

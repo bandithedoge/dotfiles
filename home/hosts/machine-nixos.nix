@@ -6,9 +6,8 @@
 {
   home = {
     packages = with pkgs; [
-      bandithedoge.cantata
+      cantata
       mpc
-      # ungoogled-chromium
       wireguard-tools
     ];
     sessionVariables.BROWSER = "librewolf";
@@ -83,6 +82,8 @@
           }))
           {
             filetote.propagatedBuildInputs = [ pkgs.beetsPackages.filetote ];
+            describe.propagatedBuildInputs = [ pkgs.bandithedoge.beetsPackages.describe ];
+            yearfixer.propagatedBuildInputs = [ pkgs.bandithedoge.beetsPackages.yearfixer ];
           };
     };
     mpdIntegration.enableUpdate = true;
@@ -91,7 +92,7 @@
       library = directory + "/beets.db";
       plugins = [
         "badfiles"
-        # "chroma"
+        "describe"
         "discogs"
         "duplicates"
         "edit"
@@ -106,14 +107,32 @@
         "missing"
         "parentwork"
         "random"
+        "replaygain"
         "scrub"
         "the"
         "unimported"
+        "yearfixer"
+        "zero"
       ];
       original_date = true;
       per_disc_numbering = true;
 
-      import.bell = true;
+      import = {
+        bell = true;
+        incremental = true;
+        duplicate_verbose_prompt = true;
+      };
+
+      musicbrainz.external_ids = {
+        discogs = true;
+        spotify = true;
+        bandcamp = true;
+        beatport = true;
+        deezer = true;
+        tidal = true;
+      };
+
+      match.preferred.original_year = true;
 
       paths = {
         default = "%the{$albumartist}/[$year] $albumartist - $album%aunique{}/$disc-$track - $artist - $title";
@@ -137,6 +156,15 @@
           "genius"
         ];
       };
+
+      replaygain.backend = "ffmpeg";
+
+      unimported.ignore_extensions = [
+        "db"
+        "stignore"
+      ];
+
+      zero.fields = ["albumartist_sort" "albumartists_sort"];
     };
   };
 }

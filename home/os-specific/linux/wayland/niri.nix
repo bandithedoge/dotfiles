@@ -6,6 +6,7 @@
 {
   home.packages = with pkgs; [
     sway-contrib.grimshot
+    slurp
   ];
 
   programs.niri = {
@@ -292,16 +293,21 @@
   };
 
   xdg.portal = {
-    extraPortals = with pkgs; [ xdg-desktop-portal-gtk ];
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-gtk
+      xdg-desktop-portal-wlr
+    ];
     config.niri = {
       default = [
         "gnome"
         "gtk"
+        "wlr"
       ];
       "org.freedesktop.impl.portal.FileChooser" = "gtk";
       "org.freedesktop.impl.portal.Notification" = "gtk";
-      "org.freedesktop.impl.portal.ScreenCast" = "gnome";
       "org.freedesktop.impl.portal.Secret" = "gnome-keyring";
+      "org.freedesktop.impl.portal.ScreenCast" = "wlr";
+      "org.freedesktop.impl.portal.Screenshot" = "wlr";
     };
   };
 

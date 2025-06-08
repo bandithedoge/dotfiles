@@ -98,10 +98,10 @@
                                                           :style :underline}
                                 :DiagnosticUnderlineInfo {:fg _G.base0D
                                                           :style :underline}
-                                :EKaputError {:link :DiagnosticError}
-                                :EKaputWarning {:link :DiagnosticWarn}
-                                :EKaputHint {:link :DiagnosticHint}
-                                :EKaputInfo {:link :DiagnosticInfo}
+                                :DiagnosticVirtualLinesError {:link :DiagnosticVirtualTextError}
+                                :DiagnosticVirtualLinesWarn {:link :DiagnosticVirtualTextWarn}
+                                :DiagnosticVirtualLinesHint {:link :DiagnosticVirtualTextHint}
+                                :DiagnosticVirtualLinesInfo {:link :DiagnosticVirtualTextInfo}
                                 :NotifyBody {:bg :bg3}
                                 :NotifyTRACEBody {:link :NotifyBody}
                                 :NotifyINFOBody {:link :NotifyBody}
@@ -238,7 +238,8 @@
                                 :SnacksPickerCursorLine {:bg _G.base10}
                                 :SnacksPickerListCursorLine {:link :SnacksPickerCursorLine}
                                 :SnacksPickerPreviewCursorLine {:link :SnacksPickerCursorLine}
-                                :SnacksPickerBorder {:fg _G.base01 :bg _G.base01}
+                                :SnacksPickerBorder {:fg _G.base01
+                                                     :bg _G.base01}
                                 :SnacksPickerTitle {:link :Title}
                                 :SnacksPickerPrompt {:fg _G.base0F}
                                 :SnacksPickerMatch {:fg _G.base0F}

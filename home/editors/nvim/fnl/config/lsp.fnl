@@ -72,16 +72,6 @@
                                :preview {:<Tab> (actions.enter_win :list)}})
                   :folds {:fold_closed "󰅂" :fold_open "󰅀" :folded false}})})
  ;;
- (use! nil
-       {:url "https://git.sr.ht/~whynothugo/lsp_lines.nvim"
-        :event :LazyFile
-        :config #(let [lsp-lines (require :lsp_lines)]
-                   (lsp-lines.setup)
-                   (vim.diagnostic.config {:virtual_text false
-                                           :virtual_lines {:highlight_whole_line false
-                                                           :only_current_line true}}))}
-       :/lsp_lines.nvim)
- ;;
  (use! :icholy/lsplinks.nvim {:keys [(key! :gx
                                            #(let [lsplinks (require :lsplinks)]
                                               (lsplinks.gx)))]
@@ -153,6 +143,8 @@
                           :fennel_language_server {:settings {:fennel {:workspace {:library (vim.api.nvim_list_runtime_paths)}
                                                                        :diagnostics {:globals [:vim
                                                                                                :case]}}}}
+                          :harper_ls {:settings {:harper-ls {:linters {:BoringWords true}}}
+                                      :filetypes [:gitcommit :markdown :typst]}
                           :html {}
                           :jdtls {}
                           :jsonls {:settings {:json {:schemas (let [schemastore (require :schemastore)]

@@ -4,7 +4,8 @@
   lib,
   inputs,
   ...
-}: {
+}:
+{
   imports = [
     ./audio.nix
     ./wayland
@@ -12,7 +13,7 @@
 
   home = {
     packages = with pkgs; [
-      (ghidra.withExtensions (p: with p; [ghidra-delinker-extension]))
+      (ghidra.withExtensions (p: with p; [ ghidra-delinker-extension ]))
       appimage-run
       bandithedoge.chainner-bin
       bandithedoge.deemix-gui-bin
@@ -149,130 +150,136 @@
   };
 
   xdg = {
-    configFile = let
-      gtkCss = pkgs.rice.compileSCSS "gtk.css" ../../../gtk.scss;
-      # qt {{{
-      qtct = version:
-        pkgs.lib.generators.toINI {} {
-          Appearance = {
-            color_scheme_path = "${config.xdg.configHome}/qt${builtins.toString version}ct/colors/rice.conf";
-            custom_palette = true;
-            icon_theme = "breeze-dark";
-            standard_dialogs = "xdgdesktopportal";
-            style = "kvantum-dark";
-          };
-          Fonts =
-            if version == 6
-            then {
-              general = "\"${pkgs.rice.uiFont},11,-1,5,400,0,0,0,0,0,0,0,0,0,0,1\"";
-              fixed = "\"${pkgs.rice.monoFont},11,-1,5,400,0,0,0,0,0,0,0,0,0,0,1\"";
-            }
-            else {
-              general = "${pkgs.rice.uiFont},12,-1,5,50,0,0,0,0,0";
-              fixed = "${pkgs.rice.monoFont},11,-1,5,50,0,0,0,0,0,Regular";
+    configFile =
+      let
+        gtkCss = pkgs.rice.compileSCSS "gtk.css" ../../../gtk.scss;
+        # qt {{{
+        qtct =
+          version:
+          pkgs.lib.generators.toINI { } {
+            Appearance = {
+              color_scheme_path = "${config.xdg.configHome}/qt${builtins.toString version}ct/colors/rice.conf";
+              custom_palette = true;
+              icon_theme = "breeze-dark";
+              standard_dialogs = "xdgdesktopportal";
+              style = "kvantum-dark";
             };
-          Interface = {
-            activate_item_on_single_click = 0;
-            buttonbox_layout = 0;
-            cursor_flash_time = 1000;
-            dialog_buttons_have_icons = 2;
-            double_click_interval = 400;
-            gui_effects = "@Invalid()";
-            keyboard_scheme = 2;
-            menus_have_icons = true;
-            show_shortcuts_in_context_menus = true;
-            stylesheets = "@Invalid()";
-            toolbutton_style = 4;
-            underline_shortcut = 1;
-            wheel_scroll_lines = 3;
+            Fonts =
+              if version == 6 then
+                {
+                  general = "\"${pkgs.rice.uiFont},11,-1,5,400,0,0,0,0,0,0,0,0,0,0,1\"";
+                  fixed = "\"${pkgs.rice.monoFont},11,-1,5,400,0,0,0,0,0,0,0,0,0,0,1\"";
+                }
+              else
+                {
+                  general = "${pkgs.rice.uiFont},12,-1,5,50,0,0,0,0,0";
+                  fixed = "${pkgs.rice.monoFont},11,-1,5,50,0,0,0,0,0,Regular";
+                };
+            Interface = {
+              activate_item_on_single_click = 0;
+              buttonbox_layout = 0;
+              cursor_flash_time = 1000;
+              dialog_buttons_have_icons = 2;
+              double_click_interval = 400;
+              gui_effects = "@Invalid()";
+              keyboard_scheme = 2;
+              menus_have_icons = true;
+              show_shortcuts_in_context_menus = true;
+              stylesheets = "@Invalid()";
+              toolbutton_style = 4;
+              underline_shortcut = 1;
+              wheel_scroll_lines = 3;
+            };
+            SettingsWindow.geometry = "@ByteArray(\\x1\\xd9\\xd0\\xcb\\0\\x3\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\x2\\xde\\0\\0\\x4\\b\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\x2\\xde\\0\\0\\x4\\b\\0\\0\\0\\0\\0\\0\\0\\0\\a\\x80\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\x2\\xde\\0\\0\\x4\\b)";
+            Troubleshooting = {
+              force_raster_widgets = 1;
+              ignored_applications = "@Invalid()";
+            };
           };
-          SettingsWindow.geometry = "@ByteArray(\\x1\\xd9\\xd0\\xcb\\0\\x3\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\x2\\xde\\0\\0\\x4\\b\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\x2\\xde\\0\\0\\x4\\b\\0\\0\\0\\0\\0\\0\\0\\0\\a\\x80\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\x2\\xde\\0\\0\\x4\\b)";
-          Troubleshooting = {
-            force_raster_widgets = 1;
-            ignored_applications = "@Invalid()";
+
+        qtColorScheme = pkgs.lib.generators.toINI { } {
+          ColorScheme =
+            let
+              concat = pkgs.lib.concatMapStringsSep "," (x: "#ff" + (pkgs.lib.removePrefix "#" x));
+            in
+            with pkgs.rice;
+            rec {
+              active_colors = concat [
+                base05 # window text
+                base00 # button bg
+                base06 # bright
+                base04 # less bright
+                base00 # dark
+                base01 # less dark
+                base05 # normal text
+                base06 # bright text
+                base05 # button text
+                base00 # normal bg
+                base10 # window
+                base00 # shadow
+                base0F # highlight
+                base00 # highlighted text
+                base0F # link
+                base0E # visited link
+                base02 # alt bg
+                base05 # default
+                base02 # tooltip bg
+                base05 # tooltip text
+                base03 # placeholder text
+                base0F # accent
+              ];
+              inactive_colors = active_colors;
+              disabled_colors = concat [
+                base03 # window text
+                base00 # button bg
+                base06 # bright
+                base04 # less bright
+                base00 # dark
+                base01 # less dark
+                base03 # normal text
+                base06 # bright text
+                base03 # button text
+                base00 # normal bg
+                base00 # window
+                base00 # shadow
+                base0F # highlight
+                base00 # highlighted text
+                base0F # link
+                base0E # visited link
+                base00 # alt bg
+                base05 # default
+                base02 # tooltip bg
+                base05 # tooltip text
+                base03 # placeholder text
+                base0F # accent
+              ];
+            };
+        };
+        # }}}
+      in
+      {
+        "keepmenu/config.ini".text = lib.generators.toINI { } {
+          dmenu.dmenu_command = "rofi -dmenu";
+          database = {
+            inherit (pkgs.rice) terminal;
+            database_1 = "~/keepass/pass.kdbx";
+            editor = config.home.sessionVariables.EDITOR;
+            gui_editor = "keepassxc";
+            type_library = "wtype";
           };
         };
 
-      qtColorScheme = pkgs.lib.generators.toINI {} {
-        ColorScheme = let
-          concat = pkgs.lib.concatMapStringsSep "," (x: "#ff" + (pkgs.lib.removePrefix "#" x));
-        in
-          with pkgs.rice; rec {
-            active_colors = concat [
-              base05 # window text
-              base00 # button bg
-              base06 # bright
-              base04 # less bright
-              base00 # dark
-              base01 # less dark
-              base05 # normal text
-              base06 # bright text
-              base05 # button text
-              base00 # normal bg
-              base10 # window
-              base00 # shadow
-              base0F # highlight
-              base00 # highlighted text
-              base0F # link
-              base0E # visited link
-              base02 # alt bg
-              base05 # default
-              base02 # tooltip bg
-              base05 # tooltip text
-              base03 # placeholder text
-              base0F # accent
-            ];
-            inactive_colors = active_colors;
-            disabled_colors = concat [
-              base03 # window text
-              base00 # button bg
-              base06 # bright
-              base04 # less bright
-              base00 # dark
-              base01 # less dark
-              base03 # normal text
-              base06 # bright text
-              base03 # button text
-              base00 # normal bg
-              base00 # window
-              base00 # shadow
-              base0F # highlight
-              base00 # highlighted text
-              base0F # link
-              base0E # visited link
-              base00 # alt bg
-              base05 # default
-              base02 # tooltip bg
-              base05 # tooltip text
-              base03 # placeholder text
-              base0F # accent
-            ];
-          };
-      };
-      # }}}
-    in {
-      "keepmenu/config.ini".text = lib.generators.toINI {} {
-        dmenu.dmenu_command = "rofi -dmenu";
-        database = {
-          inherit (pkgs.rice) terminal;
-          database_1 = "~/keepass/pass.kdbx";
-          editor = config.home.sessionVariables.EDITOR;
-          gui_editor = "keepassxc";
-          type_library = "wtype";
-        };
+        "gtk-4.0/gtk.css".source = gtkCss;
+        "gtk-3.0/gtk.css".source = gtkCss;
+        "qt6ct/qt6ct.conf".text = qtct 6;
+        "qt6ct/colors/rice.conf".text = qtColorScheme;
+        "qt5ct/qt5ct.conf".text = qtct 5;
+        "qt5ct/colors/rice.conf".text = qtColorScheme;
+        "Kvantum/KvLibadwaita".source = inputs.kvlibadwaita + "/src/KvLibadwaita";
+        "Kvantum/kvantum.kvconfig".text = lib.generators.toINI { } { General.theme = "KvLibadwaitaDark"; };
       };
 
-      "gtk-4.0/gtk.css".source = gtkCss;
-      "gtk-3.0/gtk.css".source = gtkCss;
-      "qt6ct/qt6ct.conf".text = qtct 6;
-      "qt6ct/colors/rice.conf".text = qtColorScheme;
-      "qt5ct/qt5ct.conf".text = qtct 5;
-      "qt5ct/colors/rice.conf".text = qtColorScheme;
-      "Kvantum/KvLibadwaita".source = inputs.kvlibadwaita + "/src/KvLibadwaita";
-      "Kvantum/kvantum.kvconfig".text = lib.generators.toINI {} {General.theme = "KvLibadwaitaDark";};
-    };
-
-    portal.extraPortals = with pkgs; [xdg-desktop-portal-gtk];
+    portal.extraPortals = with pkgs; [ xdg-desktop-portal-gtk ];
 
     mimeApps = rec {
       enable = true;
@@ -304,25 +311,25 @@
         profile = "sw-fast";
         save-position-on-quit = true;
         video-sync = "display-resample";
-        vo = "gpu-next";
       };
       scriptOpts.uosc = {
         timeline_style = "bar";
         top_bar = "always";
         scale_fullscreen = 1;
         time_precision = 1;
-        color = let
-          color = pkgs.lib.removePrefix "#";
-        in
+        color =
+          let
+            color = pkgs.lib.removePrefix "#";
+          in
           with pkgs.rice;
-            pkgs.lib.concatStringsSep "," [
-              "background=${color base00}"
-              "background_text=${color base05}"
-              "error=${color base08}"
-              "foreground=${color base0F}"
-              "foreground_text=${color base00}"
-              "success=${color base0B}"
-            ];
+          pkgs.lib.concatStringsSep "," [
+            "background=${color base00}"
+            "background_text=${color base05}"
+            "error=${color base08}"
+            "foreground=${color base0F}"
+            "foreground_text=${color base00}"
+            "success=${color base0B}"
+          ];
       };
     };
     # }}}
@@ -370,26 +377,28 @@
       package = pkgs.rofi-wayland;
       font = "${pkgs.rice.uiFont} 12";
       plugins = with pkgs; [
-        (rofi-calc.override {rofi-unwrapped = pkgs.rofi-wayland-unwrapped;})
+        (rofi-calc.override { rofi-unwrapped = pkgs.rofi-wayland-unwrapped; })
       ];
       extraConfig = {
-        modi = let
-          power = pkgs.writeShellScript "rofi-power" ''
-            if [ -z "$@" ]; then
-              echo -en "\0prompt\x1fpower\n"
+        modi =
+          let
+            power = pkgs.writeShellScript "rofi-power" ''
+              if [ -z "$@" ]; then
+                echo -en "\0prompt\x1fpower\n"
 
-              echo -en "Lock\0icon\x1fsystem-lock-screen\n"
-              echo -en "Reboot\0icon\x1fsystem-reboot\n"
-              echo -en "Shutdown\0icon\x1fsystem-shutdown\n"
-            else
-              case "$*" in
-                "Lock") loginctl lock-session; exit ;;
-                "Reboot") systemctl reboot; exit ;;
-                "Shutdown") systemctl poweroff; exit ;;
-              esac
-            fi
-          '';
-        in "power:${power},drun,calc";
+                echo -en "Lock\0icon\x1fsystem-lock-screen\n"
+                echo -en "Reboot\0icon\x1fsystem-reboot\n"
+                echo -en "Shutdown\0icon\x1fsystem-shutdown\n"
+              else
+                case "$*" in
+                  "Lock") loginctl lock-session; exit ;;
+                  "Reboot") systemctl reboot; exit ;;
+                  "Shutdown") systemctl poweroff; exit ;;
+                esac
+              fi
+            '';
+          in
+          "power:${power},drun,calc";
 
         drun-match-fields = "name,exec";
         drun-display-format = "{name}";
@@ -410,90 +419,104 @@
         kb-remove-char-back = "BackSpace";
         kb-screenshot = "Control+Shift+s";
       };
-      theme = with pkgs.rice; let
-        inherit (config.lib.formats.rasi) mkLiteral;
-        padding = mkLiteral "5px";
-      in {
-        "*" = {
-          background-color = mkLiteral base10;
-          text-color = mkLiteral base05;
-        };
+      theme =
+        with pkgs.rice;
+        let
+          inherit (config.lib.formats.rasi) mkLiteral;
+          padding = mkLiteral "5px";
+        in
+        {
+          "*" = {
+            background-color = mkLiteral base10;
+            text-color = mkLiteral base05;
+          };
 
-        window = {
-          border = mkLiteral "2px";
-          children = map mkLiteral ["mainbox"];
-          border-color = mkLiteral base0F;
-        };
+          window = {
+            border = mkLiteral "2px";
+            children = map mkLiteral [ "mainbox" ];
+            border-color = mkLiteral base0F;
+          };
 
-        mainbox = {
-          children = map mkLiteral ["inputbar" "message" "listview" "mode-switcher"];
-          spacing = padding;
-          margin = padding;
-        };
+          mainbox = {
+            children = map mkLiteral [
+              "inputbar"
+              "message"
+              "listview"
+              "mode-switcher"
+            ];
+            spacing = padding;
+            margin = padding;
+          };
 
-        inputbar = {
-          children = map mkLiteral ["prompt" "entry"];
-          spacing = mkLiteral "0";
-        };
+          inputbar = {
+            children = map mkLiteral [
+              "prompt"
+              "entry"
+            ];
+            spacing = mkLiteral "0";
+          };
 
-        prompt = {
-          background-color = mkLiteral base0F;
-          text-color = mkLiteral base00;
-          vertical-align = mkLiteral "0.5";
-          horizontal-align = mkLiteral "0.5";
-          inherit padding;
-        };
+          prompt = {
+            background-color = mkLiteral base0F;
+            text-color = mkLiteral base00;
+            vertical-align = mkLiteral "0.5";
+            horizontal-align = mkLiteral "0.5";
+            inherit padding;
+          };
 
-        entry = {
-          background-color = mkLiteral base00;
-          vertical-align = mkLiteral "0.5";
-          inherit padding;
-        };
+          entry = {
+            background-color = mkLiteral base00;
+            vertical-align = mkLiteral "0.5";
+            inherit padding;
+          };
 
-        listview = {
-          background-color = mkLiteral base00;
-          scrollbar = true;
-          spacing = mkLiteral "0px 5px";
-          inherit padding;
-        };
+          listview = {
+            background-color = mkLiteral base00;
+            scrollbar = true;
+            spacing = mkLiteral "0px 5px";
+            inherit padding;
+          };
 
-        element = {
-          children = map mkLiteral ["element-icon" "element-text"];
-          background-color = mkLiteral "transparent";
-          padding = mkLiteral "2px";
-          spacing = padding;
-        };
-        element-icon = {
-          background-color = mkLiteral "inherit";
-          size = mkLiteral "1.25em";
-        };
-        element-text = {
-          background-color = mkLiteral "inherit";
-          highlight = mkLiteral "bold ${base0F}";
-          vertical-align = mkLiteral "0.5";
-        };
+          element = {
+            children = map mkLiteral [
+              "element-icon"
+              "element-text"
+            ];
+            background-color = mkLiteral "transparent";
+            padding = mkLiteral "2px";
+            spacing = padding;
+          };
+          element-icon = {
+            background-color = mkLiteral "inherit";
+            size = mkLiteral "1.25em";
+          };
+          element-text = {
+            background-color = mkLiteral "inherit";
+            highlight = mkLiteral "bold ${base0F}";
+            vertical-align = mkLiteral "0.5";
+          };
 
-        "element.selected.normal".background-color = mkLiteral base02;
-        "element.urgent".text-color = mkLiteral base08;
-        "element.active".text-color = mkLiteral base0B;
-        "element.selected.urgent".background-color = mkLiteral base08;
-        "element.selected.active".background-color = mkLiteral base0B;
+          "element.selected.normal".background-color = mkLiteral base02;
+          "element.urgent".text-color = mkLiteral base08;
+          "element.active".text-color = mkLiteral base0B;
+          "element.selected.urgent".background-color = mkLiteral base08;
+          "element.selected.active".background-color = mkLiteral base0B;
 
-        scrollbar = {
-          background-color = mkLiteral base00;
-          handle-color = mkLiteral base0F;
-          handle-width = mkLiteral "5px";
-        };
+          scrollbar = {
+            background-color = mkLiteral base00;
+            handle-color = mkLiteral base0F;
+            handle-width = mkLiteral "5px";
+          };
 
-        button = {
-          background-color = mkLiteral base01;
-          text-color = mkLiteral base03;
+          button = {
+            background-color = mkLiteral base01;
+            text-color = mkLiteral base03;
+          };
+          "button.selected" = {
+            background-color = mkLiteral base0F;
+            text-color = mkLiteral base00;
+          };
         };
-        "button.selected" = {
-          background-color = mkLiteral base0F;
-          text-color = mkLiteral base00;
-        };
-      };
     }; # }}}
 
     obs-studio = {
