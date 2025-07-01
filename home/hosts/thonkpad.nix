@@ -241,4 +241,6 @@
     };
   };
   # }}}
+
+  programs.bottom.settings.flags.battery = true;
 }

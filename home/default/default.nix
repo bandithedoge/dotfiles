@@ -1,6 +1,7 @@
 {
   pkgs,
   config,
+  lib,
   ...
 }:
 {
@@ -16,6 +17,7 @@
     '';
     packages = with pkgs; [
       # {{{
+      (lib.hiPrio uutils-coreutils-noprefix)
       (sox.override { enableLame = true; })
       (writeScriptBin "nust" (builtins.readFile ../../justfile))
       age
@@ -72,6 +74,15 @@
     "rice.json".text = builtins.toJSON (
       pkgs.lib.filterAttrsRecursive (_: v: !builtins.isFunction v) pkgs.rice
     );
+
+    "yazi/init.lua".source =
+      pkgs.runCommandNoCC "yazi.lua" { nativeBuildInputs = with pkgs; [ fennel ]; }
+        ''
+          cat <<EOF > $out
+            ${pkgs.rice.def.lua}
+          EOF
+          fennel -c ${./yazi.fnl} >> $out
+        '';
   };
 
   programs = {
@@ -182,12 +193,12 @@
         };
         git_metrics.disabled = false;
 
-        bun.symbol = " ";
+        bun.symbol = " ";
         c.symbol = " ";
-        cmake.symbol = "󰔷 ";
+        cmake.symbol = " ";
         container.symbol = "󰋘 ";
         dart.symbol = " ";
-        deno.symbol = " ";
+        deno.symbol = " ";
         directory.read_only = " 󰌾";
         fennel.symbol = " ";
         git_branch.symbol = " ";
@@ -195,16 +206,19 @@
         golang.symbol = "";
         haskell.symbol = " ";
         hostname.ssh_symbol = " ";
+        java.symbol = " ";
         julia.symbol = " ";
         lua.symbol = "";
         meson.symbol = "󰔷 ";
-        nim.symbol = "󰆥 ";
+        nim.symbol = " ";
         nix_shell.symbol = " ";
         nodejs.symbol = " ";
         package.symbol = "󰏗 ";
         python.symbol = " ";
+        r.symbol = " ";
         ruby.symbol = " ";
         rust.symbol = " ";
+        typst.symbol = " ";
         zig.symbol = " ";
       };
     };
@@ -214,14 +228,22 @@
       # {{{
       enable = true;
       settings = {
-        flags.mem_as_value = true;
-        colors = with pkgs.rice; {
-          avg_cpu_color = base0F;
-          highlighted_border_color = base0F;
-          cursor_color = base0F;
-          scroll_entry_bg_color = base0F;
-          table_header_color = base03;
+        flags = {
+          process_memory_as_value = true;
+          dot_marker = false;
         };
+        processes.columns = [
+          "pid"
+          "name"
+          "cpu%"
+          "mem%"
+          "gpu%"
+          "gmem%"
+          "read"
+          "write"
+          "user"
+          "time"
+        ];
         row = [
           {
             child = [
@@ -240,6 +262,62 @@
             child = [ { type = "proc"; } ];
           }
         ];
+        styles = with pkgs.rice; {
+          cpu = {
+            all_entry_color = base0F;
+            avg_entry_color = base03;
+            cpu_core_colors = [
+              base08
+              base09
+              base0A
+              base0B
+              base0C
+              base0D
+              base0E
+            ];
+          };
+          memory = {
+            ram_color = base0F;
+            cache_color = base03;
+            swap_color = base08;
+            arc_color = base0D;
+            gpu_colors = [
+              base0A
+              base0B
+              base0C
+              base0E
+            ];
+          };
+          battery = {
+            high_battery_color = base0B;
+            medium_battery_color = base0A;
+            low_battery_color = base08;
+          };
+          tables.headers = {
+            color = base0F;
+            bold = true;
+          };
+          graphs = {
+            graph_color = base05;
+            legend_text = {
+              color = base03;
+              bold = true;
+            };
+          };
+          widgets = {
+            border_color = base03;
+            selected_border_color = base0F;
+            widget_title = {
+              color = base0F;
+              bold = true;
+            };
+            selected_text = {
+              color = base00;
+              bg_color = base0F;
+            };
+            disabled_text.color = base03;
+          };
+        };
       };
     };
     # }}}
@@ -517,15 +595,6 @@
       theme = with pkgs.rice; {
         mgr.border.fg = base03;
       };
-
-      initLua = builtins.readFile (
-        pkgs.runCommand "yazi/init.lua" { nativeBuildInputs = with pkgs; [ fennel ]; } ''
-          cat <<EOF > $out
-            ${pkgs.rice.def.lua}
-          EOF
-          fennel -c ${./yazi.fnl} >> $out
-        ''
-      );
     };
     # }}}
 

@@ -110,11 +110,13 @@
             "userContent.player.ui" = true;
           };
           preConfig = builtins.readFile (inputs.betterfox + "/user.js");
-          # + builtins.readFile (inputs.firefox-ui-fix + "/user.js");
-          userChrome =
-            builtins.readFile (inputs.firefox-ui-fix + "/css/leptonChrome.css")
-            + builtins.readFile (pkgs.rice.compileSCSS "firefox.css" ./firefox.scss);
-          userContent = builtins.readFile (inputs.firefox-ui-fix + "/css/leptonContent.css");
+          userChrome = ''
+            @import url("${inputs.firefox-ui-fix + "/css/leptonChrome.css"}");
+            @import url("${pkgs.rice.compileSCSS "firefox.css" ./firefox.scss}");
+          '';
+          userContent = ''
+            @import url("${inputs.firefox-ui-fix + "/css/leptonContent.css"}")
+          '';
         };
         secondary.id = 1;
       };

@@ -48,9 +48,12 @@
       };
 
       outputs = {
-        "DP-2".position = {
-          x = 0;
-          y = 0;
+        "DP-2" = {
+          position = {
+            x = 0;
+            y = 0;
+          };
+          focus-at-startup = true;
         };
         "DP-3".position = {
           x = 1920;
@@ -62,9 +65,9 @@
         focus-ring = {
           width = 2;
           active.color = base0F;
-          inactive.color = base00;
-          # urgent.color = base08;
+          inactive.color = base02;
         };
+        border.urgent.color = base08;
         insert-hint.display.color = base0F + "80";
         always-center-single-column = true;
         default-column-width = { };

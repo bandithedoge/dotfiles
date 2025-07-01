@@ -410,50 +410,60 @@
         margin_bottom = 5;
         margin_right = 5;
         menu =
-          {
-            d = {
+          [
+            {
+              key = "d";
               desc = "Discord";
               cmd = "equibop";
-            };
-            b = {
+            }
+            {
+              key = "b";
               desc = "Web browser";
               cmd = "$BROWSER";
-            };
-            g = {
+            }
+            {
+              key = "g";
               desc = "Game launcher";
               cmd = "lutris";
-            };
-            k = {
+            }
+            {
+              key = "k";
               desc = "Password manager";
               cmd = "secrets";
-            };
-            e = {
+            }
+            {
+              key = "e";
               desc = "Emacs";
               cmd = "emacs";
-            };
-            c = {
+            }
+            {
+              key = "c";
               desc = "Messenger";
               cmd = "caprine";
-            };
-            f = {
+            }
+            {
+              key = "f";
               desc = "Matrix";
               cmd = "fractal";
-            };
-          }
-          // pkgs.lib.optionalAttrs (config.hostname == "machine-nixos") {
-            p = {
+            }
+          ]
+          ++ pkgs.lib.optionals (config.hostname == "machine-nixos") [
+            {
+              key = "p";
               desc = "Music player";
               cmd = "cantata";
-            };
-            v = {
+            }
+            {
+              key = "v";
               desc = "Virtual machines";
               cmd = "virt-manager";
-            };
-            l = {
+            }
+            {
+              key = "l";
               desc = "Looking Glass Client";
               cmd = "looking-glass-client";
-            };
-          };
+            }
+          ];
       };
   };
 }

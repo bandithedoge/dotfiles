@@ -16,6 +16,10 @@ final: prev: {
     // prev.awesomeNeovimPlugins
     // {
       inherit (vP) nvim-treesitter blink-cmp;
+
+      blink-pairs = vP.blink-pairs.overrideAttrs (_: {
+        doCheck = false;
+      });
     };
 
   yaziPlugins = prev.yaziPlugins // prev.bandithedoge.yaziPlugins;
@@ -45,33 +49,22 @@ final: prev: {
 
   wine = prev.wine-tkg;
 
-  # https://github.com/robbert-vdh/yabridge/issues/382
+  # HACK: https://github.com/robbert-vdh/yabridge/issues/382
   yabridge = prev.yabridge.overrideAttrs (_: {
     src = prev.fetchFromGitHub {
       owner = "robbert-vdh";
       repo = "yabridge";
-      rev = "new-wine10-embedding";
-      hash = "sha256-vgG6hwB/1f4qHGRQBnXMSvafTzQKT8GJeMhcco/M8JQ=";
+      rev = "17a95fdf992cbb8be0194c32a15b0a6d41093635";
+      hash = "sha256-FddTGIK5SAwqeS0qVWoV3RUbAg5XqpY+B60fFdDXWaQ=";
     };
   });
 
-  # https://github.com/NixOS/nixpkgs/pull/406514
-  cozette = prev.cozette.overrideAttrs (_: {
-    postInstall = ''
-      install -Dm644 *.psf -t $out/share/consolefonts
+  # HACK: https://github.com/NixOS/nixpkgs/issues/421442
+  ghostty = prev.ghostty.overrideAttrs (_: {
+    preBuild = ''
+      shopt -s globstar
+      sed -i 's/^const xev = @import("xev");$/const xev = @import("xev").Epoll;/' **/*.zig
+      shopt -u globstar
     '';
-  });
-
-  # https://nixpk.gs/pr-tracker.html?pr=411777
-  linuxPackages_cachyos = prev.linuxPackages_cachyos.extend (_: prev': {
-    v4l2loopback = prev'.v4l2loopback.overrideAttrs (_: rec {
-      version = "0.15.0";
-      src = final.fetchFromGitHub {
-        owner = "umlaeute";
-        repo = "v4l2loopback";
-        rev = "v${version}";
-        hash = "sha256-fa3f8GDoQTkPppAysrkA7kHuU5z2P2pqI8dKhuKYh04=";
-      };
-    });
   });
 }

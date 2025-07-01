@@ -1,10 +1,10 @@
 {pkgs, ...}: {
   home = {
     packages = with pkgs; [
-      bandithedoge.nugget-doom
       bandithedoge.vkdoom
       doomrunner
       lutris
+      nugget-doom
       pcsx2
       prismlauncher
       umu-launcher

@@ -2,11 +2,17 @@
   pkgs,
   config,
   ...
-}: {
+}:
+{
   programs = {
     regreet = with pkgs.rice; {
       enable = true;
-      cageArgs = ["-s" "-d" "-m" "last"];
+      cageArgs = [
+        "-s"
+        "-d"
+        "-m"
+        "last"
+      ];
       inherit (gtk) theme iconTheme;
       cursorTheme = {
         inherit (cursorTheme) name package;
@@ -23,7 +29,7 @@
         };
         widget.clock.format = "%A %d %B %T";
       };
-      extraCss = builtins.readFile (compileSCSS "gtk.css" ../gtk.scss);
+      extraCss = builtins.toPath (compileSCSS "gtk.css" ../gtk.scss);
     };
 
     niri.enable = true;
@@ -38,7 +44,7 @@
   };
 
   xdg.terminal-exec.enable = true;
-  xdg.portal.extraPortals = with pkgs; [xdg-desktop-portal-gtk];
+  xdg.portal.extraPortals = with pkgs; [ xdg-desktop-portal-gtk ];
 
   gtk.iconCache.enable = true;
 
@@ -57,16 +63,16 @@
       enable = true;
       # hinting.autohint = true;
       defaultFonts = with pkgs.rice; {
-        monospace = [monoFont];
-        sansSerif = [uiFont];
-        serif = [serifFont];
+        monospace = [ monoFont ];
+        sansSerif = [ uiFont ];
+        serif = [ serifFont ];
       };
     };
   };
 
   boot = {
-    extraModulePackages = with config.boot.kernelPackages; [v4l2loopback];
-    kernelModules = ["v4l2loopback"];
+    extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
+    kernelModules = [ "v4l2loopback" ];
     extraModprobeConfig = ''
       options v4l2loopback devices=1 video_nr=1 card_label="OBS Cam" exclusive_caps=1
     '';
@@ -78,7 +84,7 @@
   security = {
     soteria.enable = true;
     pam = {
-      services.gtklock = {};
+      services.gtklock = { };
       loginLimits = [
         {
           domain = "*";

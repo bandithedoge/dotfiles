@@ -15,7 +15,6 @@
     packages = with pkgs; [
       (ghidra.withExtensions (p: with p; [ ghidra-delinker-extension ]))
       appimage-run
-      bandithedoge.chainner-bin
       bandithedoge.deemix-gui-bin
       bandithedoge.propertree
       bleachbit

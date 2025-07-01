@@ -182,7 +182,7 @@ in
         ${builtins.readFile path}
       '';
     in
-      pkgs.runCommand "output.css" {nativeBuildInputs = with pkgs; [dart-sass];} ''
+      pkgs.runCommandNoCC "output.css" {nativeBuildInputs = with pkgs; [dart-sass];} ''
         sass ${input} > $out
       '';
   })

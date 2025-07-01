@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, lib, ... }:
+{
   system.stateVersion = "24.11";
 
   hardware.enableRedistributableFirmware = true;
@@ -7,12 +8,13 @@
     systemPackages = with pkgs; [
       alsa-utils
       ntfs3g
+      (lib.hiPrio uutils-coreutils-noprefix)
     ];
   };
   services = {
     dbus = {
       enable = true;
-      packages = with pkgs; [dconf];
+      packages = with pkgs; [ dconf ];
       implementation = "broker";
     };
 
@@ -91,26 +93,29 @@
   time.timeZone = "Europe/Warsaw";
 
   console = {
-    colors = map (pkgs.lib.removePrefix "#") (with pkgs.rice; [
-      base00
-      base08
-      base0B
-      base09
-      base0D
-      base0E
-      base0C
-      base06
-      base02
-      base12
-      base14
-      base13
-      base16
-      base17
-      base15
-      base0F
-    ]);
+    colors = map (pkgs.lib.removePrefix "#") (
+      with pkgs.rice;
+      [
+        base00
+        base08
+        base0B
+        base09
+        base0D
+        base0E
+        base0C
+        base06
+        base02
+        base12
+        base14
+        base13
+        base16
+        base17
+        base15
+        base0F
+      ]
+    );
     keyMap = "pl";
-    font = "cozette";
+    font = "cozette6x13";
     packages = with pkgs; [
       cozette
     ];

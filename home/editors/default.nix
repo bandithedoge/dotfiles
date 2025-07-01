@@ -63,8 +63,8 @@
       typstyle
 
       # zig
-      bandithedoge.zlint-bin
       zig
+      zig-zlint
       zls
 
       # toml

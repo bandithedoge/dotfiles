@@ -73,17 +73,19 @@
 
   programs.beets = {
     enable = true;
-    package = pkgs.beets.override {
+    package = pkgs.beets-unstable.override {
       pluginOverrides =
         pkgs.lib.recursiveUpdate
           (pkgs.lib.genAttrs config.programs.beets.settings.plugins (name: {
             enable = true;
           }))
           {
-            filetote.propagatedBuildInputs = [ pkgs.beetsPackages.filetote ];
-            describe.propagatedBuildInputs = [ pkgs.bandithedoge.beetsPackages.describe ];
-            yearfixer.propagatedBuildInputs = [ pkgs.bandithedoge.beetsPackages.yearfixer ];
+            # filetote.propagatedBuildInputs = [ pkgs.beetsPackages.filetote ];
+            # describe.propagatedBuildInputs = [ pkgs.bandithedoge.beetsPackages.describe ];
+            # yearfixer.propagatedBuildInputs = [ pkgs.bandithedoge.beetsPackages.yearfixer ];
           };
+
+      # extraNativeBuildInputs = with pkgs; [python3Packages.poetry-core];
     };
     mpdIntegration.enableUpdate = true;
     settings = rec {
@@ -122,13 +124,16 @@
         duplicate_verbose_prompt = true;
       };
 
-      musicbrainz.external_ids = {
-        discogs = true;
-        spotify = true;
-        bandcamp = true;
-        beatport = true;
-        deezer = true;
-        tidal = true;
+      musicbrainz = {
+        searchlimit = 10;
+        external_ids = {
+          discogs = true;
+          spotify = true;
+          bandcamp = true;
+          beatport = true;
+          deezer = true;
+          tidal = true;
+        };
       };
 
       match.preferred.original_year = true;
@@ -163,7 +168,12 @@
         "stignore"
       ];
 
-      zero.fields = ["albumartist_sort" "albumartists_sort"];
+      zero.fields = [
+        "albumartist_sort"
+        "albumartists_sort"
+        "artist_sort"
+        "artists_sort"
+      ];
     };
   };
 }

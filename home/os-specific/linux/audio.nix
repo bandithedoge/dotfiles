@@ -2,14 +2,15 @@
   pkgs,
   config,
   ...
-}: {
+}:
+{
   home.packages = with pkgs; [
-    (audacious.override {withPlugins = true;})
+    (audacious.override { withPlugins = true; })
     ardour
     bandithedoge.cardinal
     bandithedoge.clap-info
     bandithedoge.partiels
-    carla
+    # carla
     coppwr
     furnace
     picard
@@ -18,9 +19,9 @@
     reaper
     strawberry-qt6
 
-    (bandithedoge.distrho-ports.override {plugins = ["vitalium"];})
-    (yabridge.override {inherit (pkgs) wine;})
-    (yabridgectl.override {inherit (pkgs) wine;})
+    (distrho-ports.override { plugins = [ "vitalium" ]; })
+    # (yabridge.override {inherit (pkgs) wine;})
+    # (yabridgectl.override {inherit (pkgs) wine;})
     aether-lv2
     airwin2rack
     bandithedoge.blepfx.crunchrr
@@ -28,7 +29,6 @@
     bandithedoge.blepfx.filtrr
     bandithedoge.dsp56300
     bandithedoge.element
-    bandithedoge.geonkick
     bandithedoge.gnomedistort2
     bandithedoge.guitarix-vst-bin
     bandithedoge.ildaeil
@@ -40,8 +40,6 @@
     bandithedoge.panacea-bin
     bandithedoge.peakeater-bin
     bandithedoge.reverse-camel
-    bandithedoge.ripplerx
-    bandithedoge.rnnoise-plugin
     bandithedoge.roomreverb
     bandithedoge.schrammel-ojd
     bandithedoge.sg-323
@@ -77,6 +75,7 @@
     calf
     chow-tape-model
     dragonfly-reverb
+    geonkick
     lsp-plugins
   ];
 
@@ -95,18 +94,44 @@
       group = "izotope"
     '';
 
-    ".u-he/ACE/Support/com.u-he.ACE.user.txt".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets."u-he/ace".path;
-    ".u-he/Bazille/Support/com.u-he.Bazille.user.txt".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets."u-he/bazille".path;
-    ".u-he/ColourCopy/Support/com.u-he.ColourCopy.user.txt".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets."u-he/colourcopy".path;
-    ".u-he/Diva/Support/com.u-he.Diva.user.txt".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets."u-he/diva".path;
-    ".u-he/Filterscape/Support/com.u-he.Filterscape.user.txt".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets."u-he/filterscape".path;
-    ".u-he/Hive/Support/com.u-he.Hive.user.txt".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets."u-he/hive".path;
-    ".u-he/MFM2/Support/com.u-he.MFM2.user.txt".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets."u-he/mfm2".path;
-    ".u-he/Presswerk/Support/com.u-he.Presswerk.user.txt".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets."u-he/presswerk".path;
-    ".u-he/Repro-1/Support/com.u-he.Repro-1.user.txt".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets."u-he/repro".path;
-    ".u-he/Satin/Support/com.u-he.Satin.user.txt".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets."u-he/satin".path;
-    ".u-he/Twangstrom/Support/com.u-he.Twangstrom.user.txt".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets."u-he/twangstrom".path;
-    ".u-he/Uhbik/Support/com.u-he.Uhbik.user.txt".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets."u-he/uhbik".path;
-    ".u-he/Zebra2/Support/com.u-he.Zebra2.user.txt".source = config.lib.file.mkOutOfStoreSymlink config.sops.secrets."u-he/zebra2".path;
+    ".u-he/ACE/Support/com.u-he.ACE.user.txt".source =
+      config.lib.file.mkOutOfStoreSymlink
+        config.sops.secrets."u-he/ace".path;
+    ".u-he/Bazille/Support/com.u-he.Bazille.user.txt".source =
+      config.lib.file.mkOutOfStoreSymlink
+        config.sops.secrets."u-he/bazille".path;
+    ".u-he/ColourCopy/Support/com.u-he.ColourCopy.user.txt".source =
+      config.lib.file.mkOutOfStoreSymlink
+        config.sops.secrets."u-he/colourcopy".path;
+    ".u-he/Diva/Support/com.u-he.Diva.user.txt".source =
+      config.lib.file.mkOutOfStoreSymlink
+        config.sops.secrets."u-he/diva".path;
+    ".u-he/Filterscape/Support/com.u-he.Filterscape.user.txt".source =
+      config.lib.file.mkOutOfStoreSymlink
+        config.sops.secrets."u-he/filterscape".path;
+    ".u-he/Hive/Support/com.u-he.Hive.user.txt".source =
+      config.lib.file.mkOutOfStoreSymlink
+        config.sops.secrets."u-he/hive".path;
+    ".u-he/MFM2/Support/com.u-he.MFM2.user.txt".source =
+      config.lib.file.mkOutOfStoreSymlink
+        config.sops.secrets."u-he/mfm2".path;
+    ".u-he/Presswerk/Support/com.u-he.Presswerk.user.txt".source =
+      config.lib.file.mkOutOfStoreSymlink
+        config.sops.secrets."u-he/presswerk".path;
+    ".u-he/Repro-1/Support/com.u-he.Repro-1.user.txt".source =
+      config.lib.file.mkOutOfStoreSymlink
+        config.sops.secrets."u-he/repro".path;
+    ".u-he/Satin/Support/com.u-he.Satin.user.txt".source =
+      config.lib.file.mkOutOfStoreSymlink
+        config.sops.secrets."u-he/satin".path;
+    ".u-he/Twangstrom/Support/com.u-he.Twangstrom.user.txt".source =
+      config.lib.file.mkOutOfStoreSymlink
+        config.sops.secrets."u-he/twangstrom".path;
+    ".u-he/Uhbik/Support/com.u-he.Uhbik.user.txt".source =
+      config.lib.file.mkOutOfStoreSymlink
+        config.sops.secrets."u-he/uhbik".path;
+    ".u-he/Zebra2/Support/com.u-he.Zebra2.user.txt".source =
+      config.lib.file.mkOutOfStoreSymlink
+        config.sops.secrets."u-he/zebra2".path;
   };
 }
