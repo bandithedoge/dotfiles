@@ -1,56 +1,54 @@
-(import-macros {: use! : key!} :config.macros)
+(import-macros {: load! : key!} :config.macros)
 
-[(use! :nvim-zh/colorful-winsep.nvim
-       {:event :WinLeave
-        :opts {:hi {:bg _G.base10 :fg _G.base0F}
-               :smooth false
-               :symbols ["─" "│" "┌" "┐" "└" "┘"]}})
- ;;
- (use! :folke/edgy.nvim {:event :VeryLazy
-                         :opts {:wo {:winbar false}
-                                :animate {:enabled false}
-                                :bottom [:Trouble :dap-repl :dapui_console]
-                                :left [:neo-tree]
-                                :right [:dapui_scopes
-                                        :dapui_breakpoints
-                                        :dapui_stacks
-                                        :dapui_watches
-                                        :Outline]}})
- ;;
- (use! :lewis6991/gitsigns.nvim
-       {:event :LazyFile
-        :opts {:signs {:add {:text "▎"}
-                       :change {:text "▎"}
-                       :delete {:text ""}
-                       :topdelete {:text ""}
-                       :changedelete {:text "▎"}
-                       :untracked {:text "▎"}}
-               :signs_staged {:add {:text "▎"}
-                              :change {:text "▎"}
-                              :delete {:text ""}
-                              :topdelete {:text ""}
-                              :changedelete {:text "▎"}}
-               :diff_opts {:internal true}}})
- ;;
- (use! :brenoprata10/nvim-highlight-colors
-       {:event :LazyFile :opts {:enable_tailwind true}})
- ;;
- (use! :kevinhwang91/nvim-hlslens {:event :CmdlineEnter :config true})
- ;;
- (use! :folke/todo-comments.nvim
-       {:dependencies [(use! :nvim-lua/plenary.nvim)]
-        :cmd [:TodoTrouble :TodoTelescope]
-        :keys [(key! :<leader>ft #(_G.Snacks.picker.todo_comments) {:desc :TODO})]
-        :event :LazyFile
-        :opts {:signs false}})
- ;;
- (use! :folke/trouble.nvim {:cmd [:TroubleToggle :Trouble]
-                            :keys [(key! :<localleader>t
-                                         "<cmd>Trouble diagnostics toggle<cr>"
-                                         {:desc :Diagnostics})]
-                            ; (key! :<localleader>s
-                            ;       "<cmd>Trouble symbols toggle<cr>"
-                            ;       {:desc :Symbols})]
-                            :opts {:auto_preview false
-                                   :use_diagnostic_signs true
-                                   :padding false}})]
+(load! :edgy.nvim
+       {:event :DeferredUIEnter
+        :after #(let [edgy (require :edgy)]
+                  (edgy.setup {:wo {:winbar false}
+                               :animate {:enabled false}
+                               :bottom [:Trouble :dap-repl :dapui_console]
+                               :left [:neo-tree]
+                               :right [:dapui_scopes]
+                               :dapui_breakpoints :dapui_stacks
+                               :dapui_watches :Outline}))})
+
+(load! :gitsigns.nvim
+       {:event [:BufReadPre :BufNewFile]
+        :after #(let [gitsigns (require :gitsigns)]
+                  (gitsigns.setup {:signs {:add {:text "▎"}
+                                           :change {:text "▎"}
+                                           :delete {:text ""}
+                                           :topdelete {:text ""}
+                                           :changedelete {:text "▎"}
+                                           :untracked {:text "▎"}}
+                                   :signs_staged {:add {:text "▎"}
+                                                  :change {:text "▎"}
+                                                  :delete {:text ""}
+                                                  :topdelete {:text ""}
+                                                  :changedelete {:text "▎"}}
+                                   :diff_opts {:internal true}}))})
+
+(load! :nvim-highlight-colors
+       {:event [:BufReadPre :BufNewFile]
+        :after #(let [highlight-colors (require :nvim-highlight-colors)]
+                  (highlight-colors.setup {:enable_tailwind true}))})
+
+(load! :nvim-hlslens
+       {:event :CmdlineEnter
+        :after #(let [hlslens (require :hlslens)] (hlslens.setup))})
+
+(load! :todo-comments.nvim
+       {:keys [(key! :<leader>ft #(_G.Snacks.picker.todo_comments)
+                     {:desc :TODO})]
+        :event [:BufReadPre :BufNewFile]
+        :after #(let [todo-comments (require :todo-comments)]
+                  (todo-comments.setup {:signs false
+                                        :highlight {:multiline false}}))})
+
+(load! :trouble.nvim
+       {:cmd [:TroubleToggle :Trouble]
+        :keys [(key! :<localleader>t "<cmd>Trouble diagnostics toggle<cr>"
+                     {:desc :Diagnostics})]
+        :after #(let [trouble (require :trouble)]
+                  (trouble.setup {:auto_preview false
+                                  :use_diagnostic_signs true
+                                  :padding false}))})

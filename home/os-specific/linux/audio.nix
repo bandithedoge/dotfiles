@@ -5,49 +5,48 @@
 }:
 {
   home.packages = with pkgs; [
-    (audacious.override { withPlugins = true; })
     ardour
     bandithedoge.cardinal
     bandithedoge.clap-info
     bandithedoge.partiels
-    # carla
+    bandithedoge.projucer
+    bandithedoge.snd2acm
+    carla
     coppwr
     furnace
     picard
-    playerctl
     pwvucontrol
     reaper
-    strawberry-qt6
 
-    (distrho-ports.override { plugins = [ "vitalium" ]; })
     # (yabridge.override {inherit (pkgs) wine;})
     # (yabridgectl.override {inherit (pkgs) wine;})
+    # (airwin2rack.override { webkitgtk_4_0 = webkitgtk_4_1; })
+    (chow-tape-model.override { webkitgtk_4_0 = webkitgtk_4_1; })
+    (distrho-ports.override { plugins = [ "vitalium" ]; })
     aether-lv2
-    airwin2rack
+    bandithedoge.aida-x
     bandithedoge.blepfx.crunchrr
     bandithedoge.blepfx.destruqtor
     bandithedoge.blepfx.filtrr
+    bandithedoge.cchorus
     bandithedoge.dsp56300
-    bandithedoge.element
-    bandithedoge.gnomedistort2
-    bandithedoge.guitarix-vst-bin
     bandithedoge.ildaeil
     bandithedoge.ircam-vamp-plugins-bin
-    bandithedoge.k-whooms
     bandithedoge.lamb-bin
     bandithedoge.maim-bin
-    bandithedoge.microbiome-bin
+    bandithedoge.microbiome
+    bandithedoge.mrugalla.hammer-and-meiszel
+    bandithedoge.mrugalla.manta
+    bandithedoge.mrugalla.nel-19
     bandithedoge.panacea-bin
     bandithedoge.peakeater-bin
+    bandithedoge.plasma
     bandithedoge.reverse-camel
-    bandithedoge.roomreverb
-    bandithedoge.schrammel-ojd
-    bandithedoge.sg-323
-    bandithedoge.showmidi-bin
+    bandithedoge.sapphire-plugins
     bandithedoge.sinuslabs.bandbreite
     bandithedoge.sinuslabs.ko
     bandithedoge.sinuslabs.reach
-    bandithedoge.squeezer-bin
+    bandithedoge.six-sines
     bandithedoge.u-he.ace
     bandithedoge.u-he.bazille
     bandithedoge.u-he.colourcopy
@@ -64,7 +63,7 @@
     bandithedoge.u-he.twangstrom
     bandithedoge.u-he.uhbik
     bandithedoge.u-he.zebra-legacy
-    bandithedoge.valentine
+    bandithedoge.unplugred
     bandithedoge.vitalium-verb-bin
     bandithedoge.white-elephant-audio.carve-bin
     bandithedoge.white-elephant-audio.monstr-bin
@@ -73,26 +72,31 @@
     bandithedoge.zl-audio.inflator
     bandithedoge.zl-audio.warm
     calf
-    chow-tape-model
+    decent-sampler
     dragonfly-reverb
     geonkick
     lsp-plugins
+    master_me
   ];
 
-  xdg.configFile."yabridgectl/config.toml".text = ''
-    plugin_dirs = [
-      '/mnt/soft/wine/drive_c/Program Files/Common Files/VST3',
-      '/mnt/soft/wine/drive_c/Program Files/Common Files/CLAP',
-      '/mnt/soft/wine/drive_c/Program Files/VstPlugins',
-      '/mnt/soft/wine/drive_c/Program Files/Steinberg/VSTPlugins'
-    ]
-  '';
+  xdg.configFile = {
+    "yabridgectl/config.toml".text = ''
+      plugin_dirs = [
+        '/mnt/soft/wine/drive_c/Program Files/Common Files/VST3',
+        '/mnt/soft/wine/drive_c/Program Files/Common Files/CLAP',
+        '/mnt/soft/wine/drive_c/Program Files/VstPlugins',
+        '/mnt/soft/wine/drive_c/Program Files/Steinberg/VSTPlugins'
+      ]
+    '';
+  };
 
   home.file = {
     ".vst3/yabridge/yabridge.toml".text = ''
       ["iZotope/*.vst3"]
       group = "izotope"
     '';
+
+    ".BitwigStudio/graphics-backend".text = "skia-gl";
 
     ".u-he/ACE/Support/com.u-he.ACE.user.txt".source =
       config.lib.file.mkOutOfStoreSymlink

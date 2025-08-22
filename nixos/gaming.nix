@@ -2,7 +2,6 @@
   programs = {
     steam = {
       enable = true;
-      protontricks.enable = true;
       remotePlay.openFirewall = true;
       package = pkgs.steam.override {
         # https://github.com/NixOS/nixpkgs/issues/338266#issuecomment-2419568331
@@ -35,7 +34,12 @@
       };
     };
 
-    wine.ntsync.enable = true;
+    wine = {
+      enable = true;
+      package = pkgs.wine;
+      binfmt = true;
+      ntsync = true;
+    };
   };
 
   security.pam.loginLimits = [

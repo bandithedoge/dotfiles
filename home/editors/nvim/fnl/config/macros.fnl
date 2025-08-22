@@ -22,10 +22,22 @@
         (tset opts# 1 name#))
     opts#))
 
-(fn M.key! [lhs rhs opts]
-  (let [opts# (or opts {})]
+(fn M.key! [lhs ?rhs ?opts]
+  (let [opts# (or ?opts {})]
     (tset opts# 1 lhs)
-    (tset opts# 2 rhs)
+    (tset opts# 2 ?rhs)
     opts#))
+
+(fn M.load! [name ?opts]
+  (let [new-name (string.gsub name "%." "-")]
+    `(let [lz-n# (require :lz.n)
+           spec# (or ,?opts {})]
+       (set (. spec# 1) ,new-name)
+       (lz-n#.load spec#))))
+
+(fn M.trigger! [name]
+  (let [new-name (string.gsub name "%." "-")]
+    `(let [lz-n# (require :lz.n)]
+       (lz-n#.trigger_load ,new-name))))
 
 M

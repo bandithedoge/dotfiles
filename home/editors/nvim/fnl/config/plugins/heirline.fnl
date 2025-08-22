@@ -1,4 +1,4 @@
-(import-macros {: use! : tx!} :config.macros)
+(import-macros {: load! : trigger! : tx!} :config.macros)
 (import-macros {: merge!} :hibiscus.core)
 (import-macros {: augroup! : set!} :hibiscus.vim)
 
@@ -151,8 +151,10 @@
             ; }}}
             :ruler {:provider (pad "%l/%L:%c %P") :hl #($1:mode-hl)}
             :navic {:condition #(and (conditions.lsp_attached)
-                                     (let [navic (require :nvim-navic)]
-                                       (navic.is_available)))
+                                     (do
+                                       (trigger! :nvim-navic)
+                                       (let [navic (require :nvim-navic)]
+                                         (navic.is_available))))
                     :provider #(let [navic (require :nvim-navic)]
                                  (padl (navic.get_location)))
                     :update :CursorMoved}
@@ -340,4 +342,4 @@
                                                                                        :snacks_picker_preview]}
                                                                            $1.buf)}})))
 
-[(use! :rebelot/heirline.nvim {:event :VeryLazy : config})]
+(load! :heirline.nvim {:event :DeferredUIEnter :after config})

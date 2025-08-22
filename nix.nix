@@ -14,6 +14,7 @@
         "lix-custom-sub-commands"
         "nix-command"
         "no-url-literals"
+        "pipe-operator"
       ];
       keep-failed = true;
       log-lines = 50;

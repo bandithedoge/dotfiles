@@ -19,12 +19,10 @@
       bandithedoge.propertree
       bleachbit
       blender-hip
-      caprine
       d-spy
       equibop
       foliate
       fractal
-      geekbench
       gnome-secrets
       handbrake
       icon-library
@@ -40,6 +38,7 @@
       qbittorrent
       qt6ct
       telegram-desktop
+      vulkanPackages_latest.vulkan-tools
       wine
       winetricks
       wtype
@@ -49,9 +48,9 @@
     sessionVariables.WINEFSYNC = "1";
 
     pointerCursor = {
+      enable = true;
       inherit (pkgs.rice.cursorTheme) package name size;
       gtk.enable = true;
-      x11.enable = true;
     };
   };
 
@@ -117,7 +116,6 @@
       package = uiFontPackage;
       size = 13;
     };
-    inherit (pkgs.rice) cursorTheme;
     inherit (pkgs.rice.gtk) theme iconTheme;
     gtk3.extraConfig = {
       gtk-application-prefer-dark-theme = true;
@@ -277,8 +275,6 @@
         "Kvantum/KvLibadwaita".source = inputs.kvlibadwaita + "/src/KvLibadwaita";
         "Kvantum/kvantum.kvconfig".text = lib.generators.toINI { } { General.theme = "KvLibadwaitaDark"; };
       };
-
-    portal.extraPortals = with pkgs; [ xdg-desktop-portal-gtk ];
 
     mimeApps = rec {
       enable = true;

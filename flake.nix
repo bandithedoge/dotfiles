@@ -22,6 +22,11 @@
       url = "github:ezKEa/aagl-gtk-on-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # XXX: https://github.com/Aylur/astal/pull/70
+    astal-niri = {
+      url = "github:sameoldlab/astal/feat/niri";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     colors = {
       url = "github:Misterio77/nix-colors";
       inputs.nixpkgs-lib.follows = "nixpkgs";
@@ -95,7 +100,12 @@
             bandithedoge = nur-bandithedoge.legacyPackages.${prev.system};
             colors = colors.lib-core;
 
-            inherit (nix-gaming.packages.${prev.system}) wine-ge wine-tkg;
+            inherit (nix-gaming.packages.${prev.system}) wine-tkg-ntsync;
+
+            astal = prev.astal // {
+              # XXX: https://github.com/Aylur/astal/pull/70
+              inherit (astal-niri.packages.${prev.system}) niri;
+            };
           })
           (import ./overlay.nix)
         ];
@@ -128,7 +138,7 @@
               flatpak.nixosModules.nix-flatpak
               home-manager.nixosModules.home-manager
               musnix.nixosModules.musnix
-              nix-gaming.nixosModules.ntsync
+              nix-gaming.nixosModules.wine
               nix-gaming.nixosModules.pipewireLowLatency
               nyx.nixosModules.default
               sops-nix.nixosModules.default
@@ -137,6 +147,7 @@
                 home-manager = {
                   useGlobalPkgs = lib.mkForce false;
                   extraSpecialArgs = { inherit inputs; };
+                  backupFileExtension = "backup";
                 };
               }
 
@@ -155,7 +166,7 @@
 
               flatpak.homeManagerModules.nix-flatpak
               niri.homeModules.niri
-              nix-index-database.hmModules.nix-index
+              nix-index-database.homeModules.nix-index
               nyx.homeModules.default
               sops-nix.homeManagerModule
 
@@ -202,12 +213,7 @@
             modules = with nixos-hardware.nixosModules; [
               self.nixosModules.default
 
-              {
-                nixpkgs = {
-                  hostPlatform = "x86_64-linux";
-                  config.rocmSupport = true;
-                };
-              }
+              { nixpkgs.hostPlatform = "x86_64-linux"; }
 
               common-pc
               common-pc-ssd
@@ -225,7 +231,7 @@
                     ./home/editors
                     ./home/gaming
                     ./home/gui
-                    ./home/hosts/machine-nixos.nix
+                    ./home/hosts/machine-nixos
                     ./home/os-specific/linux
                   ];
                 };

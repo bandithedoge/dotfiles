@@ -6,6 +6,7 @@
 {
   imports = [
     ./niri.nix
+    # ./astal
   ];
 
   home = {
@@ -22,7 +23,7 @@
       wlr-which-key
     ];
     sessionVariables = {
-      GDK_BACKEND = "wayland,x11,*";
+      # GDK_BACKEND = "wayland,x11,*";
       NIXOS_OZONE_WL = "1";
       QT_QPA_PLATFORM = "wayland;xcb";
       _JAVA_AWT_WM_NONREPARENTING = "1";
@@ -327,7 +328,7 @@
     timeouts = [
       {
         timeout = 300;
-        command = "chayang -d 10 && loginctl lock-session";
+        command = "${pkgs.systemd}/bin/loginctl lock-session";
       }
     ];
     events = [

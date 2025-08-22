@@ -177,12 +177,16 @@
 
     scx = {
       enable = true;
-      package = pkgs.scx_git.rustscheds;
+      package = pkgs.scx.rustscheds;
       scheduler = "scx_flash";
     };
 
     btrfs.autoScrub.enable = true;
+
+    cloudflare-warp.enable = true;
   };
+
+  systemd.user.services.warp-taskbar.enable = false;
 
   nix.settings.max-jobs = 6;
 

@@ -4,6 +4,8 @@
   ...
 }:
 {
+  imports = [ ./gaming.nix ];
+
   home = {
     packages = with pkgs; [
       cantata
@@ -80,7 +82,6 @@
             enable = true;
           }))
           {
-            # filetote.propagatedBuildInputs = [ pkgs.beetsPackages.filetote ];
             # describe.propagatedBuildInputs = [ pkgs.bandithedoge.beetsPackages.describe ];
             # yearfixer.propagatedBuildInputs = [ pkgs.bandithedoge.beetsPackages.yearfixer ];
           };
@@ -93,7 +94,7 @@
       library = directory + "/beets.db";
       plugins = [
         "badfiles"
-        "describe"
+        # "describe"
         "discogs"
         "duplicates"
         "edit"
@@ -112,7 +113,7 @@
         "scrub"
         "the"
         "unimported"
-        "yearfixer"
+        # "yearfixer"
         "zero"
       ];
       original_date = true;

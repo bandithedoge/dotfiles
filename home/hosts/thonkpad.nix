@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   programs.qutebrowser = {
     # {{{
     enable = true;
@@ -11,7 +12,7 @@
     settings = {
       changelog_after_upgrade = "patch";
       completion.timestamp_format = "%A %d %B %T";
-      confirm_quit = ["downloads"];
+      confirm_quit = [ "downloads" ];
       content = {
         blocking.method = "both";
         pdfjs = true;
@@ -47,10 +48,12 @@
         title_format = "{audio}{private}{current_title}";
         transparent = true;
       };
-      colors = let
-        blank = "#00000000";
-      in
-        with pkgs.rice; {
+      colors =
+        let
+          blank = "#00000000";
+        in
+        with pkgs.rice;
+        {
           # {{{
           completion = {
             fg = base05;
@@ -243,4 +246,7 @@
   # }}}
 
   programs.bottom.settings.flags.battery = true;
+
+  xdg.dataFile."Steam/compatibilitytools.d/proton-sarek".source =
+    pkgs.bandithedoge.proton.sarek.steamcompattool;
 }

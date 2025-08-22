@@ -11,5 +11,7 @@ update +INPUTS="":
 
     @if [[ "{{ INPUTS }}" == "" ]]; then flatpak update; flatpak uninstall --unused; fi
 
+    nix profile upgrade ".*" --impure
+
 clean:
-    nh clean all -v
+    sudo nh clean all -v

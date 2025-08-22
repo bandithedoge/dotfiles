@@ -18,10 +18,12 @@
     packages = with pkgs; [
       # {{{
       (lib.hiPrio uutils-coreutils-noprefix)
+      (ouch.override { enableUnfree = true; })
       (sox.override { enableLame = true; })
       (writeScriptBin "nust" (builtins.readFile ../../justfile))
       age
       aria
+      codeberg-cli
       comma
       fd
       ffmpeg
@@ -35,13 +37,14 @@
       killall
       librespeed-cli
       lix-diff
+      lixPackageSets.latest.nixpkgs-review
       ncdu
       niv
       nix-output-monitor
       nix-prefetch
       nurl
-      ouch
       pandoc
+      poop
       rclone
       ripgrep
       sops
@@ -53,20 +56,24 @@
       xdg-user-dirs
       yt-dlp
     ]; # }}}
-    shellAliases =
-      {
-        s = "sudo";
-        c = "clear";
-        e = "exit";
-        b = "bash -c";
-        v = "nvim";
-      }
-      // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
-        bi = "brew install";
-        bu = "brew uninstall";
-        bs = "brew search";
-        bq = "brew list";
-      };
+    shellAliases = {
+      s = "sudo";
+      c = "clear";
+      e = "exit";
+      b = "bash -c";
+      v = "nvim";
+
+      nd = "nix develop";
+      ns = "nix shell";
+      npi = "nix profile install";
+      nre = "nix repl --file \"<nixpkgs\"";
+    }
+    // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
+      bi = "brew install";
+      bu = "brew uninstall";
+      bs = "brew search";
+      bq = "brew list";
+    };
     file.".face".source = ../../face.png;
   }; # }}}
 
@@ -131,9 +138,7 @@
             eval "$d"
           '';
           nb = mkNom "build";
-          nd = mkNom "develop";
           nr = mkNom "run";
-          ns = mkNom "shell";
         };
       interactiveShellInit = with pkgs.rice; ''
         set fish_color_autosuggestion '${base03}'
@@ -400,7 +405,10 @@
       package = pkgs.gitAndTools.gitFull;
       userName = "bandithedoge";
       userEmail = "bandithedoge@protonmail.com";
-      ignores = [ "*~" ];
+      ignores = [
+        "*~"
+        ".jj/"
+      ];
       lfs.enable = true;
       delta = {
         enable = true;
@@ -476,6 +484,19 @@
         plugin = {
           prepend_previewers = [
             {
+              name = "*/";
+              run = "folder";
+              sync = true;
+            }
+            {
+              name = "/run/user/1000/gvfs/**/*";
+              run = "noop";
+            }
+            {
+              name = "/run/media/${config.home.username}/**/*";
+              run = "noop";
+            }
+            {
               name = "*.md";
               run = "piper -- CLICOLOR_FORCE=1 glow -w=$w -s=dark \"$1\"";
             }
@@ -518,21 +539,42 @@
               run = "git";
             }
           ];
+          prepend_preloaders = [
+            {
+              name = "/run/user/1000/gvfs/**/*";
+              run = "noop";
+            }
+            {
+              name = "/run/media/${config.home.username}/**/*";
+              run = "noop";
+            }
+          ];
         };
       };
 
-      plugins = pkgs.lib.genAttrs [
-        "git"
-        "lazygit"
-        "mount"
-        "piper"
-        "smart-enter"
-        "system-clipboard"
-        "yatline"
-      ] (name: pkgs.yaziPlugins.${name});
+      plugins = {
+        inherit (pkgs.yaziPlugins)
+          chmod
+          git
+          lazygit
+          mount
+          piper
+          smart-enter
+          wl-clipboard
+          yatline
+          ;
+      };
 
       keymap = {
         mgr.prepend_keymap = [
+          {
+            on = [
+              "c"
+              "m"
+            ];
+            run = "plugin chmod";
+            desc = "Change file permissions";
+          }
           {
             on = "l";
             run = "plugin smart-enter";
@@ -550,7 +592,7 @@
           }
           {
             on = "<C-y>";
-            run = "plugin system-clipboard";
+            run = "plugin wl-clipboard";
             desc = "Copy file";
           }
           {
@@ -577,7 +619,7 @@
           {
             on = "M";
             run = "plugin mount";
-            desc = "Mount drives";
+            desc = "Show mounted drives";
           }
         ];
         completion.prepend_keymap = [
@@ -690,7 +732,14 @@
       settings.git_protocol = "ssh";
     };
 
-    jujutsu.enable = true;
+    jujutsu = {
+      enable = true;
+      settings.user = {
+        name = "bandithedoge";
+        email = "bandithedoge@protonmail.com";
+      };
+    };
+
     dircolors.enable = true;
     info.enable = true;
     nh.enable = true;

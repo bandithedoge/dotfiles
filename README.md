@@ -1,1 +1,1 @@
-# bandithedoge's home-manager/nix-darwin configs
+# Moved to [Codeberg](https://codeberg.org/bandithedoge/dotfiles)

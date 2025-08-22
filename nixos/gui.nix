@@ -41,6 +41,7 @@
     gnome.gnome-keyring.enable = true;
     greetd.enable = true;
     flatpak.enable = true;
+    speechd.enable = false;
   };
 
   xdg.terminal-exec.enable = true;

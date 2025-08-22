@@ -6,9 +6,10 @@
 
   environment = {
     systemPackages = with pkgs; [
-      alsa-utils
-      ntfs3g
       (lib.hiPrio uutils-coreutils-noprefix)
+      alsa-utils
+      doas-sudo-shim
+      ntfs3g
     ];
   };
   services = {
@@ -61,7 +62,7 @@
     devmon.enable = true;
     # irqbalance.enable = true;
     openssh.enable = true;
-    # resolved.enable = true;
+    resolved.enable = true;
     upower.enable = true;
   };
 
@@ -85,7 +86,15 @@
       auth include login
     '';
     sudo.enable = false;
-    sudo-rs.enable = true;
+    doas = {
+      enable = true;
+      extraRules = [
+        {
+          groups = [ "wheel" ];
+          persist = true;
+        }
+      ];
+    };
   };
 
   users.mutableUsers = true;
@@ -155,18 +164,12 @@
 
   zramSwap.enable = true;
 
-  virtualisation.podman = {
-    enable = true;
-    dockerCompat = true;
-    defaultNetwork.settings.dns_enabled = true;
-  };
-
   systemd = {
-    extraConfig = ''
-      DefaultTimeoutStartSec=15s
-      DefaultTimeoutStopSec=10s
-      DefaultLimitNOFILE=2048:2097152
-    '';
+    settings.Manager = {
+      DefaultTimeoutStartSec = "15s";
+      DefaultTimeoutStopSec = "10s";
+      DefaultLimitNOFILE = "2048:2097152";
+    };
     coredump.extraConfig = ''
       Storage=none
       ProcessSizeMax=0

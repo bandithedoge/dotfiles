@@ -110,30 +110,42 @@
 (vim.diagnostic.config {:virtual_lines {:current_line true}
                         :severity_sort true})
 
-(let [lazy (require :lazy)
-      event (require :lazy.core.handler.event)]
-  (set event.mappings.LazyFile
-       {:id :LazyFile :event [:BufReadPost :BufNewFile :BufReadPre]})
-  (tset event :mappings "User LazyFile" event.mappings.LazyFile)
-  (lazy.setup [(require :config.keybindings)
-               (require :config.languages)
-               (require :config.lsp)
-               (require :config.plugins.blink)
-               (require :config.plugins.heirline)
-               (require :config.plugins.mini)
-               (require :config.plugins.neo-tree)
-               (require :config.plugins.neorg)
-               (require :config.plugins.snacks)
-               ;(require :config.plugins.telescope)
-               (require :config.plugins.treesitter)
-               (require :config.ui)
-               (require :config.utilities)
-               (require :config.standalone)]
-              {:install {:missing (not _G.USING_NIX)}
-               :ui {:border :solid :backdrop 100}
-               :checker {:enabled (not _G.USING_NIX)}
-               :performance {:rtp {:reset (not _G.USING_NIX)}
-                             :reset_packpath false}
-               :readme {:enabled false}}))
+; (let [lazy (require :lazy)
+;       event (require :lazy.core.handler.event)]
+;   (set event.mappings.LazyFile
+;        {:id :LazyFile :event [:BufReadPost :BufNewFile :BufReadPre]})
+;   (tset event :mappings "User LazyFile" event.mappings.LazyFile)
+;   (lazy.setup [ (require :config.keybindings)
+;                (require :config.languages)
+;                (require :config.lsp)
+;                (require :config.plugins.blink)
+;                (require :config.plugins.heirline)
+;                (require :config.plugins.mini)
+;                (require :config.plugins.neo-tree)
+;                (require :config.plugins.neorg)
+;                (require :config.plugins.snacks)
+;                (require :config.plugins.treesitter)
+;                (require :config.ui)
+;                (require :config.utilities)
+;                (require :config.standalone)]
+;               {:install {:missing (not _G.USING_NIX)}
+;                :ui {:border :solid :backdrop 100}
+;                :checker {:enabled (not _G.USING_NIX)}
+;                :performance {:rtp {:reset (not _G.USING_NIX)}
+;                              :reset_packpath false}
+;                :readme {:enabled false}}))
+
+(require :config.keybindings)
+(require :config.languages)
+(require :config.lsp)
+(require :config.ui)
+(require :config.utilities)
+(require :config.plugins.blink)
+(require :config.plugins.heirline)
+(require :config.plugins.mini)
+(require :config.plugins.neo-tree)
+(require :config.plugins.neorg)
+(require :config.plugins.snacks)
+(require :config.plugins.treesitter)
 
 (set! :loadplugins true)

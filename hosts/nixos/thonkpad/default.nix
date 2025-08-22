@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   environment = {
     systemPackages = with pkgs; [
       connman-gtk
@@ -9,7 +10,7 @@
   };
 
   boot = {
-    kernelModules = ["kvm-intel"];
+    kernelModules = [ "kvm-intel" ];
     initrd.availableKernelModules = [
       "ahci"
       "ehci_pci"
@@ -41,7 +42,7 @@
       # {{{
       enable = true;
       keyboards.internal = {
-        devices = ["/dev/input/by-path/platform-i8042-serio-0-event-kbd"];
+        devices = [ "/dev/input/by-path/platform-i8042-serio-0-event-kbd" ];
         config = builtins.readFile ./kmonad.kbd;
       };
     }; # }}}
@@ -73,52 +74,51 @@
       type = "gpt";
       partitions = {
         boot = {
-	  size = "512M";
-	  type = "EF00";
-	  content = {
-	    type = "filesystem";
-	    format = "vfat";
-	    mountpoint = "/boot";
-	    mountOptions = ["umask=0077"];
-	  };
-	};
+          size = "512M";
+          type = "EF00";
+          content = {
+            type = "filesystem";
+            format = "vfat";
+            mountpoint = "/boot";
+            mountOptions = [ "umask=0077" ];
+          };
+        };
 
-	root = {
-	  size = "100%";
-	  content = {
-	    type = "luks";
-	    name = "root";
-	    passwordFile = "/tmp/secret.key";
-	    settings.allowDiscards = true;
-	    content = {
-	      type = "btrfs";
-	      extraArgs = ["-f"];
-	      subvolumes = let
-	      in {
-	        "/root" = {
-		      mountpoint = "/";
-		    };
-		    "/home" = {
-		      mountpoint = "/home";
-	          mountOptions = [
-		        "compress=zstd"
-		      ];
-		    };
-		    "/nix" = {
-		      mountpoint = "/nix";
-	          mountOptions = [
-		        "compress=zstd"
-		        "noatime"
-		      ];
-		    };
-		    "/swap" = {
-		      mountpoint = "/.swapvol";
-		      swap.swapfile.size = "4G";
-		    };
-	      };
-	    };
-	  };
-	};
+        root = {
+          size = "100%";
+          content = {
+            type = "luks";
+            name = "root";
+            passwordFile = "/tmp/secret.key";
+            settings.allowDiscards = true;
+            content = {
+              type = "btrfs";
+              extraArgs = [ "-f" ];
+              subvolumes = {
+                "/root" = {
+                  mountpoint = "/";
+                };
+                "/home" = {
+                  mountpoint = "/home";
+                  mountOptions = [
+                    "compress=zstd"
+                  ];
+                };
+                "/nix" = {
+                  mountpoint = "/nix";
+                  mountOptions = [
+                    "compress=zstd"
+                    "noatime"
+                  ];
+                };
+                "/swap" = {
+                  mountpoint = "/.swapvol";
+                  swap.swapfile.size = "4G";
+                };
+              };
+            };
+          };
+        };
       };
     };
   };

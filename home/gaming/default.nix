@@ -1,55 +1,27 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   home = {
     packages = with pkgs; [
-      bandithedoge.vkdoom
-      doomrunner
       lutris
       nugget-doom
-      pcsx2
-      prismlauncher
       umu-launcher
-      vulkanPackages_latest.vulkan-tools
     ];
-  };
-
-  services.flatpak = {
-    remotes = [
-      {
-        name = "launcher.moe";
-        location = "https://gol.launcher.moe/gol.launcher.moe.flatpakrepo";
-      }
-    ];
-    packages = [
-      {
-        appId = "moe.launcher.an-anime-game-launcher";
-        origin = "launcher.moe";
-      }
-      {
-        appId = "moe.launcher.the-honkers-railway-launcher";
-        origin = "launcher.moe";
-      }
-      {
-        appId = "org.openmw.OpenMW";
-        origin = "flathub-beta";
-      }
-    ];
-    overrides = {
-      "org.openmw.OpenMW" = {
-        Context.sockets = ["wayland" "!x11" "!fallback-x11"];
-        Environment.OSG_VERTEX_BUFFER_HINT = "VERTEX_BUFFER_OBJECT";
-      };
-    };
   };
 
   programs.mangohud = {
     enable = true;
-    # enableSessionWide = true;
     package = pkgs.mangohud_git;
-    settings = let
-      color = pkgs.lib.removePrefix "#";
-    in
-      with pkgs.rice; rec {
-        fps_limit = [0 60];
+    # enableSessionWide = true;
+    settings =
+      let
+        color = pkgs.lib.removePrefix "#";
+      in
+      with pkgs.rice;
+      rec {
+        fps_limit = [
+          0
+          60
+        ];
         vsync = 1;
         gl_vsync = 0;
 
@@ -66,8 +38,15 @@
         cpu_stats = true;
         cpu_temp = true;
         cpu_mhz = true;
-        cpu_load_value = [60 90];
-        cpu_load_color = map color [base0B base0A base08];
+        cpu_load_value = [
+          60
+          90
+        ];
+        cpu_load_color = map color [
+          base0B
+          base0A
+          base08
+        ];
 
         gpu_stats = true;
         gpu_temp = true;
@@ -82,8 +61,15 @@
 
         fps = true;
         fps_color_change = true;
-        fps_value = [30 60];
-        fps_color = map color [base08 base0A base0B];
+        fps_value = [
+          30
+          60
+        ];
+        fps_color = map color [
+          base08
+          base0A
+          base0B
+        ];
 
         histogram = true;
         frametime = true;
@@ -115,10 +101,5 @@
         background_color = color base00;
         battery_color = color base08;
       };
-  };
-
-  xdg.dataFile = {
-    "Steam/compatibilitytools.d/proton-ge".source = pkgs.bandithedoge.proton.ge.steamcompattool;
-    "Steam/compatibilitytools.d/proton-sarek".source = pkgs.bandithedoge.proton.sarek.steamcompattool;
   };
 }
